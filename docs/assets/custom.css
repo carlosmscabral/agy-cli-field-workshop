@@ -1,0 +1,46 @@
+/* agy-cli Field Workshop — Custom Styles */
+/* Extends MkDocs Material theme */
+
+/* Widen content area for tables */
+.md-grid {
+  max-width: 1200px;
+}
+
+/* Duration badges on headings */
+.duration-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: var(--md-accent-fg-color);
+  color: var(--md-accent-bg-color);
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  letter-spacing: 0.03em;
+}
+
+/* Exercise cards */
+.exercise-card {
+  border: 1px solid var(--md-primary-fg-color--light);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  background: var(--md-code-bg-color);
+}
+
+/* Hero banner */
+.hero-banner img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+/* Command highlight */
+.cmd {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--md-code-bg-color);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}

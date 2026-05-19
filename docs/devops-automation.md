@@ -1,0 +1,207 @@
+# Module 3: DevOps & Automation <span class="duration-badge">40 min</span>
+
+> **agy without a human in the loop.** This module covers non-interactive `--print` pipelines, CI/CD integration, multi-repository workspaces, and sandboxed execution for governance-sensitive environments.
+
+---
+
+## 3.0 — Print Mode: The Non-Interactive Core <span class="duration-badge">5 min</span>
+
+`--print` (short: `-p`) is agy's headless mode. It runs a single prompt, prints the response, and exits. No interactive session, no prompts.
+
+```bash
+# Basic usage
+agy --print "Summarize the top-level README of this project."
+
+# Set a timeout (default: 5 minutes)
+agy --print "Generate a full test suite for auth.js" --print-timeout 10m
+
+# Short form
+agy -p "What does this project do?"
+```
+
+Output goes to stdout — pipe it, redirect it, store it.
+
+```bash
+# Pipe into a file
+agy -p "Generate API documentation for all endpoints" > docs/api.md
+
+# Pipe into another command
+agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
+```
+
+---
+
+## 3.1 — Shell Pipelines <span class="duration-badge">10 min</span>
+
+> **Pattern: agy as a Unix command** — compose it with standard shell tools.
+
+### Pattern: Pipe Code into agy
+
+```bash
+# Review a specific file
+cat src/auth.js | agy -p "Review this file for security vulnerabilities."
+
+# Review staged changes before commit
+git diff --cached | agy -p "Review these changes. Flag bugs, security issues, or missing tests."
+
+# Analyze a log file
+tail -n 200 app.log | agy -p "Identify patterns in these errors. Group by root cause."
+```
+
+### Pattern: Chain agy Calls
+
+```bash
+# Step 1: Generate a plan
+agy -p "Create a migration plan for moving this project from CommonJS to ESM. Output as JSON with steps array." > migration-plan.json
+
+# Step 2: Execute step by step
+cat migration-plan.json | agy -p "Execute step 1 of this migration plan."
+```
+
+### Pattern: Batch Processing
+
+```bash
+# Process multiple files
+for f in src/**/*.js; do
+  echo "Reviewing $f..."
+  agy -p "Add JSDoc comments to all exported functions in this file." --add-dir "$(dirname $f)" > /tmp/review.md
+  cat /tmp/review.md
+done
+```
+
+---
+
+## 3.2 — Multi-Directory Workspaces with --add-dir <span class="duration-badge">10 min</span>
+
+> **Pattern: Cross-Repo Context** — give agy visibility into multiple codebases simultaneously.
+
+By default, agy indexes the git repo containing your current directory. `--add-dir` extends that to additional directories.
+
+```bash
+# Give agy access to both your app and its shared library
+agy --add-dir ../shared-lib "How does the app use shared-lib? Identify any API mismatches."
+
+# Add multiple directories
+agy --add-dir ../api --add-dir ../frontend "Generate an integration test that covers the API-to-frontend data flow."
+
+# Use in print mode
+agy -p "Compare the error handling patterns in app/ vs api/" --add-dir ../api
+```
+
+### Real-World Use Case: Monorepo Review
+
+```bash
+# From the root of a monorepo, review cross-package dependencies
+agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
+    -p "Map the dependency graph between these three packages and flag any circular dependencies."
+```
+
+!!! tip "Repeatable flag"
+    `--add-dir` is repeatable — add as many directories as you need. agy indexes all of them alongside the primary git repo.
+
+---
+
+## 3.3 — CI/CD Integration <span class="duration-badge">10 min</span>
+
+> **Pattern: agy in the Pipeline** — automated code review and analysis on every PR.
+
+### GitHub Actions Example
+
+```yaml
+# .github/workflows/agy-review.yml
+name: agy Code Review
+on: [pull_request]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install agy-cli
+        run: |
+          # Install agy binary (update path as per distribution)
+          curl -L <AGY_DOWNLOAD_URL> -o /usr/local/bin/agy
+          chmod +x /usr/local/bin/agy
+
+      - name: Review PR changes
+        run: |
+          git diff origin/main...HEAD | \
+          agy --dangerously-skip-permissions \
+              --print "Review these changes for: (1) correctness, (2) security, (3) missing tests. Output as markdown." \
+              --print-timeout 5m > review.md
+
+      - name: Post review as comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const review = fs.readFileSync('review.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: review
+            });
+```
+
+!!! warning "--dangerously-skip-permissions in CI"
+    Always use `--dangerously-skip-permissions` in CI — there's no human to click "approve". Pair it with `--sandbox` to restrict what agy can access.
+
+### Pre-Commit Hook
+
+```bash
+#!/bin/bash
+# .git/hooks/pre-commit
+echo "🤖 Running agy pre-commit review..."
+git diff --cached | agy --dangerously-skip-permissions \
+    -p "Flag any obvious bugs or security issues in these staged changes. If none, output 'LGTM'." \
+    --print-timeout 60s
+
+# Optionally block commit if issues found
+# (parse output for keywords)
+```
+
+---
+
+## 3.4 — Sandbox Mode <span class="duration-badge">5 min</span>
+
+> **Pattern: Restricted Execution** — run agy with terminal restrictions enabled.
+
+```bash
+# Enable sandbox — restricts terminal command execution
+agy --sandbox "Analyze this codebase. Do not run any commands."
+
+# Combine with print mode for safe CI audits
+agy --sandbox --dangerously-skip-permissions \
+    -p "List all hardcoded credentials, API keys, or secrets in this codebase." \
+    --print-timeout 3m
+```
+
+`--sandbox` enables terminal restrictions — agy can read files but its ability to execute shell commands is restricted. Use this when:
+
+- Running agy on untrusted code
+- Auditing for sensitive content without side effects
+- Governance-sensitive environments where any execution requires approval
+
+---
+
+## Module 3 Exercises
+
+<div class="exercise-card" markdown>
+
+#### :material-file-document: Exercise 3: --print Pipeline
+
+**File:** `exercises/ex03_print_mode_pipeline.md`
+**Duration:** 20 min
+**Objective:** Build a multi-step shell pipeline using agy --print. Review staged changes, generate docs, and wire up a GitHub Actions workflow.
+
+</div>
+
+---
+
+## Next Module
+
+→ **[Module 4: Multi-Agent & Advanced](multi-agent-advanced.md)** — subagents, /btw mid-task steering, scheduling.

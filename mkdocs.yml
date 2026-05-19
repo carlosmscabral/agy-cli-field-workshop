@@ -1,0 +1,94 @@
+site_name: "agy-cli Field Workshop"
+site_description: "Hands-on field workshop for Antigravity CLI (agy-cli) — unreleased, private"
+site_url: ""
+repo_url: "https://github.com/pauldatta/agy-cli-field-workshop"
+repo_name: "pauldatta/agy-cli-field-workshop"
+
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
+  features:
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+    - search.suggest
+    - toc.follow
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+nav:
+  - Home: index.md
+  - "📦 Pre-Work":
+      - Environment Setup: setup.md
+  - "🛠️ Workshop":
+      - "1. SDLC Productivity": sdlc-productivity.md
+      - "2. Plugin Ecosystem": plugin-ecosystem.md
+      - "3. DevOps & Automation": devops-automation.md
+      - "4. Multi-Agent & Advanced": multi-agent-advanced.md
+  - "📋 Resources":
+      - Cheatsheet: cheatsheet.md
+      - Facilitator Guide: facilitator-guide.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.mark
+  - pymdownx.critic
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/pauldatta/agy-cli-field-workshop
+  generator: false
+
+extra_css:
+  - assets/custom.css
