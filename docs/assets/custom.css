@@ -32,7 +32,7 @@
 /* Hero banner */
 .hero-banner img {
   width: 100%;
-  max-height: 280px;
+  max-height: 360px;
   object-fit: cover;
   object-position: center;
   border-radius: 8px;
