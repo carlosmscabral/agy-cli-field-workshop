@@ -20,6 +20,8 @@ The output is JSON showing each plugin's name, source, import date, and componen
 agy plugin list | python3 -m json.tool
 ```
 
+> 📖 Official docs: [Plugins](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [Skills](https://www.antigravity.google/docs/skills)
+
 ---
 
 ## 2.1 — Importing from Gemini CLI <span class="duration-badge">10 min</span>
@@ -56,11 +58,12 @@ Output looks like:
 
 | Component | What it means |
 |---|---|
-| `skills` | Specialized knowledge files injected into agy's context |
+| `skills` | SKILL.md files with YAML frontmatter — injected into agy's context |
 | `commands` | Slash commands available inside agy sessions |
-| `mcpServers` | MCP tool servers (GitHub, gcloud, Workspace, etc.) |
+| `mcpServers` | MCP tool servers (GitHub, gcloud, Workspace, etc.) — stdio or SSE |
 | `agents` | Custom subagent definitions |
-| `hooks` | Staged but not executed (agy handles lifecycle differently) |
+| `hooks` | Staged but not auto-executed (agy handles lifecycle differently) |
+| `rules` | Rules files (`rules.md`, `rules/*.md`) injected as RULE blocks |
 
 ---
 
@@ -96,20 +99,24 @@ agy plugin enable gemini-deep-research
 agy plugin list
 ```
 
+### Plugin Locations
+
+Plugins can be installed at two levels:
+
+| Scope | Path |
+|---|---|
+| **Global** | `~/.gemini/config/plugins/` |
+| **Project** | `.agents/plugins/` |
+
 ### Install a Specific Plugin
 
 ```bash
-# Install by name (from configured marketplace)
+# Install by name (from configured source)
 agy plugin install <plugin-name>
 
 # Install a specific version
 agy plugin install <plugin-name>@<version>
 ```
-
-<!-- TODO: marketplace URL to be confirmed post-Google I/O. Above syntax is confirmed from --help. -->
-
-!!! warning "Marketplace Coming Soon"
-    The `plugin install` command supports a marketplace registry (`plugin@marketplace` syntax). The public marketplace URL will be announced at Google I/O. For now, use `plugin import` to bring in plugins from Gemini CLI or Claude.
 
 ---
 
@@ -127,18 +134,23 @@ agy plugin validate ./path/to/my-plugin
 agy plugin validate .
 ```
 
-This checks that the plugin's `plugin.json` (or equivalent manifest) is well-formed and all referenced components exist.
+This checks that the plugin's `plugin.json` manifest is well-formed and all referenced components exist.
 
 ### Build a Minimal Custom Plugin
 
-A valid agy plugin needs a `plugin.json` manifest. Here's the minimal structure:
+A valid agy plugin needs a `plugin.json` manifest. Here's the official structure:
 
 ```
 my-plugin/
 ├── plugin.json          ← manifest (required)
-├── skills/              ← optional: markdown skill files
-│   └── my-skill.md
-└── commands/            ← optional: slash command definitions
+├── mcp_config.json      ← MCP server definitions (optional)
+├── hooks.json           ← hook event handlers (optional)
+├── skills/              ← SKILL.md files with YAML frontmatter
+│   └── my-skill/
+│       └── SKILL.md
+├── agents/              ← subagent definitions (optional)
+└── rules/               ← rules files (optional)
+    └── my-rules.md
 ```
 
 ```json
@@ -157,6 +169,15 @@ agy plugin validate ./my-plugin
 # If valid, you'll see: ✔ Plugin manifest is valid
 ```
 
+### Interacting with Plugin Components
+
+Use slash commands to inspect active plugin components in a session:
+
+| Command | What it shows |
+|---|---|
+| `/skills` | All loaded skills (from plugins, project, global) |
+| `/mcp` | Active MCP servers and their status |
+
 ### Exercise: Validate the Workshop Plugin
 
 The workshop repo includes a sample plugin at `samples/plugins/workshop-helpers/`. Validate it:
@@ -171,14 +192,26 @@ agy plugin validate samples/plugins/workshop-helpers/
 
 ```mermaid
 graph LR
-    GC[Gemini CLI\nPlugins] -->|agy plugin import gemini| S[Staging Area\n~/.gemini/antigravity-cli/]
-    CC[Claude Code\nExtensions] -->|agy plugin import claude| S
-    MP[Marketplace] -->|agy plugin install| S
+    GC["Gemini CLI\nPlugins"] -->|agy plugin import gemini| S["Plugin Staging\n~/.gemini/antigravity-cli/plugins/"]
+    CC["Claude Code\nExtensions"] -->|agy plugin import claude| S
     S -->|agy plugin enable/disable| A[agy session]
     A --> SK[Skills]
-    A --> CMD[Commands]
     A --> MCP[MCP Servers]
     A --> AG[Agents]
+    A --> RU[Rules]
+    A --> HK[Hooks]
+```
+
+Plugin staging directory structure:
+
+```
+~/.gemini/antigravity-cli/plugins/<name>/
+├── plugin.json
+├── mcp_config.json
+├── hooks.json
+├── skills/
+├── agents/
+└── rules/
 ```
 
 ---

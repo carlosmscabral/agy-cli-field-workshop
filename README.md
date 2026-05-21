@@ -2,7 +2,7 @@
 
 > **Hands-on field workshop for Antigravity CLI (agy-cli).**
 
-⚠️ **Unreleased Software — Private & Confidential.** Do not share publicly.
+📚 **Official Docs:** [antigravity.google/docs](https://www.antigravity.google/docs/cli-overview)
 
 ---
 
@@ -24,6 +24,9 @@ This workshop teaches engineers how to use agy-cli as a daily-driver AI coding a
 ## Quick Start
 
 ```bash
+# Install agy-cli (if not already installed)
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+
 # Clone the workshop repo
 git clone https://github.com/pauldatta/agy-cli-field-workshop.git
 cd agy-cli-field-workshop

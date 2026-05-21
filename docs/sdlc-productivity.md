@@ -21,8 +21,8 @@ You'll land in the interactive prompt. Try:
 
 Observe how agy reads your workspace — it indexes the git repo, reads file contents, and responds with context. This is **automatic**: no config, no prompts to write first.
 
-!!! tip "The .antigravitycli/ folder"
-    After your first session, check `.antigravitycli/` — agy created a project config JSON tracking your workspace. This is how it knows what to index on future runs.
+!!! tip "The .agents/ folder"
+    After your first session, check `.agents/` — agy created project config files tracking your workspace. This is how it knows what to index on future runs.
 
 ---
 
@@ -72,8 +72,28 @@ Review the findings. Then:
 
 Only apply after you've read the proposed change.
 
-!!! warning "Review before applying"
-    agy will ask permission before writing files. Read every diff. The `--dangerously-skip-permissions` flag bypasses this — never use it interactively on a codebase you care about.
+### Permissions Model
+
+agy has a **3-level permissions model** that controls how it handles tool approvals:
+
+| Level | Behavior |
+|---|---|
+| `request-review` | **Default.** agy asks for approval before writing files or running commands |
+| `always-proceed` | Auto-approve all tool calls — useful for trusted scripts and CI |
+| `strict` | Deny all tool use unless explicitly allowed — maximum control |
+
+Use the `/permissions` slash command to view or change the current level. You can also set fine-grained rules:
+
+```json
+{
+  "permissions": {
+    "allow": ["command(git)", "read_file"],
+    "deny": ["command(rm -rf)"]
+  }
+}
+```
+
+> 📖 Full details: [Permissions docs](https://www.antigravity.google/docs/permissions) · [Strict Mode docs](https://www.antigravity.google/docs/strict-mode)
 
 ---
 
@@ -161,6 +181,48 @@ agy will incorporate your AGENTS.md into every subsequent session automatically.
 
 !!! info "Context hierarchy"
     agy reads AGENTS.md from: current directory → parent directories → home directory. More specific context overrides broader context.
+
+### Additional Context Sources
+
+Beyond AGENTS.md, agy also loads:
+
+- **`.agents/rules.md`** (or `.agents/rules/*.md`) — project-level rules injected as system prompt directives. Use these for hard requirements like "never delete migration files" or "always use TypeScript strict mode."
+- **`.gemini/`** — for Gemini CLI compatibility, agy reads `.gemini/` directories alongside `.agents/`.
+- **`~/.gemini/config/rules.md`** — global rules applied to all sessions.
+
+> 📖 Full details: [Rules & Workflows docs](https://www.antigravity.google/docs/rules-workflows)
+
+---
+
+## 1.6 — Interactive Navigation <span class="duration-badge">5 min</span>
+
+> **Pattern: Terminal Fluency** — know the shortcuts that make agy sessions fast.
+
+> 📖 Full reference: [Using AGY CLI](https://www.antigravity.google/docs/cli-using)
+
+### Key Slash Commands
+
+| Command | What it does |
+|---|---|
+| `/rewind` (or `/undo`) | Step back through conversation history |
+| `/clear` | Clear the current conversation context |
+| `/fork` | Branch the conversation — explore an alternative approach without losing the current thread |
+| `/resume` (or `/switch`) | Resume a previous session |
+| `/config` (or `/settings`) | View/edit settings |
+| `/open <path>` | Open a file or URL in your default editor/browser |
+| `/usage` | Show token usage and cost for the current session |
+| `/compact` | Condense conversation history to save context window |
+
+### Quick Tips
+
+| Shortcut | What it does |
+|---|---|
+| `@` | File path autocomplete — type `@` then start a path |
+| `!` | Direct terminal command — run a shell command without leaving agy |
+| `Esc Esc` | Clear the current prompt input |
+| `?` | Quick help |
+| `Alt+Enter` | Insert a newline in your prompt (for multi-line input) |
+| `Ctrl+G` | Open your prompt in your `$EDITOR` for complex multi-line input |
 
 ---
 

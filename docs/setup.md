@@ -8,18 +8,34 @@
 
 | Component | Minimum | Notes |
 |---|---|---|
-| **agy-cli** | Latest | Install instructions below |
+| **agy** | Latest | Install instructions below |
 | **Git** | v2.30+ | For exercise repos |
 | **Terminal** | Any | iTerm2, macOS Terminal, or VS Code integrated |
 | **jq** | Optional | Useful for parsing `--print` JSON output |
 
 ---
 
-## Step 1: Install agy-cli
+## Step 1: Install agy
 
-<!-- TODO: confirm official install path post-Google I/O -->
+> 📖 Full instructions: [Getting Started docs](https://www.antigravity.google/docs/cli-getting-started)
 
-agy-cli is distributed as a single binary. Ask your facilitator for the download link or internal distribution channel.
+### macOS / Linux
+
+```bash
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+```
+
+### Windows
+
+```powershell
+# PowerShell
+irm https://antigravity.google/cli/install.ps1 | iex
+
+# Or via WSL (recommended)
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+```
+
+After install, verify the binary is available:
 
 ```bash
 # Verify the binary is in your PATH
@@ -29,17 +45,27 @@ which agy
 agy changelog
 ```
 
-!!! tip "Shell Alias"
-    agy-cli is also available as `agy-cli` via a shell alias. Both `agy` and `agy-cli` invoke the same binary.
-
 ---
 
 ## Step 2: Authentication
 
-<!-- TODO: confirm auth flow post-Google I/O. Current working assumption: ADC or API key. -->
+agy uses **browser-based Google Sign-In**. On first run, it will:
 
-!!! warning "Auth Details Pending"
-    Authentication details will be confirmed after Google I/O. Your facilitator will provide credentials for this workshop session.
+- **Local machine:** Automatically open your default browser for sign-in.
+- **SSH / remote session:** Print a URL to paste into any browser, then paste the auth code back into the terminal.
+
+```bash
+# Start agy — auth will trigger automatically on first run
+agy
+```
+
+To sign out:
+
+```
+/logout
+```
+
+> 📖 For enterprise authentication via GCP project, see the [Enterprise docs](https://www.antigravity.google/docs/enterprise).
 
 Once auth is configured, run a quick smoke test:
 
@@ -53,21 +79,21 @@ Expected output: `Workshop ready!`
 
 ## Step 3: Initialize Your Project Workspace
 
-agy-cli auto-discovers project config by walking up from your current directory, looking for a `.antigravitycli/` folder. Create one for the workshop:
+agy auto-discovers project config by walking up from your current directory, looking for a `.agents/` folder. Create one for the workshop:
 
 ```bash
 # Clone the workshop exercises repo
 git clone https://github.com/pauldatta/agy-cli-field-workshop.git
 cd agy-cli-field-workshop
 
-# agy will create .antigravitycli/ on first run
+# agy will create .agents/ on first run
 agy --print "List the files in the current directory."
 ```
 
-You'll see a `.antigravitycli/` folder created with a project config JSON.
+You'll see a `.agents/` folder created with project config files (settings.json, mcp.json, etc.).
 
 !!! info ".gemini/ compatibility"
-    agy-cli also reads `.gemini/` directories — useful if you already have a Gemini CLI project setup. Both config locations are respected.
+    agy also reads `.gemini/` directories — useful if you already have a Gemini CLI project setup. Both config locations are respected.
 
 ---
 
@@ -77,8 +103,11 @@ You'll see a `.antigravitycli/` folder created with a project config JSON.
 # Check agy is accessible
 agy --help
 
-# Confirm plugins are available
+# List installed plugins (output is JSON)
 agy plugin list
+
+# Pretty-print the plugin list
+agy plugin list | python3 -m json.tool
 
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
@@ -96,10 +125,11 @@ Checklist before the workshop starts:
 
 | Issue | Solution |
 |---|---|
-| `agy: command not found` | Check that the binary is in your PATH. Run `echo $PATH` and ensure the install dir is included |
-| Auth errors | Contact your facilitator — auth details are session-specific |
+| `agy: command not found` | Check that the binary is in your PATH. Run `echo $PATH` and ensure the install dir is included. Re-run the install script if needed |
+| Auth errors / browser doesn't open | For SSH sessions, copy the printed URL manually. For local, check default browser settings. Run `/logout` and retry |
 | `agy plugin list` returns empty `{}` | Expected on a fresh install. You'll populate plugins in Module 2 |
 | Slow first response | First run may be slower as agy indexes your workspace |
+| Config not loading | Check `~/.gemini/antigravity-cli/settings.json` (user settings) and `.agents/` (project settings) |
 
 ---
 

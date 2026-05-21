@@ -8,9 +8,6 @@
 
 This is a **4-module, ~3.5-hour hands-on workshop** for agy-cli (Antigravity CLI). It is designed for developer audiences: engineers, tech leads, and solution architects evaluating or adopting agy-cli.
 
-!!! danger "Unreleased Software"
-    agy-cli is pre-release. This workshop is private and confidential. Confirm participant NDAs before distributing materials.
-
 ---
 
 ## Delivery Formats
@@ -81,11 +78,11 @@ This is a **4-module, ~3.5-hour hands-on workshop** for agy-cli (Antigravity CLI
 
 | Question | Answer |
 |---|---|
-| "What model does agy use?" | Facilitator to confirm — ask the agy-cli team |
+| "What model does agy use?" | Use `/model` to see and switch. See [Models docs](https://www.antigravity.google/docs/models). |
 | "How is this different from Gemini CLI?" | agy bridges plugins from both Gemini CLI and Claude, has native subagent orchestration, and /btw mid-task steering. Different product. |
-| "Can I use my own API key?" | Auth model is TBD post-Google I/O. Redirect to the session auth setup. |
-| "Is the code sent to Google?" | Facilitator to confirm with agy-cli team before the workshop. |
-| "What about hooks?" | agy-cli doesn't have Gemini CLI-style hooks. Use `--print` pipelines and CI/CD for hook-equivalent automation. |
+| "Can I use my own API key?" | agy uses browser-based Google Sign-In. Enterprise users connect a GCP project. See [Enterprise docs](https://www.antigravity.google/docs/enterprise). |
+| "Is the code sent to Google?" | See the [FAQ](https://www.antigravity.google/docs/faq) for data handling details. |
+| "What about hooks?" | agy-cli supports hooks via `hooks.json`. See [Hooks docs](https://www.antigravity.google/docs/hooks). |
 | "Where are conversation logs stored?" | `~/.gemini/antigravity-cli/conversations/` |
 
 ---

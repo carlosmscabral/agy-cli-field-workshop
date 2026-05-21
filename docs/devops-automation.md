@@ -122,9 +122,7 @@ jobs:
 
       - name: Install agy-cli
         run: |
-          # Install agy binary (update path as per distribution)
-          curl -L <AGY_DOWNLOAD_URL> -o /usr/local/bin/agy
-          chmod +x /usr/local/bin/agy
+          curl -fsSL https://antigravity.google/cli/install.sh | bash
 
       - name: Review PR changes
         run: |
@@ -148,7 +146,7 @@ jobs:
 ```
 
 !!! warning "--dangerously-skip-permissions in CI"
-    Always use `--dangerously-skip-permissions` in CI — there's no human to click "approve". Pair it with `--sandbox` to restrict what agy can access.
+    Always use `--dangerously-skip-permissions` in CI — there's no human to click "approve". Pair it with sandbox mode to restrict what agy can access.
 
 ### Pre-Commit Hook
 
@@ -168,23 +166,93 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 ## 3.4 — Sandbox Mode <span class="duration-badge">5 min</span>
 
-> **Pattern: Restricted Execution** — run agy with terminal restrictions enabled.
+> **Pattern: Restricted Execution** — run agy with OS-level terminal isolation.
 
-```bash
-# Enable sandbox — restricts terminal command execution
-agy --sandbox "Analyze this codebase. Do not run any commands."
+### Enabling the Sandbox
 
-# Combine with print mode for safe CI audits
-agy --sandbox --dangerously-skip-permissions \
-    -p "List all hardcoded credentials, API keys, or secrets in this codebase." \
-    --print-timeout 3m
+The sandbox is configured via `settings.json` (either project `.agents/settings.json` or user `~/.gemini/antigravity-cli/settings.json`):
+
+```json
+{
+  "enableTerminalSandbox": true
+}
 ```
 
-`--sandbox` enables terminal restrictions — agy can read files but its ability to execute shell commands is restricted. Use this when:
+When enabled, agy uses **native OS isolation** to restrict terminal command execution:
+
+| OS | Isolation Technology |
+|---|---|
+| **Linux** | nsjail |
+| **macOS** | sandbox-exec |
+| **Windows** | AppContainer |
+
+### Per-Command Bypass
+
+With the sandbox enabled, agy will **prompt for approval** when a command needs to break out of the sandbox. You'll see a per-command bypass prompt — allowing selective execution without disabling the entire sandbox.
+
+### Use Cases
 
 - Running agy on untrusted code
 - Auditing for sensitive content without side effects
 - Governance-sensitive environments where any execution requires approval
+
+### Combining with Permissions
+
+For maximum control, pair sandbox mode with the permissions model:
+
+```json
+{
+  "enableTerminalSandbox": true,
+  "permissions": {
+    "allow": ["read_file", "command(git)"],
+    "deny": ["command(rm)", "unsandboxed"]
+  }
+}
+```
+
+> 📖 Full details: [Permissions docs](https://www.antigravity.google/docs/permissions)
+
+---
+
+## 3.5 — Hooks & Rules <span class="duration-badge">5 min</span>
+
+> **Pattern: Guardrails & Automation** — enforce standards and trigger actions at key lifecycle points.
+
+### Hooks
+
+Hooks let you run custom logic at 5 lifecycle events:
+
+| Event | When it fires |
+|---|---|
+| `PreToolUse` | Before agy calls any tool (read file, run command, etc.) |
+| `PostToolUse` | After a tool call completes |
+| `PreInvocation` | Before agy starts processing a prompt |
+| `PostInvocation` | After agy finishes a response |
+| `Stop` | When the session ends |
+
+Configure hooks in `hooks.json` (in `.agents/` for project or `~/.gemini/config/` for global). Hook scripts receive JSON on stdin and return JSON on stdout.
+
+> 📖 Full details: [Hooks docs](https://www.antigravity.google/docs/hooks)
+
+### Rules
+
+Rules are markdown files injected into agy's system prompt as `RULE` blocks — hard constraints that agy must follow.
+
+| Scope | Location |
+|---|---|
+| **Project** | `.agents/rules.md` or `.agents/rules/*.md` |
+| **Global** | `~/.gemini/config/rules.md` or `~/.gemini/config/rules/*.md` |
+
+Example `.agents/rules.md`:
+
+```markdown
+- Never delete migration files
+- Always use TypeScript strict mode
+- Run `npm test` after any code change
+- Do not modify files in the vendor/ directory
+```
+
+> 📖 Full details: [Rules & Workflows docs](https://www.antigravity.google/docs/rules-workflows)
 
 ---
 

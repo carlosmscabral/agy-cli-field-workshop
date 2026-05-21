@@ -70,8 +70,8 @@ hide:
 !!! warning "Pre-Work Required"
     Complete the [Environment Setup](setup.md) before the workshop. You need agy-cli installed and authenticated.
 
-!!! danger "Unreleased Software"
-    agy-cli is pre-release. This material is **private and confidential**. Do not share publicly.
+!!! info "Official Documentation"
+    Full reference at [antigravity.google/docs](https://www.antigravity.google/docs/cli-overview).
 
 !!! info "Prerequisite"
     Familiarity with a terminal, Git, and basic coding workflows. No prior AI coding assistant experience required.

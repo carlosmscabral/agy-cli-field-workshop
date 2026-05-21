@@ -16,11 +16,25 @@ Three workspace modes:
 | `branch` | Subagent gets an isolated clone | Parallel changes to the same files |
 | `share` | Git worktree — isolated branch, shared repo | True parallel development |
 
+### Switching Models
+
+Use `/model` to switch the active model mid-session — useful when you want heavier reasoning for a specific task:
+
+```
+/model
+```
+
+This opens a model picker showing available options (Gemini 3.5 Flash, Gemini 3.1 Pro, Claude Sonnet 4.6, etc.).
+
+> 📖 Full model list: [Models docs](https://www.antigravity.google/docs/models)
+
 ---
 
 ## 4.1 — Spawning Subagents <span class="duration-badge">15 min</span>
 
 > **Pattern: Parallel Execution** — dispatch multiple agents to work simultaneously.
+
+> 📖 Full reference: [Subagents docs](https://www.antigravity.google/docs/subagents)
 
 ### From an Interactive Session
 
@@ -37,6 +51,28 @@ agy will spawn a subagent, report its ID, and continue your main session. The su
 ```
 > Show me what the test subagent produced.
 ```
+
+### Managing Subagents with /agents
+
+Use the `/agents` panel to see all active subagents, their status, and output:
+
+```
+/agents
+```
+
+Key shortcuts from the main conversation:
+
+| Shortcut | Action |
+|---|---|
+| `Ctrl+J` | Teleport to a subagent pending approval — jump directly to review its request |
+| `Ctrl+K` | Fast-approve from the main conversation — approve a subagent's pending action without switching |
+
+Subagent lifecycle: **Running → Idle → Killed**
+
+### Limits and Built-in Types
+
+- **Max depth:** 10 (subagents can spawn their own subagents, up to 10 levels)
+- **Built-in types:** `research` (web research), `browser` (browser automation), `self` (general purpose)
 
 ### Parallel Audit Pattern
 
@@ -141,7 +177,7 @@ Cron expressions (up to 5 fields) are supported:
 ```
 
 !!! warning "Scheduling is session-persistent"
-    Scheduled tasks persist across sessions as long as agy is running. Ask your facilitator about the exact persistence model for your environment.
+    Scheduled tasks persist across sessions as long as agy is running. Check `/tasks` to view and manage scheduled tasks.
 
 ---
 
@@ -149,24 +185,35 @@ Cron expressions (up to 5 fields) are supported:
 
 > **Pattern: Long-Running Work** — pick up exactly where you left off.
 
+> 📖 Full reference: [Using AGY CLI](https://www.antigravity.google/docs/cli-using)
+
 ### Resume the Most Recent Session
 
-```bash
-# Short form
-agy -c
+From inside agy, use the `/resume` slash command:
 
-# Long form
-agy --continue
+```
+/resume
 ```
 
-### Resume a Specific Session by ID
+This opens a session picker showing your recent conversations. Select one to resume.
 
-```bash
-# List recent conversations (check agy's log directory)
-agy --conversation <conversation-id>
+### Browse and Switch Sessions
+
+```
+/switch
 ```
 
-agy maintains full conversation history. You can resume a session from days ago and agy will have full context of everything discussed — files reviewed, decisions made, code written.
+Same as `/resume` — both commands open the session picker.
+
+### Auto-Resume on Exit
+
+When you exit an agy session, agy prints the exact command to resume it:
+
+```
+Session saved. Resume with: agy --conversation <conversation-id>
+```
+
+You can use this command directly from the terminal to jump back in.
 
 ### Use Case: Multi-Day Feature Work
 
@@ -174,8 +221,11 @@ agy maintains full conversation history. You can resume a session from days ago 
 # Day 1: Start a feature
 agy -i "I'm building a payment integration feature. Let's start with the backend API design."
 
-# Day 2: Continue exactly where you left off
-agy -c
+# Day 2: Resume from terminal
+agy --conversation <conversation-id>
+
+# Or from inside agy:
+# /resume
 ```
 
 ```
@@ -238,6 +288,6 @@ This is multi-agent incident triage — two parallel investigations, steerable m
 
 **File:** `exercises/ex06_sandbox_governance.md`
 **Duration:** 15 min
-**Objective:** Run agy with --sandbox and --dangerously-skip-permissions in a safe audit scenario.
+**Objective:** Configure sandbox mode in settings.json and test with the permissions model.
 
 </div>

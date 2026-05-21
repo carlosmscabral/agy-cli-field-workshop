@@ -7,6 +7,7 @@
 ## Installation & Version
 
 ```bash
+curl -fsSL https://antigravity.google/cli/install.sh | bash
 agy --help         # Show all flags and subcommands
 agy changelog      # Show release notes
 agy update         # Self-update
@@ -24,6 +25,7 @@ agy install        # Configure PATH and shell aliases
 | **Print (headless)** | `agy -p "<prompt>"` | Single shot, pipe to stdout |
 | **Continue last** | `agy -c` | Resume most recent session |
 | **Resume by ID** | `agy --conversation <id>` | Resume a specific past session |
+| **Resume in-session** | `/resume` or `/switch` | Switch conversations without leaving agy |
 
 ---
 
@@ -36,10 +38,54 @@ agy install        # Configure PATH and shell aliases
 | `--continue` | `-c` | Resume most recent conversation |
 | `--conversation <id>` | — | Resume by conversation ID |
 | `--add-dir <path>` | — | Add directory to workspace (repeatable) |
-| `--sandbox` | — | Enable terminal restrictions |
+| `--sandbox` | — | Enable terminal sandbox restrictions |
+| `--strict` | — | Start in strict permission mode |
+| `--model <model>` | — | Select reasoning model (e.g. `gemini-3.5-flash`) |
+| `--workspace <path>` | — | Set workspace root directory |
 | `--dangerously-skip-permissions` | — | Auto-approve all tool requests (CI only) |
 | `--print-timeout <duration>` | — | Timeout for print mode (default: 5m) |
 | `--log-file <path>` | — | Override log output path |
+
+---
+
+## Slash Commands (Interactive Mode)
+
+| Command | Category | Purpose |
+|---|---|---|
+| `/resume` (`/switch`) | Conversation | Resume or switch sessions |
+| `/rewind` (`/undo`) | Conversation | Roll back to previous checkpoint |
+| `/rename <name>` | Conversation | Rename active thread |
+| `/clear` | Conversation | Clear and start new session |
+| `/fork` | Conversation | Branch from earlier point in new workspace |
+| `/permissions` | Config | Set autonomy: `request-review`, `always-proceed`, `strict` |
+| `/model` | Config | Select reasoning model |
+| `/config` (`/settings`) | Config | Open settings overlay |
+| `/keybindings` | Config | Edit keyboard shortcuts |
+| `/statusline` | Config | Customize status bar indicators |
+| `/tasks` | Monitoring | View/manage background tasks |
+| `/skills` | Monitoring | Browse agent skills |
+| `/mcp` | Monitoring | Manage MCP servers |
+| `/agents` | Monitoring | View/manage subagents |
+| `/open <path>` | Utility | Open file in external editor |
+| `/usage` | Utility | Inline help manual |
+| `/logout` | Account | Sign out and clear credentials |
+| `/browser` | Agent | Launch browser subagent |
+| `/compact` | Agent | Compact conversation context |
+
+---
+
+## Quick Tips
+
+| Shortcut | Action |
+|---|---|
+| `@` | File path autocomplete |
+| `!` | Run terminal command directly |
+| `esc esc` | Clear prompt |
+| `?` | Help and list slash commands |
+| `alt+enter` / `ctrl+j` / `shift+enter` | Insert newline |
+| `ctrl+g` | Open prompt in external editor |
+| `ctrl+j` (in `/agents`) | Teleport to pending subagent approval |
+| `ctrl+k` | Fast-approve subagent permission |
 
 ---
 
@@ -77,13 +123,21 @@ agy plugin link <marketplace> <target>
 
 ## Workspace & Context
 
-```bash
-# Project config auto-created on first run at:
-.antigravitycli/<uuid>.json
+```
+# Project config directory:
+.agents/                    # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
+
+# Global config directory:
+~/.gemini/config/           # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
+
+# User settings:
+~/.gemini/antigravity-cli/settings.json
+
+# Context file (hierarchical: cwd → parent → home):
+AGENTS.md
 
 # agy also reads:
-.gemini/          # Gemini CLI config (compatible)
-AGENTS.md         # Project context file (read at session start)
+.gemini/                    # Gemini CLI config (compatible)
 ```
 
 ### AGENTS.md Pattern
@@ -98,15 +152,6 @@ Brief description of what this project is.
 - Testing: Jest + Supertest
 - DO NOT run database migrations without explicit approval
 ```
-
----
-
-## Slash Commands (Interactive Mode)
-
-| Command | Description |
-|---|---|
-| `/btw <message>` | Inject a note mid-task without interrupting |
-| *(see plugin commands)* | Plugins add additional slash commands |
 
 ---
 
@@ -171,3 +216,9 @@ for f in src/*.ts; do
       -p "Add JSDoc to all exported functions in $(basename $f)."
 done
 ```
+
+---
+
+## Official Docs
+
+Full reference: [antigravity.google/docs](https://www.antigravity.google/docs/cli-overview)
