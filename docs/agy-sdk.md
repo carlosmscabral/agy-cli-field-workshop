@@ -2,11 +2,11 @@
 
 <div class="module-header" markdown>
 **Duration:** ~90 minutes  
-**Goal:** Build a production-ready AGY agent from scratch using the Google ADK — tools, orchestration, skills, session state, and deployment to Cloud Run.  
+**Goal:** Build a production-ready AGY agent from scratch using the `google-antigravity` Python library — tools, hooks, policy, session state, multi-agent orchestration, and structured output.  
 **Exercises:** [Exercise 10: Your First Agent](exercises/ex10_first_agent.md) · [Exercise 11: Multi-Agent Pipeline](exercises/ex11_multi_agent_pipeline.md)
 </div>
 
-> 📖 Sources: [ADK Docs](https://google.github.io/adk-docs/) · [google-adk PyPI](https://pypi.org/project/google-adk/) · [Subagents](https://antigravity.google/docs/subagents) · [Skills](https://antigravity.google/docs/skills)
+> 📖 Sources: [SDK Overview](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [Skills](https://antigravity.google/docs/skills)
 
 ---
 
@@ -19,8 +19,9 @@ The CLI is a **general-purpose assistant**. An agent you build with the SDK is a
 | **Who uses it** | Individual developer | Team / API consumers |
 | **Customization** | AGENTS.md + plugins | Full code control |
 | **Tools** | Built-in CLI tools | Any Python function you write |
+| **Policy** | Interactive approval prompts | Programmatic `policy.*` rules |
 | **Deployment** | Local interactive session | Cloud Run service, callable via API |
-| **Multi-agent** | Subagents in CLI session | `SequentialAgent`, `ParallelAgent`, `LlmAgent` |
+| **Multi-agent** | Subagents in CLI session | `asyncio.gather` + `START_SUBAGENT` |
 
 ---
 
@@ -29,36 +30,37 @@ The CLI is a **general-purpose assistant**. An agent you build with the SDK is a
 ### Prerequisites
 
 - Python 3.11+
-- GCP credentials: `gcloud auth application-default login`
+- A Gemini API key — set as `GEMINI_API_KEY` or pass via `api_key=` in config
 
 ### Install
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install google-adk
-```text
+pip install google-antigravity
+```
 
-### Authenticate with Vertex AI
+### Verify
 
-```bash
-gcloud auth application-default login
-export GOOGLE_CLOUD_PROJECT="your-project-id"
-export GOOGLE_CLOUD_LOCATION="global"
-export GOOGLE_GENAI_USE_VERTEXAI="True"
-```text
+```python
+from google.antigravity import Agent, LocalAgentConfig
+from google.antigravity.hooks import policy
+print("google-antigravity installed ✅")
+```
 
-> **Why Vertex AI?** Vertex AI gives you enterprise billing, audit logs, VPC-SC controls, and access to the full Gemini model lineup. For production agents, always use Vertex AI over API keys.
+> **API key vs Vertex AI:** For quick local development, use `api_key="AIza..."` in
+> `LocalAgentConfig`. For production on GCP, authenticate with
+> `gcloud auth application-default login` — the library picks up ADC automatically.
 
 ---
 
-## 3.2 — Core Primitives: Agent, Tool, Skill <span class="duration-badge">20 min</span>
+## 3.2 — Core Primitives: Agent, Config, Tool <span class="duration-badge">20 min</span>
 
-The ADK has three building blocks. Learn these and you can build anything.
+The `google-antigravity` SDK has three building blocks: `Agent`, `LocalAgentConfig`, and tools (plain Python functions). Learn these and you can build anything.
 
 ### The Tool
 
-A tool is a plain Python function. The agent decides when to call it based on the docstring — that's the contract.
+A tool is a **plain Python function**. No wrapper class, no decorator. The agent decides when to call it based on the docstring — that's the entire interface contract.
 
 ```python
 def get_file_contents(file_path: str) -> str:
@@ -75,37 +77,78 @@ def get_file_contents(file_path: str) -> str:
             return f.read()
     except FileNotFoundError:
         return f"Error: File not found at {file_path}"
-```text
+```
 
 > **Critical rules for tools:**
 >
 > - Use explicit type annotations — `str`, `int`, `bool`, `list[str]`. No `typing.Optional`.
-> - Use a default value of `None` for optional parameters: `param: str = None`
-> - The docstring is the tool's interface — the agent reads it to decide when and how to call the tool. Write it for the agent, not a human.
+> - Use a default of `None` for optional parameters: `param: str = None`
+> - The docstring is the tool's schema — the model reads it to decide when and how to call the tool. Write it for the model, not a human.
 > - Keep tools narrow and focused. One job per tool.
 
-### The Agent
+### Tools with Session State
 
-An agent wraps a model, a system prompt, and a list of tools:
+To read/write **session state** inside a tool, declare a parameter typed as `ToolContext`.
+The SDK auto-detects it, injects it at call time, and **strips it from the schema shown to the model**:
 
 ```python
-from google.adk.agents import Agent
+from google.antigravity.tools.tool_context import ToolContext
 
-root_agent = Agent(
-    name="code_reviewer",
-    model="gemini-3.1-flash-lite-preview",
-    instruction="""You are a code reviewer specializing in Python.
-    When given a file path, read the file and provide a structured review covering:
-    - Correctness and edge cases
-    - Code style and readability
-    - Security concerns
-    - Suggested improvements
+def record_finding(
+    severity: str,
+    message: str,
+    ctx: ToolContext,
+) -> dict:
+    """Records a review finding into session state.
 
-    Always read the file first before commenting. Be specific — cite line numbers.
-    """,
-    tools=[get_file_contents],
+    Args:
+        severity: One of 'critical', 'warning', 'info'.
+        message: Description of the finding.
+
+    Returns:
+        Confirmation dict with the finding index.
+    """
+    findings = ctx.get_state("findings", [])
+    findings.append({"severity": severity, "message": message})
+    ctx.set_state("findings", findings)
+    return {"status": "recorded", "index": len(findings) - 1}
+```
+
+### The Agent + Config
+
+`Agent` is the single entry point. All configuration goes in `LocalAgentConfig`:
+
+```python
+import asyncio
+from google.antigravity import Agent, LocalAgentConfig
+from google.antigravity.hooks import policy
+
+config = LocalAgentConfig(
+    model="gemini-3.5-flash",
+    system_instructions="""You are a code reviewer specialising in Python.
+When given a file path, read the file and provide a structured review covering:
+- Correctness and edge cases
+- Code style and readability
+- Security concerns
+- Suggested improvements
+
+Always read the file first before commenting. Be specific — cite line numbers.
+""",
+    tools=[get_file_contents, record_finding],
+    policies=[policy.allow_all()],          # autonomous — no interactive prompts
+    workspaces=["/path/to/project"],        # file ops scoped to this directory
 )
-```text
+
+async def main():
+    async with Agent(config) as agent:
+        response = await agent.chat("Review src/auth/login.py")
+        print(await response.text())
+
+asyncio.run(main())
+```
+
+> **`async with Agent(config) as agent:`** — always use the context manager. It starts
+> the Go runtime bridge (`bin/localharness`) and tears it down cleanly on exit.
 
 ### Model Selection
 
@@ -113,16 +156,16 @@ Match the model to the job. Cost-conscious policy:
 
 | Role | Model | Rationale |
 | :-- | :-- | :-- |
-| Orchestration, routing, planning | `gemini-3.1-pro-preview` | Complex intent classification, multi-step reasoning |
-| Document generation, code review | `gemini-3.1-flash-lite-preview` | High-throughput, cost-efficient with good prompting |
-| Adversarial review, compliance | `gemini-3.1-pro-preview` | Needs deep reasoning to find non-obvious gaps |
-| Zero-cost guards and checks | `BaseAgent` (no model) | Programmatic heuristics — no tokens consumed |
+| General tasks, code review | `gemini-3.5-flash` | SDK default — cost-efficient, fast |
+| Orchestration, routing, planning | `gemini-3.1-pro-preview` | Complex reasoning, multi-step decisions |
+| Image generation tasks | `gemini-3.1-flash-image-preview` | SDK default for image generation |
+| High-stakes analysis | `gemini-3.1-pro-preview` with `ThinkingLevel.HIGH` | Deep reasoning for compliance/security |
 
 > **Never use** `gemini-1.5-flash`, `gemini-1.5-pro`. Deprecated.
 
 ### The Skill
 
-Skills are SKILL.md files loaded at runtime to inject domain knowledge. This keeps your system prompt lean and makes expertise portable:
+Skills are `SKILL.md` files loaded at runtime to inject domain knowledge. Keep your system prompt lean — load expertise from files:
 
 ```python
 from pathlib import Path
@@ -138,287 +181,340 @@ def load_skill(skill_name: str) -> str:
 
 review_guidelines = load_skill("python-review")
 
-root_agent = Agent(
-    name="code_reviewer",
-    model="gemini-3.1-flash-lite-preview",
-    instruction=f"""You are a code reviewer.
+config = LocalAgentConfig(
+    model="gemini-3.5-flash",
+    system_instructions=f"""You are a code reviewer.
 
 ## Review Guidelines
 {review_guidelines}
 """,
     tools=[get_file_contents],
+    policies=[policy.allow_all()],
 )
-```text
+```
 
-> **Why skills instead of hardcoding?** Changing review guidelines means editing `SKILL.md`, not touching agent code. Different teams can swap skill packs. New frameworks get a new skill — the agent code doesn't change.
+Skills can also be loaded natively via `LocalAgentConfig(skills_paths=["/path/to/skills/"])` — the SDK discovers `SKILL.md` files automatically.
 
 ---
 
-## 3.3 — Session State: Passing Context Through Pipelines <span class="duration-badge">10 min</span>
+## 3.3 — Policy and Safety <span class="duration-badge">10 min</span>
 
-In multi-agent pipelines, agents communicate through **session state** — not conversation history. This is critical for token efficiency and reliability.
-
-### Why Session State?
-
-Sub-agents in a pipeline use `include_contents="none"` — they don't see the conversation. They only see what's written to session state. This:
-
-- Eliminates token bloat from multi-turn history
-- Makes each step deterministic (reads from explicit keys, not implicit context)
-- Lets you inspect the pipeline's data at every step
-
-### Writing to State (Tool Pattern)
+**Policy is the first thing you configure** — it controls what the agent is allowed to do without human approval. Every `LocalAgentConfig` needs a `policies=` list:
 
 ```python
-from google.adk.tools import FunctionTool
+from google.antigravity.hooks import policy
 
-def seed_pipeline_context(
-    topic: str,
-    audience: str,
-    depth: str,
-    tool_context,  # injected by ADK
-) -> dict:
-    """Seeds structured context into session state for downstream sub-agents.
+# Fully autonomous — approve all tool calls (use for trusted, sandboxed agents)
+policies=[policy.allow_all()]
 
-    Args:
-        topic: The main subject to process.
-        audience: Target audience (e.g. 'senior engineers', 'end users').
-        depth: Depth level: 'overview', 'detailed', or 'comprehensive'.
+# Default behaviour — ask user before running shell commands, allow everything else
+policies=[policy.confirm_run_command()]
 
-    Returns:
-        Confirmation dict with the seeded keys.
-    """
-    tool_context.state["topic"] = topic
-    tool_context.state["audience"] = audience
-    tool_context.state["depth"] = depth
-    return {"status": "context_seeded", "keys": ["topic", "audience", "depth"]}
-```text
+# Fine-grained rules (evaluated in order, first match wins)
+async def approval_handler(tool_call) -> bool:
+    answer = input(f"Allow {tool_call.name}? [y/N]: ")
+    return answer.lower() == "y"
 
-### Reading from State (Sub-Agent Pattern)
+policies=[
+    policy.deny("run_command"),                 # never run shell commands
+    policy.allow("view_file"),                  # always allow reading
+    policy.ask_user("edit_file", handler=approval_handler),  # ask before every write
+    policy.allow("*"),                          # allow everything else
+]
 
-```python
-from google.adk.agents import LlmAgent
+# Conditional deny — block dangerous patterns
+policy.deny("run_command", when=lambda args: "rm -rf" in args.get("CommandLine", ""))
 
-section_writer = LlmAgent(
-    name="section_writer",
-    model="gemini-3.1-flash-lite-preview",
-    include_contents="none",  # No conversation history — state only
-    instruction="""Write a detailed section based on the context provided.
+# Scope file operations to a specific directory
+policy.workspace_only(["/path/to/project"])
+```
 
-Topic: {topic}
-Audience: {audience}
-Depth: {depth}
-Outline: {document_outline}
-""",
-    output_key="written_section",  # Writes result back to state
-)
-```text
-
-> ADK substitutes `{key}` placeholders in the instruction from session state automatically.
+> **Priority order:** `specific_deny` > `specific_ask` > `specific_allow` > `wildcard_deny` > `wildcard_ask` > `wildcard_allow`
 
 ---
 
-## 3.4 — Multi-Agent Orchestration <span class="duration-badge">20 min</span>
+## 3.4 — Hooks: Observability and Control <span class="duration-badge">10 min</span>
 
-ADK gives you three orchestration primitives:
-
-### SequentialAgent — Steps in Order
-
-Run sub-agents one after another. Output of each step feeds the next via session state:
+Hooks let you intercept and react to every event in the agent lifecycle — for logging, auditing, guardrails, or custom approval flows:
 
 ```python
-from google.adk.agents import SequentialAgent
+from google.antigravity.hooks import hooks
+from google.antigravity.types import ToolCall, ToolResult, HookResult
 
-pipeline = SequentialAgent(
-    name="review_pipeline",
-    sub_agents=[
-        file_reader,      # Step 1: Read the code
-        issue_detector,   # Step 2: Find issues
-        fix_suggester,    # Step 3: Suggest fixes
-        report_writer,    # Step 4: Format the report
-    ],
+# Block dangerous tool calls BEFORE they execute
+@hooks.pre_tool_call_decide
+async def security_guard(tool_call: ToolCall) -> HookResult:
+    if tool_call.name == "run_command":
+        cmd = tool_call.args.get("CommandLine", "")
+        if any(danger in cmd for danger in ["rm -rf", "drop table", "DELETE FROM"]):
+            return HookResult(allow=False, message=f"Blocked dangerous command: {cmd}")
+    return HookResult(allow=True)
+
+# Log all tool completions (non-blocking, read-only)
+@hooks.post_tool_call
+async def audit_logger(tool_result: ToolResult) -> None:
+    print(f"[AUDIT] tool={tool_result.name} success={tool_result.success}")
+
+# Initialise state when a session begins
+@hooks.on_session_start
+async def initialise_state() -> None:
+    print("[AGENT] Session started — ready.")
+
+config = LocalAgentConfig(
+    hooks=[security_guard, audit_logger, initialise_state],
+    policies=[policy.allow_all()],
+    model="gemini-3.5-flash",
+    system_instructions="You are a code reviewer.",
+    tools=[get_file_contents],
 )
-```text
+```
 
-### ParallelAgent — Independent Work Simultaneously
+**Hook types:**
 
-Run sub-agents at the same time. Use when steps don't depend on each other:
+| Hook | Blocks execution | Modifies data | Use for |
+| :-- | :-- | :-- | :-- |
+| `@hooks.pre_tool_call_decide` | Yes | No | Approve/deny tool calls |
+| `@hooks.post_tool_call` | No | No | Logging, metrics |
+| `@hooks.pre_turn` | No | No | Turn-level logging |
+| `@hooks.post_turn` | No | No | Response logging |
+| `@hooks.on_session_start/end` | No | No | Setup/teardown |
+| `@hooks.on_tool_error` | Yes | Yes | Error recovery |
 
-```python
-from google.adk.agents import ParallelAgent
+---
 
-parallel_analysis = ParallelAgent(
-    name="parallel_review",
-    sub_agents=[
-        security_scanner,    # Looks for vulnerabilities
-        style_checker,       # Checks code style
-        test_coverage_check, # Maps test gaps
-    ],
-)
-```text
+## 3.5 — Multi-Agent Orchestration <span class="duration-badge">15 min</span>
 
-> **When to use parallel:** Any time you have N independent analyses that could run simultaneously. This cuts wall-clock time by 60–80% compared to sequential.
+`google-antigravity` has no `SequentialAgent` or `ParallelAgent` classes. Multi-agent is done two ways: **model-driven** (let the agent spawn subagents) or **Python-driven** (you orchestrate `Agent` instances directly).
 
-### LlmAgent — Conditional Routing
+### Pattern A — Model-Driven Subagents
 
-An LLM decides which sub-agent to invoke based on input:
+Enable `START_SUBAGENT` in capabilities. The model calls it when it decides to delegate:
 
 ```python
-from google.adk.agents import LlmAgent
+from google.antigravity.types import BuiltinTools, CapabilitiesConfig
 
-orchestrator = LlmAgent(
-    name="review_orchestrator",
+config = LocalAgentConfig(
+    capabilities=CapabilitiesConfig(
+        enable_subagents=True,
+        enabled_tools=BuiltinTools.all_tools(),
+    ),
+    policies=[policy.allow_all()],
     model="gemini-3.1-pro-preview",
-    instruction="""Classify the incoming request and route to the correct agent.
-    
-    - If the user wants code reviewed: route to code_reviewer
-    - If the user wants compliance checked: route to compliance_analyst
-    - If the user wants both: route to code_reviewer first, then compliance_analyst
-    """,
-    sub_agents=[code_reviewer, compliance_analyst],
+    system_instructions="""You are an engineering lead.
+For complex tasks, spawn focused subagents to handle each part in parallel.
+Synthesise their outputs into a final summary.""",
 )
-```text
+```
 
-> Use `gemini-3.1-pro-preview` for orchestrators. Routing mistakes are expensive — a cheaper model routing to the wrong agent wastes the entire pipeline's compute.
+### Pattern B — Sequential Pipeline (Python-Driven)
 
-### Zero-Cost Guards (BaseAgent)
-
-`BaseAgent` runs Python logic with no model call — no tokens, no latency:
+Pass the output of one agent as the input to the next:
 
 ```python
-from google.adk.agents import BaseAgent
-from google.adk.invocation_context import InvocationContext
+async def sequential_review(file_path: str):
+    # Step 1 — read and summarise the file
+    async with Agent(reader_config) as reader:
+        r1 = await reader.chat(f"Read and summarise {file_path}")
+        summary = await r1.text()
 
-class DriftDetector(BaseAgent):
-    """Checks whether gathered research matches the original topic.
-    Aborts the pipeline early if research drifted off-topic.
-    Uses keyword overlap heuristic — zero token cost.
-    """
-    async def _run_async_impl(self, ctx: InvocationContext):
-        topic_keywords = set(ctx.session.state.get("topic", "").lower().split())
-        research = ctx.session.state.get("research_summary", "").lower()
-        
-        overlap = sum(1 for word in topic_keywords if word in research)
-        overlap_ratio = overlap / max(len(topic_keywords), 1)
-        
-        if overlap_ratio < 0.3:
-            ctx.session.state["drift_detected"] = True
-            # Raising here aborts the pipeline
-            raise ValueError(f"Research drifted: only {overlap_ratio:.0%} keyword overlap")
-        
-        ctx.session.state["drift_detected"] = False
-```text
+    # Step 2 — security audit using the summary
+    async with Agent(security_config) as auditor:
+        r2 = await auditor.chat(f"Security audit this code summary:\n\n{summary}")
+        report = await r2.text()
 
-> **The pattern:** Put zero-cost guards between expensive steps. A drift detector that catches a wrong-topic research run saves the entire generation pipeline's compute.
+    return report
+```
 
----
+### Pattern C — Parallel Analysis
 
-## 3.5 — Running and Testing Locally <span class="duration-badge">10 min</span>
+Run independent agents simultaneously with `asyncio.gather`:
 
-### Interactive Testing with ADK Web
+```python
+async def parallel_analysis(file_path: str):
+    async with (
+        Agent(security_config) as security_agent,
+        Agent(style_config)    as style_agent,
+        Agent(perf_config)     as perf_agent,
+    ):
+        results = await asyncio.gather(
+            security_agent.chat(f"Security review: {file_path}"),
+            style_agent.chat(f"Style review: {file_path}"),
+            perf_agent.chat(f"Performance review: {file_path}"),
+        )
+        texts = await asyncio.gather(*[r.text() for r in results])
 
-```bash
-adk web .
-```text
-
-Opens a browser UI. Select your agent, send messages, inspect session state at each step. The best way to iterate quickly.
-
-### Non-Interactive Testing
-
-```bash
-# Run a single prompt through your agent
-adk run . --prompt "Review the file at src/auth/login.py"
-
-# Run evaluation suite against golden test cases
-adk eval . --eval-set evals/review_agent.evalset.json
-```text
-
-### Eval File Structure
-
-```json
-{
-  "eval_set_id": "code_reviewer_evals",
-  "eval_cases": [
-    {
-      "eval_id": "basic_review",
-      "conversation": [
-        {
-          "role": "user",
-          "parts": [{ "text": "Review src/auth/login.py" }]
-        }
-      ],
-      "expected_tool_use": [
-        { "tool_name": "get_file_contents", "tool_input": { "file_path": "src/auth/login.py" } }
-      ],
-      "reference": "The review should identify the hardcoded secret on line 12."
+    return {
+        "security": texts[0],
+        "style":    texts[1],
+        "perf":     texts[2],
     }
-  ]
-}
-```text
+```
 
-> **Golden test philosophy:** Don't just test "does it produce output." Test "does it produce the right output for a known input." The eval set is your regression guard — run it before every deploy.
-
----
-
-## 3.6 — Deployment to Cloud Run <span class="duration-badge">10 min</span>
-
-```bash
-# Deploy to Cloud Run
-adk deploy cloud_run \
-  --project gpu-launchpad-playground \
-  --region us-central1 \
-  --service-name paul-sdlc-code-reviewer \
-  .
-```text
-
-> **Naming convention:** Always prefix with `paul-sdlc-` when deploying to `gpu-launchpad-playground`.
-
-### What Gets Deployed
-
-ADK packages your agent directory into a container, deploys it as a Cloud Run service, and exposes an HTTP endpoint. The service accepts requests in the ADK session protocol.
-
-### Calling the Deployed Agent
-
-```bash
-curl -X POST \
-  "https://paul-sdlc-code-reviewer-xxx-uc.a.run.app/run" \
-  -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
-  -H "Content-Type: application/json" \
-  -d '{"user_id": "workshop", "session_id": "session-1", "new_message": {"role": "user", "parts": [{"text": "Review src/auth/login.py"}]}}'
-```text
+> **When to use parallel:** Any time you have N independent analyses. This cuts wall-clock
+> time by 60–80% compared to running them sequentially.
 
 ---
 
-## 3.7 — Project Structure Conventions <span class="duration-badge">5 min</span>
+## 3.6 — Streaming and Structured Output <span class="duration-badge">5 min</span>
 
-Structure your agent project for maintainability and ADK compatibility:
+### Streaming Responses
+
+```python
+async with Agent(config) as agent:
+    response = await agent.chat("Write a detailed security report...")
+
+    # Stream text deltas as they arrive
+    async for delta in response:
+        print(delta, end="", flush=True)
+
+    # Stream reasoning/thinking (if thinking enabled)
+    async for thought in response.thoughts:
+        print(f"[thinking] {thought}")
+```
+
+### Structured Output
+
+Bind the agent's output to a Pydantic schema:
+
+```python
+import asyncio
+import pydantic
+from google.antigravity import Agent, LocalAgentConfig
+from google.antigravity.hooks import policy
+
+class ReviewResult(pydantic.BaseModel):
+    issues: list[str]
+    severity: str          # 'critical' | 'warning' | 'info'
+    recommendation: str
+
+config = LocalAgentConfig(
+    response_schema=ReviewResult,
+    system_instructions="Analyse the code and return structured output via the finish tool.",
+    policies=[policy.allow_all()],
+    model="gemini-3.5-flash",
+    tools=[get_file_contents],
+)
+
+async def main():
+    async with Agent(config) as agent:
+        response = await agent.chat("Review src/auth/login.py")
+        result = await response.structured_output()   # dict matching ReviewResult schema
+        print(result["severity"], result["issues"])
+
+asyncio.run(main())
+```
+
+---
+
+## 3.7 — Session Resume and Persistence <span class="duration-badge">5 min</span>
+
+```python
+# First session — save the conversation ID
+async with Agent(config) as agent:
+    await agent.chat("Analyse this codebase and build a mental model.")
+    conv_id = agent.conversation_id   # persist this
+
+# Later session — resume exactly where you left off
+resume_config = LocalAgentConfig(
+    conversation_id=conv_id,
+    save_dir="/path/where/first/session/was/saved",
+    model="gemini-3.5-flash",
+    policies=[policy.allow_all()],
+)
+async with Agent(resume_config) as agent:
+    await agent.chat("Now suggest the top 3 refactoring priorities.")
+```
+
+---
+
+## 3.8 — Triggers: Autonomous Background Agents <span class="duration-badge">5 min</span>
+
+```python
+import asyncio
+from google.antigravity import Agent, LocalAgentConfig
+from google.antigravity.hooks import policy
+from google.antigravity.triggers import every, on_file_change, TriggerContext
+
+# Poll every 60 seconds
+async def check_for_new_issues(ctx: TriggerContext) -> None:
+    await ctx.send("Scan the repo for any new TODO comments added since last run.")
+
+# React to file changes
+async def on_code_change(ctx: TriggerContext, changes) -> None:
+    paths = [c.path for c in changes]
+    await ctx.send(f"Files changed: {paths}. Run quick security check.")
+
+config = LocalAgentConfig(
+    triggers=[
+        every(60.0, check_for_new_issues),
+        on_file_change("/path/to/src", on_code_change),
+    ],
+    policies=[policy.allow_all()],
+    model="gemini-3.5-flash",
+    system_instructions="You are a background code monitor.",
+)
+
+async def main():
+    # The agent runs indefinitely, responding to triggers
+    async with Agent(config) as agent:
+        await asyncio.Event().wait()  # keep alive
+
+asyncio.run(main())
+```
+
+---
+
+## 3.9 — Project Structure Conventions <span class="duration-badge">5 min</span>
+
+Structure your agent project for maintainability:
 
 ```text
 my_agent/
-├── agent.py                  # root_agent definition — ADK entry point
+├── main.py                   # entry point — asyncio.run(main())
+├── config.py                 # LocalAgentConfig construction
 ├── tools/
 │   ├── __init__.py
-│   ├── file_reader.py        # One tool per file
+│   ├── file_reader.py        # one tool per file
 │   └── search_tool.py
+├── hooks/
+│   ├── __init__.py
+│   └── security_guard.py     # pre_tool_call_decide hooks
 ├── skills/
 │   └── domain-expertise/
-│       └── SKILL.md          # Portable skill packs
-├── sub_agents/               # For multi-agent pipelines
-│   ├── researcher.py
-│   └── writer.py
-├── evals/
-│   └── agent.evalset.json    # Golden test cases
+│       └── SKILL.md          # portable skill packs
 ├── tests/
 │   ├── test_file_reader.py
 │   └── test_search_tool.py
-├── pyproject.toml            # Dependencies
+├── requirements.txt          # google-antigravity + deps
 └── README.md
-```text
+```
 
-> **ADK entry point rule:** ADK looks for `root_agent` in `agent.py` at the package root. This name is required — don't rename it.
+### Deployment to Cloud Run
+
+Deploy as a standard Python async application:
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["python", "main.py"]
+```
+
+```bash
+gcloud run deploy paul-sdlc-code-reviewer \
+  --source . \
+  --project gpu-launchpad-playground \
+  --region us-central1 \
+  --allow-unauthenticated
+```
+
+> **Naming convention:** Always prefix with `paul-sdlc-` when deploying to `gpu-launchpad-playground`.
 
 ---
 
-## Hands-On Exercise
+## Hands-On Exercises
 
 <div class="exercise-card" markdown>
 
@@ -430,25 +526,25 @@ my_agent/
 
 **What you'll implement:**
 
-1. Define 3 tools: `read_file`, `list_directory`, `write_report`
-2. Write a system prompt with a review rubric (loaded from a SKILL.md)
-3. Wire the agent with `Agent(name=..., model=..., tools=...)`
-4. Test interactively with `adk web .`
-5. Run the eval suite against 2 golden test cases
+1. Define 3 tools: `read_file`, `list_directory`, `record_finding` (with `ToolContext`)
+2. Write a system prompt with a review rubric (loaded from a `SKILL.md`)
+3. Configure `LocalAgentConfig` with `policy.allow_all()` and `CapabilitiesConfig`
+4. Add a `@hooks.pre_tool_call_decide` security guard
+5. Run with streaming output and structured `ReviewResult` Pydantic schema
 
 ### :material-graph: Exercise 11: Multi-Agent Pipeline
 
 **File:** `exercises/ex11_multi_agent_pipeline.md`  
 **Duration:** 45 min  
-**Build:** A **Write-then-Audit Pipeline** — a Technical Writer agent produces a document, then a Compliance Analyst agent evaluates it for GDPR gaps.
+**Build:** A **Write-then-Audit Pipeline** — a Technical Writer agent produces a document, then a Compliance Analyst audits it for GDPR gaps.
 
 **What you'll implement:**
 
-1. Build a `technical_writer` agent with a PRD skill
-2. Build a `compliance_analyst` agent with a GDPR skill
-3. Wire them sequentially: `SequentialAgent(sub_agents=[writer, analyst])`
-4. Add a `ParallelAgent` for simultaneous web research + Drive context gathering
-5. Add a zero-cost `BaseAgent` drift detector between research and generation
+1. Build a `technical_writer` agent with a GDPR SKILL.md loaded via `skills_paths`
+2. Build a `compliance_analyst` agent with `response_schema=ComplianceReport`
+3. Wire them sequentially: output of writer passed as input to analyst
+4. Add a parallel variant using `asyncio.gather` for simultaneous draft + legal check
+5. Add session resume: analyst reads the writer's `conversation_id` to load context
 6. Deploy to Cloud Run as `paul-sdlc-<yourname>-pipeline`
 
 </div>
@@ -459,18 +555,21 @@ my_agent/
 
 | Primitive | What It Does | When to Use |
 | :-- | :-- | :-- |
-| `Agent` | Single LLM agent with tools and system prompt | The core building block |
-| `LlmAgent` | Agent that routes to sub-agents based on LLM decision | Orchestrators, intent routers |
-| `SequentialAgent` | Runs sub-agents in order, passing state between them | Linear pipelines |
-| `ParallelAgent` | Runs sub-agents simultaneously | Independent analyses |
-| `BaseAgent` | Pure Python logic, zero token cost | Guards, checks, state manipulation |
-| `FunctionTool` | Wraps a Python function as a callable tool | Any external operation |
-| `output_key` | Writes agent output to named session state key | Pipeline data passing |
-| `include_contents="none"` | Sub-agent ignores conversation history | Token-efficient pipeline agents |
-| Skills (`SKILL.md`) | Domain knowledge loaded at runtime | Portable expertise |
-| `adk web .` | Interactive browser testing UI | Local development |
-| `adk eval .` | Golden test evaluation | Regression testing |
-| `adk deploy cloud_run` | Deploy to Cloud Run | Production serving |
+| `Agent` | Single LLM agent with tools, hooks, policy | The core — every agent starts here |
+| `LocalAgentConfig` | All config in one place (model, tools, policy, hooks) | Always |
+| `tools=[fn]` | Plain Python callable, docstring is the schema | Any external operation |
+| `ToolContext` | State read/write injected into tools | Stateful tools in pipelines |
+| `policy.allow_all()` | Approve all tool calls autonomously | Trusted, sandboxed agents |
+| `policy.deny("run_command")` | Block specific tool types | Safety guardrails |
+| `@hooks.pre_tool_call_decide` | Block/approve tool calls before execution | Security guards |
+| `@hooks.post_tool_call` | Observe completed tool calls | Audit logging |
+| `response_schema=` | Bind output to Pydantic schema | Structured data extraction |
+| `async for delta in response:` | Stream text as it arrives | Long-form generation |
+| `asyncio.gather(...)` | Run agents in parallel | Independent analyses |
+| `every(60, handler)` | Trigger agent on interval | Background monitors |
+| `on_file_change(path, fn)` | Trigger agent on filesystem events | Live code watchers |
+| `skills_paths=[...]` | Load SKILL.md files at runtime | Portable domain expertise |
+| `conversation_id=` | Resume a previous session | Multi-session workflows |
 
 ---
 
