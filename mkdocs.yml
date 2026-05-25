@@ -1,5 +1,5 @@
-site_name: "agy-cli Field Workshop"
-site_description: "Hands-on field workshop for Antigravity CLI — SDLC productivity, plugins, automation, multi-agent patterns"
+site_name: "Antigravity CLI Field Workshop"
+site_description: "Hands-on field workshop for Antigravity CLI — from daily SDLC productivity to building production AGY agents with the SDK"
 site_url: "https://pauldatta.github.io/agy-cli-field-workshop"
 repo_url: "https://github.com/pauldatta/agy-cli-field-workshop"
 repo_name: "pauldatta/agy-cli-field-workshop"
@@ -45,12 +45,14 @@ nav:
       - Environment Setup: setup.md
   - "🛠️ Workshop":
       - "1. SDLC Productivity": sdlc-productivity.md
-      - "2. Plugin Ecosystem": plugin-ecosystem.md
-      - "3. DevOps & Automation": devops-automation.md
+      - "2. Legacy Modernization ⭐": legacy-modernization.md
+      - "3. Building AGY Agents": agy-sdk.md
       - "4. Multi-Agent & Advanced": multi-agent-advanced.md
   - "📋 Resources":
       - Cheatsheet: cheatsheet.md
       - Facilitator Guide: facilitator-guide.md
+      - "Reference: Plugin Ecosystem": plugin-ecosystem.md
+      - "Reference: DevOps Patterns": devops-automation.md
 
 markdown_extensions:
   - admonition
