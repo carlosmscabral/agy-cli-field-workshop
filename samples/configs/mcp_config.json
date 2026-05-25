@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "plugin-tool": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["./server/index.js"],
+      "env": {
+        "PLUGIN_API_KEY": "$PLUGIN_API_KEY"
+      }
+    }
+  }
+}

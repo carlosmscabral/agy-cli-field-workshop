@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: AGY CLI Documentation
+    url: https://antigravity.google/docs/cli-overview
+    about: Official AGY CLI docs — check here first for command reference and configuration guides
+  - name: AGY CLI Bug (not workshop)
+    url: https://issuetracker.google.com/
+    about: Report bugs in agy itself (not this workshop) to the AGY CLI team via Google Issue Tracker

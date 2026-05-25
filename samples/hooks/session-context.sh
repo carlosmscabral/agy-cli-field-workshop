@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# PreInvocation hook: Injects project state into the session context
+# Performance: <200ms — reads package.json + git status
+#
+# PURPOSE: At the start of every agy session, give the agent a quick
+# summary of the project state: current branch, pending changes,
+# and key dependencies. This steers early prompts toward
+# awareness of what's in-flight.
+#
+# AGY CLI hook event: PreInvocation
+# Register in: .agents/hooks.json or settings.json under "PreInvocation"
+
+input=$(cat)
+cwd=$(echo "$input" | jq -r '.cwd' 2>/dev/null)
+
+# Gather lightweight project state
+branch=$(git -C "$cwd" branch --show-current 2>/dev/null || echo "unknown")
+dirty_count=$(git -C "$cwd" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+node_version=$(node --version 2>/dev/null || echo "not installed")
+
+context="Session context: branch=$branch, uncommitted_files=$dirty_count, node=$node_version"
+
+# Inject as system message — the agent sees this as background context
+echo "{\"systemMessage\":\"$context\"}"

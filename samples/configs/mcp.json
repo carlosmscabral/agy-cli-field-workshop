@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "github-mcp-server"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_TOKEN"
+      }
+    },
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
+    },
+    "workshop-remote": {
+      "type": "sse",
+      "serverUrl": "https://your-mcp-server.example.com/sse",
+      "env": {
+        "API_KEY": "$MCP_API_KEY"
+      }
+    }
+  }
+}

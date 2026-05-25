@@ -1,0 +1,80 @@
+name: 'Bug Report'
+description: 'Report an issue with workshop content, setup, exercises, or sample code'
+labels:
+  - 'type/bug'
+  - 'status/triage'
+body:
+  - type: 'markdown'
+    attributes:
+      value: |-
+        > [!IMPORTANT]
+        > Thanks for reporting this issue!
+        >
+        > Please search **[existing issues](https://github.com/pauldatta/agy-cli-field-workshop/issues)** to see if this has already been reported.
+        >
+        > For bugs in `agy` itself (not the workshop docs): report directly to the AGY CLI team.
+
+  - type: 'textarea'
+    id: 'problem'
+    attributes:
+      label: 'What happened?'
+      description: 'A clear description of the issue you encountered.'
+    validations:
+      required: true
+
+  - type: 'textarea'
+    id: 'expected'
+    attributes:
+      label: 'What did you expect to happen?'
+    validations:
+      required: true
+
+  - type: 'textarea'
+    id: 'reproduce'
+    attributes:
+      label: 'Steps to reproduce'
+      value: |-
+        1. Run `agy`
+        2. Navigate to module '...'
+        3. Run prompt '...'
+        4. See error
+
+  - type: 'dropdown'
+    id: 'area'
+    attributes:
+      label: 'Which area is affected?'
+      options:
+        - Setup / Installation
+        - Workshop content (docs)
+        - Sample code / hooks / agents
+        - Exercises (ex01–ex07)
+        - Migration guide (M09)
+        - Site / Navigation
+        - Other
+    validations:
+      required: true
+
+  - type: 'dropdown'
+    id: 'os'
+    attributes:
+      label: 'Operating System'
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - Other
+    validations:
+      required: true
+
+  - type: 'textarea'
+    id: 'agy-version'
+    attributes:
+      label: 'AGY CLI version'
+      description: 'Run `agy changelog` and paste the version here.'
+      placeholder: 'agy v1.x.x'
+
+  - type: 'textarea'
+    id: 'additional-context'
+    attributes:
+      label: 'Additional context'
+      description: 'Add terminal output, screenshots, or error messages.'

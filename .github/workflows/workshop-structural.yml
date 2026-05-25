@@ -1,0 +1,128 @@
+name: '🏗️ Structural Tests'
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  structure:
+    name: File Structure & Config Syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          echo "📋 Checking required files..."
+          errors=0
+          for f in README.md mkdocs.yml docs/index.md \
+                   samples/configs/settings.json samples/configs/mcp.json \
+                   AUDIT.md CHANGELOG.md; do
+            if [ -f "$f" ]; then
+              echo "  ✅ $f"
+            else
+              echo "  ❌ Missing: $f"
+              errors=$((errors + 1))
+            fi
+          done
+          if [ "$errors" -gt 0 ]; then exit 1; fi
+
+      - name: Validate JSON configs
+        run: |
+          echo "📋 Validating JSON..."
+          for f in samples/configs/*.json; do
+            jq . "$f" > /dev/null && echo "  ✅ $f — valid"
+          done
+
+      - name: Validate shell script syntax
+        run: |
+          echo "📋 Checking shell scripts..."
+          for f in scripts/*.sh samples/hooks/*.sh; do
+            [ -f "$f" ] || continue
+            bash -n "$f" && echo "  ✅ $f"
+          done
+
+      - name: Validate agent frontmatter
+        run: |
+          echo "📋 Checking agent definitions..."
+          for f in samples/agents/*.md; do
+            [ -f "$f" ] || continue
+            if head -1 "$f" | grep -q '^---'; then
+              echo "  ✅ $f — frontmatter OK"
+            else
+              echo "  ❌ $f — missing YAML frontmatter"
+              exit 1
+            fi
+          done
+
+      - name: Check for stale Gemini CLI references
+        run: |
+          echo "📋 Checking for stale 'gemini' binary references..."
+          # Flag bare 'gemini' commands but allow "Gemini CLI" as a noun
+          if grep -rqE '^\s*(gemini |`gemini )' docs/*.md 2>/dev/null; then
+            echo "  ❌ Found bare 'gemini' command calls — should be 'agy'"
+            grep -rnoE '^\s*(gemini |`gemini )' docs/*.md | head -10
+            exit 1
+          else
+            echo "  ✅ No stale 'gemini' binary references"
+          fi
+
+      - name: Check for stale Gemini CLI hook event names
+        run: |
+          echo "📋 Checking for stale hook event names..."
+          for stale in SessionStart BeforeTool AfterTool; do
+            if grep -rq "\"${stale}\"" docs/ samples/ 2>/dev/null; then
+              echo "  ❌ Stale hook event '${stale}' found — use PreInvocation/PreToolUse/PostToolUse"
+              exit 1
+            fi
+          done
+          echo "  ✅ All hook event names are AGY-correct"
+
+      - name: Validate mkdocs.yml nav alignment
+        run: |
+          echo "📋 Checking nav alignment..."
+          pip install mkdocs-material -q
+          mkdocs build --strict
+          echo "  ✅ MkDocs build (strict) passed"
+
+  code-blocks:
+    name: Code Block Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python (for YAML validation)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Validate code blocks in docs
+        run: |
+          chmod +x scripts/validate-code-blocks.sh
+          ./scripts/validate-code-blocks.sh docs/
+
+  drift:
+    name: Drift Detection
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check local drift
+        run: |
+          chmod +x scripts/detect-drift.sh
+          ./scripts/detect-drift.sh
+
+  markdown-lint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint markdown
+        run: |
+          npx -y markdownlint-cli2 "docs/**/*.md" "README.md"
