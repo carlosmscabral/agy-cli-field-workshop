@@ -38,7 +38,7 @@ make check-env
 # Serve the docs locally
 make install-deps
 make serve
-```bash
+```
 
 Open [http://localhost:8000](http://localhost:8000) for the workshop site.
 
@@ -63,14 +63,14 @@ Open [http://localhost:8000](http://localhost:8000) for the workshop site.
 │   └── check-env.sh         # Pre-workshop validator
 ├── Makefile
 └── mkdocs.yml
-```bash
+```
 
 ---
 
 ## Delivery Formats
 
 | Format | Modules | Duration |
-|---|---|---|
+| :-- | :-- | :-- |
 | ⚡ Lightning | 1 + 2 highlights | 1.5 hrs |
 | 📋 Standard | 1 + 2 + 3 | 2.5 hrs |
 | 📦 Full | All four modules | 3.5 hrs |

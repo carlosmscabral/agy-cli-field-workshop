@@ -11,14 +11,14 @@ agy-cli's plugin system does something unique: it can **import plugins you've al
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
-```bash
+```
 
 The output is JSON showing each plugin's name, source, import date, and components (skills, commands, mcpServers, agents).
 
 ```bash
 # More readable
 agy plugin list | python3 -m json.tool
-```bash
+```
 
 > 📖 Official docs: [Plugins](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [Skills](https://www.antigravity.google/docs/skills)
 
@@ -32,11 +32,12 @@ agy plugin list | python3 -m json.tool
 
 ```bash
 agy plugin import gemini
-```bash
+```
 
-agy scans your local Gemini CLI installation, discovers all installed plugins, and stages their components (skills, commands, MCP servers, agents) into agy's config at `~/.gemini/antigravity-cli/`.
+agy scans your local Gemini CLI installation, discovers all installed plugins, and stages their components (skills, commands, MCP servers, agents) into agy's config at `~/.gemini/antigravity/`.
 
 Output looks like:
+
 ```text
   [ok]    code-review
           ✔ skills      : 3 processed
@@ -46,7 +47,7 @@ Output looks like:
           ✔ commands    : 1 processed
           ✔ mcpServers  : 1 processed
   [skip]  superpowers (already imported)
-```text
+```
 
 !!! tip "Re-import with --force"
     Already imported plugins are skipped by default. To force re-import after a plugin update:
@@ -57,7 +58,7 @@ Output looks like:
 ### What Gets Imported
 
 | Component | What it means |
-|---|---|
+| :-- | :-- |
 | `skills` | SKILL.md files with YAML frontmatter — injected into agy's context |
 | `commands` | Slash commands available inside agy sessions |
 | `mcpServers` | MCP tool servers (GitHub, gcloud, Workspace, etc.) — stdio or SSE |
@@ -73,7 +74,7 @@ Output looks like:
 
 ```bash
 agy plugin import claude
-```text
+```
 
 Same mechanic — agy discovers your Claude Code extension installations and bridges compatible components.
 
@@ -97,20 +98,20 @@ agy plugin enable gemini-deep-research
 
 # Check current state
 agy plugin list
-```bash
+```
 
 ### Plugin Locations
 
 Plugins can be installed at two levels:
 
 | Scope | Path |
-|---|---|
+| :-- | :-- |
 | **Global** | `~/.gemini/config/plugins/` |
 | **Project** | `.agents/plugins/` |
 
 ### Install a Specific Plugin
 
-```text
+```bash
 # Install by name (from configured source)
 agy plugin install <plugin-name>
 
@@ -126,7 +127,7 @@ agy plugin install <plugin-name>@<version>
 
 ### Validate an Existing Plugin Directory
 
-```text
+```bash
 # Validate a plugin directory
 agy plugin validate ./path/to/my-plugin
 
@@ -192,7 +193,7 @@ agy plugin validate samples/plugins/workshop-helpers/
 
 ```mermaid
 graph LR
-    GC["Gemini CLI\nPlugins"] --> |agy plugin import gemini| S["Plugin Staging\n~/.gemini/antigravity-cli/plugins/"]
+    GC["Gemini CLI\nPlugins"] --> |agy plugin import gemini| S["Plugin Staging\n~/.gemini/antigravity/plugins/"]
     CC["Claude Code\nExtensions"] --> |agy plugin import claude| S
     S --> |agy plugin enable/disable| A[agy session]
     A --> SK[Skills]
@@ -206,7 +207,7 @@ graph LR
 Plugin staging directory structure:
 
 ```text
-~/.gemini/antigravity-cli/plugins/<name>/
+~/.gemini/antigravity/plugins/<name>/
 ├── plugin.json
 ├── mcp_config.json
 ├── hooks.json
@@ -311,7 +312,7 @@ The `schedule` builtin takes a cron expression as its first arg, then the comman
 
 `agentapi` is automatically available to sidecars — it lets them **programmatically create or message conversations**:
 
-```text
+```bash
 # Start a new conversation from a sidecar
 agentapi new-conversation "<prompt>"
 

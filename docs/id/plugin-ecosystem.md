@@ -11,14 +11,14 @@ Sistem plugin agy-cli melakukan sesuatu yang unik: sistem ini dapat **mengimpor 
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
-```bash
+```
 
 Outputnya adalah JSON yang menunjukkan nama, sumber, tanggal impor, dan komponen setiap plugin (skill, perintah, mcpServers, agen).
 
 ```bash
 # More readable
 agy plugin list | python3 -m json.tool
-```bash
+```
 
 > 📖 Dokumentasi resmi: [Plugin](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [Skill](https://www.antigravity.google/docs/skills)
 
@@ -32,11 +32,12 @@ agy plugin list | python3 -m json.tool
 
 ```bash
 agy plugin import gemini
-```bash
+```
 
-agy memindai instalasi Gemini CLI lokal Anda, menemukan semua plugin yang terinstal, dan menyiapkan komponennya (skill, perintah, server MCP, agen) ke dalam konfigurasi agy di `~/.gemini/antigravity-cli/`.
+agy memindai instalasi Gemini CLI lokal Anda, menemukan semua plugin yang terinstal, dan menyiapkan komponennya (skill, perintah, server MCP, agen) ke dalam konfigurasi agy di `~/.gemini/antigravity/`.
 
 Outputnya terlihat seperti:
+
 ```text
   [ok]    code-review
           ✔ skills      : 3 processed
@@ -46,10 +47,11 @@ Outputnya terlihat seperti:
           ✔ commands    : 1 processed
           ✔ mcpServers  : 1 processed
   [skip]  superpowers (already imported)
-```yaml
+```
 
 !!! tip "Impor ulang dengan --force"
     Plugin yang sudah diimpor akan dilewati secara default. Untuk memaksa impor ulang setelah pembaruan plugin:
+
     ```bash
     agy plugin import gemini --force
     ```
@@ -73,7 +75,7 @@ Outputnya terlihat seperti:
 
 ```bash
 agy plugin import claude
-```yaml
+```
 
 Same mechanic — agy discovers your Claude Code extension installations and bridges compatible components.
 
@@ -97,7 +99,7 @@ agy plugin enable gemini-deep-research
 
 # Memeriksa status saat ini
 agy plugin list
-```bash
+```
 
 ### Plugin Locations
 
@@ -116,7 +118,7 @@ agy plugin install <plugin-name>
 
 # Menginstal versi tertentu
 agy plugin install <plugin-name>@<version>
-```bash
+```
 
 ---
 
@@ -132,7 +134,7 @@ agy plugin validate ./path/to/my-plugin
 
 # Atau memvalidasi direktori saat ini
 agy plugin validate .
-```bash
+```
 
 This checks that the plugin's `plugin.json` manifest is well-formed and all referenced components exist.
 
@@ -140,7 +142,7 @@ This checks that the plugin's `plugin.json` manifest is well-formed and all refe
 
 A valid agy plugin needs a `plugin.json` manifest. Here's the official structure:
 
-```bash
+```text
 my-plugin/
 ├── plugin.json          ← manifes (wajib)
 ├── mcp_config.json      ← definisi server MCP (opsional)
@@ -151,7 +153,7 @@ my-plugin/
 ├── agents/              ← definisi sub-agen (opsional)
 └── rules/               ← file aturan (opsional)
     └── my-rules.md
-```bash
+```
 
 ```json
 {
@@ -160,14 +162,14 @@ my-plugin/
   "description": "Plugin agy kustom saya",
   "components": ["skills"]
 }
-```text
+```
 
 ```bash
 # Memvalidasinya
 agy plugin validate ./my-plugin
 
 # Jika valid, Anda akan melihat: ✔ Plugin manifest is valid
-```bash
+```
 
 ### Interacting with Plugin Components
 
@@ -184,7 +186,7 @@ The workshop repo includes a sample plugin at `samples/plugins/workshop-helpers/
 
 ```bash
 agy plugin validate samples/plugins/workshop-helpers/
-```yaml
+```
 
 ---
 
@@ -192,7 +194,7 @@ agy plugin validate samples/plugins/workshop-helpers/
 
 ```mermaid
 graph LR
-    GC["Plugin\nGemini CLI"] -->|agy plugin import gemini| S["Staging Plugin\n~/.gemini/antigravity-cli/plugins/"]
+    GC["Plugin\nGemini CLI"] -->|agy plugin import gemini| S["Staging Plugin\n~/.gemini/antigravity/plugins/"]
     CC["Ekstensi\nClaude Code"] -->|agy plugin import claude| S
     S -->|agy plugin enable/disable| A[sesi agy]
     A --> SK[Skill]
@@ -200,19 +202,19 @@ graph LR
     A --> AG[Agen]
     A --> RU[Aturan]
     A --> HK[Hook]
-```bash
+```
 
 Plugin staging directory structure:
 
 ```bash
-~/.gemini/antigravity-cli/plugins/<name>/
+~/.gemini/antigravity/plugins/<name>/
 ├── plugin.json
 ├── mcp_config.json
 ├── hooks.json
 ├── skills/
 ├── agents/
 └── rules/
-```yaml
+```
 
 ---
 

@@ -1,4 +1,4 @@
-# Module 5: Legacy Codebase Modernization
+# Module 2: Legacy Codebase Modernization
 
 <div class="module-header" markdown>
 **Duration:** ~75 minutes  
@@ -22,7 +22,7 @@ AGY's primitives address all three directly.
 
 ---
 
-## 5.1 — Strict Permissions: Read Before You Write <span class="duration-badge">15 min</span>
+## 2.1 — Strict Permissions: Read Before You Write <span class="duration-badge">15 min</span>
 
 The AGY equivalent of "Plan Mode" is **strict permissions** — a hard gate that denies all file writes and shell commands until you explicitly permit them.
 
@@ -30,14 +30,14 @@ The AGY equivalent of "Plan Mode" is **strict permissions** — a hard gate that
 
 ```bash
 /permissions
-```text
+```
 
 Set the level to `strict`:
 
 ```bash
 # In the permissions dialog, select: strict
 # Or set directly in settings.json:
-```text
+```
 
 ```json
 {
@@ -45,7 +45,7 @@ Set the level to `strict`:
     "mode": "strict"
   }
 }
-```text
+```
 
 In `strict` mode the agent can read files, search the web, and reason — but **cannot write, delete, or execute anything**. It's a hard wall, not a soft prompt.
 
@@ -63,7 +63,7 @@ Analyze this entire codebase for a migration. Map:
 4. Configuration files and external property sources
 5. Test frameworks and coverage gaps
 6. Migration risks ordered by severity
-```text
+```
 
 > **What's happening:** The agent reads every file it needs, traces imports and call chains, and builds a mental model — all with zero risk of modification. This is your reconnaissance phase.
 
@@ -73,7 +73,7 @@ Once the agent produces a migration plan, open it in your editor to refine it:
 
 ```text
 ctrl+g
-```text
+```
 
 This drops you into `$EDITOR` with the current agent output. Edit constraints, add team-specific requirements, strike out scope you don't want. The agent incorporates your edits when you save and exit.
 
@@ -86,7 +86,7 @@ Once the plan is signed off, restore write access selectively:
 ```bash
 /permissions
 # Select: request-review
-```text
+```
 
 In `request-review` mode, the agent asks for approval before every write or shell command. You see exactly what it wants to do before it does it.
 
@@ -94,7 +94,7 @@ In `request-review` mode, the agent asks for approval before every write or shel
 
 ---
 
-## 5.2 — AGENTS.md: Encoding Migration Standards <span class="duration-badge">10 min</span>
+## 2.2 — AGENTS.md: Encoding Migration Standards <span class="duration-badge">10 min</span>
 
 Context collapses over long sessions. AGENTS.md is how you prevent it — it's injected into every session automatically, no matter how long the conversation runs.
 
@@ -115,7 +115,7 @@ Based on your codebase analysis, write an AGENTS.md that:
 5. Lists files that are off-limits in this phase
 
 Write this to AGENTS.md in the project root.
-```text
+```
 
 > **Why self-onboarding works:** The agent is writing instructions for itself. Every migration decision it makes from this point forward is checked against constraints it authored. This is a self-reinforcing loop — better context produces better changes, which surface more patterns, which improve context.
 
@@ -129,7 +129,7 @@ For large projects, keep AGENTS.md lean and import detailed specs:
 @./docs/migration/architecture-target.md
 @./docs/migration/api-contracts.md
 @./docs/migration/phase-1-checklist.md
-```text
+```
 
 > 📖 Source: [cli-using](https://antigravity.google/docs/cli-using) — AGENTS.md import syntax
 
@@ -144,13 +144,13 @@ For non-negotiable requirements, use `.agents/rules.md` — these are injected a
 - NEVER modify files outside the current migration module's directory
 - ALWAYS run the test suite before declaring a phase complete
 - ALWAYS commit with message format: "migrate(phase-N): <description>"
-```text
+```
 
 > 📖 Source: [cli-using](https://antigravity.google/docs/cli-using) — `.agents/rules.md` system prompt directives
 
 ---
 
-## 5.3 — Subagents: Parallel Analysis Teams <span class="duration-badge">15 min</span>
+## 2.3 — Subagents: Parallel Analysis Teams <span class="duration-badge">15 min</span>
 
 Large migrations have multiple independent concerns — security, performance, API contracts, test coverage. Running them sequentially is slow and wastes the agent's context window. Use subagents to parallelize.
 
@@ -170,25 +170,25 @@ I need three parallel analyses before we start migrating. Please spawn:
    no test coverage. Produce a test-gap report.
 
 Run all three concurrently. I'll review the reports before we start Phase 1.
-```text
+```
 
 ### Monitor from the Subagents Panel
 
 ```bash
 /agents
-```text
+```
 
 The panel shows all running subagents with status: `running`, `done`, `killed`. Watch all three finish simultaneously.
 
 ```text
 ctrl+j
-```text
+```
 
 Teleports you to the next subagent waiting for your approval — useful if one hits a permission boundary and needs a go-ahead.
 
 ```text
 ctrl+k
-```text
+```
 
 Fast-approve a subagent permission request from the main conversation without leaving your current context.
 
@@ -222,13 +222,13 @@ Focus on:
 
 Always report: file path, line number, severity (HIGH/MEDIUM/LOW), and remediation.
 Never modify any file. Never execute any command.
-```text
+```
 
 > 📖 Source: [Subagents](https://antigravity.google/docs/subagents) · [cli-features](https://antigravity.google/docs/cli-features) — uid 5_274: fine-grained permissions JSON format
 
 ---
 
-## 5.4 — Skills: Reusable Migration Expertise <span class="duration-badge">10 min</span>
+## 2.4 — Skills: Reusable Migration Expertise <span class="duration-badge">10 min</span>
 
 Skills are instruction sets the agent reads and activates when relevant. For repeatable migrations (Java 8→21, .NET Framework→.NET 8, Express→Fastify), encode the pattern once as a skill.
 
@@ -236,15 +236,15 @@ Skills are instruction sets the agent reads and activates when relevant. For rep
 
 ```bash
 /skills
-```text
+```
 
 ### Create a Migration Skill
 
 ```bash
-mkdir -p ~/.gemini/antigravity-cli/skills/java-migration
-```text
+mkdir -p ~/.gemini/antigravity/skills/java-migration
+```
 
-Create `~/.gemini/antigravity-cli/skills/java-migration/SKILL.md`:
+Create `~/.gemini/antigravity/skills/java-migration/SKILL.md`:
 
 ```markdown
 ---
@@ -270,14 +270,24 @@ description: >
 - Gate: mvn clean verify must pass before Phase 2
 
 ### Phase 2 — Configuration Migration
-...
-```text
+
+**Goal:** Migrate XML/property-file config to type-safe structured config.
+
+**Steps:**
+1. Identify all config sources (XML, .properties, environment variables)
+2. Map to typed configuration classes
+3. Replace with framework-native config (Spring Boot `@ConfigurationProperties`, .NET `IOptions<T>`)
+4. Add validation annotations
+5. Remove legacy config loading code
+
+**Validation:** All tests pass with new config loading path.
+```
 
 > 📖 Source: [Skills](https://antigravity.google/docs/skills) · [cli-features — /skills](https://antigravity.google/docs/cli-features) — uid 5_251–5_253
 
 ---
 
-## 5.5 — Hooks: Automated Guardrails <span class="duration-badge">10 min</span>
+## 2.5 — Hooks: Automated Guardrails <span class="duration-badge">10 min</span>
 
 For enterprise migrations, you want automated gates — not just manual review. Hooks fire on CLI events and can block, warn, or log tool use before it happens.
 
@@ -300,7 +310,7 @@ if [[ "$TOOL_NAME" == "write_file" || "$TOOL_NAME" == "edit" ]]; then
     exit 1  # Non-zero exit blocks the tool call
   fi
 fi
-```text
+```
 
 Register in `settings.json`:
 
@@ -315,7 +325,7 @@ Register in `settings.json`:
     ]
   }
 }
-```text
+```
 
 ### Post-Tool Hook: Auto-Run Tests After Every File Write
 
@@ -334,13 +344,13 @@ if [[ "$TOOL_NAME" == "write_file" && "$FILE_PATH" == *".java" ]]; then
     echo "⚠️  Tests failed after writing $FILE_PATH — consider /rewind"
   fi
 fi
-```text
+```
 
 > 📖 Source: [Hooks](https://antigravity.google/docs/hooks)
 
 ---
 
-## 5.6 — /rewind and /fork: Your Safety Net <span class="duration-badge">5 min</span>
+## 2.6 — /rewind and /fork: Your Safety Net <span class="duration-badge">5 min</span>
 
 ### /rewind — Roll Back the Conversation
 
@@ -348,7 +358,7 @@ If the agent goes off-track, you don't need to start over. `/rewind` rolls back 
 
 ```bash
 /rewind
-```text
+```
 
 This opens a history picker. Select the turn to revert to. The agent's understanding of the codebase resets to that point — useful if it's accumulated incorrect assumptions during a long session.
 
@@ -360,7 +370,7 @@ Before attempting a risky migration step, fork the conversation:
 
 ```bash
 /fork
-```text
+```
 
 This creates a parallel workspace. You can try the risky approach in the fork. If it works, great. If it doesn't, close the fork and continue from the main conversation — which never changed.
 
@@ -372,7 +382,7 @@ Large migrations span multiple days. When you return:
 
 ```bash
 /resume
-```text
+```
 
 This opens a session picker showing your previous migration sessions with timestamps and conversation names. Select the right one to continue exactly where you left off.
 
@@ -382,11 +392,11 @@ Rename sessions to keep migrations organized:
 
 ```bash
 /rename "Java 21 Migration — Phase 2: Jakarta namespace"
-```text
+```
 
 ---
 
-## 5.7 — Print Mode: Non-Interactive Migration Pipeline <span class="duration-badge">5 min</span>
+## 2.7 — Print Mode: Non-Interactive Migration Pipeline <span class="duration-badge">5 min</span>
 
 For CI/CD gates or overnight migration runs, use print mode to pipe migration tasks without interaction:
 
@@ -397,14 +407,14 @@ agy -p "Review the migration changes in the last commit. \
   missing jakarta.* imports, and test files that weren't \
   updated to match renamed packages. \
   Output a structured report with file paths and line numbers."
-```text
+```
 
 ```bash
 # Chain: analyze → generate migration report → save
 agy -p "Scan src/auth/ for javax.persistence.* usage" | \
   agy -p "Convert this javax.persistence usage report into \
   a step-by-step migration plan with exact sed commands" > migration-plan.md
-```text
+```
 
 > 📖 Source: [cli-getting-started](https://antigravity.google/docs/cli-getting-started) — `agy --help`: "-p: Short alias for --print"
 
@@ -425,7 +435,7 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 #### Track A: Plan-First (Strict → Investigate → Execute)
 
 1. Set `/permissions` to `strict` — lock all writes
-2. Give the agent a full investigation mandate (Section 5.1)
+2. Give the agent a full investigation mandate (Section 2.1)
 3. Use `ctrl+g` to open the plan in your editor and add team constraints
 4. Write an AGENTS.md encoding the migration rules (or have the agent write it)
 5. Add a `.agents/rules.md` with hard non-negotiables
@@ -438,7 +448,7 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 1. Spawn three parallel subagents: security scan, dependency map, test coverage
 2. Monitor via `/agents` — use `ctrl+j` and `ctrl+k` for approvals
 3. Aggregate their reports into an AGENTS.md (have the agent synthesize)
-4. Install the `java-migration` skill (Section 5.4)
+4. Install the `java-migration` skill (Section 2.4)
 5. Use `/fork` before the riskiest step — try it there first
 6. Use print mode to generate a post-phase report
 
@@ -449,7 +459,7 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 ## Summary: AGY Primitives for Legacy Modernization
 
 | Primitive | What It Does | When to Use |
-|:--|:--|:--|
+| :-- | :-- | :-- |
 | `/permissions strict` | Hard read-only gate — no writes or commands | Investigation phase |
 | `/permissions request-review` | Agent asks before every write | Controlled execution |
 | `ctrl+g` | Open plan in `$EDITOR` for collaborative editing | Plan refinement |

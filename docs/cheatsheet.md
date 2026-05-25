@@ -13,14 +13,14 @@ agy --help         # Show all flags and subcommands
 agy changelog      # Show release notes
 agy update         # Self-update
 agy install        # Configure PATH and shell aliases
-```bash
+```
 
 ---
 
 ## Launch Modes
 
 | Mode | Command | When to use |
-|---|---|---|
+| :-- | :-- | :-- |
 | **Interactive** | `agy` | Default — full conversational session |
 | **Seeded interactive** | `agy -i "<prompt>"` | Start with direction, continue conversationally |
 | **Print (headless)** | `agy -p "<prompt>"` | Single shot, pipe to stdout |
@@ -35,7 +35,7 @@ agy install        # Configure PATH and shell aliases
 > Source: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
 
 | Flag | Short | Description |
-|---|---|---|
+| :-- | :-- | :-- |
 | `--print "<prompt>"` | `-p` | Non-interactive single prompt |
 | `--prompt-interactive "<prompt>"` | `-i` | Seeded interactive session |
 | `--continue` | `-c` | Resume most recent conversation |
@@ -55,7 +55,7 @@ agy install        # Configure PATH and shell aliases
 > Source: [CLI Features — Core Slash Commands](https://antigravity.google/docs/cli-features) · [Using Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 | Command | Category | Purpose |
-|---|---|---|
+| :-- | :-- | :-- |
 | `/resume` (`/switch`) | Conversation | Open conversation picker to resume or switch sessions |
 | `/rewind` (`/undo`) | Conversation | Roll back conversation history to a previous checkpoint |
 | `/fork` | Conversation | Branch the current conversation into a parallel isolated workspace — trial risky steps without affecting the original |
@@ -80,12 +80,12 @@ agy install        # Configure PATH and shell aliases
 > Source: [Using Antigravity CLI — Quick Tips & Keybindings](https://antigravity.google/docs/cli-using)
 
 | Shortcut / Tip | Action |
-|---|---|
+| :-- | :-- |
 | `@` | File path autocomplete (type `@` to trigger path suggestions) |
 | `!` | Run terminal commands directly from the prompt |
 | `esc esc` | Clear your prompt box (when no streaming is active) |
 | `?` | Get help and list all slash commands |
-| `alt+enter` / `ctrl+j` / `shift+enter` | Insert newline without submitting |
+| `alt+enter` / `shift+enter` | Insert newline without submitting |
 | `ctrl+g` | Edit prompt inside your default shell editor |
 | `ctrl+l` | Clear TUI screen |
 | `ctrl+d` | Exit the CLI session |
@@ -123,7 +123,7 @@ agy plugin validate ./my-plugin
 
 # Generate marketplace link
 agy plugin link <marketplace> <target>
-```yaml
+```
 
 ---
 
@@ -174,14 +174,14 @@ Minimal `sidecar.json` — scheduled recurring task:
 ~/.gemini/config/           # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
 
 # User settings:
-~/.gemini/antigravity-cli/settings.json
+~/.gemini/antigravity/settings.json
 
 # Context file (hierarchical: cwd → parent → home):
 AGENTS.md
 
 # agy also reads:
 .gemini/                    # Gemini CLI config (compatible)
-```bash
+```
 
 ### AGENTS.md Pattern
 
@@ -194,7 +194,7 @@ Brief description of what this project is.
 - Language: TypeScript, Node 20
 - Testing: Jest + Supertest
 - DO NOT run database migrations without explicit approval
-```yaml
+```
 
 ---
 
@@ -221,7 +221,7 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Schedule a recurring task (in interactive mode)
 # > Schedule a daily code quality report at 9am weekdays.
-```yaml
+```
 
 ---
 
@@ -239,7 +239,7 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Background task
 > In the background, audit all dependencies for known CVEs. Notify me when done.
-```yaml
+```
 
 ---
 
@@ -258,14 +258,14 @@ for f in src/*.ts; do
   agy --add-dir "$(dirname $f)" \
       -p "Add JSDoc to all exported functions in $(basename $f)."
 done
-```bash
+```
 
 ---
 
 ## Official Docs
 
 | Topic | Link |
-|---|---|
+| :-- | :-- |
 | CLI Overview | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | Getting Started | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
 | Using Antigravity CLI (settings, tips, keybindings) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |

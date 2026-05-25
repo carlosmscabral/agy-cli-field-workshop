@@ -23,7 +23,7 @@
 
 ```bash
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```bash
+```
 
 ### Windows
 
@@ -33,7 +33,7 @@ irm https://antigravity.google/cli/install.ps1 | iex
 
 # Or via WSL (recommended)
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```bash
+```
 
 After install, verify the binary is available:
 
@@ -42,8 +42,8 @@ After install, verify the binary is available:
 which agy
 
 # Confirm the version
-agy changelog
-```text
+agy --version
+```
 
 ---
 
@@ -57,13 +57,14 @@ agy uses **browser-based Google Sign-In**. On first run, it will:
 ```bash
 # Start agy — auth will trigger automatically on first run
 agy
-```bash
+```
 
 To sign out:
 
-```bash
+```text
+# Run this inside an agy interactive session (not in your terminal):
 /logout
-```bash
+```
 
 > 📖 For enterprise authentication via GCP project, see the [Enterprise docs](https://www.antigravity.google/docs/enterprise).
 
@@ -71,7 +72,7 @@ Once auth is configured, run a quick smoke test:
 
 ```bash
 agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
-```text
+```
 
 Expected output: `Workshop ready!`
 
@@ -88,7 +89,7 @@ cd agy-cli-field-workshop
 
 # agy will create .agents/ on first run
 agy --print "List the files in the current directory."
-```bash
+```
 
 You'll see a `.agents/` folder created with project config files (settings.json, mcp.json, etc.).
 
@@ -111,7 +112,7 @@ agy plugin list | python3 -m json.tool
 
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
-```yaml
+```
 
 Checklist before the workshop starts:
 
@@ -129,7 +130,7 @@ Checklist before the workshop starts:
 | Auth errors / browser doesn't open | For SSH sessions, copy the printed URL manually. For local, check default browser settings. Run `/logout` and retry |
 | `agy plugin list` returns empty `{}` | Expected on a fresh install. You'll populate plugins in Module 2 |
 | Slow first response | First run may be slower as agy indexes your workspace |
-| Config not loading | Check `~/.gemini/antigravity-cli/settings.json` (user settings) and `.agents/` (project settings) |
+| Config not loading | Check `~/.gemini/antigravity/settings.json` (user settings) and `.agents/` (project settings) |
 
 ---
 

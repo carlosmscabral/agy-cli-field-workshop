@@ -22,7 +22,7 @@ Gunakan `/model` untuk beralih model aktif di tengah sesi — berguna ketika And
 
 ```bash
 /model
-```yaml
+```
 
 Ini membuka pemilih model yang menunjukkan opsi yang tersedia (Gemini 3.5 Flash, Gemini 3.1 Pro, Claude Sonnet 4.6, dll.).
 
@@ -39,17 +39,17 @@ Ini membuka pemilih model yang menunjukkan opsi yang tersedia (Gemini 3.5 Flash,
 
 ```bash
 > Spawn a subagent to write unit tests for the auth module while I work on the API refactor.
-```bash
+```
 
 agy akan memunculkan sub-agen, melaporkan ID-nya, dan melanjutkan sesi utama Anda. Sub-agen bekerja secara independen.
 
 ```text
 > What's the status of the test-writing subagent?
-```bash
+```
 
 ```bash
 > Show me what the test subagent produced.
-```bash
+```
 
 ### Mengelola Sub-agen dengan /agents
 
@@ -57,7 +57,7 @@ Gunakan panel `/agents` untuk melihat semua sub-agen yang aktif, statusnya, dan 
 
 ```bash
 /agents
-```text
+```
 
 Pintasan utama dari percakapan utama:
 
@@ -82,7 +82,7 @@ Siklus hidup sub-agen: **Berjalan → Menganggur → Dihentikan**
 > 3. Coverage audit — identify untested functions and missing integration tests
 >
 > Use branch workspace mode for each. Report back when all three complete.
-```bash
+```
 
 Saksikan tiga analisis independen berjalan secara bersamaan. Ketika selesai, agy menyintesis hasilnya.
 
@@ -95,7 +95,7 @@ Saksikan tiga analisis independen berjalan secara bersamaan. Ketika selesai, agy
 > Spawn a subagent to act as an adversarial reviewer for the changes in this branch.
 > Its only job: find reasons why this code should NOT be merged.
 > It should challenge every assumption and look for edge cases the implementer missed.
-```yaml
+```
 
 Pola peninjau adversarial sangat kuat untuk perubahan yang sensitif terhadap keamanan, modifikasi infrastruktur, atau PR apa pun di mana "terlihat bagus bagi saya" tidaklah cukup.
 
@@ -111,13 +111,13 @@ Pola peninjau adversarial sangat kuat untuk perubahan yang sensitif terhadap kea
 
 ```bash
 > Refactor the entire authentication module to use JWT instead of sessions. This will touch multiple files. Start with the backend.
-```bash
+```
 
 *agy mulai bekerja... saat sedang berjalan:*
 
 ```bash
 /btw Actually, keep backward compatibility with sessions for 30 days — implement a dual-mode auth.
-```bash
+```
 
 agy menggabungkan catatan Anda ke dalam tugas yang sedang berlangsung tanpa berhenti. Ini seperti meninggalkan catatan tempel untuk seorang pengembang di tengah sprint — mereka melihatnya dan menyesuaikan.
 
@@ -125,15 +125,15 @@ agy menggabungkan catatan Anda ke dalam tugas yang sedang berlangsung tanpa berh
 
 ```bash
 /btw The API rate limit is 100 req/min, factor that into any retry logic you add.
-```bash
+```
 
 ```bash
 /btw The team uses conventional commits — make sure any commit messages follow that format.
-```bash
+```
 
 ```bash
 /btw Skip the frontend changes for now, just focus on the backend API.
-```bash
+```
 
 !!! info "Perbandingan dengan menginterupsi"
     Tanpa `/btw`, mengarahkan tugas yang berjalan lama berarti membatalkannya, menyesuaikan prompt Anda, dan memulai ulang — kehilangan semua kemajuan. `/btw` memungkinkan Anda mengoreksi arah tanpa biaya tersebut.
@@ -150,7 +150,7 @@ agy mendukung eksekusi asinkronus — Anda dapat memulai tugas dan terus bekerja
 
 ```bash
 > In the background, do a comprehensive security audit of this entire codebase. Take as long as you need. Notify me when done.
-```bash
+```
 
 agy menjalankan audit tanpa memblokir terminal Anda. Saat selesai, Anda menerima pemberitahuan dengan hasilnya.
 
@@ -160,7 +160,7 @@ agy mendukung penjadwalan bergaya cron untuk analisis berulang:
 
 ```bash
 > Schedule a nightly code quality report every day at 2am. It should check for new TODOs, failing tests, and dependency updates. Save the report to reports/nightly-YYYY-MM-DD.md.
-```bash
+```
 
 Ekspresi cron (hingga 5 bidang) didukung:
 
@@ -173,7 +173,7 @@ Ekspresi cron (hingga 5 bidang) didukung:
 
 # Run every 15 minutes
 */15 * * * *
-```yaml
+```
 
 !!! warning "Penjadwalan bersifat persisten dalam sesi"
     Tugas terjadwal tetap ada di seluruh sesi selama agy berjalan. Periksa `/tasks` untuk melihat dan mengelola tugas terjadwal.
@@ -191,7 +191,7 @@ Dari dalam agy, gunakan perintah garis miring `/resume`:
 
 ```bash
 /resume
-```bash
+```
 
 Ini akan membuka pemilih sesi yang menampilkan percakapan terbaru Anda. Pilih salah satu untuk dilanjutkan.
 
@@ -199,7 +199,7 @@ Ini akan membuka pemilih sesi yang menampilkan percakapan terbaru Anda. Pilih sa
 
 ```bash
 /switch
-```bash
+```
 
 Sama seperti `/resume` — kedua perintah membuka pemilih sesi.
 
@@ -209,7 +209,7 @@ Saat Anda keluar dari sesi agy, agy mencetak perintah yang tepat untuk melanjutk
 
 ```bash
 Session saved. Resume with: agy --conversation <conversation-id>
-```bash
+```
 
 Anda dapat menggunakan perintah ini langsung dari terminal untuk kembali masuk.
 
@@ -224,11 +224,11 @@ agy --conversation <conversation-id>
 
 # Or from inside agy:
 # /resume
-```bash
+```
 
 ```bash
 > What was the last thing we decided about the payment API schema?
-```yaml
+```
 
 agy akan memiliki konteks penuh, termasuk kode yang ditulis, keputusan yang dibuat, dan pertanyaan yang terbuka.
 
@@ -246,13 +246,13 @@ agy akan memiliki konteks penuh, termasuk kode yang ditulis, keputusan yang dibu
 > 2. A config-checker subagent (branch mode) — review all environment configs and recent deploys for anomalies
 >
 > Report back when both complete. I'll be monitoring in the meantime.
-```bash
+```
 
 Saat mereka berjalan:
 
 ```bash
 /btw The incident started at 14:32 UTC. Focus analysis on that window.
-```yaml
+```
 
 Ini adalah triase insiden multi-agen — dua investigasi paralel, dapat diarahkan saat berjalan.
 

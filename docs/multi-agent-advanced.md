@@ -22,7 +22,7 @@ Use `/model` to switch the active model mid-session — useful when you want hea
 
 ```bash
 /model
-```text
+```
 
 This opens a model picker showing available options (Gemini 3.5 Flash, Gemini 3.1 Pro, Claude Sonnet 4.6, etc.).
 
@@ -37,19 +37,19 @@ This opens a model picker showing available options (Gemini 3.5 Flash, Gemini 3.
 
 ### From an Interactive Session
 
-```bash
+```text
 > Spawn a subagent to write unit tests for the auth module while I work on the API refactor.
-```bash
+```
 
 agy will spawn a subagent, report its ID, and continue your main session. The subagent works independently.
 
 ```text
 > What's the status of the test-writing subagent?
-```bash
+```
 
-```bash
+```text
 > Show me what the test subagent produced.
-```bash
+```
 
 ### Managing Subagents with /agents
 
@@ -57,7 +57,7 @@ Use the `/agents` panel to see all active subagents, their status, and output:
 
 ```bash
 /agents
-```text
+```
 
 Key shortcuts from the main conversation:
 
@@ -82,7 +82,7 @@ Subagent lifecycle: **Running → Idle → Killed**
 > 3. Coverage audit — identify untested functions and missing integration tests
 >
 > Use branch workspace mode for each. Report back when all three complete.
-```bash
+```
 
 Watch three independent analyses run simultaneously. When they finish, agy synthesizes the results.
 
@@ -91,11 +91,11 @@ Watch three independent analyses run simultaneously. When they finish, agy synth
 
 ### Adversarial Review Pattern
 
-```bash
+```text
 > Spawn a subagent to act as an adversarial reviewer for the changes in this branch.
 > Its only job: find reasons why this code should NOT be merged.
 > It should challenge every assumption and look for edge cases the implementer missed.
-```text
+```
 
 The adversarial reviewer pattern is particularly powerful for security-sensitive changes, infrastructure modifications, or any PR where "looks good to me" isn't sufficient.
 
@@ -109,15 +109,15 @@ The adversarial reviewer pattern is particularly powerful for security-sensitive
 
 ### How It Works
 
-```bash
+```text
 > Refactor the entire authentication module to use JWT instead of sessions. This will touch multiple files. Start with the backend.
-```bash
+```
 
 *agy starts working... while it's running:*
 
 ```bash
 /btw Actually, keep backward compatibility with sessions for 30 days — implement a dual-mode auth.
-```bash
+```
 
 agy incorporates your note into the ongoing task without stopping. It's like leaving a sticky note for a developer in the middle of a sprint — they see it and adjust.
 
@@ -125,15 +125,15 @@ agy incorporates your note into the ongoing task without stopping. It's like lea
 
 ```bash
 /btw The API rate limit is 100 req/min, factor that into any retry logic you add.
-```bash
+```
 
 ```bash
 /btw The team uses conventional commits — make sure any commit messages follow that format.
-```bash
+```
 
 ```bash
 /btw Skip the frontend changes for now, just focus on the backend API.
-```bash
+```
 
 !!! info "Contrast with interrupting"
     Without `/btw`, steering a long-running task means cancelling it, adjusting your prompt, and restarting — losing all progress. `/btw` lets you course-correct without that cost.
@@ -148,9 +148,9 @@ agy incorporates your note into the ongoing task without stopping. It's like lea
 
 agy supports asynchronous execution — you can kick off a task and continue working. agy notifies you when it completes.
 
-```bash
+```text
 > In the background, do a comprehensive security audit of this entire codebase. Take as long as you need. Notify me when done.
-```bash
+```
 
 agy runs the audit without blocking your terminal. When it finishes, you receive a notification with the results.
 
@@ -158,9 +158,9 @@ agy runs the audit without blocking your terminal. When it finishes, you receive
 
 agy supports cron-style scheduling for recurring analysis:
 
-```bash
+```text
 > Schedule a nightly code quality report every day at 2am. It should check for new TODOs, failing tests, and dependency updates. Save the report to reports/nightly-YYYY-MM-DD.md.
-```bash
+```
 
 Cron expressions (up to 5 fields) are supported:
 
@@ -173,7 +173,7 @@ Cron expressions (up to 5 fields) are supported:
 
 # Run every 15 minutes
 */15 * * * *
-```text
+```
 
 !!! warning "Scheduling is session-persistent"
     Scheduled tasks persist across sessions as long as agy is running. Check `/tasks` to view and manage scheduled tasks.
@@ -191,7 +191,7 @@ From inside agy, use the `/resume` slash command:
 
 ```bash
 /resume
-```bash
+```
 
 This opens a session picker showing your recent conversations. Select one to resume.
 
@@ -199,7 +199,7 @@ This opens a session picker showing your recent conversations. Select one to res
 
 ```bash
 /switch
-```bash
+```
 
 Same as `/resume` — both commands open the session picker.
 
@@ -209,7 +209,7 @@ When you exit an agy session, agy prints the exact command to resume it:
 
 ```bash
 Session saved. Resume with: agy --conversation <conversation-id>
-```bash
+```
 
 You can use this command directly from the terminal to jump back in.
 
@@ -224,11 +224,11 @@ agy --conversation <conversation-id>
 
 # Or from inside agy:
 # /resume
-```bash
+```
 
-```bash
-> What was the last thing we decided about the payment API schema?
 ```text
+> What was the last thing we decided about the payment API schema?
+```
 
 agy will have the full context, including code written, decisions made, and open questions.
 
@@ -240,19 +240,19 @@ agy will have the full context, including code written, decisions made, and open
 
 ### Enterprise Incident Response
 
-```bash
+```text
 > I'm starting an incident response for a production issue. Spawn:
 > 1. A log-analyzer subagent (branch mode) — read the last 1000 lines of app.log and identify the root cause
 > 2. A config-checker subagent (branch mode) — review all environment configs and recent deploys for anomalies
 >
 > Report back when both complete. I'll be monitoring in the meantime.
-```bash
+```
 
 While they run:
 
 ```bash
 /btw The incident started at 14:32 UTC. Focus analysis on that window.
-```yaml
+```
 
 This is multi-agent incident triage — two parallel investigations, steerable mid-flight.
 

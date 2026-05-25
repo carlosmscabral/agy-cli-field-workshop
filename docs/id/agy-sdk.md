@@ -3,7 +3,7 @@
 <div class="module-header" markdown>
 **Durasi:** ~90 menit  
 **Tujuan:** Membangun agen AGY siap produksi dari awal menggunakan pustaka Python `google-antigravity` — alat, hook, kebijakan, status sesi, orkestrasi multi-agen, dan keluaran terstruktur.  
-**Latihan:** [Latihan 10: Agen Pertama Anda](exercises/ex10_first_agent.md) · [Latihan 11: Pipeline Multi-Agen](exercises/ex11_multi_agent_pipeline.md)
+**Latihan:** Exercise 10: Your First Agent · Exercise 11: Multi-Agent Pipeline
 </div>
 
 > 📖 Sumber: [Ikhtisar SDK](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [Skill](https://antigravity.google/docs/skills)

@@ -23,7 +23,7 @@
 
 ```bash
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```bash
+```
 
 ### Windows
 
@@ -33,7 +33,7 @@ irm https://antigravity.google/cli/install.ps1 | iex
 
 # Or via WSL (recommended)
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```bash
+```
 
 Setelah instalasi, verifikasi bahwa berkas biner tersedia:
 
@@ -43,7 +43,7 @@ which agy
 
 # Confirm the version
 agy changelog
-```yaml
+```
 
 ---
 
@@ -57,13 +57,13 @@ agy menggunakan **Google Sign-In berbasis browser**. Pada saat dijalankan pertam
 ```bash
 # Start agy — auth will trigger automatically on first run
 agy
-```bash
+```
 
 Untuk keluar:
 
 ```bash
 /logout
-```bash
+```
 
 > 📖 Untuk autentikasi enterprise melalui proyek GCP, lihat [Dokumentasi Enterprise](https://www.antigravity.google/docs/enterprise).
 
@@ -71,7 +71,7 @@ Setelah autentikasi dikonfigurasi, jalankan *smoke test* singkat:
 
 ```bash
 agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
-```yaml
+```
 
 Keluaran yang diharapkan: `Workshop ready!`
 
@@ -88,7 +88,7 @@ cd agy-cli-field-workshop
 
 # agy will create .agents/ on first run
 agy --print "List the files in the current directory."
-```bash
+```
 
 Anda akan melihat folder `.agents/` dibuat dengan file-file konfigurasi proyek (settings.json, mcp.json, dll.).
 
@@ -111,7 +111,7 @@ agy plugin list | python3 -m json.tool
 
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
-```yaml
+```
 
 Daftar periksa sebelum lokakarya dimulai:
 

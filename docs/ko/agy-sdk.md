@@ -3,7 +3,7 @@
 <div class="module-header" markdown>
 **소요 시간:** 약 90분  
 **목표:** `google-antigravity` Python 라이브러리를 사용하여 처음부터 프로덕션 수준의 AGY 에이전트를 구축합니다 — 도구, 훅, 정책, 세션 상태, 다중 에이전트 오케스트레이션 및 구조화된 출력.  
-**연습 문제:** [연습 문제 10: 첫 번째 에이전트](exercises/ex10_first_agent.md) · [연습 문제 11: 다중 에이전트 파이프라인](exercises/ex11_multi_agent_pipeline.md)
+**연습 문제:** Exercise 10: Your First Agent · Exercise 11: Multi-Agent Pipeline
 </div>
 
 > 📖 출처: [SDK 개요](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [스킬](https://antigravity.google/docs/skills)

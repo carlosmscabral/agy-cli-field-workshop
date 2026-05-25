@@ -267,7 +267,7 @@ setup-hooks:  ## Install git pre-commit hook
 # ───────────────────────────────────────────────────────────
 # Requires:
 #   gcloud auth application-default login
-#   export GOOGLE_CLOUD_PROJECT=gpu-launchpad-playground
+#   export GOOGLE_CLOUD_PROJECT=<your-gcp-project>
 # Pipeline source: tools/i18n/ in gemini-cli-field-workshop
 # Run from: engagements/gemini-cli-field-workshop/
 #
@@ -385,15 +385,46 @@ translate-validate: _check-translate-env  ## Validate translation completeness (
 		fi; \
 	done
 
-translate-drift: _check-translate-env  ## Show docs changed since last translation (L=ko)
-	@echo "🔍 Checking translation drift for $(L)..."
-	@for doc in docs/*.md; do \
-		base=$$(basename $$doc); \
-		target="docs/$(L)/$$base"; \
-		[ -f "$$target" ] || continue; \
-		if [ "$$doc" -nt "$$target" ]; then \
-			echo "  ⚠️  $$doc is newer than $$target — re-translate: make translate-file FILE=$$doc L=$(L)"; \
-		else \
-			echo "  ✅ $$target up to date"; \
-		fi; \
-	done
+translate-drift:  ## Show drift between English source and all translations (no GCP/L= needed)
+	@echo "🔍 Translation drift check (all languages)..."
+	@echo ""
+	@STALE=0; MISSING=0; CLEAN=0; \
+	LANGS=$$(find docs -mindepth 1 -maxdepth 1 -type d | xargs -I{} basename {} | grep -E '^[a-z]{2}(-[A-Z]{2})?$$' | sort); \
+	if [ -z "$$LANGS" ]; then echo "  ℹ️  No translated languages found under docs/"; exit 0; fi; \
+	for lang in $$LANGS; do \
+		echo "  📖 $${lang}:"; \
+		for src in docs/*.md; do \
+			base=$$(basename $$src); \
+			tgt="docs/$${lang}/$$base"; \
+			if [ ! -f "$$tgt" ]; then \
+				echo "    ⬚  MISSING   $$tgt"; \
+				echo "               → make translate-file FILE=$$src L=$$lang GOOGLE_CLOUD_PROJECT=<your-gcp-project>"; \
+				MISSING=$$((MISSING + 1)); \
+				continue; \
+			fi; \
+			SRC_COMMIT=$$(git log -1 --format=%ct -- $$src 2>/dev/null || echo 0); \
+			TGT_COMMIT=$$(git log -1 --format=%ct -- $$tgt 2>/dev/null || echo 0); \
+			SRC_MTIME=$$(stat -f %m $$src 2>/dev/null || stat -c %Y $$src 2>/dev/null || echo 0); \
+			TGT_MTIME=$$(stat -f %m $$tgt 2>/dev/null || stat -c %Y $$tgt 2>/dev/null || echo 0); \
+			DRIFT=0; \
+			[ "$$SRC_COMMIT" -gt "$$TGT_COMMIT" ] 2>/dev/null && DRIFT=1; \
+			[ "$$SRC_MTIME"  -gt "$$TGT_MTIME"  ] 2>/dev/null && DRIFT=1; \
+			if [ "$$DRIFT" -eq 1 ]; then \
+				echo "    ⚠️   STALE     $$tgt"; \
+				echo "               → make translate-file FILE=$$src L=$$lang GOOGLE_CLOUD_PROJECT=<your-gcp-project>"; \
+				STALE=$$((STALE + 1)); \
+			else \
+				echo "    ✅  ok        $$tgt"; \
+				CLEAN=$$((CLEAN + 1)); \
+			fi; \
+		done; \
+		echo ""; \
+	done; \
+	echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"; \
+	echo "Clean: $$CLEAN  Stale: $$STALE  Missing: $$MISSING"; \
+	if [ "$$((STALE + MISSING))" -gt 0 ]; then \
+		echo "⚠️  Run the translate-file commands above, then: make post-translate L=<lang>"; \
+	else \
+		echo "✅ All translations up to date"; \
+	fi
+

@@ -23,7 +23,7 @@
 
 ```bash
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```bash
+```
 
 ### Windows
 
@@ -33,7 +33,7 @@ irm https://antigravity.google/cli/install.ps1 | iex
 
 # Or via WSL (recommended)
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```bash
+```
 
 安装完成后，验证二进制文件是否可用：
 
@@ -43,7 +43,7 @@ which agy
 
 # Confirm the version
 agy changelog
-```yaml
+```
 
 ---
 
@@ -57,13 +57,13 @@ agy 使用 **基于浏览器的 Google 登录**。在首次运行时，它将：
 ```bash
 # Start agy — auth will trigger automatically on first run
 agy
-```bash
+```
 
 要退出登录：
 
 ```bash
 /logout
-```bash
+```
 
 > 📖 有关通过 GCP 项目进行企业级身份验证的信息，请参阅 [企业级文档](https://www.antigravity.google/docs/enterprise)。
 
@@ -71,7 +71,7 @@ agy
 
 ```bash
 agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
-```yaml
+```
 
 预期输出：`Workshop ready!`
 
@@ -88,7 +88,7 @@ cd agy-cli-field-workshop
 
 # agy will create .agents/ on first run
 agy --print "List the files in the current directory."
-```bash
+```
 
 您会看到创建了一个 `.agents/` 文件夹，其中包含项目配置文件（settings.json、mcp.json 等）。
 
@@ -111,7 +111,7 @@ agy plugin list | python3 -m json.tool
 
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
-```yaml
+```
 
 工作坊开始前的检查清单：
 

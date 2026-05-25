@@ -11,13 +11,13 @@ Jalankan Antigravity CLI di direktori proyek lokakarya Anda:
 ```bash
 cd agy-cli-field-workshop
 agy
-```text
+```
 
 Anda akan masuk ke prompt interaktif. Cobalah:
 
 ```text
 > What files are in this project and what does each one do?
-```text
+```
 
 Perhatikan bagaimana agy membaca ruang kerja Anda — ia mengindeks repositori git, membaca isi berkas, dan merespons dengan konteks. Ini **otomatis**: tanpa konfigurasi, tanpa prompt yang harus ditulis terlebih dahulu.
 
@@ -35,7 +35,7 @@ Perhatikan bagaimana agy membaca ruang kerja Anda — ia mengindeks repositori g
 ```bash
 # -i seeds the session with an initial prompt and stays interactive
 agy -i "Give me a high-level architecture overview of this project. What are the main components and how do they connect?"
-```text
+```
 
 Kemudian tindak lanjuti secara interaktif:
 
@@ -43,7 +43,7 @@ Kemudian tindak lanjuti secara interaktif:
 > Which file handles the entry point?
 > What external dependencies does this project have?
 > Are there any obvious code smells or tech debt?
-```text
+```
 
 !!! tip "Gunakan -i untuk sesi yang di-seed"
     `agy -i "<task>"` (singkatan dari `--prompt-interactive`) dimulai dengan prompt tetapi tetap interaktif. Sangat bagus untuk eksplorasi yang terarah — Anda menentukan arahnya, lalu mengarahkannya dengan tindak lanjut.
@@ -58,17 +58,17 @@ Kemudian tindak lanjuti secara interaktif:
 
 ```bash
 agy
-```text
+```
 
 ```text
 > I want to refactor the error handling in this project. First, show me all the places where errors are currently caught or returned — don't change anything yet.
-```text
+```
 
 Tinjau temuan tersebut. Kemudian:
 
 ```text
 > Now propose a refactored version of [specific function] using a consistent error handling pattern. Show me the diff before applying.
-```text
+```
 
 Terapkan hanya setelah Anda membaca perubahan yang diusulkan.
 
@@ -91,7 +91,7 @@ Gunakan perintah garis miring `/permissions` untuk melihat atau mengubah tingkat
     "deny": ["command(rm -rf)"]
   }
 }
-```text
+```
 
 > 📖 Detail lengkap: [Dokumentasi izin](https://www.antigravity.google/docs/permissions) · [Dokumentasi Mode Ketat](https://www.antigravity.google/docs/strict-mode)
 
@@ -105,17 +105,17 @@ Gunakan perintah garis miring `/permissions` untuk melihat atau mengubah tingkat
 
 ```bash
 agy
-```text
+```
 
 ```text
 > Look at [specific function or file]. Generate a comprehensive unit test suite for it. Include happy path, edge cases, and error conditions. Use the testing framework already in this project.
-```text
+```
 
 Kemudian:
 
 ```text
 > Run the tests and fix any that fail.
-```text
+```
 
 !!! tip "Biarkan agy menjalankan pengujian"
     agy dapat mengeksekusi perintah shell. Ini akan menjalankan rangkaian pengujian Anda dan melakukan iterasi pada kegagalan tanpa Anda harus menyalin-tempel pesan kesalahan. Perhatikan ia mengoreksi dirinya sendiri.
@@ -134,18 +134,18 @@ git add -p
 
 # Start agy and review what's staged
 agy
-```text
+```
 
 ```text
 > Review my staged changes for: (1) correctness, (2) security issues, (3) missing test coverage, (4) anything that would block a PR. Be direct — don't soften findings.
-```text
+```
 
 ### Varian Headless (untuk pembuatan skrip)
 
 ```bash
 # Review changes non-interactively — useful in pre-commit hooks or CI
 git diff --cached | agy --print "Review these changes. Flag any bugs, security issues, or missing tests. Output as markdown."
-```text
+```
 
 ---
 
@@ -169,13 +169,13 @@ This is a [your project description]. Key conventions:
 ## Architecture
 [Brief architecture summary]
 EOF
-```text
+```
 
 Sekarang mulai sesi baru:
 
 ```bash
 agy --print "What do you know about this project?"
-```text
+```
 
 agy akan memasukkan AGENTS.md Anda ke dalam setiap sesi berikutnya secara otomatis.
 
@@ -245,7 +245,7 @@ Sistem plugin Antigravity CLI melakukan sesuatu yang unik: sistem ini dapat **me
 
 ```bash
 agy plugin list
-```text
+```
 
 Menampilkan nama setiap plugin, sumber, tanggal impor, dan komponen (skill, perintah, mcpServers, agen).
 
@@ -253,7 +253,7 @@ Menampilkan nama setiap plugin, sumber, tanggal impor, dan komponen (skill, peri
 
 ```bash
 agy plugin import gemini
-```text
+```
 
 agy memindai instalasi Gemini CLI lokal Anda, menemukan semua plugin yang terinstal, dan menyiapkan komponennya ke dalam `~/.gemini/antigravity-cli/`. Output:
 
@@ -266,7 +266,7 @@ agy memindai instalasi Gemini CLI lokal Anda, menemukan semua plugin yang terins
           ✔ commands    : 1 processed
           ✔ mcpServers  : 1 processed
   [skip]  superpowers (already imported)
-```text
+```
 
 !!! warning "Tema kustom diabaikan secara diam-diam"
     Komponen tema kustom tidak dapat dimigrasikan 1:1 ke model agy dan dilewati tanpa kesalahan selama impor. Periksa plugin aktif Anda setelah impor jika tema penting untuk alur kerja Anda.
@@ -298,7 +298,7 @@ agy plugin disable gemini-deep-research
 
 # Aktifkan kembali
 agy plugin enable gemini-deep-research
-```text
+```
 
 ### Plugin Locations
 
@@ -322,7 +322,7 @@ my-plugin/
 ├── agents/              ← definisi sub-agen (opsional)
 └── rules/               ← file aturan (opsional)
     └── my-rules.md
-```text
+```
 
 ```json
 {
@@ -331,14 +331,14 @@ my-plugin/
   "description": "Plugin agy kustom saya",
   "components": ["skills"]
 }
-```text
+```
 
 Validate it before shipping:
 
 ```bash
 agy plugin validate ./my-plugin
 # ✔ Manifes plugin valid
-```text
+```
 
 > 📖 Referensi lengkap: [Plugin](https://www.antigravity.google/docs/plugins) · [Panduan Migrasi](https://www.antigravity.google/docs/gcli-migration)
 

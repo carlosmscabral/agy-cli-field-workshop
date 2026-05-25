@@ -1,8 +1,25 @@
 {
+  // markdownlint-cli2 config for AGY CLI Field Workshop
+  // Visual browser review (MkDocs Material live server) is the source of truth.
+  // Rules disabled here are confirmed false positives for this doc stack.
   "config": {
     "default": true,
+
+    // MD013: Line length — disabled; long code examples and table cells are unavoidable
     "MD013": false,
+
+    // MD033: Inline HTML — disabled; MkDocs Material uses <div class="exercise-card" markdown>
+    //   and other HTML elements that render correctly in the browser
     "MD033": false,
-    "MD041": false
+
+    // MD041: First line should be h1 — disabled; some docs start with admonitions or badges
+    "MD041": false,
+
+    // MD046: Code block style — disabled; 4-space-indented ```lang blocks inside
+    //   MkDocs !!! tip/note/warning admonitions are flagged as 'indented style' by
+    //   markdownlint, but they render correctly as fenced blocks in MkDocs Material.
+    //   Confirmed via visual review of http://127.0.0.1:8001/agy-cli-field-workshop/
+    //   Affects translated files (ko/id/zh) where translation preserves the indentation.
+    "MD046": false
   }
 }

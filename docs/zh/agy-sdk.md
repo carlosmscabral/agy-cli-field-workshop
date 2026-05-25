@@ -3,7 +3,7 @@
 <div class="module-header" markdown>
 **时长：** 约 90 分钟  
 **目标：** 使用 `google-antigravity` Python 库从头开始构建一个生产就绪的 AGY 代理 —— 工具、钩子、策略、会话状态、多代理编排和结构化输出。  
-**练习：** [练习 10：你的第一个代理](exercises/ex10_first_agent.md) · [练习 11：多代理流水线](exercises/ex11_multi_agent_pipeline.md)
+**练习：** Exercise 10: Your First Agent · Exercise 11: Multi-Agent Pipeline
 </div>
 
 > 📖 来源：[SDK 概述](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [技能](https://antigravity.google/docs/skills)

@@ -100,7 +100,7 @@ This is a **4-module, ~5.5-hour hands-on workshop** for Antigravity CLI. It is d
 | "Can I use my own API key?" | agy uses browser-based Google Sign-In. Enterprise users connect a GCP project. See [Enterprise docs](https://www.antigravity.google/docs/enterprise). |
 | "Is the code sent to Google?" | See the [FAQ](https://www.antigravity.google/docs/faq) for data handling details. |
 | "What about hooks?" | agy-cli supports hooks via `hooks.json`. See [Hooks docs](https://www.antigravity.google/docs/hooks). |
-| "Where are conversation logs stored?" | `~/.gemini/antigravity-cli/conversations/` |
+| "Where are conversation logs stored?" | `~/.gemini/antigravity/conversations/` |
 | "My Gemini CLI theme didn't import." | Expected — custom themes are silently dropped during `agy plugin import gemini`. Skills, MCP servers, and agents do carry over. |
 | "Can I deploy SDK agents to Cloud Run?" | Yes — `adk deploy cloud_run`. See Module 3 section 3.6. |
 
@@ -112,7 +112,7 @@ This is a **4-module, ~5.5-hour hands-on workshop** for Antigravity CLI. It is d
 | :-- | :-- |
 | `agy: command not found` | Check PATH. Run `which agy` or `which agy-cli`. |
 | Auth error / 401 | Session credentials may have expired. Redistribute auth. |
-| `agy plugin list` errors | Check that `~/.gemini/antigravity-cli/` exists |
+| `agy plugin list` errors | Check that `~/.gemini/antigravity/` exists |
 | Slow responses | Check network. First run after idle may be slower due to workspace indexing. |
 | Subagent doesn't spawn | Confirm the participant is in interactive mode (not `--print`) |
 | `google-adk` import errors (M3) | Ensure venv is activated: `source .venv/bin/activate` |

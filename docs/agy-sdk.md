@@ -3,7 +3,7 @@
 <div class="module-header" markdown>
 **Duration:** ~90 minutes  
 **Goal:** Build a production-ready AGY agent from scratch using the `google-antigravity` Python library — tools, hooks, policy, session state, multi-agent orchestration, and structured output.  
-**Exercises:** [Exercise 10: Your First Agent](exercises/ex10_first_agent.md) · [Exercise 11: Multi-Agent Pipeline](exercises/ex11_multi_agent_pipeline.md)
+**Exercises:** Exercise 10: Your First Agent · Exercise 11: Multi-Agent Pipeline
 </div>
 
 > 📖 Sources: [SDK Overview](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [Skills](https://antigravity.google/docs/skills)
@@ -531,6 +531,10 @@ gcloud run deploy my-code-reviewer \
 3. Configure `LocalAgentConfig` with `policy.allow_all()` and `CapabilitiesConfig`
 4. Add a `@hooks.pre_tool_call_decide` security guard
 5. Run with streaming output and structured `ReviewResult` Pydantic schema
+
+</div>
+
+<div class="exercise-card" markdown>
 
 ### :material-graph: Exercise 11: Multi-Agent Pipeline
 

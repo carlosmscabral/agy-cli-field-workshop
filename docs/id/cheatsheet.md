@@ -13,7 +13,7 @@ agy --help         # Show all flags and subcommands
 agy changelog      # Show release notes
 agy update         # Self-update
 agy install        # Configure PATH and shell aliases
-```bash
+```
 
 ---
 
@@ -122,7 +122,7 @@ agy plugin validate ./my-plugin
 
 # Generate marketplace link
 agy plugin link <marketplace> <target>
-```yaml
+```
 
 ---
 
@@ -143,7 +143,7 @@ AGENTS.md
 
 # agy also reads:
 .gemini/                    # Gemini CLI config (compatible)
-```bash
+```
 
 ### Pola AGENTS.md
 
@@ -156,7 +156,7 @@ Brief description of what this project is.
 - Language: TypeScript, Node 20
 - Testing: Jest + Supertest
 - DO NOT run database migrations without explicit approval
-```yaml
+```
 
 ---
 
@@ -183,7 +183,7 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Schedule a recurring task (in interactive mode)
 # > Schedule a daily code quality report at 9am weekdays.
-```yaml
+```
 
 ---
 
@@ -201,7 +201,7 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Background task
 > In the background, audit all dependencies for known CVEs. Notify me when done.
-```yaml
+```
 
 ---
 
@@ -220,7 +220,7 @@ for f in src/*.ts; do
   agy --add-dir "$(dirname $f)" \
       -p "Add JSDoc to all exported functions in $(basename $f)."
 done
-```bash
+```
 
 ---
 
