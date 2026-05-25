@@ -204,25 +204,35 @@ Beyond AGENTS.md, agy also loads:
 
 | Command | What it does |
 |---|---|
-| `/rewind` (or `/undo`) | Step back through conversation history |
-| `/clear` | Clear the current conversation context |
-| `/fork` | Branch the conversation — explore an alternative approach without losing the current thread |
-| `/resume` (or `/switch`) | Resume a previous session |
-| `/config` (or `/settings`) | View/edit settings |
-| `/open <path>` | Open a file or URL in your default editor/browser |
-| `/usage` | Show token usage and cost for the current session |
-| `/compact` | Condense conversation history to save context window |
+| `/rewind` (or `/undo`) | Roll back conversation history to a previous checkpoint |
+| `/resume` (or `/switch`) | Open conversation picker to resume or switch sessions |
+| `/rename <name>` | Rename the active conversation thread |
+| `/config` (or `/settings`) | Open full-screen settings overlay |
+| `/permissions` | Set agent autonomy level (`request-review`, `always-proceed`, `strict`) |
+| `/model` | Select reasoning model (persists across sessions) |
+| `/tasks` | Monitor, view logs for, or terminate background tasks |
+| `/agents` | View, manage, and approve subagent actions |
+| `/open <path>` | Open a file in your preferred external editor |
+| `/usage` | Open the inline interactive help manual |
+| `/skills` | Browse local and global agent skills |
+| `/mcp` | Configure and manage MCP servers |
+
+> 📖 Full slash command reference: [CLI Features](https://antigravity.google/docs/cli-features)
 
 ### Quick Tips
 
 | Shortcut | What it does |
 |---|---|
-| `@` | File path autocomplete — type `@` then start a path |
-| `!` | Direct terminal command — run a shell command without leaving agy |
-| `Esc Esc` | Clear the current prompt input |
-| `?` | Quick help |
-| `Alt+Enter` | Insert a newline in your prompt (for multi-line input) |
-| `Ctrl+G` | Open your prompt in your `$EDITOR` for complex multi-line input |
+| `@` | File path autocomplete — type `@` to trigger path suggestions |
+| `!` | Run terminal commands directly without leaving agy |
+| `esc esc` | Clear the current prompt input (when no streaming is active) |
+| `?` | Get help and list all slash commands |
+| `alt+enter` / `ctrl+j` / `shift+enter` | Insert a newline in your prompt (multi-line input) |
+| `ctrl+g` | Edit prompt inside your default shell editor |
+| `ctrl+l` | Clear TUI screen |
+| `ctrl+d` | Exit the CLI |
+
+> 📖 Full keybindings reference: [Using AGY CLI](https://antigravity.google/docs/cli-using)
 
 ---
 

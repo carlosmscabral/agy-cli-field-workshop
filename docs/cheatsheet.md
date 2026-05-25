@@ -1,6 +1,7 @@
 # agy-cli Cheatsheet
 
 > Quick reference for everything covered in this workshop.
+> All commands verified against [antigravity.google/docs](https://antigravity.google/docs/cli-overview).
 
 ---
 
@@ -31,6 +32,8 @@ agy install        # Configure PATH and shell aliases
 
 ## Key Flags
 
+> Source: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
+
 | Flag | Short | Description |
 |---|---|---|
 | `--print "<prompt>"` | `-p` | Non-interactive single prompt |
@@ -39,53 +42,55 @@ agy install        # Configure PATH and shell aliases
 | `--conversation <id>` | — | Resume by conversation ID |
 | `--add-dir <path>` | — | Add directory to workspace (repeatable) |
 | `--sandbox` | — | Enable terminal sandbox restrictions |
-| `--strict` | — | Start in strict permission mode |
-| `--model <model>` | — | Select reasoning model (e.g. `gemini-3.5-flash`) |
-| `--workspace <path>` | — | Set workspace root directory |
 | `--dangerously-skip-permissions` | — | Auto-approve all tool requests (CI only) |
 | `--print-timeout <duration>` | — | Timeout for print mode (default: 5m) |
 | `--log-file <path>` | — | Override log output path |
+
+> **Note:** Model selection and strict mode are set via `/model` and `/permissions` slash commands, not CLI flags. See [Features docs](https://antigravity.google/docs/cli-features).
 
 ---
 
 ## Slash Commands (Interactive Mode)
 
+> Source: [CLI Features — Core Slash Commands](https://antigravity.google/docs/cli-features) · [Using AGY CLI](https://antigravity.google/docs/cli-using)
+
 | Command | Category | Purpose |
 |---|---|---|
-| `/resume` (`/switch`) | Conversation | Resume or switch sessions |
-| `/rewind` (`/undo`) | Conversation | Roll back to previous checkpoint |
-| `/rename <name>` | Conversation | Rename active thread |
-| `/clear` | Conversation | Clear and start new session |
-| `/fork` | Conversation | Branch from earlier point in new workspace |
-| `/permissions` | Config | Set autonomy: `request-review`, `always-proceed`, `strict` |
-| `/model` | Config | Select reasoning model |
-| `/config` (`/settings`) | Config | Open settings overlay |
-| `/keybindings` | Config | Edit keyboard shortcuts |
-| `/statusline` | Config | Customize status bar indicators |
-| `/tasks` | Monitoring | View/manage background tasks |
-| `/skills` | Monitoring | Browse agent skills |
-| `/mcp` | Monitoring | Manage MCP servers |
-| `/agents` | Monitoring | View/manage subagents |
-| `/open <path>` | Utility | Open file in external editor |
-| `/usage` | Utility | Inline help manual |
-| `/logout` | Account | Sign out and clear credentials |
-| `/browser` | Agent | Launch browser subagent |
-| `/compact` | Agent | Compact conversation context |
+| `/resume` (`/switch`) | Conversation | Open conversation picker to resume or switch sessions |
+| `/rewind` (`/undo`) | Conversation | Roll back conversation history to a previous checkpoint |
+| `/rename <name>` | Conversation | Rename the active conversation thread |
+| `/permissions` | Config | Set autonomy level: `request-review`, `always-proceed`, `strict` |
+| `/model` | Config | Select default reasoning model (persists across sessions) |
+| `/config` (`/settings`) | Config | Open full-screen settings overlay |
+| `/keybindings` | Config | Open the interactive keyboard shortcut editor |
+| `/statusline` | Config | Customize real-time CLI status bar indicators |
+| `/tasks` | Monitoring | Monitor, view logs for, or terminate background tasks |
+| `/skills` | Monitoring | Browse local and global agent skills |
+| `/mcp` | Monitoring | Configure and manage MCP servers |
+| `/agents` | Monitoring | View, manage, and approve subagent actions |
+| `/open <path>` | Utility | Open a file in your preferred external editor |
+| `/usage` | Utility | Open the inline interactive help manual |
+| `/logout` | Account | Log out and clear cached credentials |
 
 ---
 
 ## Quick Tips
 
-| Shortcut | Action |
+> Source: [Using AGY CLI — Quick Tips & Keybindings](https://antigravity.google/docs/cli-using)
+
+| Shortcut / Tip | Action |
 |---|---|
-| `@` | File path autocomplete |
-| `!` | Run terminal command directly |
-| `esc esc` | Clear prompt |
-| `?` | Help and list slash commands |
-| `alt+enter` / `ctrl+j` / `shift+enter` | Insert newline |
-| `ctrl+g` | Open prompt in external editor |
-| `ctrl+j` (in `/agents`) | Teleport to pending subagent approval |
-| `ctrl+k` | Fast-approve subagent permission |
+| `@` | File path autocomplete (type `@` to trigger path suggestions) |
+| `!` | Run terminal commands directly from the prompt |
+| `esc esc` | Clear your prompt box (when no streaming is active) |
+| `?` | Get help and list all slash commands |
+| `alt+enter` / `ctrl+j` / `shift+enter` | Insert newline without submitting |
+| `ctrl+g` | Edit prompt inside your default shell editor |
+| `ctrl+l` | Clear TUI screen |
+| `ctrl+d` | Exit the CLI session |
+| `ctrl+z` | Suspend CLI to terminal background |
+| `ctrl+j` (in `/agents`) | Teleport to next pending subagent approval |
+| `ctrl+k` | Fast-approve pending subagent permission from main conversation |
 
 ---
 
@@ -221,4 +226,19 @@ done
 
 ## Official Docs
 
-Full reference: [antigravity.google/docs](https://www.antigravity.google/docs/cli-overview)
+| Topic | Link |
+|---|---|
+| CLI Overview | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
+| Getting Started | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
+| Using AGY CLI (settings, tips, keybindings) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
+| Features (plugins, sandbox, slash commands, subagents) | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
+| Migration from Gemini CLI | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
+| Permissions | [antigravity.google/docs/permissions](https://antigravity.google/docs/permissions) |
+| Strict Mode | [antigravity.google/docs/strict-mode](https://antigravity.google/docs/strict-mode) |
+| Plugins | [antigravity.google/docs/plugins](https://antigravity.google/docs/plugins) |
+| MCP | [antigravity.google/docs/mcp](https://antigravity.google/docs/mcp) |
+| Skills | [antigravity.google/docs/skills](https://antigravity.google/docs/skills) |
+| Rules | [antigravity.google/docs/rules-workflows](https://antigravity.google/docs/rules-workflows) |
+| Hooks | [antigravity.google/docs/hooks](https://antigravity.google/docs/hooks) |
+| Subagents | [antigravity.google/docs/subagents](https://antigravity.google/docs/subagents) |
+| Enterprise | [antigravity.google/docs/enterprise](https://antigravity.google/docs/enterprise) |
