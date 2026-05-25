@@ -110,13 +110,13 @@ Plugins can be installed at two levels:
 
 ### Install a Specific Plugin
 
-```bash
+```text
 # Install by name (from configured source)
 agy plugin install <plugin-name>
 
 # Install a specific version
 agy plugin install <plugin-name>@<version>
-```bash
+```
 
 ---
 
@@ -132,7 +132,7 @@ agy plugin validate ./path/to/my-plugin
 
 # Or validate the current directory
 agy plugin validate .
-```bash
+```
 
 This checks that the plugin's `plugin.json` manifest is well-formed and all referenced components exist.
 
@@ -140,7 +140,7 @@ This checks that the plugin's `plugin.json` manifest is well-formed and all refe
 
 A valid agy plugin needs a `plugin.json` manifest. Here's the official structure:
 
-```bash
+```text
 my-plugin/
 ├── plugin.json          ← manifest (required)
 ├── mcp_config.json      ← MCP server definitions (optional)
@@ -151,7 +151,7 @@ my-plugin/
 ├── agents/              ← subagent definitions (optional)
 └── rules/               ← rules files (optional)
     └── my-rules.md
-```bash
+```
 
 ```json
 {
@@ -160,21 +160,21 @@ my-plugin/
   "description": "My custom agy plugin",
   "components": ["skills"]
 }
-```text
+```
 
 ```bash
 # Validate it
 agy plugin validate ./my-plugin
 
 # If valid, you'll see: ✔ Plugin manifest is valid
-```bash
+```
 
 ### Interacting with Plugin Components
 
 Use slash commands to inspect active plugin components in a session:
 
 | Command | What it shows |
-|---|---|
+| :-- | :-- |
 | `/skills` | All loaded skills (from plugins, project, global) |
 | `/mcp` | Active MCP servers and their status |
 
@@ -184,7 +184,7 @@ The workshop repo includes a sample plugin at `samples/plugins/workshop-helpers/
 
 ```bash
 agy plugin validate samples/plugins/workshop-helpers/
-```yaml
+```
 
 ---
 
@@ -192,27 +192,156 @@ agy plugin validate samples/plugins/workshop-helpers/
 
 ```mermaid
 graph LR
-    GC["Gemini CLI\nPlugins"] -->|agy plugin import gemini| S["Plugin Staging\n~/.gemini/antigravity-cli/plugins/"]
-    CC["Claude Code\nExtensions"] -->|agy plugin import claude| S
-    S -->|agy plugin enable/disable| A[agy session]
+    GC["Gemini CLI\nPlugins"] --> |agy plugin import gemini| S["Plugin Staging\n~/.gemini/antigravity-cli/plugins/"]
+    CC["Claude Code\nExtensions"] --> |agy plugin import claude| S
+    S --> |agy plugin enable/disable| A[agy session]
     A --> SK[Skills]
     A --> MCP[MCP Servers]
     A --> AG[Agents]
     A --> RU[Rules]
     A --> HK[Hooks]
-```bash
+    A --> SD[Sidecars]
+```
 
 Plugin staging directory structure:
 
-```bash
+```text
 ~/.gemini/antigravity-cli/plugins/<name>/
 ├── plugin.json
 ├── mcp_config.json
 ├── hooks.json
 ├── skills/
 ├── agents/
-└── rules/
-```yaml
+├── rules/
+└── sidecars/          ← plugin-scoped background processes
+```
+
+---
+
+## 2.6 — Sidecars: Persistent Background Processes <span class="duration-badge">15 min</span>
+
+> **Pattern: Always-On Agent** — sidecars run alongside AGY CLI, independently of any conversation. Use them for scheduled tasks, event watchers, and persistent background workers.
+>
+> 📖 Source: [sidecars](https://antigravity.google/docs/sidecars)
+
+### What Sidecars Are
+
+A sidecar is a background process that AGY manages for you: it launches automatically when AGY starts, restarts on crash, and runs independently of your active conversation. Unlike hooks (which fire in response to conversation events), sidecars are **always running**.
+
+**Three use cases:**
+
+| Use case | Example |
+| :-- | :-- |
+| Persistent background worker | Python script that watches a queue |
+| Scheduled recurring task | Hourly PR triage via `schedule` builtin |
+| Event-reactive agent | `agentapi` call that spins up a new conversation |
+
+### Configuration
+
+Sidecars are discovered from two locations:
+
+```bash
+# Global sidecars (available in all projects)
+~/.gemini/config/sidecars/<sidecar-name>/sidecar.json
+
+# Plugin-scoped sidecars (shipped with a plugin)
+~/.gemini/config/plugins/<plugin-name>/sidecars/<sidecar-name>/sidecar.json
+```
+
+The directory name becomes the sidecar's ID. Plugin sidecars get the ID `<pluginName>/<sidecarName>`.
+
+**Sidecars are disabled by default.** Enable them explicitly in `~/.gemini/config/config.json`:
+
+```json
+{
+  "sidecars": {
+    "pr-triage": {
+      "enabled": true
+    },
+    "my-plugin/log-watcher": {
+      "enabled": true,
+      "projectId": "<conversation-project-id>"
+    }
+  }
+}
+```
+
+### sidecar.json Schema
+
+| Field | Type | Description |
+| :-- | :-- | :-- |
+| `command` | string | Executable to run (e.g. `python3`). Mutually exclusive with `builtin`. |
+| `builtin` | string | Built-in function. Currently only `schedule`. Mutually exclusive with `command`. |
+| `args` | string[] | Arguments passed to the command or builtin. |
+| `restart_policy` | string | `always` (default), `on-failure`, or `never`. |
+| `description` | string | Human-readable label shown in AGY UI. |
+| `env` | object | Environment variables for the sidecar process. |
+| `display_name` | string | Display name in the UI. |
+
+### Example 1: Background Worker Script
+
+```json
+{
+  "description": "Watches the build queue and notifies on failures",
+  "command": "python3",
+  "args": ["watch_builds.py"],
+  "restart_policy": "on-failure",
+  "env": {
+    "BUILD_QUEUE_URL": "https://ci.example.com/api/queue"
+  }
+}
+```
+
+### Example 2: Scheduled Recurring Task (the `schedule` builtin)
+
+The `schedule` builtin takes a cron expression as its first arg, then the command + args to run:
+
+```json
+{
+  "description": "Hourly PR triage — summarises incoming review requests",
+  "builtin": "schedule",
+  "args": [
+    "0 * * * *",
+    "agentapi",
+    "new-conversation",
+    "Summarise all open PRs waiting for my review. Group by urgency."
+  ]
+}
+```
+
+`agentapi` is automatically available to sidecars — it lets them **programmatically create or message conversations**:
+
+```text
+# Start a new conversation from a sidecar
+agentapi new-conversation "<prompt>"
+
+# Send a message to an existing conversation
+agentapi send-message <conversation_id> "<prompt>"
+```
+
+!!! warning "projectId required for agentapi"
+    Sidecars that use `agentapi new-conversation` must have a `projectId` set in `config.json` — this scopes which conversation project the new session is created under.
+
+### Runtime Data
+
+Sidecar output is stored at:
+
+```text
+~/.gemini/antigravity/sidecar_data/<sidecarId>/
+├── data/     ← persistent storage (ANTIGRAVITY_EXECUTABLE_DATA_DIR env var)
+├── logs/     ← timestamped stdout/stderr logs
+└── events/   ← JSON records of agentapi calls
+```
+
+### Directory Structure for a Plugin Sidecar
+
+```text
+~/.gemini/config/plugins/my-plugin/
+└── sidecars/
+    └── pr-triage/
+        ├── sidecar.json   ← config (required)
+        └── triage.py      ← helper script (optional, runs in this dir)
+```
 
 ---
 
@@ -228,10 +357,29 @@ Plugin staging directory structure:
 
 </div>
 
+<div class="exercise-card" markdown>
+
+### :material-clock-outline: Exercise 2B: Your First Sidecar
+
+> **Duration:** 20 min
+> **Build:** A scheduled **daily standup sidecar** that fires at 9am, creates a new AGY conversation, and asks it to summarise yesterday's git commits across your repos.
+
+**What you'll do:**
+
+1. Create `~/.gemini/config/sidecars/standup/sidecar.json` using the `schedule` builtin
+2. Set the cron to `0 9 * * 1-5` (9am Monday–Friday)
+3. Use `agentapi new-conversation` to open a conversation with your standup prompt
+4. Enable it in `~/.gemini/config/config.json`
+5. Verify it appears in logs at `~/.gemini/antigravity/sidecar_data/standup/logs/`
+
+**Stretch goal:** Add a second sidecar using `command: python3` that watches a local file for changes and sends a message to an existing conversation when it detects a diff.
+
+</div>
+
 ---
 
 ## Back to Workshop
 
 → **[Module 1: SDLC Productivity](sdlc-productivity.md)** — plugins are introduced in Section 1.7
 
-→ **[Cheatsheet](cheatsheet.md)** — all plugin commands in one place
+→ **[Cheatsheet](cheatsheet.md)** — all plugin and sidecar commands in one place

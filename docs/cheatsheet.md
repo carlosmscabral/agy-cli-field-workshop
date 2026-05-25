@@ -58,6 +58,7 @@ agy install        # Configure PATH and shell aliases
 |---|---|---|
 | `/resume` (`/switch`) | Conversation | Open conversation picker to resume or switch sessions |
 | `/rewind` (`/undo`) | Conversation | Roll back conversation history to a previous checkpoint |
+| `/fork` | Conversation | Branch the current conversation into a parallel isolated workspace — trial risky steps without affecting the original |
 | `/rename <name>` | Conversation | Rename the active conversation thread |
 | `/permissions` | Config | Set autonomy level: `request-review`, `always-proceed`, `strict` |
 | `/model` | Config | Select default reasoning model (persists across sessions) |
@@ -123,6 +124,43 @@ agy plugin validate ./my-plugin
 # Generate marketplace link
 agy plugin link <marketplace> <target>
 ```yaml
+
+---
+
+## Sidecars
+
+> Background processes AGY manages for you — launches, restarts, and runs independently of any conversation. Source: [antigravity.google/docs/sidecars](https://antigravity.google/docs/sidecars)
+
+```bash
+# Config locations:
+~/.gemini/config/sidecars/<name>/sidecar.json                         # global
+~/.gemini/config/plugins/<plugin>/sidecars/<name>/sidecar.json        # plugin-scoped
+
+# Enable (disabled by default) — edit ~/.gemini/config/config.json:
+#   { "sidecars": { "<name>": { "enabled": true } } }
+
+# Check logs:
+ls ~/.gemini/antigravity/sidecar_data/<name>/logs/
+
+# agentapi (auto-available inside sidecars):
+agentapi new-conversation "<prompt>"
+agentapi send-message <conversation_id> "<prompt>"
+```
+
+Minimal `sidecar.json` — background script:
+
+```json
+{ "command": "python3", "args": ["worker.py"], "restart_policy": "on-failure" }
+```
+
+Minimal `sidecar.json` — scheduled recurring task:
+
+```json
+{
+  "builtin": "schedule",
+  "args": ["0 9 * * 1-5", "agentapi", "new-conversation", "Summarise open PRs."]
+}
+```
 
 ---
 
@@ -240,5 +278,6 @@ done
 | Skills | [antigravity.google/docs/skills](https://antigravity.google/docs/skills) |
 | Rules | [antigravity.google/docs/rules-workflows](https://antigravity.google/docs/rules-workflows) |
 | Hooks | [antigravity.google/docs/hooks](https://antigravity.google/docs/hooks) |
+| Sidecars | [antigravity.google/docs/sidecars](https://antigravity.google/docs/sidecars) |
 | Subagents | [antigravity.google/docs/subagents](https://antigravity.google/docs/subagents) |
 | Enterprise | [antigravity.google/docs/enterprise](https://antigravity.google/docs/enterprise) |
