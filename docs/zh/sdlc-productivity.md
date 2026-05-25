@@ -3,6 +3,7 @@
 > **你的第一次真正的 agy-cli 会话。** 本模块涵盖了核心的日常工作流：理解代码、重构、生成测试以及审查更改——所有这些都在终端中完成。
 
 ---
+
 ## 1.0 — 首次交互式会话 <span class="duration-badge">5 分钟</span>
 
 在您的研讨会项目目录中启动 agy-cli：
@@ -24,6 +25,7 @@ agy
     在您的首次会话之后，检查 `.agents/` —— agy 创建了跟踪您工作区的项目配置文件。这就是它在未来运行中知道要索引什么内容的方式。
 
 ---
+
 ## 1.1 — 代码理解 <span class="duration-badge">10 min</span>
 
 > **模式：修改前先解释** — 在修改代码之前先理解它。
@@ -47,6 +49,7 @@ agy -i "Give me a high-level architecture overview of this project. What are the
     `agy -i "<task>"`（`--prompt-interactive` 的简写）以提示词开始，但保持交互状态。非常适合定向探索——你设定方向，然后通过跟进进行引导。
 
 ---
+
 ## 1.2 — 重构 <span class="duration-badge">10 分钟</span>
 
 > **模式：提议、审查、应用** — 永远不要应用你没有阅读过的更改。
@@ -93,6 +96,7 @@ agy 具有一个**三级权限模型**，用于控制其处理工具审批的方
 > 📖 完整详情：[权限文档](https://www.antigravity.google/docs/permissions) · [严格模式文档](https://www.antigravity.google/docs/strict-mode)
 
 ---
+
 ## 1.3 — 测试生成 <span class="duration-badge">10 分钟</span>
 
 > **模式：测试现有代码** — 为真实代码生成测试，而不是假设的代码。
@@ -117,6 +121,7 @@ agy
     agy 可以执行 shell 命令。它将运行你的测试套件并在失败时进行迭代，而无需你复制粘贴错误消息。观察它的自我修正过程。
 
 ---
+
 ## 1.4 — 代码审查 <span class="duration-badge">10 min</span>
 
 > **模式：提交前审查** — 在每次推送之前，使用 agy 作为高级审查员。
@@ -143,6 +148,7 @@ git diff --cached | agy --print "Review these changes. Flag any bugs, security i
 ```
 
 ---
+
 ## 1.5 — 使用 AGENTS.md 设置项目上下文 <span class="duration-badge">5 分钟</span>
 
 > **模式：持久化上下文** — 告诉 agy 一次，它会在每个会话中记住。
@@ -187,6 +193,7 @@ agy 会自动将你的 AGENTS.md 整合到随后的每个会话中。
 > 📖 完整详情：[规则与工作流文档](https://www.antigravity.google/docs/rules-workflows)
 
 ---
+
 ## 1.6 — 交互式导航 <span class="duration-badge">5 分钟</span>
 
 > **模式：终端熟练度** — 了解让 agy 会话变得更快的快捷键。
@@ -228,6 +235,7 @@ agy 会自动将你的 AGENTS.md 整合到随后的每个会话中。
 > 📖 完整快捷键参考：[使用 Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 ---
+
 ## 模块 1 练习
 
 <div class="exercise-card" markdown>
@@ -241,6 +249,7 @@ agy 会自动将你的 AGENTS.md 整合到随后的每个会话中。
 </div>
 
 ---
+
 ## 下一模块
 
 → **[模块 2：插件生态系统](../plugin-ecosystem.md)** — 只需一条命令即可将 Gemini CLI 和 Claude 插件导入到 agy 中。

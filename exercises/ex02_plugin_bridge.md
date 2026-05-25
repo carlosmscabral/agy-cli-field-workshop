@@ -18,9 +18,10 @@ agy plugin list
 
 # Import everything from Gemini CLI
 agy plugin import gemini
-```
+```text
 
 Read the output carefully:
+
 - Which plugins were imported?
 - Which components did each plugin contribute (skills, commands, mcpServers, agents)?
 - Were any skipped? Why?
@@ -28,7 +29,7 @@ Read the output carefully:
 ```bash
 # See the updated list
 agy plugin list | python3 -m json.tool
-```
+```text
 
 **Question:** What plugins are now available that weren't before?
 
@@ -40,17 +41,19 @@ Launch agy and try a command from one of the imported plugins:
 
 ```bash
 agy
-```
+```text
 
 If `code-review` was imported:
-```
+
+```text
 > /code-review Review the main entry point of this project.
-```
+```text
 
 If `gemini-deep-research` was imported:
-```
+
+```text
 > Use the deep research capability to find best practices for error handling in Node.js APIs.
-```
+```text
 
 ---
 
@@ -65,7 +68,7 @@ agy plugin list | python3 -m json.tool
 
 # Re-enable it
 agy plugin enable <plugin-name>
-```
+```text
 
 ---
 
@@ -78,7 +81,7 @@ ls samples/plugins/workshop-helpers/
 
 # Validate its structure
 agy plugin validate samples/plugins/workshop-helpers/
-```
+```text
 
 Then intentionally break it and see what validation catches:
 
@@ -86,7 +89,7 @@ Then intentionally break it and see what validation catches:
 # Edit the manifest to remove a required field (use any text editor)
 # Then re-validate
 agy plugin validate samples/plugins/workshop-helpers/
-```
+```text
 
 Restore the manifest when done.
 

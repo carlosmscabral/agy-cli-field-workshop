@@ -17,7 +17,7 @@ Walk through a real Gemini CLI project directory and migrate it to AGY CLI. You'
 When teams migrate from Gemini CLI to AGY CLI, there are four common breakage points:
 
 | What breaks | Why |
-|---|---|
+| :-- | :-- |
 | Hook events `SessionStart`, `BeforeTool`, `AfterTool` | Renamed to `PreInvocation`, `PreToolUse`, `PostToolUse` |
 | MCP `url` key in `settings.json` | AGY uses `serverUrl` in a separate `mcp.json` |
 | `.gemini/` project config dir | AGY uses `.agents/` |
@@ -83,7 +83,7 @@ cat > scripts/review.sh << 'EOF'
 #!/usr/bin/env bash
 gemini -p "Review the diff: $(git diff HEAD~1)" > review.md
 EOF
-```
+```text
 
 ---
 
@@ -91,14 +91,16 @@ EOF
 
 Migrate the project yourself:
 
-**Step 1: Move config to AGY directories**
+### Step 1: Move config to AGY directories
+
 ```bash
 mkdir -p .agents/hooks
 # AGY reads .agents/ instead of .gemini/ for project config
 cp .gemini/GEMINI.md .agents/AGENTS.md
-```
+```text
 
-**Step 2: Separate MCP config**
+### Step 2: Separate MCP config
+
 ```bash
 # AGY uses mcp.json, not mcpServers in settings.json
 cat > .agents/mcp.json << 'EOF'
@@ -113,9 +115,10 @@ cat > .agents/mcp.json << 'EOF'
   }
 }
 EOF
-```
+```text
 
-**Step 3: Rewrite hook event names in settings.json**
+### Step 3: Rewrite hook event names in settings.json
+
 ```json
 {
   "hooks": {
@@ -142,12 +145,13 @@ EOF
     ]
   }
 }
-```
+```text
 
-**Step 4: Update binary references**
+### Step 4: Update binary references
+
 ```bash
 sed -i 's/\bgemini\b/agy/g' scripts/review.sh
-```
+```text
 
 ---
 
@@ -158,14 +162,16 @@ Start AGY CLI and launch the migration validator:
 ```bash
 cd ~/gemini-migration-lab
 agy
-```
+```text
 
 Inside the AGY REPL:
-```
+
+```text
 Use the migration-validator agent to check this project directory for any remaining Gemini CLI configuration.
-```
+```text
 
 The `migration-validator` subagent will check:
+
 - [ ] Hook event names (no `SessionStart`, `BeforeTool`, `AfterTool`)
 - [ ] MCP format (`serverUrl` for SSE, `type` field present)
 - [ ] Binary references (`agy` not `gemini` in scripts)
@@ -194,7 +200,7 @@ Refer to [`samples/hooks/secret-scanner.sh`](../samples/hooks/secret-scanner.sh)
 ## Key Takeaways
 
 | Gemini CLI | AGY CLI |
-|---|---|
+| :-- | :-- |
 | `SessionStart` | `PreInvocation` |
 | `BeforeTool` | `PreToolUse` |
 | `AfterTool` | `PostToolUse` |

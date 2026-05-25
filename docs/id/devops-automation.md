@@ -3,6 +3,7 @@
 > **agy tanpa campur tangan manusia.** Modul ini mencakup pipeline `--print` non-interaktif, integrasi CI/CD, ruang kerja multi-repositori, dan eksekusi sandbox untuk lingkungan yang sensitif terhadap tata kelola.
 
 ---
+
 ## 3.0 — Mode Cetak: Inti Non-Interaktif <span class="duration-badge">5 min</span>
 
 `--print` (singkat: `-p`) adalah mode headless dari agy. Ini menjalankan satu prompt, mencetak respons, dan keluar. Tidak ada sesi interaktif, tidak ada prompt.
@@ -29,6 +30,7 @@ agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
 ```
 
 ---
+
 ## 3.1 — Pipeline Shell <span class="duration-badge">10 menit</span>
 
 > **Pola: agy sebagai perintah Unix** — gabungkan dengan alat shell standar.
@@ -68,6 +70,7 @@ done
 ```
 
 ---
+
 ## 3.2 — Ruang Kerja Multi-Direktori dengan --add-dir <span class="duration-badge">10 min</span>
 
 > **Pola: Konteks Lintas-Repo** — memberikan agy visibilitas ke beberapa basis kode secara bersamaan.
@@ -97,6 +100,7 @@ agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
     `--add-dir` dapat diulang — tambahkan sebanyak mungkin direktori yang Anda butuhkan. agy mengindeks semuanya bersama dengan repo git utama.
 
 ---
+
 ## 3.3 — Integrasi CI/CD <span class="duration-badge">10 min</span>
 
 > **Pola: agy di dalam Pipeline** — tinjauan dan analisis kode otomatis pada setiap PR.
@@ -159,6 +163,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 ```
 
 ---
+
 ## 3.4 — Mode Sandbox <span class="duration-badge">5 menit</span>
 
 > **Pola: Eksekusi Terbatas** — jalankan agy dengan isolasi terminal tingkat OS.
@@ -208,6 +213,7 @@ Untuk kontrol maksimum, pasangkan mode sandbox dengan model izin:
 > 📖 Detail lengkap: [Dokumentasi izin](https://www.antigravity.google/docs/permissions)
 
 ---
+
 ## 3.5 — Hook & Aturan <span class="duration-badge">5 min</span>
 
 > **Pola: Pagar Pengaman & Otomatisasi** — menegakkan standar dan memicu tindakan pada titik siklus hidup utama.
@@ -249,6 +255,7 @@ Contoh `.agents/rules.md`:
 > 📖 Detail lengkap: [Dokumentasi Aturan & Alur Kerja](https://www.antigravity.google/docs/rules-workflows)
 
 ---
+
 ## Latihan Modul 3
 
 <div class="exercise-card" markdown>
@@ -262,6 +269,7 @@ Contoh `.agents/rules.md`:
 </div>
 
 ---
+
 ## Modul Selanjutnya
 
 → **[Modul 4: Multi-Agen & Lanjutan](../multi-agent-advanced.md)** — sub-agen, pengarahan di tengah tugas /btw, penjadwalan.

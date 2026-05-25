@@ -4,6 +4,7 @@
 > 所有命令均已根据 [antigravity.google/docs](https://antigravity.google/docs/cli-overview) 验证。
 
 ---
+
 ## 安装与版本
 
 ```bash
@@ -15,6 +16,7 @@ agy install        # Configure PATH and shell aliases
 ```
 
 ---
+
 ## 启动模式
 
 | 模式 | 命令 | 何时使用 |
@@ -27,6 +29,7 @@ agy install        # Configure PATH and shell aliases
 | **会话内恢复** | `/resume` 或 `/switch` | 在不离开 agy 的情况下切换会话 |
 
 ---
+
 ## 关键标志
 
 > 来源：[`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
@@ -46,6 +49,7 @@ agy install        # Configure PATH and shell aliases
 > **注意：** 模型选择和严格模式是通过 `/model` 和 `/permissions` 斜杠命令设置的，而不是 CLI 标志。请参阅 [功能文档](https://antigravity.google/docs/cli-features)。
 
 ---
+
 ## 斜杠命令（交互模式）
 
 > 来源：[CLI 功能 — 核心斜杠命令](https://antigravity.google/docs/cli-features) · [使用 Antigravity CLI](https://antigravity.google/docs/cli-using)
@@ -69,6 +73,7 @@ agy install        # Configure PATH and shell aliases
 | `/logout` | 账户 | 登出并清除缓存的凭据 |
 
 ---
+
 ## 快速提示
 
 > 来源：[使用 Antigravity CLI — 快速提示与快捷键](https://antigravity.google/docs/cli-using)
@@ -88,6 +93,7 @@ agy install        # Configure PATH and shell aliases
 | `ctrl+k` | 从主对话中快速批准待处理的子代理权限 |
 
 ---
+
 ## 插件命令
 
 ```bash
@@ -119,6 +125,7 @@ agy plugin link <marketplace> <target>
 ```
 
 ---
+
 ## 工作区与上下文
 
 ```
@@ -152,6 +159,7 @@ Brief description of what this project is.
 ```
 
 ---
+
 ## 实用模式
 
 ```bash
@@ -178,6 +186,7 @@ agy --sandbox --dangerously-skip-permissions \
 ```
 
 ---
+
 ## 多代理模式
 
 ```
@@ -195,6 +204,7 @@ agy --sandbox --dangerously-skip-permissions \
 ```
 
 ---
+
 ## 打印模式流水线示例
 
 ```bash
@@ -213,6 +223,7 @@ done
 ```
 
 ---
+
 ## 官方文档
 
 | 主题 | 链接 |

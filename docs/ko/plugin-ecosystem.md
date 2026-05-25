@@ -3,6 +3,7 @@
 > **agy-cli의 가장 뛰어난 기능입니다.** 다른 어떤 AI 코딩 CLI도 Gemini CLI와 Claude Code의 플러그인을 단일 인터페이스로 연결할 수 없습니다. 이 모듈에서는 가져오기, 설치, 활성화, 비활성화 및 검증과 같은 전체 플러그인 수명 주기를 다룹니다.
 
 ---
+
 ## 2.0 — 플러그인이 중요한 이유 <span class="duration-badge">5 min</span>
 
 agy-cli의 플러그인 시스템은 독특한 기능을 제공합니다. 재설치나 재구성 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 이어집니다.
@@ -22,6 +23,7 @@ agy plugin list | python3 -m json.tool
 > 📖 공식 문서: [플러그인](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [스킬](https://www.antigravity.google/docs/skills)
 
 ---
+
 ## 2.1 — Gemini CLI에서 가져오기 <span class="duration-badge">10분</span>
 
 > **패턴: 교차 도구 플러그인 브릿지(Cross-Tool Plugin Bridge)** — 전체 Gemini CLI 플러그인 설정을 agy로 가져옵니다.
@@ -35,6 +37,7 @@ agy plugin import gemini
 agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을 찾고, 해당 구성 요소(스킬, 명령어, MCP 서버, 에이전트)를 `~/.gemini/antigravity-cli/`에 있는 agy의 설정으로 스테이징합니다.
 
 출력은 다음과 같습니다:
+
 ```
   [ok]    code-review
           ✔ skills      : 3 processed
@@ -213,6 +216,7 @@ Plugin staging directory structure:
 ```
 
 ---
+
 ## 모듈 2 실습
 
 <div class="exercise-card" markdown>
@@ -226,6 +230,7 @@ Plugin staging directory structure:
 </div>
 
 ---
+
 ## 다음 모듈
 
 → **[모듈 3: DevOps 및 자동화](../devops-automation.md)** — 비대화형 파이프라인, CI/CD, 다중 디렉터리 작업 공간.

@@ -7,7 +7,7 @@
 ## System Requirements
 
 | Component | Minimum | Notes |
-|---|---|---|
+| :-- | :-- | :-- |
 | **agy** | Latest | Install instructions below |
 | **Git** | v2.30+ | For exercise repos |
 | **Terminal** | Any | iTerm2, macOS Terminal, or VS Code integrated |
@@ -124,7 +124,7 @@ Checklist before the workshop starts:
 ## Troubleshooting
 
 | Issue | Solution |
-|---|---|
+| :-- | :-- |
 | `agy: command not found` | Check that the binary is in your PATH. Run `echo $PATH` and ensure the install dir is included. Re-run the install script if needed |
 | Auth errors / browser doesn't open | For SSH sessions, copy the printed URL manually. For local, check default browser settings. Run `/logout` and retry |
 | `agy plugin list` returns empty `{}` | Expected on a fresh install. You'll populate plugins in Module 2 |

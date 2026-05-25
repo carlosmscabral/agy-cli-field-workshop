@@ -11,13 +11,13 @@
 This workshop teaches engineers how to use agy-cli as a daily-driver AI coding assistant and automation tool. It covers four modules, from first interactive session to multi-agent orchestration.
 
 | Module | Topic | Duration |
-|---|---|---|
-| **1. SDLC Productivity** | First session, code understanding, refactoring, test generation, review | 50 min |
-| **2. Plugin Ecosystem** | Import from Gemini CLI & Claude, enable/disable, validate custom plugins | 45 min |
-| **3. DevOps & Automation** | `--print` pipelines, CI/CD, multi-dir workspaces, sandbox mode | 40 min |
-| **4. Multi-Agent & Advanced** | Subagents, `/btw` mid-task steering, scheduling, session resumption | 45 min |
+| :-- | :-- | :-- |
+| **1. SDLC Productivity** | First session, code understanding, refactoring, test generation, review + plugins | 75 min |
+| **2. Legacy Modernization ⭐** | Strict mode, agent self-onboarding, .NET/Java migration, `/rewind` | 90 min |
+| **3. Building AGY Agents** | ADK SDK, Agent/Tool/SequentialAgent, session state, Cloud Run deploy | 90 min |
+| **4. Multi-Agent & Advanced** | Subagents, `/btw` mid-task steering, scheduling, session resumption | 60 min |
 
-**Total: ~3.5 hours (half-day)**
+Total: ~5.5 hours (full day) · Half-day: Modules 1–2 · Lightning: Module 1 + M2 highlights
 
 ---
 

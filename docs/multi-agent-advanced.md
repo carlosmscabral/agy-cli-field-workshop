@@ -11,7 +11,7 @@ agy-cli can spawn **subagents** — isolated task runners that operate in parall
 Three workspace modes:
 
 | Mode | What it means | Use when |
-|---|---|---|
+| :-- | :-- | :-- |
 | `inherit` | Subagent shares the same workspace | Additive tasks — no conflicts expected |
 | `branch` | Subagent gets an isolated clone | Parallel changes to the same files |
 | `share` | Git worktree — isolated branch, shared repo | True parallel development |
@@ -62,7 +62,7 @@ Use the `/agents` panel to see all active subagents, their status, and output:
 Key shortcuts from the main conversation:
 
 | Shortcut | Action |
-|---|---|
+| :-- | :-- |
 | `Ctrl+J` | Teleport to a subagent pending approval — jump directly to review its request |
 | `Ctrl+K` | Fast-approve from the main conversation — approve a subagent's pending action without switching |
 

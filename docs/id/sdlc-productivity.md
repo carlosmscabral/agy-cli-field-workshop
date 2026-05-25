@@ -3,6 +3,7 @@
 > **Sesi agy-cli nyata pertama Anda.** Modul ini mencakup alur kerja harian utama: memahami kode, refactoring, membuat pengujian, dan meninjau perubahan — semuanya dari terminal.
 
 ---
+
 ## 1.0 — Sesi Interaktif Pertama <span class="duration-badge">5 menit</span>
 
 Jalankan agy-cli di direktori proyek workshop Anda:
@@ -24,6 +25,7 @@ Perhatikan bagaimana agy membaca ruang kerja Anda — ia mengindeks repo git, me
     Setelah sesi pertama Anda, periksa `.agents/` — agy membuat file konfigurasi proyek yang melacak ruang kerja Anda. Beginilah cara ia mengetahui apa yang harus diindeks pada eksekusi selanjutnya.
 
 ---
+
 ## 1.1 — Pemahaman Kode <span class="duration-badge">10 min</span>
 
 > **Pola: Jelaskan Sebelum Menyentuh** — pahami kode sebelum mengubahnya.
@@ -47,6 +49,7 @@ Kemudian tindak lanjuti secara interaktif:
     `agy -i "<task>"` (singkatan dari `--prompt-interactive`) dimulai dengan sebuah prompt tetapi tetap interaktif. Sangat bagus untuk eksplorasi yang terarah — Anda menentukan arahnya, lalu mengarahkannya dengan tindak lanjut.
 
 ---
+
 ## 1.2 — Refactoring <span class="duration-badge">10 menit</span>
 
 > **Pola: Usulkan, Tinjau, Terapkan** — jangan pernah menerapkan perubahan yang belum Anda baca.
@@ -93,6 +96,7 @@ Gunakan perintah garis miring `/permissions` untuk melihat atau mengubah tingkat
 > 📖 Detail lengkap: [Dokumentasi Izin](https://www.antigravity.google/docs/permissions) · [Dokumentasi Mode Ketat](https://www.antigravity.google/docs/strict-mode)
 
 ---
+
 ## 1.3 — Pembuatan Pengujian <span class="duration-badge">10 min</span>
 
 > **Pola: Uji Apa yang Ada** — buat pengujian untuk kode nyata, bukan hipotesis.
@@ -117,6 +121,7 @@ Kemudian:
     agy dapat mengeksekusi perintah shell. Ini akan menjalankan rangkaian pengujian Anda dan melakukan iterasi pada kegagalan tanpa Anda harus menyalin-tempel pesan kesalahan. Perhatikan ia mengoreksi dirinya sendiri.
 
 ---
+
 ## 1.4 — Tinjauan Kode <span class="duration-badge">10 min</span>
 
 > **Pola: Tinjauan Pre-Commit** — gunakan agy sebagai peninjau senior sebelum setiap push.
@@ -143,6 +148,7 @@ git diff --cached | agy --print "Review these changes. Flag any bugs, security i
 ```
 
 ---
+
 ## 1.5 — Konteks Proyek dengan AGENTS.md <span class="duration-badge">5 menit</span>
 
 > **Pola: Konteks Persisten** — beri tahu agy sekali, ia akan mengingatnya di setiap sesi.
@@ -187,6 +193,7 @@ Selain AGENTS.md, agy juga memuat:
 > 📖 Detail lengkap: [Dokumentasi Aturan & Alur Kerja](https://www.antigravity.google/docs/rules-workflows)
 
 ---
+
 ## 1.6 — Navigasi Interaktif <span class="duration-badge">5 menit</span>
 
 > **Pola: Kelancaran Terminal** — ketahui pintasan yang membuat sesi agy menjadi cepat.
@@ -228,6 +235,7 @@ Selain AGENTS.md, agy juga memuat:
 > 📖 Referensi lengkap keybinding: [Menggunakan Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 ---
+
 ## Latihan Modul 1
 
 <div class="exercise-card" markdown>
@@ -241,6 +249,7 @@ Selain AGENTS.md, agy juga memuat:
 </div>
 
 ---
+
 ## Modul Selanjutnya
 
 → **[Modul 2: Ekosistem Plugin](../plugin-ecosystem.md)** — mengimpor plugin Gemini CLI dan Claude ke dalam agy dalam satu perintah.

@@ -11,13 +11,13 @@ Launch Antigravity CLI in your workshop project directory:
 ```bash
 cd agy-cli-field-workshop
 agy
-```
+```text
 
 You'll land in the interactive prompt. Try:
 
 ```text
 > What files are in this project and what does each one do?
-```
+```text
 
 Observe how agy reads your workspace — it indexes the git repo, reads file contents, and responds with context. This is **automatic**: no config, no prompts to write first.
 
@@ -35,7 +35,7 @@ Observe how agy reads your workspace — it indexes the git repo, reads file con
 ```bash
 # -i seeds the session with an initial prompt and stays interactive
 agy -i "Give me a high-level architecture overview of this project. What are the main components and how do they connect?"
-```
+```text
 
 Then follow up interactively:
 
@@ -43,7 +43,7 @@ Then follow up interactively:
 > Which file handles the entry point?
 > What external dependencies does this project have?
 > Are there any obvious code smells or tech debt?
-```
+```text
 
 !!! tip "Use -i for seeded sessions"
     `agy -i "<task>"` (short for `--prompt-interactive`) starts with a prompt but stays interactive. Great for oriented exploration — you set the direction, then steer with follow-ups.
@@ -58,17 +58,17 @@ Then follow up interactively:
 
 ```bash
 agy
-```
+```text
 
 ```text
 > I want to refactor the error handling in this project. First, show me all the places where errors are currently caught or returned — don't change anything yet.
-```
+```text
 
 Review the findings. Then:
 
 ```text
 > Now propose a refactored version of [specific function] using a consistent error handling pattern. Show me the diff before applying.
-```
+```text
 
 Only apply after you've read the proposed change.
 
@@ -91,7 +91,7 @@ Use the `/permissions` slash command to view or change the current level. You ca
     "deny": ["command(rm -rf)"]
   }
 }
-```
+```text
 
 > 📖 Full details: [Permissions docs](https://www.antigravity.google/docs/permissions) · [Strict Mode docs](https://www.antigravity.google/docs/strict-mode)
 
@@ -105,17 +105,17 @@ Use the `/permissions` slash command to view or change the current level. You ca
 
 ```bash
 agy
-```
+```text
 
 ```text
 > Look at [specific function or file]. Generate a comprehensive unit test suite for it. Include happy path, edge cases, and error conditions. Use the testing framework already in this project.
-```
+```text
 
 Then:
 
 ```text
 > Run the tests and fix any that fail.
-```
+```text
 
 !!! tip "Let agy run the tests"
     agy can execute shell commands. It will run your test suite and iterate on failures without you having to copy-paste error messages. Watch it self-correct.
@@ -134,18 +134,18 @@ git add -p
 
 # Start agy and review what's staged
 agy
-```
+```text
 
 ```text
 > Review my staged changes for: (1) correctness, (2) security issues, (3) missing test coverage, (4) anything that would block a PR. Be direct — don't soften findings.
-```
+```text
 
 ### Headless Variant (for scripting)
 
 ```bash
 # Review changes non-interactively — useful in pre-commit hooks or CI
 git diff --cached | agy --print "Review these changes. Flag any bugs, security issues, or missing tests. Output as markdown."
-```
+```text
 
 ---
 
@@ -169,13 +169,13 @@ This is a [your project description]. Key conventions:
 ## Architecture
 [Brief architecture summary]
 EOF
-```
+```text
 
 Now start a new session:
 
 ```bash
 agy --print "What do you know about this project?"
-```
+```text
 
 agy will incorporate your AGENTS.md into every subsequent session automatically.
 
@@ -245,7 +245,7 @@ Antigravity CLI's plugin system does something unique: it can **import plugins y
 
 ```bash
 agy plugin list
-```
+```text
 
 Shows each plugin's name, source, import date, and components (skills, commands, mcpServers, agents).
 
@@ -253,7 +253,7 @@ Shows each plugin's name, source, import date, and components (skills, commands,
 
 ```bash
 agy plugin import gemini
-```
+```text
 
 agy scans your local Gemini CLI installation, discovers all installed plugins, and stages their components into `~/.gemini/antigravity-cli/`. Output:
 
@@ -266,7 +266,7 @@ agy scans your local Gemini CLI installation, discovers all installed plugins, a
           ✔ commands    : 1 processed
           ✔ mcpServers  : 1 processed
   [skip]  superpowers (already imported)
-```
+```text
 
 !!! warning "Custom themes are silently dropped"
     Custom theme components cannot be migrated 1:1 to agy's model and are skipped without error during import. Check your active plugins after import if themes are important to your workflow.
@@ -298,7 +298,7 @@ agy plugin disable gemini-deep-research
 
 # Re-enable
 agy plugin enable gemini-deep-research
-```
+```text
 
 ### Plugin Locations
 
@@ -322,7 +322,7 @@ my-plugin/
 ├── agents/              ← subagent definitions (optional)
 └── rules/               ← rules files (optional)
     └── my-rules.md
-```
+```text
 
 ```json
 {
@@ -331,14 +331,14 @@ my-plugin/
   "description": "My custom agy plugin",
   "components": ["skills"]
 }
-```
+```text
 
 Validate it before shipping:
 
 ```bash
 agy plugin validate ./my-plugin
 # ✔ Plugin manifest is valid
-```
+```text
 
 > 📖 Full reference: [Plugins](https://www.antigravity.google/docs/plugins) · [Migration guide](https://www.antigravity.google/docs/gcli-migration)
 

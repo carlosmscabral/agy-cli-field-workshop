@@ -3,7 +3,7 @@
 <div class="module-header" markdown>
 **Duration:** ~90 minutes  
 **Goal:** Build a production-ready AGY agent from scratch using the Google ADK — tools, orchestration, skills, session state, and deployment to Cloud Run.  
-**Exercises:** [Exercise 10: Your First Agent](../exercises/ex10_first_agent.md) · [Exercise 11: Multi-Agent Pipeline](../exercises/ex11_multi_agent_pipeline.md)
+**Exercises:** [Exercise 10: Your First Agent](exercises/ex10_first_agent.md) · [Exercise 11: Multi-Agent Pipeline](exercises/ex11_multi_agent_pipeline.md)
 </div>
 
 > 📖 Sources: [ADK Docs](https://google.github.io/adk-docs/) · [google-adk PyPI](https://pypi.org/project/google-adk/) · [Subagents](https://antigravity.google/docs/subagents) · [Skills](https://antigravity.google/docs/skills)
@@ -15,7 +15,7 @@
 The CLI is a **general-purpose assistant**. An agent you build with the SDK is a **specialist** — it has a narrow job, domain-specific tools, a carefully engineered system prompt, and it can be deployed as a service that your whole team calls.
 
 | | Antigravity CLI | AGY SDK Agent |
-|:--|:--|:--|
+| :-- | :-- | :-- |
 | **Who uses it** | Individual developer | Team / API consumers |
 | **Customization** | AGENTS.md + plugins | Full code control |
 | **Tools** | Built-in CLI tools | Any Python function you write |
@@ -37,7 +37,7 @@ The CLI is a **general-purpose assistant**. An agent you build with the SDK is a
 python -m venv .venv
 source .venv/bin/activate
 pip install google-adk
-```
+```text
 
 ### Authenticate with Vertex AI
 
@@ -46,7 +46,7 @@ gcloud auth application-default login
 export GOOGLE_CLOUD_PROJECT="your-project-id"
 export GOOGLE_CLOUD_LOCATION="global"
 export GOOGLE_GENAI_USE_VERTEXAI="True"
-```
+```text
 
 > **Why Vertex AI?** Vertex AI gives you enterprise billing, audit logs, VPC-SC controls, and access to the full Gemini model lineup. For production agents, always use Vertex AI over API keys.
 
@@ -75,9 +75,10 @@ def get_file_contents(file_path: str) -> str:
             return f.read()
     except FileNotFoundError:
         return f"Error: File not found at {file_path}"
-```
+```text
 
 > **Critical rules for tools:**
+>
 > - Use explicit type annotations — `str`, `int`, `bool`, `list[str]`. No `typing.Optional`.
 > - Use a default value of `None` for optional parameters: `param: str = None`
 > - The docstring is the tool's interface — the agent reads it to decide when and how to call the tool. Write it for the agent, not a human.
@@ -104,14 +105,14 @@ root_agent = Agent(
     """,
     tools=[get_file_contents],
 )
-```
+```text
 
 ### Model Selection
 
 Match the model to the job. Cost-conscious policy:
 
 | Role | Model | Rationale |
-|:--|:--|:--|
+| :-- | :-- | :-- |
 | Orchestration, routing, planning | `gemini-3.1-pro-preview` | Complex intent classification, multi-step reasoning |
 | Document generation, code review | `gemini-3.1-flash-lite-preview` | High-throughput, cost-efficient with good prompting |
 | Adversarial review, compliance | `gemini-3.1-pro-preview` | Needs deep reasoning to find non-obvious gaps |
@@ -147,7 +148,7 @@ root_agent = Agent(
 """,
     tools=[get_file_contents],
 )
-```
+```text
 
 > **Why skills instead of hardcoding?** Changing review guidelines means editing `SKILL.md`, not touching agent code. Different teams can swap skill packs. New frameworks get a new skill — the agent code doesn't change.
 
@@ -190,7 +191,7 @@ def seed_pipeline_context(
     tool_context.state["audience"] = audience
     tool_context.state["depth"] = depth
     return {"status": "context_seeded", "keys": ["topic", "audience", "depth"]}
-```
+```text
 
 ### Reading from State (Sub-Agent Pattern)
 
@@ -210,7 +211,7 @@ Outline: {document_outline}
 """,
     output_key="written_section",  # Writes result back to state
 )
-```
+```text
 
 > ADK substitutes `{key}` placeholders in the instruction from session state automatically.
 
@@ -236,7 +237,7 @@ pipeline = SequentialAgent(
         report_writer,    # Step 4: Format the report
     ],
 )
-```
+```text
 
 ### ParallelAgent — Independent Work Simultaneously
 
@@ -253,7 +254,7 @@ parallel_analysis = ParallelAgent(
         test_coverage_check, # Maps test gaps
     ],
 )
-```
+```text
 
 > **When to use parallel:** Any time you have N independent analyses that could run simultaneously. This cuts wall-clock time by 60–80% compared to sequential.
 
@@ -275,7 +276,7 @@ orchestrator = LlmAgent(
     """,
     sub_agents=[code_reviewer, compliance_analyst],
 )
-```
+```text
 
 > Use `gemini-3.1-pro-preview` for orchestrators. Routing mistakes are expensive — a cheaper model routing to the wrong agent wastes the entire pipeline's compute.
 
@@ -305,7 +306,7 @@ class DriftDetector(BaseAgent):
             raise ValueError(f"Research drifted: only {overlap_ratio:.0%} keyword overlap")
         
         ctx.session.state["drift_detected"] = False
-```
+```text
 
 > **The pattern:** Put zero-cost guards between expensive steps. A drift detector that catches a wrong-topic research run saves the entire generation pipeline's compute.
 
@@ -317,7 +318,7 @@ class DriftDetector(BaseAgent):
 
 ```bash
 adk web .
-```
+```text
 
 Opens a browser UI. Select your agent, send messages, inspect session state at each step. The best way to iterate quickly.
 
@@ -329,7 +330,7 @@ adk run . --prompt "Review the file at src/auth/login.py"
 
 # Run evaluation suite against golden test cases
 adk eval . --eval-set evals/review_agent.evalset.json
-```
+```text
 
 ### Eval File Structure
 
@@ -352,7 +353,7 @@ adk eval . --eval-set evals/review_agent.evalset.json
     }
   ]
 }
-```
+```text
 
 > **Golden test philosophy:** Don't just test "does it produce output." Test "does it produce the right output for a known input." The eval set is your regression guard — run it before every deploy.
 
@@ -367,7 +368,7 @@ adk deploy cloud_run \
   --region us-central1 \
   --service-name paul-sdlc-code-reviewer \
   .
-```
+```text
 
 > **Naming convention:** Always prefix with `paul-sdlc-` when deploying to `gpu-launchpad-playground`.
 
@@ -383,7 +384,7 @@ curl -X POST \
   -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
   -H "Content-Type: application/json" \
   -d '{"user_id": "workshop", "session_id": "session-1", "new_message": {"role": "user", "parts": [{"text": "Review src/auth/login.py"}]}}'
-```
+```text
 
 ---
 
@@ -391,7 +392,7 @@ curl -X POST \
 
 Structure your agent project for maintainability and ADK compatibility:
 
-```
+```text
 my_agent/
 ├── agent.py                  # root_agent definition — ADK entry point
 ├── tools/
@@ -411,7 +412,7 @@ my_agent/
 │   └── test_search_tool.py
 ├── pyproject.toml            # Dependencies
 └── README.md
-```
+```text
 
 > **ADK entry point rule:** ADK looks for `root_agent` in `agent.py` at the package root. This name is required — don't rename it.
 
@@ -428,6 +429,7 @@ my_agent/
 **Build:** A **Code Review Agent** that reads files, identifies issues, and produces a structured review report.
 
 **What you'll implement:**
+
 1. Define 3 tools: `read_file`, `list_directory`, `write_report`
 2. Write a system prompt with a review rubric (loaded from a SKILL.md)
 3. Wire the agent with `Agent(name=..., model=..., tools=...)`
@@ -441,6 +443,7 @@ my_agent/
 **Build:** A **Write-then-Audit Pipeline** — a Technical Writer agent produces a document, then a Compliance Analyst agent evaluates it for GDPR gaps.
 
 **What you'll implement:**
+
 1. Build a `technical_writer` agent with a PRD skill
 2. Build a `compliance_analyst` agent with a GDPR skill
 3. Wire them sequentially: `SequentialAgent(sub_agents=[writer, analyst])`
@@ -455,7 +458,7 @@ my_agent/
 ## Summary: SDK Building Blocks
 
 | Primitive | What It Does | When to Use |
-|:--|:--|:--|
+| :-- | :-- | :-- |
 | `Agent` | Single LLM agent with tools and system prompt | The core building block |
 | `LlmAgent` | Agent that routes to sub-agents based on LLM decision | Orchestrators, intent routers |
 | `SequentialAgent` | Runs sub-agents in order, passing state between them | Linear pipelines |

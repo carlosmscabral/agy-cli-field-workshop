@@ -48,6 +48,11 @@ nav:
       - "2. Legacy Modernization ⭐": legacy-modernization.md
       - "3. Building AGY Agents": agy-sdk.md
       - "4. Multi-Agent & Advanced": multi-agent-advanced.md
+  - "🧪 Exercises":
+      - ".NET Modernization (ex08)": exercises/ex08_dotnet_modernization.md
+      - "Java Upgrade (ex09)": exercises/ex09_java_upgrade.md
+      - "First Agent (ex10)": exercises/ex10_first_agent.md
+      - "Multi-Agent Pipeline (ex11)": exercises/ex11_multi_agent_pipeline.md
   - "📋 Resources":
       - Cheatsheet: cheatsheet.md
       - Facilitator Guide: facilitator-guide.md

@@ -3,11 +3,13 @@
 > Panduan internal untuk fasilitator lokakarya. Jangan bagikan kepada peserta.
 
 ---
+
 ## Gambaran Umum
 
 Ini adalah **lokakarya praktik langsung 4 modul berdurasi ~3,5 jam** untuk agy-cli (Antigravity CLI). Lokakarya ini dirancang untuk audiens pengembang: insinyur, pemimpin teknis, dan arsitek solusi yang sedang mengevaluasi atau mengadopsi agy-cli.
 
 ---
+
 ## Format Penyampaian
 
 | Format | Modul | Durasi |
@@ -18,6 +20,7 @@ Ini adalah **lokakarya praktik langsung 4 modul berdurasi ~3,5 jam** untuk agy-c
 | 🏗️ Diperpanjang | Semua modul + lab terbuka | 5 jam |
 
 ---
+
 ## Daftar Periksa Pra-Lokakarya
 
 - [ ] Peserta telah menginstal dan mengautentikasi agy-cli *(lihat [setup.md](setup.md))*
@@ -34,6 +37,7 @@ Ini adalah **lokakarya praktik langsung 4 modul berdurasi ~3,5 jam** untuk agy-c
     Jika peserta tidak bisa mendapatkan respons, hentikan dan lakukan debug sebelum memulai.
 
 ---
+
 ## Catatan Penyampaian per Modul
 
 ### Modul 1 — Produktivitas SDLC (50 menit)
@@ -69,6 +73,7 @@ Ini adalah **lokakarya praktik langsung 4 modul berdurasi ~3,5 jam** untuk agy-c
 - **Penjadwalan:** jelaskan polanya secara konseptual, jangan didemokan secara langsung (latensi membuatnya canggung dalam sebuah lokakarya).
 
 ---
+
 ## Pertanyaan Umum Peserta
 
 | Pertanyaan | Jawaban |
@@ -81,6 +86,7 @@ Ini adalah **lokakarya praktik langsung 4 modul berdurasi ~3,5 jam** untuk agy-c
 | "Di mana log percakapan disimpan?" | `~/.gemini/antigravity-cli/conversations/` |
 
 ---
+
 ## Pemecahan Masalah Selama Workshop
 
 | Gejala | Perbaikan |
@@ -92,6 +98,7 @@ Ini adalah **lokakarya praktik langsung 4 modul berdurasi ~3,5 jam** untuk agy-c
 | Sub-agen tidak muncul | Konfirmasikan bahwa peserta berada dalam mode interaktif (bukan `--print`) |
 
 ---
+
 ## Pasca-Lokakarya
 
 1. Kumpulkan umpan balik menggunakan formulir umpan balik lokakarya standar

@@ -3,6 +3,7 @@
 > **agy-cli 的突出特性。** 没有任何其他 AI 编码 CLI 能够将来自 Gemini CLI 和 Claude Code 的插件桥接到一个统一的界面中。本模块涵盖完整的插件生命周期：导入、安装、启用、禁用和验证。
 
 ---
+
 ## 2.0 — 为什么插件很重要 <span class="duration-badge">5 min</span>
 
 agy-cli 的插件系统有一个独特之处：它可以**导入你已经在 Gemini CLI 或 Claude Code 中安装的插件**——无需重新安装或重新配置。你现有的扩展投资可以无缝继承。
@@ -22,6 +23,7 @@ agy plugin list | python3 -m json.tool
 > 📖 官方文档：[插件](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [技能](https://www.antigravity.google/docs/skills)
 
 ---
+
 ## 2.1 — 从 Gemini CLI 导入 <span class="duration-badge">10 分钟</span>
 
 > **模式：跨工具插件桥接** — 将您完整的 Gemini CLI 插件环境设置引入 agy。
@@ -35,6 +37,7 @@ agy plugin import gemini
 agy 会扫描您本地的 Gemini CLI 安装，发现所有已安装的插件，并将其组件（技能、命令、MCP 服务器、代理）暂存到位于 `~/.gemini/antigravity-cli/` 的 agy 配置中。
 
 输出如下所示：
+
 ```
   [ok]    code-review
           ✔ skills      : 3 processed
@@ -213,6 +216,7 @@ Plugin staging directory structure:
 ```
 
 ---
+
 ## 模块 2 练习
 
 <div class="exercise-card" markdown>
@@ -226,6 +230,7 @@ Plugin staging directory structure:
 </div>
 
 ---
+
 ## 下一模块
 
 → **[模块 3：DevOps 与自动化](../devops-automation.md)** — 非交互式流水线、CI/CD、多目录工作区。

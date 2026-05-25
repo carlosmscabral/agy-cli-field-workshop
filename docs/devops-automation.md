@@ -17,7 +17,7 @@ agy --print "Generate a full test suite for auth.js" --print-timeout 10m
 
 # Short form
 agy -p "What does this project do?"
-```
+```text
 
 Output goes to stdout — pipe it, redirect it, store it.
 
@@ -27,7 +27,7 @@ agy -p "Generate API documentation for all endpoints" > docs/api.md
 
 # Pipe into another command
 agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
-```
+```text
 
 ---
 
@@ -46,7 +46,7 @@ git diff --cached | agy -p "Review these changes. Flag bugs, security issues, or
 
 # Analyze a log file
 tail -n 200 app.log | agy -p "Identify patterns in these errors. Group by root cause."
-```
+```text
 
 ### Pattern: Chain agy Calls
 
@@ -56,7 +56,7 @@ agy -p "Create a migration plan for moving this project from CommonJS to ESM. Ou
 
 # Step 2: Execute step by step
 cat migration-plan.json | agy -p "Execute step 1 of this migration plan."
-```
+```text
 
 ### Pattern: Batch Processing
 
@@ -67,7 +67,7 @@ for f in src/**/*.js; do
   agy -p "Add JSDoc comments to all exported functions in this file." --add-dir "$(dirname $f)" > /tmp/review.md
   cat /tmp/review.md
 done
-```
+```text
 
 ---
 
@@ -86,7 +86,7 @@ agy --add-dir ../api --add-dir ../frontend "Generate an integration test that co
 
 # Use in print mode
 agy -p "Compare the error handling patterns in app/ vs api/" --add-dir ../api
-```
+```text
 
 ### Real-World Use Case: Monorepo Review
 
@@ -94,7 +94,7 @@ agy -p "Compare the error handling patterns in app/ vs api/" --add-dir ../api
 # From the root of a monorepo, review cross-package dependencies
 agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
     -p "Map the dependency graph between these three packages and flag any circular dependencies."
-```
+```text
 
 !!! tip "Repeatable flag"
     `--add-dir` is repeatable — add as many directories as you need. agy indexes all of them alongside the primary git repo.
@@ -143,7 +143,7 @@ jobs:
               repo: context.repo.repo,
               body: review
             });
-```
+```text
 
 !!! warning "--dangerously-skip-permissions in CI"
     Always use `--dangerously-skip-permissions` in CI — there's no human to click "approve". Pair it with sandbox mode to restrict what agy can access.
@@ -160,7 +160,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 # Optionally block commit if issues found
 # (parse output for keywords)
-```
+```text
 
 ---
 
@@ -176,12 +176,12 @@ The sandbox is configured via `settings.json` (either project `.agents/settings.
 {
   "enableTerminalSandbox": true
 }
-```
+```text
 
 When enabled, agy uses **native OS isolation** to restrict terminal command execution:
 
 | OS | Isolation Technology |
-|---|---|
+| :-- | :-- |
 | **Linux** | nsjail |
 | **macOS** | sandbox-exec |
 | **Windows** | AppContainer |
@@ -208,7 +208,7 @@ For maximum control, pair sandbox mode with the permissions model:
     "deny": ["command(rm)", "unsandboxed"]
   }
 }
-```
+```text
 
 > 📖 Full details: [Permissions docs](https://www.antigravity.google/docs/permissions)
 
@@ -223,7 +223,7 @@ For maximum control, pair sandbox mode with the permissions model:
 Hooks let you run custom logic at 5 lifecycle events:
 
 | Event | When it fires |
-|---|---|
+| :-- | :-- |
 | `PreToolUse` | Before agy calls any tool (read file, run command, etc.) |
 | `PostToolUse` | After a tool call completes |
 | `PreInvocation` | Before agy starts processing a prompt |
@@ -239,7 +239,7 @@ Configure hooks in `hooks.json` (in `.agents/` for project or `~/.gemini/config/
 Rules are markdown files injected into agy's system prompt as `RULE` blocks — hard constraints that agy must follow.
 
 | Scope | Location |
-|---|---|
+| :-- | :-- |
 | **Project** | `.agents/rules.md` or `.agents/rules/*.md` |
 | **Global** | `~/.gemini/config/rules.md` or `~/.gemini/config/rules/*.md` |
 
@@ -250,7 +250,7 @@ Example `.agents/rules.md`:
 - Always use TypeScript strict mode
 - Run `npm test` after any code change
 - Do not modify files in the vendor/ directory
-```
+```text
 
 > 📖 Full details: [Rules & Workflows docs](https://www.antigravity.google/docs/rules-workflows)
 
