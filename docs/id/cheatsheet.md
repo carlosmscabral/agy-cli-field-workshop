@@ -4,7 +4,6 @@
 > Semua perintah telah diverifikasi terhadap [antigravity.google/docs](https://antigravity.google/docs/cli-overview).
 
 ---
-
 ## Instalasi & Versi
 
 ```bash
@@ -19,12 +18,12 @@ agy install        # Configure PATH and shell aliases
 ## Mode Peluncuran
 
 | Mode | Perintah | Kapan digunakan |
-| :-- | :-- | :-- |
-| **Interaktif** | `agy` | Default — sesi percakapan penuh |
+|---|---|---|
+| **Interaktif** | `agy` | Bawaan — sesi percakapan penuh |
 | **Interaktif dengan seed** | `agy -i "<prompt>"` | Mulai dengan arahan, lanjutkan secara percakapan |
-| **Cetak (mode headless)** | `agy -p "<prompt>"` | Satu kali eksekusi, teruskan ke stdout |
+| **Cetak (mode headless)** | `agy -p "<prompt>"` | Sekali jalan, teruskan ke stdout |
 | **Lanjutkan terakhir** | `agy -c` | Lanjutkan sesi paling baru |
-| **Lanjutkan berdasarkan ID** | `agy --conversation <id>` | Lanjutkan sesi spesifik sebelumnya |
+| **Lanjutkan berdasarkan ID** | `agy --conversation <id>` | Lanjutkan sesi masa lalu tertentu |
 | **Lanjutkan dalam sesi** | `/resume` atau `/switch` | Beralih percakapan tanpa meninggalkan agy |
 
 ---
@@ -32,11 +31,11 @@ agy install        # Configure PATH and shell aliases
 
 > Sumber: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
 
-| Flag | Singkatan | Deskripsi |
-| :-- | :-- | :-- |
+| Flag | Singkat | Deskripsi |
+|---|---|---|
 | `--print "<prompt>"` | `-p` | Prompt tunggal non-interaktif |
 | `--prompt-interactive "<prompt>"` | `-i` | Sesi interaktif dengan seed |
-| `--continue` | `-c` | Lanjutkan percakapan paling baru |
+| `--continue` | `-c` | Lanjutkan percakapan terbaru |
 | `--conversation <id>` | — | Lanjutkan berdasarkan ID percakapan |
 | `--add-dir <path>` | — | Tambahkan direktori ke ruang kerja (dapat diulang) |
 | `--sandbox` | — | Aktifkan pembatasan sandbox terminal |
@@ -52,7 +51,7 @@ agy install        # Configure PATH and shell aliases
 > Sumber: [Fitur CLI — Perintah Slash Inti](https://antigravity.google/docs/cli-features) · [Menggunakan Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 | Perintah | Kategori | Tujuan |
-| :-- | :-- | :-- |
+|---|---|---|
 | `/resume` (`/switch`) | Percakapan | Buka pemilih percakapan untuk melanjutkan atau beralih sesi |
 | `/rewind` (`/undo`) | Percakapan | Kembalikan riwayat percakapan ke checkpoint sebelumnya |
 | `/rename <name>` | Percakapan | Ganti nama utas percakapan aktif |
@@ -67,19 +66,19 @@ agy install        # Configure PATH and shell aliases
 | `/agents` | Pemantauan | Lihat, kelola, dan setujui tindakan sub-agen |
 | `/open <path>` | Utilitas | Buka file di editor eksternal pilihan Anda |
 | `/usage` | Utilitas | Buka manual bantuan interaktif sebaris |
-| `/logout` | Akun | Keluar dan hapus kredensial yang di-cache |
+| `/logout` | Akun | Keluar dan bersihkan kredensial yang di-cache |
 
 ---
 ## Tips Cepat
 
 > Sumber: [Menggunakan Antigravity CLI — Tips Cepat & Pintasan Keyboard](https://antigravity.google/docs/cli-using)
 
-| Pintasan / Tips | Aksi |
-| :-- | :-- |
+| Pintasan / Tips | Tindakan |
+|---|---|
 | `@` | Pelengkapan otomatis jalur file (ketik `@` untuk memicu saran jalur) |
 | `!` | Jalankan perintah terminal langsung dari prompt |
 | `esc esc` | Bersihkan kotak prompt Anda (saat tidak ada streaming yang aktif) |
-| `?` | Dapatkan bantuan dan daftar semua perintah garis miring |
+| `?` | Dapatkan bantuan dan tampilkan semua perintah garis miring |
 | `alt+enter` / `ctrl+j` / `shift+enter` | Sisipkan baris baru tanpa mengirimkan |
 | `ctrl+g` | Edit prompt di dalam editor shell default Anda |
 | `ctrl+l` | Bersihkan layar TUI |
@@ -181,7 +180,7 @@ agy --sandbox --dangerously-skip-permissions \
 ---
 ## Pola Multi-Agen
 
-```bash
+```text
 # Spawn parallel subagents (in interactive mode)
 > Spawn a security auditor and a performance auditor in parallel (branch mode).
 
@@ -217,10 +216,10 @@ done
 ## Dokumentasi Resmi
 
 | Topik | Tautan |
-| :-- | :-- |
+|---|---|
 | Gambaran Umum CLI | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | Memulai | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
-| Menggunakan Antigravity CLI (pengaturan, tips, pintasan tombol) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
+| Menggunakan Antigravity CLI (pengaturan, kiat, pintasan keyboard) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
 | Fitur (plugin, sandbox, perintah garis miring, sub-agen) | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
 | Migrasi dari Gemini CLI | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
 | Izin | [antigravity.google/docs/permissions](https://antigravity.google/docs/permissions) |

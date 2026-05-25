@@ -1,19 +1,18 @@
 # Referensi: Ekosistem Plugin
 
-> **Referensi mendalam untuk sistem plugin agy-cli.** Perintah-perintah penting dibahas dalam [Modul 1 — Bagian 1.7](sdlc-productivity.md#17-extend-with-plugins). Halaman ini berisi detail siklus hidup lengkap untuk tim yang membangun dan memelihara plugin kustom.
+> **Referensi mendalam untuk sistem plugin agy-cli.** Perintah-perintah penting dibahas dalam [Modul 1 — Bagian 1.7](sdlc-productivity.md#17-extend-with-plugins). Halaman ini memiliki detail siklus hidup lengkap untuk tim yang membangun dan memelihara plugin kustom.
 
 ---
-
 ## 2.0 — Mengapa Plugin Penting <span class="duration-badge">5 min</span>
 
-Sistem plugin agy-cli melakukan sesuatu yang unik: sistem ini dapat **mengimpor plugin yang telah Anda instal di Gemini CLI atau Claude Code** — tanpa perlu menginstal ulang atau mengonfigurasi ulang. Investasi Anda yang sudah ada pada ekstensi akan terbawa.
+Sistem plugin agy-cli melakukan sesuatu yang unik: sistem ini dapat **mengimpor plugin yang sudah Anda instal di Gemini CLI atau Claude Code** — tanpa perlu menginstal ulang atau mengonfigurasi ulang. Investasi Anda yang ada pada ekstensi akan terbawa.
 
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
 ```bash
 
-Outputnya adalah JSON yang menunjukkan nama, sumber, tanggal impor, dan komponen dari setiap plugin (skill, perintah, mcpServers, agen).
+Outputnya adalah JSON yang menunjukkan nama, sumber, tanggal impor, dan komponen setiap plugin (skill, perintah, mcpServers, agen).
 
 ```bash
 # More readable
@@ -23,9 +22,9 @@ agy plugin list | python3 -m json.tool
 > 📖 Dokumentasi resmi: [Plugin](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [Skill](https://www.antigravity.google/docs/skills)
 
 ---
-## 2.1 — Mengimpor dari Gemini CLI <span class="duration-badge">10 min</span>
+## 2.1 — Mengimpor dari Gemini CLI <span class="duration-badge">10 menit</span>
 
-> **Pola: Cross-Tool Plugin Bridge** — tarik seluruh pengaturan plugin Gemini CLI Anda ke dalam agy.
+> **Pola: Jembatan Plugin Lintas Alat** — tarik seluruh pengaturan plugin Gemini CLI Anda ke dalam agy.
 
 ### Impor Semua Plugin Gemini CLI
 
@@ -33,10 +32,10 @@ agy plugin list | python3 -m json.tool
 agy plugin import gemini
 ```bash
 
-agy memindai instalasi Gemini CLI lokal Anda, menemukan semua plugin yang terinstal, dan menyiapkan komponen-komponennya (skill, perintah, server MCP, agen) ke dalam konfigurasi agy di `~/.gemini/antigravity-cli/`.
+agy memindai instalasi Gemini CLI lokal Anda, menemukan semua plugin yang terinstal, dan menyiapkan komponennya (skill, perintah, server MCP, agen) ke dalam konfigurasi agy di `~/.gemini/antigravity-cli/`.
 
 Outputnya terlihat seperti:
-```bash
+```text
   [ok]    code-review
           ✔ skills      : 3 processed
           ✔ commands    : 2 processed
@@ -56,7 +55,7 @@ Outputnya terlihat seperti:
 ### What Gets Imported
 
 | Component | What it means |
-| :-- | :-- |
+|---|---|
 | `skills` | SKILL.md files with YAML frontmatter — injected into agy's context |
 | `commands` | Slash commands available inside agy sessions |
 | `mcpServers` | MCP tool servers (GitHub, gcloud, Workspace, etc.) — stdio or SSE |
@@ -88,13 +87,13 @@ Same mechanic — agy discovers your Claude Code extension installations and bri
 ### Enable / Disable
 
 ```bash
-# Nonaktifkan plugin untuk sesi/proyek ini
+# Menonaktifkan plugin untuk sesi/proyek ini
 agy plugin disable gemini-deep-research
 
-# Aktifkan kembali
+# Mengaktifkannya kembali
 agy plugin enable gemini-deep-research
 
-# Periksa status saat ini
+# Memeriksa status saat ini
 agy plugin list
 ```bash
 
@@ -103,17 +102,17 @@ agy plugin list
 Plugins can be installed at two levels:
 
 | Scope | Path |
-| :-- | :-- |
+|---|---|
 | **Global** | `~/.gemini/config/plugins/` |
 | **Project** | `.agents/plugins/` |
 
 ### Install a Specific Plugin
 
 ```bash
-# Instal berdasarkan nama (dari sumber yang dikonfigurasi)
+# Menginstal berdasarkan nama (dari sumber yang dikonfigurasi)
 agy plugin install <plugin-name>
 
-# Instal versi spesifik
+# Menginstal versi tertentu
 agy plugin install <plugin-name>@<version>
 ```bash
 
@@ -125,11 +124,11 @@ agy plugin install <plugin-name>@<version>
 
 ### Validate an Existing Plugin Directory
 
-```bash
-# Validasi direktori plugin
+```text
+# Memvalidasi direktori plugin
 agy plugin validate ./path/to/my-plugin
 
-# Atau validasi direktori saat ini
+# Atau memvalidasi direktori saat ini
 agy plugin validate .
 ```bash
 
@@ -143,7 +142,7 @@ A valid agy plugin needs a `plugin.json` manifest. Here's the official structure
 my-plugin/
 ├── plugin.json          ← manifes (wajib)
 ├── mcp_config.json      ← definisi server MCP (opsional)
-├── hooks.json           ← penangan kejadian hook (opsional)
+├── hooks.json           ← penangan peristiwa hook (opsional)
 ├── skills/              ← file SKILL.md dengan frontmatter YAML
 │   └── my-skill/
 │       └── SKILL.md
@@ -159,10 +158,10 @@ my-plugin/
   "description": "Plugin agy kustom saya",
   "components": ["skills"]
 }
-```bash
+```text
 
 ```bash
-# Validasi
+# Memvalidasinya
 agy plugin validate ./my-plugin
 
 # Jika valid, Anda akan melihat: ✔ Plugin manifest is valid
@@ -173,7 +172,7 @@ agy plugin validate ./my-plugin
 Use slash commands to inspect active plugin components in a session:
 
 | Command | What it shows |
-| :-- | :-- |
+|---|---|
 | `/skills` | All loaded skills (from plugins, project, global) |
 | `/mcp` | Active MCP servers and their status |
 
@@ -227,8 +226,8 @@ Plugin staging directory structure:
 </div>
 
 ---
-## Kembali ke Workshop
+## Kembali ke Lokakarya
 
-→ **[Modul 1: Produktivitas SDLC](sdlc-productivity.md)** — plugin diperkenalkan pada Bagian 1.7
+→ **[Modul 1: Produktivitas SDLC](sdlc-productivity.md)** — plugin diperkenalkan di Bagian 1.7
 
 → **[Lembar Contekan](cheatsheet.md)** — semua perintah plugin di satu tempat

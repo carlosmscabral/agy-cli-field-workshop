@@ -189,7 +189,7 @@ agy --sandbox --dangerously-skip-permissions \
 
 ## Multi-Agent Patterns
 
-```bash
+```text
 # Spawn parallel subagents (in interactive mode)
 > Spawn a security auditor and a performance auditor in parallel (branch mode).
 

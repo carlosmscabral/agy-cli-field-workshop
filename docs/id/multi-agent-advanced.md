@@ -1,37 +1,36 @@
-# Modul 4: Multi-Agen & Lanjutan <span class="duration-badge">45 min</span>
+# Modul 4: Multi-Agen & Lanjutan <span class="duration-badge">45 menit</span>
 
-> **Di mana agy melampaui sekadar asisten obrolan.** Modul ini mencakup fitur-fitur yang membedakan agy-cli dari setiap alat pengkodean AI lainnya: sub-agen paralel, pengarahan di tengah tugas dengan `/btw`, penjadwalan latar belakang, dan pelanjutan sesi.
+> **Di mana agy melampaui asisten obrolan.** Modul ini mencakup fitur-fitur yang membedakan agy-cli dari setiap alat pengkodean AI lainnya: sub-agen paralel, pengarahan di tengah tugas dengan `/btw`, penjadwalan latar belakang, dan pelanjutan sesi.
 
 ---
-
 ## 4.0 — Model Agen agy <span class="duration-badge">5 min</span>
 
-agy-cli dapat memunculkan **sub-agen** — pelaksana tugas yang terisolasi yang beroperasi secara paralel, masing-masing dengan konteks ruang kerja mereka sendiri. Tidak seperti menjalankan beberapa tab terminal dengan sesi agy yang terpisah, sub-agen dikoordinasikan: mereka dapat berbagi ruang kerja, bekerja pada cabang yang terisolasi, atau beroperasi pada salinan kloning.
+agy-cli dapat memunculkan **sub-agen** — pelaksana tugas terisolasi yang beroperasi secara paralel, masing-masing dengan konteks ruang kerja mereka sendiri. Tidak seperti menjalankan beberapa tab terminal dengan sesi agy yang terpisah, sub-agen dikoordinasikan: mereka dapat berbagi ruang kerja, bekerja pada cabang yang terisolasi, atau beroperasi pada salinan hasil kloning.
 
 Tiga mode ruang kerja:
 
-| Mode | Apa artinya | Gunakan saat |
+| Mode | Apa artinya | Gunakan ketika |
 | :-- | :-- | :-- |
 | `inherit` | Sub-agen berbagi ruang kerja yang sama | Tugas tambahan — tidak ada konflik yang diharapkan |
 | `branch` | Sub-agen mendapatkan klon yang terisolasi | Perubahan paralel pada berkas yang sama |
-| `share` | worktree git — cabang terisolasi, repo bersama | Pengembangan paralel yang sebenarnya |
+| `share` | Git worktree — cabang terisolasi, repositori bersama | Pengembangan paralel yang sebenarnya |
 
 ### Beralih Model
 
-Gunakan `/model` untuk beralih model aktif di tengah sesi — berguna saat Anda menginginkan penalaran yang lebih berat untuk tugas tertentu:
+Gunakan `/model` untuk beralih model aktif di tengah sesi — berguna ketika Anda menginginkan penalaran yang lebih berat untuk tugas tertentu:
 
 ```bash
 /model
 ```yaml
 
-Ini akan membuka pemilih model yang menunjukkan opsi yang tersedia (Gemini 3.5 Flash, Gemini 3.1 Pro, Claude Sonnet 4.6, dll.).
+Ini membuka pemilih model yang menunjukkan opsi yang tersedia (Gemini 3.5 Flash, Gemini 3.1 Pro, Claude Sonnet 4.6, dll.).
 
 > 📖 Daftar model lengkap: [Dokumentasi model](https://www.antigravity.google/docs/models)
 
 ---
-## 4.1 — Memunculkan Sub-agen <span class="duration-badge">15 menit</span>
+## 4.1 — Memunculkan Sub-agen <span class="duration-badge">15 min</span>
 
-> **Pola: Eksekusi Paralel** — mengirim beberapa agen untuk bekerja secara bersamaan.
+> **Pola: Eksekusi Paralel** — mengirimkan beberapa agen untuk bekerja secara bersamaan.
 > 📖 Referensi lengkap: [Dokumentasi sub-agen](https://www.antigravity.google/docs/subagents)
 
 ### Dari Sesi Interaktif
@@ -42,7 +41,7 @@ Ini akan membuka pemilih model yang menunjukkan opsi yang tersedia (Gemini 3.5 F
 
 agy akan memunculkan sub-agen, melaporkan ID-nya, dan melanjutkan sesi utama Anda. Sub-agen bekerja secara independen.
 
-```bash
+```text
 > What's the status of the test-writing subagent?
 ```bash
 
@@ -56,14 +55,14 @@ Gunakan panel `/agents` untuk melihat semua sub-agen yang aktif, statusnya, dan 
 
 ```bash
 /agents
-```bash
+```text
 
 Pintasan utama dari percakapan utama:
 
 | Pintasan | Aksi |
 | :-- | :-- |
-| `Ctrl+J` | Teleportasi ke sub-agen yang menunggu persetujuan — melompat langsung untuk meninjau permintaannya |
-| `Ctrl+K` | Persetujuan cepat dari percakapan utama — menyetujui aksi sub-agen yang tertunda tanpa beralih |
+| `Ctrl+J` | Berpindah ke sub-agen yang menunggu persetujuan — lompat langsung untuk meninjau permintaannya |
+| `Ctrl+K` | Persetujuan cepat dari percakapan utama — menyetujui aksi sub-agen yang tertunda tanpa berpindah |
 
 Siklus hidup sub-agen: **Berjalan → Menganggur → Dihentikan**
 
@@ -74,7 +73,7 @@ Siklus hidup sub-agen: **Berjalan → Menganggur → Dihentikan**
 
 ### Pola Audit Paralel
 
-```bash
+```text
 > Spawn three subagents in parallel:
 > 1. Security audit — scan for hardcoded credentials, injection risks, and insecure dependencies
 > 2. Performance audit — find N+1 queries, unindexed lookups, and memory leaks
@@ -83,7 +82,7 @@ Siklus hidup sub-agen: **Berjalan → Menganggur → Dihentikan**
 > Use branch workspace mode for each. Report back when all three complete.
 ```bash
 
-Perhatikan tiga analisis independen berjalan secara bersamaan. Saat selesai, agy menyintesis hasilnya.
+Saksikan tiga analisis independen berjalan secara bersamaan. Ketika selesai, agy menyintesis hasilnya.
 
 !!! tip "Momen Wow"
     Tiga agen khusus berjalan secara paralel pada basis kode Anda, masing-masing dengan konteks penuh, masing-masing menghasilkan temuan independen. Ini adalah pola yang membuat agy secara kualitatif berbeda dari asisten berbasis obrolan.
@@ -103,7 +102,7 @@ Pola peninjau adversarial sangat kuat untuk perubahan yang sensitif terhadap kea
 
 > **Pola: Mengarahkan Tanpa Menginterupsi** — menyuntikkan konteks ke dalam tugas yang sedang berjalan tanpa menghentikannya.
 
-`/btw` adalah salah satu fitur paling khas dari agy. Saat agy berada di tengah tugas, Anda dapat mengiriminya pesan tanpa membatalkan operasi saat ini.
+`/btw` adalah salah satu fitur agy yang paling khas. Saat agy berada di tengah tugas, Anda dapat mengiriminya pesan tanpa membatalkan operasi saat ini.
 
 ### Cara Kerjanya
 
@@ -117,7 +116,7 @@ Pola peninjau adversarial sangat kuat untuk perubahan yang sensitif terhadap kea
 /btw Actually, keep backward compatibility with sessions for 30 days — implement a dual-mode auth.
 ```bash
 
-agy memasukkan catatan Anda ke dalam tugas yang sedang berlangsung tanpa berhenti. Ini seperti meninggalkan catatan tempel untuk seorang pengembang di tengah-tengah sprint — mereka melihatnya dan menyesuaikan.
+agy menggabungkan catatan Anda ke dalam tugas yang sedang berlangsung tanpa berhenti. Ini seperti meninggalkan catatan tempel untuk seorang pengembang di tengah sprint — mereka melihatnya dan menyesuaikan.
 
 ### Kasus Penggunaan untuk /btw
 
@@ -133,13 +132,13 @@ agy memasukkan catatan Anda ke dalam tugas yang sedang berlangsung tanpa berhent
 /btw Skip the frontend changes for now, just focus on the backend API.
 ```bash
 
-!!! info "Kontras dengan menginterupsi"
-    Tanpa `/btw`, mengarahkan tugas yang berjalan lama berarti membatalkannya, menyesuaikan prompt Anda, dan memulai ulang — kehilangan semua kemajuan. `/btw` memungkinkan Anda mengoreksi arah tanpa kerugian tersebut.
+!!! info "Perbandingan dengan menginterupsi"
+    Tanpa `/btw`, mengarahkan tugas yang berjalan lama berarti membatalkannya, menyesuaikan prompt Anda, dan memulai ulang — kehilangan semua kemajuan. `/btw` memungkinkan Anda mengoreksi arah tanpa biaya tersebut.
 
 ---
 ## 4.3 — Eksekusi Latar Belakang & Penjadwalan <span class="duration-badge">10 min</span>
 
-> **Pola: Async Agy** — mulai tugas yang berjalan lama dan dapatkan pemberitahuan saat tugas tersebut selesai.
+> **Pola: Async Agy** — memulai tugas yang berjalan lama dan mendapatkan pemberitahuan saat tugas tersebut selesai.
 
 ### Tugas Latar Belakang
 
@@ -173,7 +172,7 @@ Ekspresi cron (hingga 5 bidang) didukung:
 ```yaml
 
 !!! warning "Penjadwalan bersifat persisten dalam sesi"
-    Tugas terjadwal bertahan di seluruh sesi selama agy berjalan. Periksa `/tasks` untuk melihat dan mengelola tugas terjadwal.
+    Tugas terjadwal tetap ada di seluruh sesi selama agy berjalan. Periksa `/tasks` untuk melihat dan mengelola tugas terjadwal.
 
 ---
 ## 4.4 — Melanjutkan Sesi <span class="duration-badge">5 min</span>
@@ -197,7 +196,7 @@ Ini akan membuka pemilih sesi yang menampilkan percakapan terbaru Anda. Pilih sa
 /switch
 ```bash
 
-Sama seperti `/resume` — kedua perintah tersebut membuka pemilih sesi.
+Sama seperti `/resume` — kedua perintah membuka pemilih sesi.
 
 ### Lanjutkan Otomatis saat Keluar
 
@@ -249,7 +248,7 @@ Saat mereka berjalan:
 /btw The incident started at 14:32 UTC. Focus analysis on that window.
 ```yaml
 
-Ini adalah triase insiden multi-agen — dua investigasi paralel, yang dapat diarahkan di tengah jalan.
+Ini adalah triase insiden multi-agen — dua investigasi paralel, dapat diarahkan saat berjalan.
 
 ---
 ## Latihan Modul 4

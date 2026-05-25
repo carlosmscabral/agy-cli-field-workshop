@@ -361,4 +361,4 @@ agy plugin validate ./my-plugin
 ---
 ## 下一模块
 
-→ **[模块 2：遗留代码库现代化](legacy-modernization.md)** —— 严格模式、代理自我引导、子代理，以及作为安全网的 `/rewind`。
+→ **[Legacy Modernization](../legacy-modernization.md)** —— 严格模式、代理自我引导、子代理，以及作为安全网的 `/rewind`。

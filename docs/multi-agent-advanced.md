@@ -43,7 +43,7 @@ This opens a model picker showing available options (Gemini 3.5 Flash, Gemini 3.
 
 agy will spawn a subagent, report its ID, and continue your main session. The subagent works independently.
 
-```bash
+```text
 > What's the status of the test-writing subagent?
 ```bash
 
@@ -57,7 +57,7 @@ Use the `/agents` panel to see all active subagents, their status, and output:
 
 ```bash
 /agents
-```bash
+```text
 
 Key shortcuts from the main conversation:
 
@@ -75,7 +75,7 @@ Subagent lifecycle: **Running → Idle → Killed**
 
 ### Parallel Audit Pattern
 
-```bash
+```text
 > Spawn three subagents in parallel:
 > 1. Security audit — scan for hardcoded credentials, injection risks, and insecure dependencies
 > 2. Performance audit — find N+1 queries, unindexed lookups, and memory leaks

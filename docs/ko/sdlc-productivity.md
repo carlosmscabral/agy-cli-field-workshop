@@ -361,4 +361,4 @@ agy plugin validate ./my-plugin
 ---
 ## 다음 모듈
 
-→ **[모듈 2: 레거시 코드베이스 현대화](legacy-modernization.md)** — 엄격 모드, 에이전트 셀프 온보딩, 서브에이전트, 그리고 안전망 역할을 하는 `/rewind`.
+→ **[Legacy Modernization](../legacy-modernization.md)** — 엄격 모드, 에이전트 셀프 온보딩, 서브에이전트, 그리고 안전망 역할을 하는 `/rewind`.

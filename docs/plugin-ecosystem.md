@@ -37,7 +37,7 @@ agy plugin import gemini
 agy scans your local Gemini CLI installation, discovers all installed plugins, and stages their components (skills, commands, MCP servers, agents) into agy's config at `~/.gemini/antigravity-cli/`.
 
 Output looks like:
-```bash
+```text
   [ok]    code-review
           ✔ skills      : 3 processed
           ✔ commands    : 2 processed
@@ -126,7 +126,7 @@ agy plugin install <plugin-name>@<version>
 
 ### Validate an Existing Plugin Directory
 
-```bash
+```text
 # Validate a plugin directory
 agy plugin validate ./path/to/my-plugin
 
@@ -160,7 +160,7 @@ my-plugin/
   "description": "My custom agy plugin",
   "components": ["skills"]
 }
-```bash
+```text
 
 ```bash
 # Validate it

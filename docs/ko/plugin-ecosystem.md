@@ -1,19 +1,18 @@
 # 참조: 플러그인 생태계
 
-> **agy-cli의 플러그인 시스템에 대한 심층 참조입니다.** 필수 명령어는 [모듈 1 — 섹션 1.7](sdlc-productivity.md#17-extend-with-plugins)에서 다룹니다. 이 페이지는 커스텀 플러그인을 구축하고 유지 관리하는 팀을 위한 전체 수명 주기 세부 정보를 제공합니다.
+> **agy-cli의 플러그인 시스템에 대한 심층 참조입니다.** 필수 명령어는 [모듈 1 — 섹션 1.7](sdlc-productivity.md#17-extend-with-plugins)에서 다룹니다. 이 페이지에는 사용자 지정 플러그인을 빌드하고 유지 관리하는 팀을 위한 전체 수명 주기 세부 정보가 포함되어 있습니다.
 
 ---
-
 ## 2.0 — 플러그인이 중요한 이유 <span class="duration-badge">5 min</span>
 
-agy-cli의 플러그인 시스템은 특별한 기능을 제공합니다. 재설치나 재구성이 필요 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 유지됩니다.
+agy-cli의 플러그인 시스템은 독특한 기능을 제공합니다. 재설치나 재구성이 필요 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 유지됩니다.
 
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
 ```bash
 
-출력은 각 플러그인의 이름, 출처, 가져온 날짜 및 구성 요소(스킬, 명령어, mcpServers, 에이전트)를 보여주는 JSON입니다.
+출력은 각 플러그인의 이름, 소스, 가져오기 날짜 및 구성 요소(스킬, 명령어, mcpServers, 에이전트)를 보여주는 JSON입니다.
 
 ```bash
 # More readable
@@ -36,7 +35,7 @@ agy plugin import gemini
 agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을 검색하고, 해당 구성 요소(스킬, 명령어, MCP 서버, 에이전트)를 `~/.gemini/antigravity-cli/`에 있는 agy의 설정으로 스테이징합니다.
 
 출력은 다음과 같습니다:
-```bash
+```text
   [ok]    code-review
           ✔ skills      : 3 processed
           ✔ commands    : 2 processed
@@ -56,7 +55,7 @@ agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을
 ### What Gets Imported
 
 | Component | What it means |
-| :-- | :-- |
+|---|---|
 | `skills` | SKILL.md files with YAML frontmatter — injected into agy's context |
 | `commands` | Slash commands available inside agy sessions |
 | `mcpServers` | MCP tool servers (GitHub, gcloud, Workspace, etc.) — stdio or SSE |
@@ -103,7 +102,7 @@ agy plugin list
 Plugins can be installed at two levels:
 
 | Scope | Path |
-| :-- | :-- |
+|---|---|
 | **Global** | `~/.gemini/config/plugins/` |
 | **Project** | `.agents/plugins/` |
 
@@ -125,7 +124,7 @@ agy plugin install <plugin-name>@<version>
 
 ### Validate an Existing Plugin Directory
 
-```bash
+```text
 # 플러그인 디렉터리 유효성 검사
 agy plugin validate ./path/to/my-plugin
 
@@ -144,7 +143,7 @@ my-plugin/
 ├── plugin.json          ← 매니페스트 (필수)
 ├── mcp_config.json      ← MCP 서버 정의 (선택 사항)
 ├── hooks.json           ← 훅 이벤트 핸들러 (선택 사항)
-├── skills/              ← YAML 프런트매터가 포함된 SKILL.md 파일
+├── skills/              ← YAML 프런트매터가 있는 SKILL.md 파일
 │   └── my-skill/
 │       └── SKILL.md
 ├── agents/              ← 서브에이전트 정의 (선택 사항)
@@ -156,10 +155,10 @@ my-plugin/
 {
   "name": "my-plugin",
   "version": "1.0.0",
-  "description": "내 사용자 정의 agy 플러그인",
+  "description": "내 사용자 지정 agy 플러그인",
   "components": ["skills"]
 }
-```bash
+```text
 
 ```bash
 # 유효성 검사
@@ -173,7 +172,7 @@ agy plugin validate ./my-plugin
 Use slash commands to inspect active plugin components in a session:
 
 | Command | What it shows |
-| :-- | :-- |
+|---|---|
 | `/skills` | All loaded skills (from plugins, project, global) |
 | `/mcp` | Active MCP servers and their status |
 
@@ -229,6 +228,6 @@ Plugin staging directory structure:
 ---
 ## 워크숍으로 돌아가기
 
-→ **[모듈 1: SDLC 생산성 향상](sdlc-productivity.md)** — 섹션 1.7에서 플러그인이 소개됩니다
+→ **[모듈 1: SDLC 생산성 향상](sdlc-productivity.md)** — 플러그인은 섹션 1.7에서 소개됩니다
 
-→ **[치트시트](cheatsheet.md)** — 모든 플러그인 명령어를 한곳에 모아두었습니다
+→ **[치트시트](cheatsheet.md)** — 모든 플러그인 명령어가 한곳에 있습니다

@@ -361,4 +361,4 @@ agy plugin validate ./my-plugin
 ---
 ## Modul Selanjutnya
 
-→ **[Modul 2: Modernisasi Basis Kode Legacy](legacy-modernization.md)** — mode ketat, orientasi mandiri agen, sub-agen, dan `/rewind` sebagai jaring pengaman Anda.
+→ **[Legacy Modernization](../legacy-modernization.md)** — mode ketat, orientasi mandiri agen, sub-agen, dan `/rewind` sebagai jaring pengaman Anda.
