@@ -1,6 +1,6 @@
-# Module 3: DevOps & Automation <span class="duration-badge">40 min</span>
+# Reference: DevOps & Automation Patterns
 
-> **agy without a human in the loop.** This module covers non-interactive `--print` pipelines, CI/CD integration, multi-repository workspaces, and sandboxed execution for governance-sensitive environments.
+> **agy without a human in the loop.** Deep reference for non-interactive `--print` pipelines, CI/CD integration, multi-repository workspaces, and sandboxed execution. Essential commands are linked from the [Cheatsheet](cheatsheet.md).
 
 ---
 

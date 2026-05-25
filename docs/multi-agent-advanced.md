@@ -284,8 +284,18 @@ This is multi-agent incident triage — two parallel investigations, steerable m
 
 ### :material-file-document: Exercise 6: Sandbox Governance
 
-**File:** `exercises/ex06_sandbox_governance.md`
-**Duration:** 15 min
+**File:** `exercises/ex06_sandbox_governance.md`  
+**Duration:** 15 min  
 **Objective:** Configure sandbox mode in settings.json and test with the permissions model.
 
 </div>
+
+---
+
+## You're Done 🎉
+
+→ **[Cheatsheet](cheatsheet.md)** — every command from all four modules in one place
+
+→ **[Reference: DevOps Patterns](devops-automation.md)** — `--print` pipelines, CI/CD, sandbox deep dive
+
+→ **[Reference: Plugin Ecosystem](plugin-ecosystem.md)** — full plugin lifecycle reference

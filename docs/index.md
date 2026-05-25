@@ -5,8 +5,8 @@ hide:
   - toc
 ---
 
-<div class="hero-banner">
-  <img src="assets/banner.png" alt="agy-cli Field Workshop">
+<div class="hero-banner" markdown>
+  <img src="assets/banner.png" alt="Antigravity CLI Field Workshop">
 </div>
 
 ---
@@ -19,31 +19,39 @@ hide:
 
     ---
 
-    Your first agy-cli session. Explain, refactor, test, review. Core workflows that replace your daily dev busywork.
+    Your first Antigravity CLI session. Explain, refactor, test, review — plus extending your toolchain with plugins in one command.
+
+    **75 min** · Sections 1.0–1.7
 
     [:octicons-arrow-right-24: Start Module 1](sdlc-productivity.md)
 
-- :material-puzzle:{ .lg .middle } **Module 2 — Plugin Ecosystem**
+- :material-wrench:{ .lg .middle } **Module 2 — Legacy Modernization ⭐**
 
     ---
 
-    agy-cli's killer feature: import plugins from Gemini CLI and Claude Code in one command. Install, enable, validate, and manage plugins per project.
+    The flagship module. Migrate a real legacy codebase (.NET or Java) using strict mode, agent self-onboarding, and subagent planning.
 
-    [:octicons-arrow-right-24: Start Module 2](plugin-ecosystem.md)
+    **90 min** · Exercises: ex08, ex09
 
-- :material-console:{ .lg .middle } **Module 3 — DevOps & Automation**
+    [:octicons-arrow-right-24: Start Module 2](legacy-modernization.md)
+
+- :material-code-braces:{ .lg .middle } **Module 3 — Building AGY Agents**
 
     ---
 
-    Non-interactive `--print` pipelines, CI/CD integration, multi-directory workspaces, and sandbox governance.
+    Build production agents with the ADK SDK. Tools, session state, SequentialAgent pipelines, and deploy to Cloud Run.
 
-    [:octicons-arrow-right-24: Start Module 3](devops-automation.md)
+    **90 min** · Exercises: ex10, ex11
+
+    [:octicons-arrow-right-24: Start Module 3](agy-sdk.md)
 
 - :material-sitemap:{ .lg .middle } **Module 4 — Multi-Agent & Advanced**
 
     ---
 
     Spawn isolated subagents, steer tasks mid-flight with `/btw`, schedule recurring jobs, and resume long-running sessions by ID.
+
+    **60 min** · Exercises: ex04–ex07
 
     [:octicons-arrow-right-24: Start Module 4](multi-agent-advanced.md)
 
@@ -54,21 +62,24 @@ hide:
 ## Workshop Timeline
 
 | Time | Content | Duration |
-|---|---|---|
+| :-- | :-- | :-- |
 | `0:00` | Setup + first run | 20 min |
-| `0:20` | **Module 1:** SDLC Productivity | 50 min |
-| `1:10` | :coffee: Break | 10 min |
-| `1:20` | **Module 2:** Plugin Ecosystem | 45 min |
-| `2:05` | **Module 3:** DevOps & Automation | 40 min |
-| `2:45` | **Module 4:** Multi-Agent & Advanced | 45 min |
-| `3:30` | Wrap-up & Q&A | 15 min |
+| `0:20` | **Module 1:** SDLC Productivity + Plugins | 75 min |
+| `1:35` | :coffee: Break | 10 min |
+| `1:45` | **Module 2:** Legacy Codebase Modernization | 90 min |
+| `3:15` | :coffee: Break | 10 min |
+| `3:25` | **Module 3:** Building AGY Agents with the SDK | 90 min |
+| `4:55` | **Module 4:** Multi-Agent & Advanced | 60 min |
+| `5:55` | Wrap-up & Q&A | 15 min |
+
+> **Half-day format:** Modules 1 + 2 only (2.5 hrs). **Lightning format:** Module 1 + Module 2 highlights (1.5 hrs).
 
 ---
 
 ## Before You Start
 
 !!! warning "Pre-Work Required"
-    Complete the [Environment Setup](setup.md) before the workshop. You need agy-cli installed and authenticated.
+    Complete the [Environment Setup](setup.md) before the workshop. You need Antigravity CLI installed and authenticated.
 
 !!! info "Official Documentation"
     Full reference at [antigravity.google/docs](https://www.antigravity.google/docs/cli-overview).
