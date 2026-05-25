@@ -77,7 +77,7 @@ Only apply after you've read the proposed change.
 agy has a **3-level permissions model** that controls how it handles tool approvals:
 
 | Level | Behavior |
-|:--|:--|
+| --- |:--|
 | `request-review` | **Default.** agy asks for approval before writing files or running commands |
 | `always-proceed` | Auto-approve all tool calls — useful for trusted scripts and CI |
 | `strict` | Deny all tool use unless explicitly allowed — maximum control |
@@ -202,7 +202,7 @@ Beyond AGENTS.md, agy also loads:
 ### Key Slash Commands
 
 | Command | What it does |
-|:--|:--|
+| --- |:--|
 | `/rewind` (or `/undo`) | Roll back conversation history to a previous checkpoint |
 | `/resume` (or `/switch`) | Open conversation picker to resume or switch sessions |
 | `/rename <name>` | Rename the active conversation thread |
@@ -221,7 +221,7 @@ Beyond AGENTS.md, agy also loads:
 ### Quick Tips
 
 | Shortcut | What it does |
-|:--|:--|
+| --- |:--|
 | `@` | File path autocomplete — type `@` to trigger path suggestions |
 | `!` | Run terminal commands directly without leaving agy |
 | `esc esc` | Clear the current prompt input (when no streaming is active) |
@@ -280,7 +280,7 @@ agy scans your local Gemini CLI installation, discovers all installed plugins, a
 ### What Gets Imported
 
 | Component | What it means |
-|:--|:--|
+| :-- | :-- |
 | `skills` | SKILL.md files — injected as domain expertise into agy sessions |
 | `commands` | Slash commands available inside agy sessions |
 | `mcpServers` | MCP tool servers (GitHub, gcloud, Workspace, etc.) |
@@ -303,7 +303,7 @@ agy plugin enable gemini-deep-research
 ### Plugin Locations
 
 | Scope | Path |
-|:--|:--|
+| :-- | :-- |
 | **Global** | `~/.gemini/antigravity-cli/plugins/` |
 | **Project** | `.agents/plugins/` |
 
