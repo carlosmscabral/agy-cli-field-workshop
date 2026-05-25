@@ -4,6 +4,7 @@
 > Semua perintah telah diverifikasi terhadap [antigravity.google/docs](https://antigravity.google/docs/cli-overview).
 
 ---
+
 ## Instalasi & Versi
 
 ```bash
@@ -15,6 +16,7 @@ agy install        # Configure PATH and shell aliases
 ```bash
 
 ---
+
 ## Mode Peluncuran
 
 | Mode | Perintah | Kapan digunakan |
@@ -27,6 +29,7 @@ agy install        # Configure PATH and shell aliases
 | **Lanjutkan dalam sesi** | `/resume` atau `/switch` | Beralih percakapan tanpa meninggalkan agy |
 
 ---
+
 ## Flag Utama
 
 > Sumber: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
@@ -46,6 +49,7 @@ agy install        # Configure PATH and shell aliases
 > **Catatan:** Pemilihan model dan mode ketat diatur melalui perintah garis miring `/model` dan `/permissions`, bukan flag CLI. Lihat [Dokumentasi fitur](https://antigravity.google/docs/cli-features).
 
 ---
+
 ## Perintah Slash (Mode Interaktif)
 
 > Sumber: [Fitur CLI — Perintah Slash Inti](https://antigravity.google/docs/cli-features) · [Menggunakan Antigravity CLI](https://antigravity.google/docs/cli-using)
@@ -69,6 +73,7 @@ agy install        # Configure PATH and shell aliases
 | `/logout` | Akun | Keluar dan bersihkan kredensial yang di-cache |
 
 ---
+
 ## Tips Cepat
 
 > Sumber: [Menggunakan Antigravity CLI — Tips Cepat & Pintasan Keyboard](https://antigravity.google/docs/cli-using)
@@ -88,6 +93,7 @@ agy install        # Configure PATH and shell aliases
 | `ctrl+k` | Setujui cepat izin sub-agen yang tertunda dari percakapan utama |
 
 ---
+
 ## Perintah Plugin
 
 ```bash
@@ -119,6 +125,7 @@ agy plugin link <marketplace> <target>
 ```yaml
 
 ---
+
 ## Ruang Kerja & Konteks
 
 ```bash
@@ -152,6 +159,7 @@ Brief description of what this project is.
 ```yaml
 
 ---
+
 ## Pola yang Berguna
 
 ```bash
@@ -178,6 +186,7 @@ agy --sandbox --dangerously-skip-permissions \
 ```yaml
 
 ---
+
 ## Pola Multi-Agen
 
 ```text
@@ -195,6 +204,7 @@ agy --sandbox --dangerously-skip-permissions \
 ```yaml
 
 ---
+
 ## Contoh Pipeline Mode Cetak
 
 ```bash
@@ -213,6 +223,7 @@ done
 ```bash
 
 ---
+
 ## Dokumentasi Resmi
 
 | Topik | Tautan |

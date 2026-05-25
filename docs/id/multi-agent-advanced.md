@@ -3,6 +3,7 @@
 > **Di mana agy melampaui asisten obrolan.** Modul ini mencakup fitur-fitur yang membedakan agy-cli dari setiap alat pengkodean AI lainnya: sub-agen paralel, pengarahan di tengah tugas dengan `/btw`, penjadwalan latar belakang, dan pelanjutan sesi.
 
 ---
+
 ## 4.0 — Model Agen agy <span class="duration-badge">5 min</span>
 
 agy-cli dapat memunculkan **sub-agen** — pelaksana tugas terisolasi yang beroperasi secara paralel, masing-masing dengan konteks ruang kerja mereka sendiri. Tidak seperti menjalankan beberapa tab terminal dengan sesi agy yang terpisah, sub-agen dikoordinasikan: mereka dapat berbagi ruang kerja, bekerja pada cabang yang terisolasi, atau beroperasi pada salinan hasil kloning.
@@ -28,6 +29,7 @@ Ini membuka pemilih model yang menunjukkan opsi yang tersedia (Gemini 3.5 Flash,
 > 📖 Daftar model lengkap: [Dokumentasi model](https://www.antigravity.google/docs/models)
 
 ---
+
 ## 4.1 — Memunculkan Sub-agen <span class="duration-badge">15 min</span>
 
 > **Pola: Eksekusi Paralel** — mengirimkan beberapa agen untuk bekerja secara bersamaan.
@@ -98,6 +100,7 @@ Saksikan tiga analisis independen berjalan secara bersamaan. Ketika selesai, agy
 Pola peninjau adversarial sangat kuat untuk perubahan yang sensitif terhadap keamanan, modifikasi infrastruktur, atau PR apa pun di mana "terlihat bagus bagi saya" tidaklah cukup.
 
 ---
+
 ## 4.2 — /btw: Pengarahan di Tengah Tugas <span class="duration-badge">10 min</span>
 
 > **Pola: Mengarahkan Tanpa Menginterupsi** — menyuntikkan konteks ke dalam tugas yang sedang berjalan tanpa menghentikannya.
@@ -136,6 +139,7 @@ agy menggabungkan catatan Anda ke dalam tugas yang sedang berlangsung tanpa berh
     Tanpa `/btw`, mengarahkan tugas yang berjalan lama berarti membatalkannya, menyesuaikan prompt Anda, dan memulai ulang — kehilangan semua kemajuan. `/btw` memungkinkan Anda mengoreksi arah tanpa biaya tersebut.
 
 ---
+
 ## 4.3 — Eksekusi Latar Belakang & Penjadwalan <span class="duration-badge">10 min</span>
 
 > **Pola: Async Agy** — memulai tugas yang berjalan lama dan mendapatkan pemberitahuan saat tugas tersebut selesai.
@@ -175,6 +179,7 @@ Ekspresi cron (hingga 5 bidang) didukung:
     Tugas terjadwal tetap ada di seluruh sesi selama agy berjalan. Periksa `/tasks` untuk melihat dan mengelola tugas terjadwal.
 
 ---
+
 ## 4.4 — Melanjutkan Sesi <span class="duration-badge">5 min</span>
 
 > **Pola: Pekerjaan Berjalan Lama** — lanjutkan tepat di mana Anda tinggalkan.
@@ -228,6 +233,7 @@ agy --conversation <conversation-id>
 agy akan memiliki konteks penuh, termasuk kode yang ditulis, keputusan yang dibuat, dan pertanyaan yang terbuka.
 
 ---
+
 ## 4.5 — Lanjutan: Menggabungkan Pola <span class="duration-badge">Opsional</span>
 
 > **Tumpukan kekuatan penuh:** sub-agen + /btw + latar belakang + penjadwalan + kelanjutan percakapan.
@@ -251,6 +257,7 @@ Saat mereka berjalan:
 Ini adalah triase insiden multi-agen — dua investigasi paralel, dapat diarahkan saat berjalan.
 
 ---
+
 ## Latihan Modul 4
 
 <div class="exercise-card" markdown>
@@ -284,6 +291,7 @@ Ini adalah triase insiden multi-agen — dua investigasi paralel, dapat diarahka
 </div>
 
 ---
+
 ## Anda Telah Selesai 🎉
 
 → **[Lembar Contekan](cheatsheet.md)** — setiap perintah dari keempat modul di satu tempat

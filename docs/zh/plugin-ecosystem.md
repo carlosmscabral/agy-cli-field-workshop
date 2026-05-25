@@ -3,6 +3,7 @@
 > **agy-cli 插件系统的深度参考。** 核心命令已在 [模块 1 — 第 1.7 节](sdlc-productivity.md#17-extend-with-plugins) 中介绍。本页包含供构建和维护自定义插件的团队参考的完整生命周期详细信息。
 
 ---
+
 ## 2.0 — 为什么插件很重要 <span class="duration-badge">5 分钟</span>
 
 agy-cli 的插件系统有一个独特之处：它可以**导入您已经在 Gemini CLI 或 Claude Code 中安装的插件**——无需重新安装或重新配置。您在扩展上的现有投资得以保留。
@@ -22,6 +23,7 @@ agy plugin list | python3 -m json.tool
 > 📖 官方文档：[插件](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [技能](https://www.antigravity.google/docs/skills)
 
 ---
+
 ## 2.1 — 从 Gemini CLI 导入 <span class="duration-badge">10 分钟</span>
 
 > **模式：跨工具插件桥接** — 将您完整的 Gemini CLI 插件环境设置拉取到 agy 中。
@@ -213,6 +215,7 @@ Plugin staging directory structure:
 ```yaml
 
 ---
+
 ## 模块 2 练习
 
 <div class="exercise-card" markdown>
@@ -226,6 +229,7 @@ Plugin staging directory structure:
 </div>
 
 ---
+
 ## 返回工作坊
 
 → **[模块 1：SDLC 生产力提升](sdlc-productivity.md)** — 插件在 1.7 节中介绍

@@ -3,6 +3,7 @@
 > **agy-cli의 플러그인 시스템에 대한 심층 참조입니다.** 필수 명령어는 [모듈 1 — 섹션 1.7](sdlc-productivity.md#17-extend-with-plugins)에서 다룹니다. 이 페이지에는 사용자 지정 플러그인을 빌드하고 유지 관리하는 팀을 위한 전체 수명 주기 세부 정보가 포함되어 있습니다.
 
 ---
+
 ## 2.0 — 플러그인이 중요한 이유 <span class="duration-badge">5 min</span>
 
 agy-cli의 플러그인 시스템은 독특한 기능을 제공합니다. 재설치나 재구성이 필요 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 유지됩니다.
@@ -22,6 +23,7 @@ agy plugin list | python3 -m json.tool
 > 📖 공식 문서: [플러그인](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [스킬](https://www.antigravity.google/docs/skills)
 
 ---
+
 ## 2.1 — Gemini CLI에서 가져오기 <span class="duration-badge">10분</span>
 
 > **패턴: 교차 도구 플러그인 브리지** — 전체 Gemini CLI 플러그인 설정을 agy로 가져옵니다.
@@ -213,6 +215,7 @@ Plugin staging directory structure:
 ```yaml
 
 ---
+
 ## 모듈 2 연습 문제
 
 <div class="exercise-card" markdown>
@@ -226,6 +229,7 @@ Plugin staging directory structure:
 </div>
 
 ---
+
 ## 워크숍으로 돌아가기
 
 → **[모듈 1: SDLC 생산성 향상](sdlc-productivity.md)** — 플러그인은 섹션 1.7에서 소개됩니다

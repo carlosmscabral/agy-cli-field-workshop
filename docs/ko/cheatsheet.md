@@ -4,6 +4,7 @@
 > 모든 명령어는 [antigravity.google/docs](https://antigravity.google/docs/cli-overview)를 기준으로 검증되었습니다.
 
 ---
+
 ## 설치 및 버전
 
 ```bash
@@ -15,6 +16,7 @@ agy install        # Configure PATH and shell aliases
 ```bash
 
 ---
+
 ## 실행 모드
 
 | 모드 | 명령어 | 사용 시기 |
@@ -27,6 +29,7 @@ agy install        # Configure PATH and shell aliases
 | **세션 내 재개** | `/resume` 또는 `/switch` | agy를 종료하지 않고 대화 전환 |
 
 ---
+
 ## 주요 플래그
 
 > 출처: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
@@ -46,6 +49,7 @@ agy install        # Configure PATH and shell aliases
 > **참고:** 모델 선택 및 엄격 모드는 CLI 플래그가 아닌 `/model` 및 `/permissions` 슬래시 명령을 통해 설정됩니다. [기능 문서](https://antigravity.google/docs/cli-features)를 참조하세요.
 
 ---
+
 ## 슬래시 명령어 (대화형 모드)
 
 > 출처: [CLI 기능 — 핵심 슬래시 명령어](https://antigravity.google/docs/cli-features) · [Antigravity CLI 사용하기](https://antigravity.google/docs/cli-using)
@@ -69,6 +73,7 @@ agy install        # Configure PATH and shell aliases
 | `/logout` | 계정 | 로그아웃 및 캐시된 자격 증명 지우기 |
 
 ---
+
 ## 빠른 팁
 
 > 출처: [Antigravity CLI 사용 — 빠른 팁 및 키 바인딩](https://antigravity.google/docs/cli-using)
@@ -88,6 +93,7 @@ agy install        # Configure PATH and shell aliases
 | `ctrl+k` | 메인 대화에서 대기 중인 서브에이전트 권한 빠른 승인 |
 
 ---
+
 ## 플러그인 명령어
 
 ```bash
@@ -119,6 +125,7 @@ agy plugin link <marketplace> <target>
 ```yaml
 
 ---
+
 ## 작업 공간 및 컨텍스트
 
 ```bash
@@ -152,6 +159,7 @@ Brief description of what this project is.
 ```yaml
 
 ---
+
 ## 유용한 패턴
 
 ```bash
@@ -178,6 +186,7 @@ agy --sandbox --dangerously-skip-permissions \
 ```yaml
 
 ---
+
 ## 멀티 에이전트 패턴
 
 ```text
@@ -195,6 +204,7 @@ agy --sandbox --dangerously-skip-permissions \
 ```yaml
 
 ---
+
 ## 프린트 모드 파이프라인 예시
 
 ```bash
@@ -213,6 +223,7 @@ done
 ```bash
 
 ---
+
 ## 공식 문서
 
 | 주제 | 링크 |
