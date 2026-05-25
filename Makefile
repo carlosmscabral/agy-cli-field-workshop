@@ -4,6 +4,7 @@
 #
 # Usage:
 #   make test             Run all offline tests (structure + blocks + drift)
+#   make precommit        Run ALL checks locally (mirrors CI exactly)
 #   make test-structure   Validate file structure and config syntax
 #   make test-blocks      Validate code blocks in documentation
 #   make test-drift       Check for doc ↔ code drift (local)
@@ -15,25 +16,53 @@
 #   make serve            Start MkDocs dev server
 #   make check-env        Validate participant environment
 #   make install-deps     Install Python dependencies (MkDocs)
-#   make lint-md          Lint markdown files
+#   make lint-md          Lint ALL markdown (English + translated + root docs)
+#   make lint-md-fix      Auto-fix markdown lint errors where possible
 #   make demos            Generate terminal demo GIFs (needs vhs)
+#   make setup-hooks      Install git pre-commit hook
 #
 # Translation pipeline:
 #   make translate L=ko          Translate all docs to Korean
 #   make translate-file FILE=docs/setup.md L=ko
+#   make post-translate L=ko     Normalize translated files after translation
 #   make translate-validate L=ko
 #   make translate-drift L=ko
 #   make translate-list
 #
 # See: .agents/AGENTS.md for full project context.
 
-.PHONY: test test-structure test-blocks test-drift test-drift-full \
+.PHONY: test precommit test-structure test-blocks test-drift test-drift-full \
         test-links test-build test-live test-ci \
-        serve install-deps check-env demos lint-md help \
-        translate translate-file translate-validate translate-drift translate-list
+        serve install-deps check-env demos lint-md lint-md-fix help \
+        translate translate-file post-translate translate-validate translate-drift translate-list \
+        check-translations setup-hooks
 
 # Default: run all offline tests
-test: test-structure test-blocks test-drift  ## Run all offline tests
+test: lint-md test-structure test-blocks test-drift  ## Run all offline tests
+
+precommit:  ## Run ALL checks locally before committing — same as CI
+	@echo "🚦 Pre-commit checks (mirrors CI exactly)..."
+	@echo ""
+	@echo "[1/5] Markdown lint..."
+	@$(MAKE) lint-md
+	@echo ""
+	@echo "[2/5] Code block validation..."
+	@bash scripts/validate-code-blocks.sh docs/
+	@echo ""
+	@echo "[3/5] MkDocs strict build..."
+	@$(MAKE) test-build
+	@echo ""
+	@echo "[4/5] Drift detection..."
+	@bash scripts/detect-drift.sh
+	@echo ""
+	@echo "[5/5] Shell & JSON validation..."
+	@for f in scripts/*.sh samples/hooks/*.sh; do [ -f "$$f" ] && bash -n "$$f" && echo "  ✅ $$f"; done
+	@for f in samples/configs/*.json; do jq . "$$f" > /dev/null && echo "  ✅ $$f"; done
+	@echo ""
+	@echo "ℹ️  [Advisory] Translation drift check (non-blocking)..."
+	@$(MAKE) check-translations
+	@echo ""
+	@echo "✅ All pre-commit checks passed — safe to commit"
 
 help:  ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) | sort | \
@@ -146,7 +175,7 @@ test-live:  ## Live agy smoke test (needs GCP auth: gcloud auth application-defa
 		exit 1; \
 	fi
 	@if [ -z "$${GOOGLE_CLOUD_PROJECT:-}" ]; then \
-		echo "❌ GOOGLE_CLOUD_PROJECT not set. Export it or run: export GOOGLE_CLOUD_PROJECT=gpu-launchpad-playground"; \
+		echo "❌ GOOGLE_CLOUD_PROJECT not set. Export it or run: export GOOGLE_CLOUD_PROJECT=<your-gcp-project>"; \
 		exit 1; \
 	fi
 	@echo "🤖 Running live agy smoke test..."
@@ -208,10 +237,30 @@ demos:  ## Generate terminal demo GIFs (needs vhs)
 # Markdown Lint
 # ───────────────────────────────────────────────────────────
 
-lint-md:  ## Lint markdown files
+lint-md:  ## Lint ALL markdown (English + translated + root docs)
 	@echo "📝 Linting markdown..."
-	@npx -y markdownlint-cli2 "docs/**/*.md" "README.md" "exercises/**/*.md"
+	@TRANSLATED_MDS=$$(find docs -mindepth 2 -name "*.md" 2>/dev/null | tr '\n' ' '); \
+	npx -y markdownlint-cli2 "docs/*.md" "README.md" "AGENTS.md" "CONTRIBUTING.md" "CHANGELOG.md" "exercises/**/*.md" $$TRANSLATED_MDS 2>&1
 	@echo "✅ Markdown lint passed"
+
+lint-md-fix:  ## Auto-fix markdown lint errors where possible
+	@echo "🔧 Auto-fixing markdown..."
+	@TRANSLATED_MDS=$$(find docs -mindepth 2 -name "*.md" 2>/dev/null | tr '\n' ' '); \
+	npx -y markdownlint-cli2 --fix "docs/*.md" "README.md" "AGENTS.md" "CONTRIBUTING.md" "CHANGELOG.md" "exercises/**/*.md" $$TRANSLATED_MDS 2>&1 || true
+	@echo "  🔧 Fixing MD022 blank-lines-around-headings in translated files..."
+	@find docs -mindepth 2 -name "*.md" 2>/dev/null | while read f; do \
+		perl -i -0pe 's/(\S)\n(##\s)/$$1\n\n$$2/g' "$$f"; \
+	done
+	@echo "  🔧 Normalizing table separators..."
+	@find docs -mindepth 2 -name "*.md" 2>/dev/null | while read f; do \
+		perl -i -pe 'if (/^\|[-:| ]+\|$$/) { s/\|\s*:?-+:?\s*/| :-- /g; s/ $$//; s/\| :-- $$/|/; }' "$$f"; \
+	done
+	@echo "✅ Auto-fix complete — re-run lint-md to verify"
+
+setup-hooks:  ## Install git pre-commit hook
+	@cp scripts/pre-commit.sh .git/hooks/pre-commit
+	@chmod +x .git/hooks/pre-commit
+	@echo "✅ Pre-commit hook installed"
 
 # ───────────────────────────────────────────────────────────
 # Translation Pipeline (Vertex AI / gemini-3.1-pro-preview)
@@ -232,25 +281,56 @@ lint-md:  ## Lint markdown files
 P ?= 6
 AGY_TRANSLATE_SCRIPT := ../gemini-cli-field-workshop/tools/i18n/translate.py
 AGY_VENV_PYTHON := ../gemini-cli-field-workshop/.venv/bin/python
-AGY_TRANSLATE_ENV := GOOGLE_CLOUD_PROJECT=$${GOOGLE_CLOUD_PROJECT:-gpu-launchpad-playground} GOOGLE_CLOUD_LOCATION=global AGY_REPO_ROOT=$(PWD)
+AGY_TRANSLATE_ENV := GOOGLE_CLOUD_PROJECT=$${GOOGLE_CLOUD_PROJECT} GOOGLE_CLOUD_LOCATION=global AGY_REPO_ROOT=$(PWD)
 
 translate-list:  ## Show available languages and translation status
 	@echo "🌐 Antigravity CLI Field Workshop — Translation Status"
 	@echo ""
-	@for lang in ko zh id; do \
-		count=$$(ls docs/$$lang/*.md 2>/dev/null | wc -l | tr -d ' '); \
-		if [ "$$count" -gt 0 ]; then \
-			echo "  ✅ $$lang — $$count translated files"; \
-		else \
-			echo "  ⬚  $$lang — no translations yet"; \
-		fi; \
-	done
+	@LANGS=$$(find docs -mindepth 1 -maxdepth 1 -type d 2>/dev/null | xargs -I{} basename {} | sort); \
+	if [ -z "$$LANGS" ]; then \
+		echo "  ⬚  No translated languages found under docs/"; \
+	else \
+		for lang in $$LANGS; do \
+			count=$$(ls docs/$$lang/*.md 2>/dev/null | wc -l | tr -d ' '); \
+			if [ "$$count" -gt 0 ]; then \
+				echo "  ✅ $$lang — $$count translated files"; \
+			else \
+				echo "  ⬚  $$lang — no translations yet"; \
+			fi; \
+		done; \
+	fi
 	@echo ""
 	@echo "  Run: make translate L=ko"
 
+check-translations:  ## Report translation drift and missing files (advisory, non-blocking, no GCP needed)
+	@echo "🌐 Translation status check..."
+	@echo ""
+	@LANGS=$$(find docs -mindepth 1 -maxdepth 1 -type d 2>/dev/null | xargs -I{} basename {} | sort); \
+	if [ -z "$$LANGS" ]; then \
+		echo "  ℹ️  No translated languages found under docs/"; \
+	else \
+		for lang in $$LANGS; do \
+			echo "  📖 $$lang:"; \
+			for src in docs/*.md; do \
+				base=$$(basename $$src); \
+				target="docs/$$lang/$$base"; \
+				if [ ! -f "$$target" ]; then \
+					echo "    ⬚  missing  → make translate-file FILE=$$src L=$$lang"; \
+				elif [ "$$src" -nt "$$target" ]; then \
+					echo "    ⚠️   stale    → make translate-file FILE=$$src L=$$lang"; \
+				else \
+					echo "    ✅  up to date  $$target"; \
+				fi; \
+			done; \
+			echo ""; \
+		done; \
+	fi
+	@echo "ℹ️  To add a new language: create docs/<lang>/ and run: make translate L=<lang>"
+	@echo "ℹ️  This check is advisory — translations are not required to commit."
+
 _check-translate-env:
 	@if [ -z "$${GOOGLE_CLOUD_PROJECT:-}" ]; then \
-		echo "❌ Set GOOGLE_CLOUD_PROJECT first (e.g. export GOOGLE_CLOUD_PROJECT=gpu-launchpad-playground)"; \
+		echo "❌ Set GOOGLE_CLOUD_PROJECT first (e.g. export GOOGLE_CLOUD_PROJECT=<your-gcp-project>)"; \
 		exit 1; \
 	fi
 	@if [ -z "$(L)" ]; then echo "❌ Specify L=ko|zh|id" && exit 1; fi
@@ -269,11 +349,30 @@ translate: _check-translate-env  ## Translate all docs to target language (L=ko|
 		$(AGY_TRANSLATE_ENV) $(AGY_VENV_PYTHON) $(AGY_TRANSLATE_SCRIPT) \
 			$$doc --lang $(L) --parallel $(P) --model gemini-3.1-pro-preview; \
 	done
+	@echo "  ℹ️  Run: make post-translate L=$(L)  to normalize lint"
 
 translate-file: _check-translate-env  ## Translate one file (FILE=docs/setup.md L=ko)
 	@test -n "$(FILE)" || (echo "❌ Specify FILE=docs/setup.md" && exit 1)
 	$(AGY_TRANSLATE_ENV) $(AGY_VENV_PYTHON) $(AGY_TRANSLATE_SCRIPT) \
 		$(FILE) --lang $(L) --parallel $(P) --model gemini-3.1-pro-preview
+	@echo "  ℹ️  Run: make post-translate L=$(L)  to normalize lint"
+
+post-translate:  ## Normalize translated files after translation (run after make translate)
+	@echo "🔧 Post-translation normalization for $(L)..."
+	@if [ -z "$(L)" ]; then echo "❌ Specify L=ko|zh|id" && exit 1; fi
+	@echo "  Step 1/3: markdownlint auto-fix..."
+	@npx -y markdownlint-cli2 --fix "docs/$(L)/**/*.md" 2>&1 || true
+	@echo "  Step 2/3: Fix MD022 (blank line before headings)..."
+	@find docs/$(L) -name "*.md" | while read f; do \
+		perl -i -0pe 's/(\S)\n(##\s)/$$1\n\n$$2/g' "$$f"; \
+	done
+	@echo "  Step 3/3: Normalize table separators..."
+	@find docs/$(L) -name "*.md" | while read f; do \
+		perl -i -pe 'if (/^\|[-:| ]+\|$$/) { s/\|\s*:?-+:?\s*/| :-- /g; s/ $$//; s/\| :-- $$/|/; }' "$$f"; \
+	done
+	@echo "  Verifying..."
+	@npx markdownlint-cli2 "docs/$(L)/**/*.md" 2>&1 | grep -E "Summary|error" | tail -3
+	@echo "✅ Post-translate normalization complete for $(L)"
 
 translate-validate: _check-translate-env  ## Validate translation completeness (L=ko)
 	@echo "✅ Checking $(L) translation coverage..."

@@ -1,3 +1,39 @@
+# Workshop Quality Audit
+
+## Test Register
+
+Each row is an automated test case that runs in CI (`.github/workflows/workshop-structural.yml`)
+or locally via `make precommit`. Run the full suite with `make precommit`.
+
+| ID | Test Name | Command | What It Catches | Status |
+| :-- | :-- | :-- | :-- | :-- |
+| T-01 | Markdown Lint — English | `npx markdownlint-cli2 "docs/*.md" "README.md" "AGENTS.md" "CONTRIBUTING.md"` | MD022 (blank lines), MD040 (untagged fences), MD060 (table style), MD001 (heading levels) | ✅ CI |
+| T-02 | Markdown Lint — Translated | `npx markdownlint-cli2 "docs/id/**/*.md" "docs/ko/**/*.md" "docs/zh/**/*.md"` | Same rules on generated translations; MD022 most common failure | ✅ CI |
+| T-03 | Code Block Validation | `bash scripts/validate-code-blocks.sh docs/` | `bash` blocks with non-bash content (prompts, tables, CLI output); `yaml` blocks with prose | ✅ CI |
+| T-04 | MkDocs Strict Build | `.venv/bin/mkdocs build --strict` | Broken relative links (wrong depth in translated files), nav mismatches, missing i18n plugin | ✅ CI |
+| T-05 | Required Files | CI step: "Check required files exist" | Deleted or renamed core files (README.md, mkdocs.yml, AUDIT.md, etc.) | ✅ CI |
+| T-06 | JSON Config Syntax | `jq . samples/configs/*.json` | Invalid JSON in settings/mcp samples | ✅ CI |
+| T-07 | Shell Script Syntax | `bash -n scripts/*.sh` | Broken shell scripts in scripts/ and samples/hooks/ | ✅ CI |
+| T-08 | Agent Frontmatter | CI step: "Validate agent frontmatter" | Agent definition files missing YAML `---` frontmatter | ✅ CI |
+| T-09 | Stale Binary References | `grep -rE 'gemini ' docs/*.md` | Docs that still say `gemini` instead of `agy` | ✅ CI |
+| T-10 | Stale Hook Event Names | `grep -r '"SessionStart"' docs/` | Old Gemini CLI hook names (SessionStart, BeforeTool, AfterTool) | ✅ CI |
+| T-11 | Drift Detection | `bash scripts/detect-drift.sh` | AUDIT.md claims that conflict with detected binary behavior | ✅ CI |
+| T-12 | Translation Coverage | `make check-translations` | Auto-detects all language subdirs under docs/; tells contributor which translations need regenerating — non-blocking | ⚠️ Advisory |
+| T-13 | Translation Drift | `make check-translations` | Auto-detects all language subdirs under docs/; shows which English files have changed since last translation — non-blocking | ⚠️ Advisory |
+| T-14 | Live Smoke Test | `make test-live` | agy binary present and responding (needs GCP auth) | 🔧 Local only |
+
+### Known Root Causes of Recurring CI Failures
+
+| Failure Pattern | Root Cause | Prevention |
+| :-- | :-- | :-- |
+| `MD022` in translated files | Translation model drops blank line between `</div>` and `## Heading` | Run `make post-translate L=<lang>` after every translation |
+| Code block `Invalid bash syntax` | Prompt text / CLI output tagged as `` ```bash `` | Use `` ```text `` for anything that isn't a real shell command |
+| Code block `Invalid YAML` | MkDocs admonitions (`!!!`) or prose tagged as `` ```yaml `` | Use `` ```text `` for admonitions and non-config YAML |
+| MkDocs `link not found` in translated files | Relative link depth wrong (used `../../` instead of `../`) | Translated files are one level deep — relative links need only one `../` |
+| MkDocs `Aborted with configuration error` in CI | CI pip install missing `mkdocs-static-i18n` | Fixed: CI now installs `mkdocs-static-i18n mkdocs-minify-plugin` |
+
+---
+
 # Workshop Content Audit — Grounded Against Official Sources
 
 > **Audit date:** 2026-05-25 (v5 — confirmed current state only)

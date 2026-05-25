@@ -13,12 +13,14 @@ Content-specific changes to workshop materials — CLI breakages, deprecated com
 The workshop now includes a dedicated migration guide for participants moving from Gemini CLI to Antigravity CLI.
 
 **What was added:**
+
 - `docs/migration-guide.md` — Full M09 module covering installation, plugin migration, MCP config migration, hook event name changes, and a decision framework
-- Korean, Chinese (Simplified), and Indonesian translations via `gemini-3.1-pro-preview` on Vertex AI (`gpu-launchpad-playground/global`)
+- Korean, Chinese (Simplified), and Indonesian translations via `gemini-3.1-pro-preview` on Vertex AI
 - `mkdocs.yml` nav updated with `⚠️ Migration Guide: Gemini CLI → AGY CLI` under Resources
 - Glossaries updated with AGY migration terminology (all three languages)
 
 **Key migration differences documented:**
+
 - `gemini` binary → `agy`
 - `SessionStart` → `PreInvocation`, `BeforeTool` → `PreToolUse`, `AfterTool` → `PostToolUse`
 - `settings.json` MCP block → standalone `mcp.json` with `serverUrl` (not `url`)
@@ -34,6 +36,7 @@ The workshop now includes a dedicated migration guide for participants moving fr
 Ported and AGY-adapted quality infrastructure from the gemini-cli-field-workshop reference:
 
 **New files:**
+
 - `scripts/validate-code-blocks.sh` — Validates JSON/YAML/bash code blocks in docs
 - `scripts/detect-drift.sh` — Detects doc↔code drift, stale `gemini` binary refs, and stale Gemini CLI hook names
 - `.github/workflows/workshop-structural.yml` — PR quality gate with AGY-specific checks
@@ -43,6 +46,7 @@ Ported and AGY-adapted quality infrastructure from the gemini-cli-field-workshop
 - `CONTRIBUTING.md` — Full contributor guide with AGY-specific content guidelines
 
 **New sample files:**
+
 - `samples/configs/settings.json` — AGY settings with PreInvocation/PreToolUse/PostToolUse hooks
 - `samples/configs/mcp.json` — Project MCP config (stdio + SSE, `serverUrl` format)
 - `samples/configs/mcp_config.json` — Plugin-level MCP config
@@ -62,6 +66,6 @@ Ported and AGY-adapted quality infrastructure from the gemini-cli-field-workshop
 ### Placeholders (pending post-Google I/O clarity)
 
 | File | Section | Placeholder |
-|---|---|---|
+| :-- | :-- | :-- |
 | `docs/setup.md` | Step 2: Authentication | Full auth flow documentation |
 | `docs/plugin-ecosystem.md` | Section 2.3 | Plugin marketplace URL |

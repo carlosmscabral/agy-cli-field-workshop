@@ -13,13 +13,12 @@ cd agy-cli-field-workshop
 
 # Start AGY CLI — it auto-reads AGENTS.md for project context
 agy
-
-```bash
+```
 
 ### Key Context Files
 
 | File | Purpose | How AGY CLI uses it |
-|---|---|---|
+| :-- | :-- | :-- |
 | `AGENTS.md` | Project rules, testing infrastructure, quality standards | Auto-loaded on every session |
 | `AUDIT.md` | Claims-based audit table grounded against live `agy` binary | Ask: `Read AUDIT.md and check if any ⚠️ claims have been resolved` |
 | `samples/agents/*.md` | Subagent definitions for code review, docs, migration validation | Reference when building new agents |
@@ -41,8 +40,7 @@ agy "What docs exist under docs/ko/ and what's missing compared to docs/?"
 
 # "I want to validate migration guide accuracy"
 agy "Run the migration-validator agent against the migration guide examples"
-
-```bash
+```
 
 ## How to Contribute
 
@@ -51,7 +49,7 @@ agy "Run the migration-validator agent against the migration guide examples"
 Use [GitHub Issues](https://github.com/pauldatta/agy-cli-field-workshop/issues/new/choose) to:
 
 | Template | When to use |
-|:---------|:------------|
+| :-- | :-- |
 | **Bug Report** | Setup fails, broken links, incorrect commands, stale `gemini` references |
 | **Content Improvement** | Suggest new exercises, better explanations, additional use cases |
 | **Workshop Feedback** | Share your experience after attending a session |
@@ -63,11 +61,13 @@ All issues are automatically triaged with type, area, and priority labels.
 1. **Fork** the repository
 2. **Create a branch** from `main` (`git checkout -b fix/broken-command-m02`)
 3. **Make your changes** — see [Content Guidelines](#content-guidelines) below
-4. **Test locally**:
+4. **Run quality checks locally** (see [Quality Checklist](#quality-checklist)):
+
    ```bash
    make test          # Structure, code blocks, drift (~5s)
    make serve         # Preview the MkDocs site
    ```
+
 5. **Submit a PR** — reference any related issue numbers
 
 ### Content Guidelines
@@ -92,7 +92,7 @@ All issues are automatically triaged with type, area, and priority labels.
 The workshop supports multiple languages via an automated Gemini-powered pipeline:
 
 | Language | Code | Status |
-|---|---|---|
+| :-- | :-- | :-- |
 | English | `en` | Source of truth |
 | Korean | `ko` | Active |
 | Indonesian | `id` | Active |
@@ -102,13 +102,74 @@ The workshop supports multiple languages via an automated Gemini-powered pipelin
 
 - Note in your PR which docs changed — translation owners will regenerate
 - Never edit `docs/{lang}/*.md` directly — these are generated files
-- Translation owners run (from the `gemini-cli-field-workshop` shared pipeline):
+- Re-translate changed files with:
+
   ```bash
-  GOOGLE_CLOUD_PROJECT=gpu-launchpad-playground GOOGLE_CLOUD_LOCATION=global \
-    python tools/i18n/translate.py docs/<filename>.md --lang ko --model gemini-3.1-pro-preview
+  export GOOGLE_CLOUD_PROJECT=<your-gcp-project>
+
+  # Single file, one language
+  make translate-file FILE=docs/agy-sdk.md L=ko P=8
+
+  # All files, all languages in parallel (fastest)
+  make translate L=ko P=8 & make translate L=zh P=8 & make translate L=id P=8 & wait
+  ```
+
+- After translating, **always run the post-translation lint fix**:
+
+  ```bash
+  # Auto-fix, normalize tables, fix MD022 blank lines
+  npx markdownlint-cli2 --fix "docs/id/**/*.md" "docs/ko/**/*.md" "docs/zh/**/*.md"
+  find docs/id docs/ko docs/zh -name "*.md" | while read f; do
+    perl -i -0pe 's/(\S)\n(##\s)/$1\n\n$2/g' "$f"
+    perl -i -pe '
+      if (/^\|[-:| ]+\|$/) { s/\|\s*:?-+:?\s*/| :-- /g; s/ $//; s/\| :-- $/|/; }
+      s/^```\n$/```text\n/;
+    ' "$f"
+  done
+  npx markdownlint-cli2 "docs/id/**/*.md" "docs/ko/**/*.md" "docs/zh/**/*.md"
   ```
 
 **To add a new language:** Open a Content Improvement issue first to discuss glossary coverage.
+
+---
+
+## Quality Checklist
+
+> See [`AGENTS.md`](AGENTS.md) for the machine-readable version of these rules
+> that AGY CLI loads automatically.
+
+Run these before every commit:
+
+```bash
+# 1. Markdown lint — English source
+npx markdownlint-cli2 "docs/*.md" "README.md"
+
+# 2. Markdown lint — translated files
+npx markdownlint-cli2 "docs/id/**/*.md" "docs/ko/**/*.md" "docs/zh/**/*.md"
+
+# 3. Code block syntax validation
+bash scripts/validate-code-blocks.sh docs/
+# Expected: ALL PASSED
+
+# 4. MkDocs strict build (catches broken links, nav mismatches)
+.venv/bin/mkdocs build --strict
+# Expected: Documentation built in X.XXs (no warnings)
+
+# 5. Full CI simulation
+make test
+```
+
+### Common errors and how to fix them
+
+| Error | Fix |
+| :-- | :-- |
+| `MD022` — no blank line above heading | Add blank line between `</div>` and `## Heading` |
+| `MD040` — untagged code fence | Add language tag: `` ```text `` for prompts/output |
+| `MD060` — table separator style | Run the table normalizer (see `AGENTS.md`) |
+| `MD001` — heading level skipped | Don't jump from `##` to `####` — use `###` |
+| Code block: Invalid bash syntax | Prompt text tagged as `bash` — retag as `` ```text `` |
+| Code block: Invalid YAML | YAML snippet with `${{ }}` (GH Actions template) — retag as `` ```text `` |
+| MkDocs warning: link not found | Check relative path depth in translated files (`../` not `../../`) |
 
 ## Code of Conduct
 
