@@ -13,14 +13,14 @@ agy --help         # Show all flags and subcommands
 agy changelog      # Show release notes
 agy update         # Self-update
 agy install        # Configure PATH and shell aliases
-```
+```text
 
 ---
 
 ## 실행 모드
 
 | 모드 | 명령어 | 사용 시기 |
-|---|---|---|
+| :-- | :-- | :-- |
 | **대화형 (Interactive)** | `agy` | 기본값 — 전체 대화형 세션 |
 | **시드 기반 대화형 (Seeded interactive)** | `agy -i "<프롬프트>"` | 지시사항으로 시작하여 대화형으로 계속 진행 |
 | **출력 (헤드리스 모드)** | `agy -p "<프롬프트>"` | 단일 실행, 표준 출력(stdout)으로 파이프 |
@@ -35,7 +35,7 @@ agy install        # Configure PATH and shell aliases
 > 출처: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
 
 | 플래그 | 단축형 | 설명 |
-|---|---|---|
+| :-- | :-- | :-- |
 | `--print "<프롬프트>"` | `-p` | 비대화형 단일 프롬프트 |
 | `--prompt-interactive "<프롬프트>"` | `-i` | 초기 프롬프트가 포함된 대화형 세션 |
 | `--continue` | `-c` | 가장 최근 대화 재개 |
@@ -55,7 +55,7 @@ agy install        # Configure PATH and shell aliases
 > 출처: [CLI 기능 — 핵심 슬래시 명령어](https://antigravity.google/docs/cli-features) · [Antigravity CLI 사용하기](https://antigravity.google/docs/cli-using)
 
 | 명령어 | 카테고리 | 목적 |
-|---|---|---|
+| :-- | :-- | :-- |
 | `/resume` (`/switch`) | 대화 | 대화 선택기를 열어 세션을 재개하거나 전환합니다 |
 | `/rewind` (`/undo`) | 대화 | 대화 기록을 이전 체크포인트로 되돌립니다 |
 | `/rename <name>` | 대화 | 활성 대화 스레드의 이름을 변경합니다 |
@@ -79,7 +79,7 @@ agy install        # Configure PATH and shell aliases
 > 출처: [Antigravity CLI 사용 — 빠른 팁 및 키 바인딩](https://antigravity.google/docs/cli-using)
 
 | 단축키 / 팁 | 동작 |
-|---|---|
+| :-- | :-- |
 | `@` | 파일 경로 자동 완성 (`@`를 입력하여 경로 제안 트리거) |
 | `!` | 프롬프트에서 직접 터미널 명령 실행 |
 | `esc esc` | 프롬프트 상자 지우기 (활성화된 스트리밍이 없을 때) |
@@ -122,13 +122,13 @@ agy plugin validate ./my-plugin
 
 # Generate marketplace link
 agy plugin link <marketplace> <target>
-```
+```text
 
 ---
 
 ## 워크스페이스 및 컨텍스트
 
-```
+```text
 # Project config directory:
 .agents/                    # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
 
@@ -143,7 +143,7 @@ AGENTS.md
 
 # agy also reads:
 .gemini/                    # Gemini CLI config (compatible)
-```
+```text
 
 ### AGENTS.md 패턴
 
@@ -156,7 +156,7 @@ Brief description of what this project is.
 - Language: TypeScript, Node 20
 - Testing: Jest + Supertest
 - DO NOT run database migrations without explicit approval
-```
+```text
 
 ---
 
@@ -183,13 +183,13 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Schedule a recurring task (in interactive mode)
 # > Schedule a daily code quality report at 9am weekdays.
-```
+```text
 
 ---
 
 ## 멀티 에이전트 패턴
 
-```
+```text
 # Spawn parallel subagents (in interactive mode)
 > Spawn a security auditor and a performance auditor in parallel (branch mode).
 
@@ -201,7 +201,7 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Background task
 > In the background, audit all dependencies for known CVEs. Notify me when done.
-```
+```text
 
 ---
 
@@ -220,14 +220,14 @@ for f in src/*.ts; do
   agy --add-dir "$(dirname $f)" \
       -p "Add JSDoc to all exported functions in $(basename $f)."
 done
-```
+```text
 
 ---
 
 ## 공식 문서
 
 | 주제 | 링크 |
-|---|---|
+| :-- | :-- |
 | CLI 개요 | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | 시작하기 | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
 | Antigravity CLI 사용 (설정, 팁, 키 바인딩) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |

@@ -13,14 +13,14 @@ agy --help         # Show all flags and subcommands
 agy changelog      # Show release notes
 agy update         # Self-update
 agy install        # Configure PATH and shell aliases
-```
+```text
 
 ---
 
 ## 启动模式
 
 | 模式 | 命令 | 何时使用 |
-|---|---|---|
+| :-- | :-- | :-- |
 | **交互模式** | `agy` | 默认 — 完整的对话会话 |
 | **种子交互模式** | `agy -i "<提示词>"` | 以特定指令开始，随后继续对话 |
 | **打印（无头模式）** | `agy -p "<提示词>"` | 单次执行，通过管道输出到标准输出 |
@@ -35,7 +35,7 @@ agy install        # Configure PATH and shell aliases
 > 来源：[`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
 
 | 标志 | 简写 | 描述 |
-|---|---|---|
+| :-- | :-- | :-- |
 | `--print "<prompt>"` | `-p` | 非交互式单一提示词 |
 | `--prompt-interactive "<prompt>"` | `-i` | 带有初始提示词的交互式会话 |
 | `--continue` | `-c` | 恢复最近的会话 |
@@ -55,7 +55,7 @@ agy install        # Configure PATH and shell aliases
 > 来源：[CLI 功能 — 核心斜杠命令](https://antigravity.google/docs/cli-features) · [使用 Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 | 命令 | 类别 | 用途 |
-|---|---|---|
+| :-- | :-- | :-- |
 | `/resume` (`/switch`) | 对话 | 打开对话选择器以恢复或切换会话 |
 | `/rewind` (`/undo`) | 对话 | 将对话历史回滚到上一个检查点 |
 | `/rename <name>` | 对话 | 重命名当前活动对话线程 |
@@ -79,7 +79,7 @@ agy install        # Configure PATH and shell aliases
 > 来源：[使用 Antigravity CLI — 快速提示与快捷键](https://antigravity.google/docs/cli-using)
 
 | 快捷键 / 提示 | 操作 |
-|---|---|
+| :-- | :-- |
 | `@` | 文件路径自动补全（输入 `@` 触发路径建议） |
 | `!` | 直接从提示词运行终端命令 |
 | `esc esc` | 清空提示词框（当没有活动的流式传输时） |
@@ -122,13 +122,13 @@ agy plugin validate ./my-plugin
 
 # Generate marketplace link
 agy plugin link <marketplace> <target>
-```
+```text
 
 ---
 
 ## 工作区与上下文
 
-```
+```text
 # Project config directory:
 .agents/                    # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
 
@@ -143,7 +143,7 @@ AGENTS.md
 
 # agy also reads:
 .gemini/                    # Gemini CLI config (compatible)
-```
+```text
 
 ### AGENTS.md 模式
 
@@ -156,7 +156,7 @@ Brief description of what this project is.
 - Language: TypeScript, Node 20
 - Testing: Jest + Supertest
 - DO NOT run database migrations without explicit approval
-```
+```text
 
 ---
 
@@ -183,13 +183,13 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Schedule a recurring task (in interactive mode)
 # > Schedule a daily code quality report at 9am weekdays.
-```
+```text
 
 ---
 
 ## 多代理模式
 
-```
+```text
 # Spawn parallel subagents (in interactive mode)
 > Spawn a security auditor and a performance auditor in parallel (branch mode).
 
@@ -201,7 +201,7 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Background task
 > In the background, audit all dependencies for known CVEs. Notify me when done.
-```
+```text
 
 ---
 
@@ -220,14 +220,14 @@ for f in src/*.ts; do
   agy --add-dir "$(dirname $f)" \
       -p "Add JSDoc to all exported functions in $(basename $f)."
 done
-```
+```text
 
 ---
 
 ## 官方文档
 
 | 主题 | 链接 |
-|---|---|
+| :-- | :-- |
 | CLI 概述 | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | 快速入门 | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
 | 使用 Antigravity CLI（设置、技巧、快捷键） | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |

@@ -17,7 +17,7 @@ agy --print "Generate a full test suite for auth.js" --print-timeout 10m
 
 # Short form
 agy -p "What does this project do?"
-```
+```text
 
 输出直接进入标准输出 (stdout) —— 可以对其进行管道传输、重定向或存储。
 
@@ -27,7 +27,7 @@ agy -p "Generate API documentation for all endpoints" > docs/api.md
 
 # Pipe into another command
 agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
-```
+```text
 
 ---
 
@@ -46,7 +46,7 @@ git diff --cached | agy -p "Review these changes. Flag bugs, security issues, or
 
 # Analyze a log file
 tail -n 200 app.log | agy -p "Identify patterns in these errors. Group by root cause."
-```
+```text
 
 ### 模式：链式调用 agy
 
@@ -56,7 +56,7 @@ agy -p "Create a migration plan for moving this project from CommonJS to ESM. Ou
 
 # Step 2: Execute step by step
 cat migration-plan.json | agy -p "Execute step 1 of this migration plan."
-```
+```text
 
 ### 模式：批处理
 
@@ -67,7 +67,7 @@ for f in src/**/*.js; do
   agy -p "Add JSDoc comments to all exported functions in this file." --add-dir "$(dirname $f)" > /tmp/review.md
   cat /tmp/review.md
 done
-```
+```text
 
 ---
 
@@ -86,7 +86,7 @@ agy --add-dir ../api --add-dir ../frontend "Generate an integration test that co
 
 # Use in print mode
 agy -p "Compare the error handling patterns in app/ vs api/" --add-dir ../api
-```
+```text
 
 ### 真实世界的使用场景：Monorepo 审查
 
@@ -94,7 +94,7 @@ agy -p "Compare the error handling patterns in app/ vs api/" --add-dir ../api
 # From the root of a monorepo, review cross-package dependencies
 agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
     -p "Map the dependency graph between these three packages and flag any circular dependencies."
-```
+```text
 
 !!! tip "可重复使用的标志"
     `--add-dir` 是可重复的 — 您可以根据需要添加任意数量的目录。agy 会将它们与主 git 仓库一起进行索引。
@@ -143,7 +143,7 @@ jobs:
               repo: context.repo.repo,
               body: review
             });
-```
+```text
 
 !!! warning "CI 中的 --dangerously-skip-permissions"
     在 CI 中始终使用 `--dangerously-skip-permissions` — 因为没有人工来点击“批准”。将其与沙盒模式结合使用，以限制 agy 可以访问的内容。
@@ -160,7 +160,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 # Optionally block commit if issues found
 # (parse output for keywords)
-```
+```text
 
 ---
 
@@ -176,12 +176,12 @@ git diff --cached | agy --dangerously-skip-permissions \
 {
   "enableTerminalSandbox": true
 }
-```
+```text
 
 启用后，agy 使用**原生操作系统隔离**来限制终端命令的执行：
 
 | 操作系统 | 隔离技术 |
-|---|---|
+| :-- | :-- |
 | **Linux** | nsjail |
 | **macOS** | sandbox-exec |
 | **Windows** | AppContainer |
@@ -208,7 +208,7 @@ git diff --cached | agy --dangerously-skip-permissions \
     "deny": ["command(rm)", "unsandboxed"]
   }
 }
-```
+```text
 
 > 📖 完整详情：[权限文档](https://www.antigravity.google/docs/permissions)
 
@@ -223,7 +223,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 钩子允许您在 5 个生命周期事件中运行自定义逻辑：
 
 | 事件 | 触发时机 |
-|---|---|
+| :-- | :-- |
 | `PreToolUse` | 在 agy 调用任何工具（读取文件、运行命令等）之前 |
 | `PostToolUse` | 在工具调用完成之后 |
 | `PreInvocation` | 在 agy 开始处理提示词之前 |
@@ -239,7 +239,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 规则是注入到 agy 系统提示词中的 markdown 文件，作为 `RULE` 块存在 —— 这是 agy 必须遵循的硬性约束。
 
 | 作用域 | 位置 |
-|---|---|
+| :-- | :-- |
 | **项目** | `.agents/rules.md` 或 `.agents/rules/*.md` |
 | **全局** | `~/.gemini/config/rules.md` 或 `~/.gemini/config/rules/*.md` |
 
@@ -250,7 +250,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 - Always use TypeScript strict mode
 - Run `npm test` after any code change
 - Do not modify files in the vendor/ directory
-```
+```text
 
 > 📖 完整详情：[规则与工作流文档](https://www.antigravity.google/docs/rules-workflows)
 

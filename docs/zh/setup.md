@@ -7,7 +7,7 @@
 ## 系统要求
 
 | 组件 | 最低要求 | 备注 |
-|---|---|---|
+| :-- | :-- | :-- |
 | **agy** | 最新版本 | 安装说明见下文 |
 | **Git** | v2.30+ | 用于练习仓库 |
 | **终端** | 任意 | iTerm2、macOS 终端或 VS Code 集成终端 |
@@ -23,7 +23,7 @@
 
 ```bash
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```
+```text
 
 ### Windows
 
@@ -33,7 +33,7 @@ irm https://antigravity.google/cli/install.ps1 | iex
 
 # Or via WSL (recommended)
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```
+```text
 
 安装完成后，验证二进制文件是否可用：
 
@@ -43,7 +43,7 @@ which agy
 
 # Confirm the version
 agy changelog
-```
+```text
 
 ---
 
@@ -57,13 +57,13 @@ agy 使用 **基于浏览器的 Google 登录**。在首次运行时，它将：
 ```bash
 # Start agy — auth will trigger automatically on first run
 agy
-```
+```text
 
 要退出登录：
 
-```
+```text
 /logout
-```
+```text
 
 > 📖 有关通过 GCP 项目进行企业级身份验证的信息，请参阅 [企业级文档](https://www.antigravity.google/docs/enterprise)。
 
@@ -71,7 +71,7 @@ agy
 
 ```bash
 agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
-```
+```text
 
 预期输出：`Workshop ready!`
 
@@ -88,7 +88,7 @@ cd agy-cli-field-workshop
 
 # agy will create .agents/ on first run
 agy --print "List the files in the current directory."
-```
+```text
 
 您会看到创建了一个包含项目配置文件（settings.json、mcp.json 等）的 `.agents/` 文件夹。
 
@@ -111,7 +111,7 @@ agy plugin list | python3 -m json.tool
 
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
-```
+```text
 
 工作坊开始前的检查清单：
 
@@ -124,7 +124,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 ## 故障排除
 
 | 问题 | 解决方案 |
-|---|---|
+| :-- | :-- |
 | `agy: command not found` | 检查该二进制文件是否在您的 PATH 环境变量中。运行 `echo $PATH` 并确保包含安装目录。如有需要，请重新运行安装脚本 |
 | 身份验证错误 / 浏览器未打开 | 对于 SSH 会话，请手动复制打印的 URL。对于本地环境，请检查默认浏览器设置。运行 `/logout` 并重试 |
 | `agy plugin list` 返回空的 `{}` | 全新安装时的正常现象。您将在模块 2 中填充插件 |

@@ -13,7 +13,7 @@ Ini adalah **lokakarya praktik langsung 4 modul berdurasi ~3,5 jam** untuk agy-c
 ## Format Penyampaian
 
 | Format | Modul | Durasi |
-|---|---|---|
+| :-- | :-- | :-- |
 | ⚡ Kilat | Modul 1 + Sorotan Modul 2 | 1,5 jam |
 | 📋 Standar | Modul 1 + 2 + 3 | 2,5 jam |
 | 📦 Lengkap | Keempat modul | 3,5 jam |
@@ -77,7 +77,7 @@ Ini adalah **lokakarya praktik langsung 4 modul berdurasi ~3,5 jam** untuk agy-c
 ## Pertanyaan Umum Peserta
 
 | Pertanyaan | Jawaban |
-|---|---|
+| :-- | :-- |
 | "Model apa yang digunakan agy?" | Gunakan `/model` untuk melihat dan beralih. Lihat [Dokumentasi model](https://www.antigravity.google/docs/models). |
 | "Apa bedanya ini dengan Gemini CLI?" | agy menjembatani plugin dari Gemini CLI dan Claude, memiliki orkestrasi sub-agen bawaan, dan pengarahan di tengah tugas dengan /btw. Produk yang berbeda. |
 | "Bisakah saya menggunakan kunci API saya sendiri?" | agy menggunakan Google Sign-In berbasis peramban. Pengguna enterprise menghubungkan proyek GCP. Lihat [Dokumentasi enterprise](https://www.antigravity.google/docs/enterprise). |
@@ -90,7 +90,7 @@ Ini adalah **lokakarya praktik langsung 4 modul berdurasi ~3,5 jam** untuk agy-c
 ## Pemecahan Masalah Selama Workshop
 
 | Gejala | Perbaikan |
-|---|---|
+| :-- | :-- |
 | `agy: command not found` | Periksa PATH. Jalankan `which agy` atau `which agy-cli`. |
 | Kesalahan autentikasi / 401 | Kredensial sesi mungkin telah kedaluwarsa. Distribusikan ulang autentikasi. |
 | Kesalahan `agy plugin list` | Periksa apakah `~/.gemini/antigravity-cli/` ada |

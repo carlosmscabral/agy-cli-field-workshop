@@ -11,13 +11,13 @@
 ```bash
 cd agy-cli-field-workshop
 agy
-```
+```text
 
 您将进入交互式提示符。尝试输入：
 
-```
+```text
 > What files are in this project and what does each one do?
-```
+```text
 
 观察 agy 如何读取您的工作区 —— 它会索引 git 仓库，读取文件内容，并结合上下文进行响应。这是**自动**的：无需配置，也无需预先编写提示词。
 
@@ -35,15 +35,15 @@ agy
 ```bash
 # Start with --prompt-interactive: give agy an initial task, then continue conversationally
 agy -i "Give me a high-level architecture overview of this project. What are the main components and how do they connect?"
-```
+```text
 
 然后进行交互式跟进：
 
-```
+```text
 > Which file handles the entry point?
 > What external dependencies does this project have?
 > Are there any obvious code smells or tech debt?
-```
+```text
 
 !!! tip "使用 -i 进行预设会话"
     `agy -i "<task>"`（`--prompt-interactive` 的简写）以提示词开始，但保持交互状态。非常适合定向探索——你设定方向，然后通过跟进进行引导。
@@ -58,17 +58,17 @@ agy -i "Give me a high-level architecture overview of this project. What are the
 
 ```bash
 agy
-```
+```text
 
-```
+```text
 > I want to refactor the error handling in this project. First, show me all the places where errors are currently caught or returned — don't change anything yet.
-```
+```text
 
 审查发现的问题。然后：
 
-```
+```text
 > Now propose a refactored version of [specific function] using a consistent error handling pattern. Show me the diff before applying.
-```
+```text
 
 只有在阅读了提议的更改后才进行应用。
 
@@ -77,7 +77,7 @@ agy
 agy 具有一个**三级权限模型**，用于控制其处理工具审批的方式：
 
 | 级别 | 行为 |
-|---|---|
+| :-- | :-- |
 | `request-review` | **默认。** agy 在写入文件或运行命令之前会请求批准 |
 | `always-proceed` | 自动批准所有工具调用 — 适用于受信任的脚本和 CI |
 | `strict` | 拒绝所有工具使用，除非明确允许 — 最大限度的控制 |
@@ -91,7 +91,7 @@ agy 具有一个**三级权限模型**，用于控制其处理工具审批的方
     "deny": ["command(rm -rf)"]
   }
 }
-```
+```text
 
 > 📖 完整详情：[权限文档](https://www.antigravity.google/docs/permissions) · [严格模式文档](https://www.antigravity.google/docs/strict-mode)
 
@@ -105,17 +105,17 @@ agy 具有一个**三级权限模型**，用于控制其处理工具审批的方
 
 ```bash
 agy
-```
+```text
 
-```
+```text
 > Look at [specific function or file]. Generate a comprehensive unit test suite for it. Include happy path, edge cases, and error conditions. Use the testing framework already in this project.
-```
+```text
 
 然后：
 
-```
+```text
 > Run the tests and fix any that fail.
-```
+```text
 
 !!! tip "让 agy 运行测试"
     agy 可以执行 shell 命令。它将运行你的测试套件并在失败时进行迭代，而无需你复制粘贴错误消息。观察它的自我修正过程。
@@ -134,18 +134,18 @@ git add -p
 
 # Start agy and review what's staged
 agy
-```
+```text
 
-```
+```text
 > Review my staged changes for: (1) correctness, (2) security issues, (3) missing test coverage, (4) anything that would block a PR. Be direct — don't soften findings.
-```
+```text
 
 ### 无头变体（用于脚本编写）
 
 ```bash
 # Review changes non-interactively — useful in pre-commit hooks or CI
 git diff --cached | agy --print "Review these changes. Flag any bugs, security issues, or missing tests. Output as markdown."
-```
+```text
 
 ---
 
@@ -169,13 +169,13 @@ This is a [your project description]. Key conventions:
 ## Architecture
 [Brief architecture summary]
 EOF
-```
+```text
 
 现在启动一个新会话：
 
 ```bash
 agy --print "What do you know about this project?"
-```
+```text
 
 agy 会自动将你的 AGENTS.md 整合到随后的每个会话中。
 
@@ -203,7 +203,7 @@ agy 会自动将你的 AGENTS.md 整合到随后的每个会话中。
 ### 关键斜杠命令
 
 | 命令 | 功能说明 |
-|---|---|
+| :-- | :-- |
 | `/rewind`（或 `/undo`） | 将对话历史回滚到上一个检查点 |
 | `/resume`（或 `/switch`） | 打开对话选择器以恢复或切换会话 |
 | `/rename <name>` | 重命名当前活动的对话线程 |
@@ -222,7 +222,7 @@ agy 会自动将你的 AGENTS.md 整合到随后的每个会话中。
 ### 快速提示
 
 | 快捷键 | 功能说明 |
-|---|---|
+| :-- | :-- |
 | `@` | 文件路径自动补全 — 键入 `@` 触发路径建议 |
 | `!` | 直接运行终端命令而无需离开 agy |
 | `esc esc` | 清除当前的提示词输入（当没有活动的流式传输时） |

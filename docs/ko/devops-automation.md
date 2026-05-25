@@ -17,7 +17,7 @@ agy --print "Generate a full test suite for auth.js" --print-timeout 10m
 
 # Short form
 agy -p "What does this project do?"
-```
+```text
 
 출력은 stdout으로 전달됩니다. 파이프, 리디렉션, 저장이 가능합니다.
 
@@ -27,7 +27,7 @@ agy -p "Generate API documentation for all endpoints" > docs/api.md
 
 # Pipe into another command
 agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
-```
+```text
 
 ---
 
@@ -46,7 +46,7 @@ git diff --cached | agy -p "Review these changes. Flag bugs, security issues, or
 
 # Analyze a log file
 tail -n 200 app.log | agy -p "Identify patterns in these errors. Group by root cause."
-```
+```text
 
 ### 패턴: agy 호출 체이닝
 
@@ -56,7 +56,7 @@ agy -p "Create a migration plan for moving this project from CommonJS to ESM. Ou
 
 # Step 2: Execute step by step
 cat migration-plan.json | agy -p "Execute step 1 of this migration plan."
-```
+```text
 
 ### 패턴: 일괄 처리
 
@@ -67,7 +67,7 @@ for f in src/**/*.js; do
   agy -p "Add JSDoc comments to all exported functions in this file." --add-dir "$(dirname $f)" > /tmp/review.md
   cat /tmp/review.md
 done
-```
+```text
 
 ---
 
@@ -86,7 +86,7 @@ agy --add-dir ../api --add-dir ../frontend "Generate an integration test that co
 
 # Use in print mode
 agy -p "Compare the error handling patterns in app/ vs api/" --add-dir ../api
-```
+```text
 
 ### 실제 사용 사례: 모노레포 리뷰
 
@@ -94,7 +94,7 @@ agy -p "Compare the error handling patterns in app/ vs api/" --add-dir ../api
 # From the root of a monorepo, review cross-package dependencies
 agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
     -p "Map the dependency graph between these three packages and flag any circular dependencies."
-```
+```text
 
 !!! tip "반복 가능한 플래그"
     `--add-dir`은 반복해서 사용할 수 있습니다. 필요한 만큼 디렉터리를 추가하세요. agy는 기본 git 저장소와 함께 추가된 모든 디렉터리를 인덱싱합니다.
@@ -143,7 +143,7 @@ jobs:
               repo: context.repo.repo,
               body: review
             });
-```
+```text
 
 !!! warning "CI에서의 --dangerously-skip-permissions"
     CI에서는 항상 `--dangerously-skip-permissions`를 사용하세요 — '승인'을 클릭할 사람이 없기 때문입니다. agy가 접근할 수 있는 항목을 제한하려면 샌드박스 모드와 함께 사용하세요.
@@ -160,7 +160,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 # Optionally block commit if issues found
 # (parse output for keywords)
-```
+```text
 
 ---
 
@@ -176,12 +176,12 @@ git diff --cached | agy --dangerously-skip-permissions \
 {
   "enableTerminalSandbox": true
 }
-```
+```text
 
 활성화되면 agy는 **네이티브 OS 격리**를 사용하여 터미널 명령 실행을 제한합니다:
 
 | OS | 격리 기술 |
-|---|---|
+| :-- | :-- |
 | **Linux** | nsjail |
 | **macOS** | sandbox-exec |
 | **Windows** | AppContainer |
@@ -208,7 +208,7 @@ git diff --cached | agy --dangerously-skip-permissions \
     "deny": ["command(rm)", "unsandboxed"]
   }
 }
-```
+```text
 
 > 📖 전체 세부 정보: [권한 문서](https://www.antigravity.google/docs/permissions)
 
@@ -223,7 +223,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 훅을 사용하면 5가지 수명 주기 이벤트에서 사용자 지정 로직을 실행할 수 있습니다:
 
 | 이벤트 | 실행 시점 |
-|---|---|
+| :-- | :-- |
 | `PreToolUse` | agy가 도구(파일 읽기, 명령어 실행 등)를 호출하기 전 |
 | `PostToolUse` | 도구 호출이 완료된 후 |
 | `PreInvocation` | agy가 프롬프트 처리를 시작하기 전 |
@@ -239,7 +239,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 규칙은 agy의 시스템 프롬프트에 `RULE` 블록으로 주입되는 마크다운 파일로, agy가 반드시 따라야 하는 엄격한 제약 조건입니다.
 
 | 범위 | 위치 |
-|---|---|
+| :-- | :-- |
 | **프로젝트** | `.agents/rules.md` 또는 `.agents/rules/*.md` |
 | **전역** | `~/.gemini/config/rules.md` 또는 `~/.gemini/config/rules/*.md` |
 
@@ -250,7 +250,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 - Always use TypeScript strict mode
 - Run `npm test` after any code change
 - Do not modify files in the vendor/ directory
-```
+```text
 
 > 📖 전체 세부 정보: [규칙 & 워크플로 문서](https://www.antigravity.google/docs/rules-workflows)
 

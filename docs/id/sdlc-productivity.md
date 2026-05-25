@@ -11,13 +11,13 @@ Jalankan agy-cli di direktori proyek workshop Anda:
 ```bash
 cd agy-cli-field-workshop
 agy
-```
+```text
 
 Anda akan masuk ke prompt interaktif. Coba:
 
-```
+```text
 > What files are in this project and what does each one do?
-```
+```text
 
 Perhatikan bagaimana agy membaca ruang kerja Anda — ia mengindeks repo git, membaca isi file, dan merespons dengan konteks. Ini **otomatis**: tanpa konfigurasi, tanpa prompt yang harus ditulis terlebih dahulu.
 
@@ -35,15 +35,15 @@ Perhatikan bagaimana agy membaca ruang kerja Anda — ia mengindeks repo git, me
 ```bash
 # Start with --prompt-interactive: give agy an initial task, then continue conversationally
 agy -i "Give me a high-level architecture overview of this project. What are the main components and how do they connect?"
-```
+```text
 
 Kemudian tindak lanjuti secara interaktif:
 
-```
+```text
 > Which file handles the entry point?
 > What external dependencies does this project have?
 > Are there any obvious code smells or tech debt?
-```
+```text
 
 !!! tip "Gunakan -i untuk sesi yang diinisialisasi"
     `agy -i "<task>"` (singkatan dari `--prompt-interactive`) dimulai dengan sebuah prompt tetapi tetap interaktif. Sangat bagus untuk eksplorasi yang terarah — Anda menentukan arahnya, lalu mengarahkannya dengan tindak lanjut.
@@ -58,17 +58,17 @@ Kemudian tindak lanjuti secara interaktif:
 
 ```bash
 agy
-```
+```text
 
-```
+```text
 > I want to refactor the error handling in this project. First, show me all the places where errors are currently caught or returned — don't change anything yet.
-```
+```text
 
 Tinjau temuannya. Kemudian:
 
-```
+```text
 > Now propose a refactored version of [specific function] using a consistent error handling pattern. Show me the diff before applying.
-```
+```text
 
 Terapkan hanya setelah Anda membaca perubahan yang diusulkan.
 
@@ -77,7 +77,7 @@ Terapkan hanya setelah Anda membaca perubahan yang diusulkan.
 agy memiliki **model izin 3 tingkat** yang mengontrol bagaimana ia menangani persetujuan alat:
 
 | Tingkat | Perilaku |
-|---|---|
+| :-- | :-- |
 | `request-review` | **Bawaan.** agy meminta persetujuan sebelum menulis file atau menjalankan perintah |
 | `always-proceed` | Setujui otomatis semua panggilan alat — berguna untuk skrip tepercaya dan CI |
 | `strict` | Tolak semua penggunaan alat kecuali diizinkan secara eksplisit — kontrol maksimum |
@@ -91,7 +91,7 @@ Gunakan perintah garis miring `/permissions` untuk melihat atau mengubah tingkat
     "deny": ["command(rm -rf)"]
   }
 }
-```
+```text
 
 > 📖 Detail lengkap: [Dokumentasi Izin](https://www.antigravity.google/docs/permissions) · [Dokumentasi Mode Ketat](https://www.antigravity.google/docs/strict-mode)
 
@@ -105,17 +105,17 @@ Gunakan perintah garis miring `/permissions` untuk melihat atau mengubah tingkat
 
 ```bash
 agy
-```
+```text
 
-```
+```text
 > Look at [specific function or file]. Generate a comprehensive unit test suite for it. Include happy path, edge cases, and error conditions. Use the testing framework already in this project.
-```
+```text
 
 Kemudian:
 
-```
+```text
 > Run the tests and fix any that fail.
-```
+```text
 
 !!! tip "Biarkan agy menjalankan pengujian"
     agy dapat mengeksekusi perintah shell. Ini akan menjalankan rangkaian pengujian Anda dan melakukan iterasi pada kegagalan tanpa Anda harus menyalin-tempel pesan kesalahan. Perhatikan ia mengoreksi dirinya sendiri.
@@ -134,18 +134,18 @@ git add -p
 
 # Start agy and review what's staged
 agy
-```
+```text
 
-```
+```text
 > Review my staged changes for: (1) correctness, (2) security issues, (3) missing test coverage, (4) anything that would block a PR. Be direct — don't soften findings.
-```
+```text
 
 ### Varian Headless (untuk pembuatan skrip)
 
 ```bash
 # Review changes non-interactively — useful in pre-commit hooks or CI
 git diff --cached | agy --print "Review these changes. Flag any bugs, security issues, or missing tests. Output as markdown."
-```
+```text
 
 ---
 
@@ -169,13 +169,13 @@ This is a [your project description]. Key conventions:
 ## Architecture
 [Brief architecture summary]
 EOF
-```
+```text
 
 Sekarang mulai sesi baru:
 
 ```bash
 agy --print "What do you know about this project?"
-```
+```text
 
 agy akan memasukkan AGENTS.md Anda ke dalam setiap sesi berikutnya secara otomatis.
 
@@ -203,7 +203,7 @@ Selain AGENTS.md, agy juga memuat:
 ### Perintah Slash Utama
 
 | Perintah | Fungsinya |
-|---|---|
+| :-- | :-- |
 | `/rewind` (atau `/undo`) | Mengembalikan riwayat percakapan ke checkpoint sebelumnya |
 | `/resume` (atau `/switch`) | Membuka pemilih percakapan untuk melanjutkan atau beralih sesi |
 | `/rename <name>` | Mengganti nama utas percakapan aktif |
@@ -222,7 +222,7 @@ Selain AGENTS.md, agy juga memuat:
 ### Tips Cepat
 
 | Pintasan | Fungsinya |
-|---|---|
+| :-- | :-- |
 | `@` | Pelengkapan otomatis jalur file — ketik `@` untuk memicu saran jalur |
 | `!` | Menjalankan perintah terminal secara langsung tanpa meninggalkan agy |
 | `esc esc` | Menghapus input prompt saat ini (saat tidak ada streaming yang aktif) |

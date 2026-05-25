@@ -13,14 +13,14 @@ agy --help         # Show all flags and subcommands
 agy changelog      # Show release notes
 agy update         # Self-update
 agy install        # Configure PATH and shell aliases
-```
+```text
 
 ---
 
 ## Mode Peluncuran
 
 | Mode | Perintah | Kapan digunakan |
-|---|---|---|
+| :-- | :-- | :-- |
 | **Interaktif** | `agy` | Bawaan — sesi percakapan penuh |
 | **Interaktif dengan awalan** | `agy -i "<prompt>"` | Mulai dengan arahan, lanjutkan secara percakapan |
 | **Cetak (mode headless)** | `agy -p "<prompt>"` | Satu kali jalan, teruskan (pipe) ke stdout |
@@ -35,7 +35,7 @@ agy install        # Configure PATH and shell aliases
 > Sumber: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
 
 | Flag | Singkatan | Deskripsi |
-|---|---|---|
+| :-- | :-- | :-- |
 | `--print "<prompt>"` | `-p` | Prompt tunggal non-interaktif |
 | `--prompt-interactive "<prompt>"` | `-i` | Sesi interaktif dengan seed |
 | `--continue` | `-c` | Melanjutkan percakapan terbaru |
@@ -55,7 +55,7 @@ agy install        # Configure PATH and shell aliases
 > Sumber: [Fitur CLI — Perintah Slash Inti](https://antigravity.google/docs/cli-features) · [Menggunakan CLI AGY](https://antigravity.google/docs/cli-using)
 
 | Perintah | Kategori | Tujuan |
-|---|---|---|
+| :-- | :-- | :-- |
 | `/resume` (`/switch`) | Percakapan | Buka pemilih percakapan untuk melanjutkan atau beralih sesi |
 | `/rewind` (`/undo`) | Percakapan | Kembalikan riwayat percakapan ke checkpoint sebelumnya |
 | `/rename <name>` | Percakapan | Ganti nama utas percakapan aktif |
@@ -79,7 +79,7 @@ agy install        # Configure PATH and shell aliases
 > Sumber: [Menggunakan Antigravity CLI — Tips Cepat & Pintasan Keyboard](https://antigravity.google/docs/cli-using)
 
 | Pintasan / Tips | Aksi |
-|---|---|
+| :-- | :-- |
 | `@` | Pelengkapan otomatis jalur file (ketik `@` untuk memicu saran jalur) |
 | `!` | Jalankan perintah terminal langsung dari prompt |
 | `esc esc` | Bersihkan kotak prompt Anda (saat tidak ada streaming yang aktif) |
@@ -122,13 +122,13 @@ agy plugin validate ./my-plugin
 
 # Generate marketplace link
 agy plugin link <marketplace> <target>
-```
+```text
 
 ---
 
 ## Ruang Kerja & Konteks
 
-```
+```text
 # Project config directory:
 .agents/                    # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
 
@@ -143,7 +143,7 @@ AGENTS.md
 
 # agy also reads:
 .gemini/                    # Gemini CLI config (compatible)
-```
+```text
 
 ### Pola AGENTS.md
 
@@ -156,7 +156,7 @@ Brief description of what this project is.
 - Language: TypeScript, Node 20
 - Testing: Jest + Supertest
 - DO NOT run database migrations without explicit approval
-```
+```text
 
 ---
 
@@ -183,13 +183,13 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Schedule a recurring task (in interactive mode)
 # > Schedule a daily code quality report at 9am weekdays.
-```
+```text
 
 ---
 
 ## Pola Multi-Agen
 
-```
+```text
 # Spawn parallel subagents (in interactive mode)
 > Spawn a security auditor and a performance auditor in parallel (branch mode).
 
@@ -201,7 +201,7 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Background task
 > In the background, audit all dependencies for known CVEs. Notify me when done.
-```
+```text
 
 ---
 
@@ -220,14 +220,14 @@ for f in src/*.ts; do
   agy --add-dir "$(dirname $f)" \
       -p "Add JSDoc to all exported functions in $(basename $f)."
 done
-```
+```text
 
 ---
 
 ## Dokumentasi Resmi
 
 | Topik | Tautan |
-|---|---|
+| :-- | :-- |
 | Gambaran Umum CLI | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | Memulai | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
 | Menggunakan Antigravity CLI (pengaturan, tips, pintasan keyboard) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |

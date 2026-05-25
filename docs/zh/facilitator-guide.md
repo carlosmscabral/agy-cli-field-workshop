@@ -13,7 +13,7 @@
 ## 交付形式
 
 | 形式 | 模块 | 时长 |
-|---|---|---|
+| :-- | :-- | :-- |
 | ⚡ 闪电版 | 模块 1 + 模块 2 亮点 | 1.5 小时 |
 | 📋 标准版 | 模块 1 + 2 + 3 | 2.5 小时 |
 | 📦 完整版 | 全部四个模块 | 3.5 小时 |
@@ -77,7 +77,7 @@
 ## 常见参与者问题
 
 | 问题 | 解答 |
-|---|---|
+| :-- | :-- |
 | "agy 使用什么模型？" | 使用 `/model` 查看和切换。请参阅 [模型文档](https://www.antigravity.google/docs/models)。 |
 | "这与 Gemini CLI 有什么不同？" | agy 桥接了 Gemini CLI 和 Claude 的插件，具有原生的子代理编排，以及 `/btw` 任务中途引导。这是不同的产品。 |
 | "我可以使用自己的 API 密钥吗？" | agy 使用基于浏览器的 Google 登录。企业级用户连接 GCP 项目。请参阅 [企业级文档](https://www.antigravity.google/docs/enterprise)。 |
@@ -90,7 +90,7 @@
 ## 研讨会期间的故障排除
 
 | 症状 | 解决方法 |
-|---|---|
+| :-- | :-- |
 | `agy: command not found` | 检查 PATH 环境变量。运行 `which agy` 或 `which agy-cli`。 |
 | 身份验证错误 / 401 | 会话凭据可能已过期。重新分发身份验证信息。 |
 | `agy plugin list` 错误 | 检查 `~/.gemini/antigravity-cli/` 是否存在 |

@@ -17,7 +17,7 @@ agy --print "Generate a full test suite for auth.js" --print-timeout 10m
 
 # Short form
 agy -p "What does this project do?"
-```
+```text
 
 Output diarahkan ke stdout — lakukan pipe, alihkan, simpan.
 
@@ -27,7 +27,7 @@ agy -p "Generate API documentation for all endpoints" > docs/api.md
 
 # Pipe into another command
 agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
-```
+```text
 
 ---
 
@@ -46,7 +46,7 @@ git diff --cached | agy -p "Review these changes. Flag bugs, security issues, or
 
 # Analyze a log file
 tail -n 200 app.log | agy -p "Identify patterns in these errors. Group by root cause."
-```
+```text
 
 ### Pola: Merangkai Panggilan agy
 
@@ -56,7 +56,7 @@ agy -p "Create a migration plan for moving this project from CommonJS to ESM. Ou
 
 # Step 2: Execute step by step
 cat migration-plan.json | agy -p "Execute step 1 of this migration plan."
-```
+```text
 
 ### Pola: Pemrosesan Batch
 
@@ -67,7 +67,7 @@ for f in src/**/*.js; do
   agy -p "Add JSDoc comments to all exported functions in this file." --add-dir "$(dirname $f)" > /tmp/review.md
   cat /tmp/review.md
 done
-```
+```text
 
 ---
 
@@ -86,7 +86,7 @@ agy --add-dir ../api --add-dir ../frontend "Generate an integration test that co
 
 # Use in print mode
 agy -p "Compare the error handling patterns in app/ vs api/" --add-dir ../api
-```
+```text
 
 ### Kasus Penggunaan di Dunia Nyata: Tinjauan Monorepo
 
@@ -94,7 +94,7 @@ agy -p "Compare the error handling patterns in app/ vs api/" --add-dir ../api
 # From the root of a monorepo, review cross-package dependencies
 agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
     -p "Map the dependency graph between these three packages and flag any circular dependencies."
-```
+```text
 
 !!! tip "Flag yang dapat diulang"
     `--add-dir` dapat diulang — tambahkan sebanyak mungkin direktori yang Anda butuhkan. agy mengindeks semuanya bersama dengan repo git utama.
@@ -143,7 +143,7 @@ jobs:
               repo: context.repo.repo,
               body: review
             });
-```
+```text
 
 !!! warning "--dangerously-skip-permissions di CI"
     Selalu gunakan `--dangerously-skip-permissions` di CI — tidak ada manusia yang akan mengklik "setuju". Pasangkan dengan mode sandbox untuk membatasi apa yang dapat diakses oleh agy.
@@ -160,7 +160,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 # Optionally block commit if issues found
 # (parse output for keywords)
-```
+```text
 
 ---
 
@@ -176,12 +176,12 @@ Sandbox dikonfigurasi melalui `settings.json` (baik pada proyek `.agents/setting
 {
   "enableTerminalSandbox": true
 }
-```
+```text
 
 Saat diaktifkan, agy menggunakan **isolasi OS native** untuk membatasi eksekusi perintah terminal:
 
 | OS | Teknologi Isolasi |
-|---|---|
+| :-- | :-- |
 | **Linux** | nsjail |
 | **macOS** | sandbox-exec |
 | **Windows** | AppContainer |
@@ -208,7 +208,7 @@ Untuk kontrol maksimum, pasangkan mode sandbox dengan model izin:
     "deny": ["command(rm)", "unsandboxed"]
   }
 }
-```
+```text
 
 > 📖 Detail lengkap: [Dokumentasi izin](https://www.antigravity.google/docs/permissions)
 
@@ -223,7 +223,7 @@ Untuk kontrol maksimum, pasangkan mode sandbox dengan model izin:
 Hook memungkinkan Anda menjalankan logika kustom pada 5 peristiwa siklus hidup:
 
 | Peristiwa | Kapan dipicu |
-|---|---|
+| :-- | :-- |
 | `PreToolUse` | Sebelum agy memanggil alat apa pun (membaca file, menjalankan perintah, dll.) |
 | `PostToolUse` | Setelah pemanggilan alat selesai |
 | `PreInvocation` | Sebelum agy mulai memproses prompt |
@@ -239,7 +239,7 @@ Konfigurasikan hook di `hooks.json` (di `.agents/` untuk proyek atau `~/.gemini/
 Aturan adalah file markdown yang disuntikkan ke dalam prompt sistem agy sebagai blok `RULE` — batasan keras yang harus diikuti oleh agy.
 
 | Cakupan | Lokasi |
-|---|---|
+| :-- | :-- |
 | **Proyek** | `.agents/rules.md` atau `.agents/rules/*.md` |
 | **Global** | `~/.gemini/config/rules.md` atau `~/.gemini/config/rules/*.md` |
 
@@ -250,7 +250,7 @@ Contoh `.agents/rules.md`:
 - Always use TypeScript strict mode
 - Run `npm test` after any code change
 - Do not modify files in the vendor/ directory
-```
+```text
 
 > 📖 Detail lengkap: [Dokumentasi Aturan & Alur Kerja](https://www.antigravity.google/docs/rules-workflows)
 

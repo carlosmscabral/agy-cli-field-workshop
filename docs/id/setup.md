@@ -7,7 +7,7 @@
 ## Persyaratan Sistem
 
 | Komponen | Minimum | Catatan |
-|---|---|---|
+| :-- | :-- | :-- |
 | **agy** | Terbaru | Instruksi instalasi di bawah ini |
 | **Git** | v2.30+ | Untuk repositori latihan |
 | **Terminal** | Apa saja | iTerm2, macOS Terminal, atau terintegrasi dengan VS Code |
@@ -23,7 +23,7 @@
 
 ```bash
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```
+```text
 
 ### Windows
 
@@ -33,7 +33,7 @@ irm https://antigravity.google/cli/install.ps1 | iex
 
 # Or via WSL (recommended)
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```
+```text
 
 Setelah instalasi, verifikasi bahwa berkas biner tersedia:
 
@@ -43,7 +43,7 @@ which agy
 
 # Confirm the version
 agy changelog
-```
+```text
 
 ---
 
@@ -57,13 +57,13 @@ agy menggunakan **Google Sign-In berbasis browser**. Pada saat pertama kali dija
 ```bash
 # Start agy — auth will trigger automatically on first run
 agy
-```
+```text
 
 Untuk keluar:
 
-```
+```text
 /logout
-```
+```text
 
 > 📖 Untuk autentikasi enterprise melalui proyek GCP, lihat [Dokumentasi enterprise](https://www.antigravity.google/docs/enterprise).
 
@@ -71,7 +71,7 @@ Setelah autentikasi dikonfigurasi, jalankan smoke test cepat:
 
 ```bash
 agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
-```
+```text
 
 Output yang diharapkan: `Workshop ready!`
 
@@ -88,7 +88,7 @@ cd agy-cli-field-workshop
 
 # agy will create .agents/ on first run
 agy --print "List the files in the current directory."
-```
+```text
 
 Anda akan melihat folder `.agents/` dibuat dengan file konfigurasi proyek (settings.json, mcp.json, dll.).
 
@@ -111,7 +111,7 @@ agy plugin list | python3 -m json.tool
 
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
-```
+```text
 
 Daftar periksa sebelum lokakarya dimulai:
 
@@ -124,7 +124,7 @@ Daftar periksa sebelum lokakarya dimulai:
 ## Pemecahan Masalah
 
 | Masalah | Solusi |
-|---|---|
+| :-- | :-- |
 | `agy: command not found` | Periksa apakah berkas biner berada di PATH Anda. Jalankan `echo $PATH` dan pastikan direktori instalasi disertakan. Jalankan ulang skrip instalasi jika diperlukan |
 | Kesalahan autentikasi / peramban tidak terbuka | Untuk sesi SSH, salin URL yang dicetak secara manual. Untuk lokal, periksa pengaturan peramban bawaan. Jalankan `/logout` dan coba lagi |
 | `agy plugin list` mengembalikan `{}` kosong | Diharapkan pada instalasi baru. Anda akan mengisi plugin di Modul 2 |
