@@ -1,7 +1,7 @@
 # agy-cli 速查表
 
 > 本工作坊涵盖的所有内容的快速参考。
-> 所有命令均已根据 [antigravity.google/docs](https://antigravity.google/docs/cli-overview) 验证。
+> 所有命令均已根据 [antigravity.google/docs](https://antigravity.google/docs/cli-overview) 进行验证。
 
 ---
 
@@ -13,23 +13,21 @@ agy --help         # Show all flags and subcommands
 agy changelog      # Show release notes
 agy update         # Self-update
 agy install        # Configure PATH and shell aliases
-```text
+```bash
 
 ---
-
 ## 启动模式
 
-| 模式 | 命令 | 何时使用 |
+| 模式 | 命令 | 使用场景 |
 | :-- | :-- | :-- |
-| **交互模式** | `agy` | 默认 — 完整的对话会话 |
-| **种子交互模式** | `agy -i "<提示词>"` | 以特定指令开始，随后继续对话 |
-| **打印（无头模式）** | `agy -p "<提示词>"` | 单次执行，通过管道输出到标准输出 |
+| **交互式** | `agy` | 默认 — 完整的对话会话 |
+| **预设交互式** | `agy -i "<提示词>"` | 提供初始方向，随后继续进行对话 |
+| **打印 (无头模式)** | `agy -p "<提示词>"` | 单次执行，通过管道输出到标准输出 |
 | **继续上一次** | `agy -c` | 恢复最近一次的会话 |
 | **按 ID 恢复** | `agy --conversation <id>` | 恢复特定的历史会话 |
 | **会话内恢复** | `/resume` 或 `/switch` | 在不离开 agy 的情况下切换会话 |
 
 ---
-
 ## 关键标志
 
 > 来源：[`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
@@ -43,13 +41,12 @@ agy install        # Configure PATH and shell aliases
 | `--add-dir <path>` | — | 将目录添加到工作区（可重复） |
 | `--sandbox` | — | 启用终端沙盒限制 |
 | `--dangerously-skip-permissions` | — | 自动批准所有工具请求（仅限 CI） |
-| `--print-timeout <duration>` | — | 打印模式的超时时间（默认：5分钟） |
+| `--print-timeout <duration>` | — | print 模式的超时时间（默认：5分钟） |
 | `--log-file <path>` | — | 覆盖日志输出路径 |
 
-> **注意：** 模型选择和严格模式是通过 `/model` 和 `/permissions` 斜杠命令设置的，而不是 CLI 标志。请参阅 [功能文档](https://antigravity.google/docs/cli-features)。
+> **注意：** 模型选择和严格模式是通过 `/model` 和 `/permissions` 斜杠命令设置的，而不是通过 CLI 标志。请参阅 [功能文档](https://antigravity.google/docs/cli-features)。
 
 ---
-
 ## 斜杠命令（交互模式）
 
 > 来源：[CLI 功能 — 核心斜杠命令](https://antigravity.google/docs/cli-features) · [使用 Antigravity CLI](https://antigravity.google/docs/cli-using)
@@ -57,23 +54,22 @@ agy install        # Configure PATH and shell aliases
 | 命令 | 类别 | 用途 |
 | :-- | :-- | :-- |
 | `/resume` (`/switch`) | 对话 | 打开对话选择器以恢复或切换会话 |
-| `/rewind` (`/undo`) | 对话 | 将对话历史回滚到上一个检查点 |
-| `/rename <name>` | 对话 | 重命名当前活动对话线程 |
-| `/permissions` | 配置 | 设置自主级别：`request-review`、`always-proceed`、`strict` |
+| `/rewind` (`/undo`) | 对话 | 将对话历史记录回滚到上一个检查点 |
+| `/rename <name>` | 对话 | 重命名活动对话线程 |
+| `/permissions` | 配置 | 设置自治级别：`request-review`、`always-proceed`、`strict` |
 | `/model` | 配置 | 选择默认推理模型（跨会话持久保存） |
-| `/config` (`/settings`) | 配置 | 打开全屏设置浮层 |
+| `/config` (`/settings`) | 配置 | 打开全屏设置覆盖层 |
 | `/keybindings` | 配置 | 打开交互式键盘快捷键编辑器 |
 | `/statusline` | 配置 | 自定义实时 CLI 状态栏指示器 |
 | `/tasks` | 监控 | 监控、查看日志或终止后台任务 |
 | `/skills` | 监控 | 浏览本地和全局代理技能 |
 | `/mcp` | 监控 | 配置和管理 MCP 服务器 |
 | `/agents` | 监控 | 查看、管理和批准子代理操作 |
-| `/open <path>` | 实用工具 | 在首选的外部编辑器中打开文件 |
+| `/open <path>` | 实用工具 | 在您首选的外部编辑器中打开文件 |
 | `/usage` | 实用工具 | 打开内联交互式帮助手册 |
 | `/logout` | 账户 | 登出并清除缓存的凭据 |
 
 ---
-
 ## 快速提示
 
 > 来源：[使用 Antigravity CLI — 快速提示与快捷键](https://antigravity.google/docs/cli-using)
@@ -81,19 +77,18 @@ agy install        # Configure PATH and shell aliases
 | 快捷键 / 提示 | 操作 |
 | :-- | :-- |
 | `@` | 文件路径自动补全（输入 `@` 触发路径建议） |
-| `!` | 直接从提示词运行终端命令 |
+| `!` | 直接从提示词框运行终端命令 |
 | `esc esc` | 清空提示词框（当没有活动的流式传输时） |
 | `?` | 获取帮助并列出所有斜杠命令 |
 | `alt+enter` / `ctrl+j` / `shift+enter` | 插入换行符而不提交 |
 | `ctrl+g` | 在默认的 shell 编辑器中编辑提示词 |
-| `ctrl+l` | 清除 TUI 屏幕 |
+| `ctrl+l` | 清空 TUI 屏幕 |
 | `ctrl+d` | 退出 CLI 会话 |
-| `ctrl+z` | 将 CLI 挂起到终端后台 |
-| `ctrl+j`（在 `/agents` 中） | 传送到下一个待处理的子代理审批 |
+| `ctrl+z` | 将 CLI 挂起至终端后台 |
+| `ctrl+j` （在 `/agents` 中） | 跳转到下一个待处理的子代理审批 |
 | `ctrl+k` | 从主对话中快速批准待处理的子代理权限 |
 
 ---
-
 ## 插件命令
 
 ```bash
@@ -122,13 +117,12 @@ agy plugin validate ./my-plugin
 
 # Generate marketplace link
 agy plugin link <marketplace> <target>
-```text
+```yaml
 
 ---
-
 ## 工作区与上下文
 
-```text
+```bash
 # Project config directory:
 .agents/                    # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
 
@@ -143,7 +137,7 @@ AGENTS.md
 
 # agy also reads:
 .gemini/                    # Gemini CLI config (compatible)
-```text
+```bash
 
 ### AGENTS.md 模式
 
@@ -156,10 +150,9 @@ Brief description of what this project is.
 - Language: TypeScript, Node 20
 - Testing: Jest + Supertest
 - DO NOT run database migrations without explicit approval
-```text
+```yaml
 
 ---
-
 ## 实用模式
 
 ```bash
@@ -183,13 +176,12 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Schedule a recurring task (in interactive mode)
 # > Schedule a daily code quality report at 9am weekdays.
-```text
+```yaml
 
 ---
-
 ## 多代理模式
 
-```text
+```bash
 # Spawn parallel subagents (in interactive mode)
 > Spawn a security auditor and a performance auditor in parallel (branch mode).
 
@@ -201,11 +193,10 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Background task
 > In the background, audit all dependencies for known CVEs. Notify me when done.
-```text
+```yaml
 
 ---
-
-## 打印模式流水线示例
+## 打印模式管道示例
 
 ```bash
 # Step 1: plan
@@ -220,18 +211,17 @@ for f in src/*.ts; do
   agy --add-dir "$(dirname $f)" \
       -p "Add JSDoc to all exported functions in $(basename $f)."
 done
-```text
+```bash
 
 ---
-
 ## 官方文档
 
 | 主题 | 链接 |
 | :-- | :-- |
 | CLI 概述 | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
-| 快速入门 | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
+| 入门指南 | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
 | 使用 Antigravity CLI（设置、技巧、快捷键） | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
-| 功能（插件、沙盒、斜杠命令、子代理） | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
+| 功能特性（插件、沙盒、斜杠命令、子代理） | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
 | 从 Gemini CLI 迁移 | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
 | 权限 | [antigravity.google/docs/permissions](https://antigravity.google/docs/permissions) |
 | 严格模式 | [antigravity.google/docs/strict-mode](https://antigravity.google/docs/strict-mode) |

@@ -1,12 +1,12 @@
-# Modul 3: DevOps & Otomatisasi <span class="duration-badge">40 menit</span>
+# Referensi: Pola DevOps & Otomatisasi
 
-> **agy tanpa campur tangan manusia.** Modul ini mencakup pipeline `--print` non-interaktif, integrasi CI/CD, ruang kerja multi-repositori, dan eksekusi sandbox untuk lingkungan yang sensitif terhadap tata kelola.
+> **agy tanpa campur tangan manusia.** Referensi mendalam untuk pipeline `--print` non-interaktif, integrasi CI/CD, ruang kerja multi-repositori, dan eksekusi sandbox. Perintah-perintah penting ditautkan dari [Lembar Contekan](cheatsheet.md).
 
 ---
 
-## 3.0 — Mode Cetak: Inti Non-Interaktif <span class="duration-badge">5 min</span>
+## 3.0 — Mode Print: Inti Non-Interaktif <span class="duration-badge">5 menit</span>
 
-`--print` (singkat: `-p`) adalah mode headless dari agy. Ini menjalankan satu prompt, mencetak respons, dan keluar. Tidak ada sesi interaktif, tidak ada prompt.
+`--print` (singkatan: `-p`) adalah mode headless dari agy. Mode ini menjalankan satu prompt, mencetak respons, dan keluar. Tidak ada sesi interaktif, tidak ada prompt.
 
 ```bash
 # Basic usage
@@ -19,7 +19,7 @@ agy --print "Generate a full test suite for auth.js" --print-timeout 10m
 agy -p "What does this project do?"
 ```text
 
-Output diarahkan ke stdout — lakukan pipe, alihkan, simpan.
+Output diarahkan ke stdout — lakukan pipe, arahkan ulang, simpan.
 
 ```bash
 # Pipe into a file
@@ -30,8 +30,7 @@ agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
 ```text
 
 ---
-
-## 3.1 — Pipeline Shell <span class="duration-badge">10 menit</span>
+## 3.1 — Pipeline Shell <span class="duration-badge">10 min</span>
 
 > **Pola: agy sebagai perintah Unix** — gabungkan dengan alat shell standar.
 
@@ -70,12 +69,11 @@ done
 ```text
 
 ---
-
 ## 3.2 — Ruang Kerja Multi-Direktori dengan --add-dir <span class="duration-badge">10 min</span>
 
 > **Pola: Konteks Lintas-Repo** — memberikan agy visibilitas ke beberapa basis kode secara bersamaan.
 
-Secara default, agy mengindeks repo git yang berisi direktori Anda saat ini. `--add-dir` memperluas hal tersebut ke direktori tambahan.
+Secara default, agy mengindeks repo git yang berisi direktori Anda saat ini. `--add-dir` memperluasnya ke direktori tambahan.
 
 ```bash
 # Give agy access to both your app and its shared library
@@ -88,7 +86,7 @@ agy --add-dir ../api --add-dir ../frontend "Generate an integration test that co
 agy -p "Compare the error handling patterns in app/ vs api/" --add-dir ../api
 ```text
 
-### Kasus Penggunaan di Dunia Nyata: Tinjauan Monorepo
+### Kasus Penggunaan Dunia Nyata: Tinjauan Monorepo
 
 ```bash
 # From the root of a monorepo, review cross-package dependencies
@@ -97,13 +95,12 @@ agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
 ```text
 
 !!! tip "Flag yang dapat diulang"
-    `--add-dir` dapat diulang — tambahkan sebanyak mungkin direktori yang Anda butuhkan. agy mengindeks semuanya bersama dengan repo git utama.
+    `--add-dir` dapat diulang — tambahkan sebanyak mungkin direktori yang Anda butuhkan. agy mengindeks semuanya bersama repo git utama.
 
 ---
-
 ## 3.3 — Integrasi CI/CD <span class="duration-badge">10 min</span>
 
-> **Pola: agy di dalam Pipeline** — tinjauan dan analisis kode otomatis pada setiap PR.
+> **Pola: agy dalam Pipeline** — tinjauan kode dan analisis otomatis pada setiap PR.
 
 ### Contoh GitHub Actions
 
@@ -163,14 +160,13 @@ git diff --cached | agy --dangerously-skip-permissions \
 ```text
 
 ---
-
-## 3.4 — Mode Sandbox <span class="duration-badge">5 menit</span>
+## 3.4 — Mode Sandbox <span class="duration-badge">5 min</span>
 
 > **Pola: Eksekusi Terbatas** — jalankan agy dengan isolasi terminal tingkat OS.
 
 ### Mengaktifkan Sandbox
 
-Sandbox dikonfigurasi melalui `settings.json` (baik pada proyek `.agents/settings.json` atau pengguna `~/.gemini/antigravity-cli/settings.json`):
+Sandbox dikonfigurasi melalui `settings.json` (baik proyek `.agents/settings.json` maupun pengguna `~/.gemini/antigravity-cli/settings.json`):
 
 ```json
 {
@@ -186,9 +182,9 @@ Saat diaktifkan, agy menggunakan **isolasi OS native** untuk membatasi eksekusi 
 | **macOS** | sandbox-exec |
 | **Windows** | AppContainer |
 
-### Bypass Per-Perintah
+### Bypass Per Perintah
 
-Dengan sandbox diaktifkan, agy akan **meminta persetujuan** ketika sebuah perintah perlu keluar dari sandbox. Anda akan melihat prompt bypass per-perintah — memungkinkan eksekusi selektif tanpa menonaktifkan seluruh sandbox.
+Dengan sandbox diaktifkan, agy akan **meminta persetujuan** ketika sebuah perintah perlu keluar dari sandbox. Anda akan melihat prompt bypass per perintah — yang memungkinkan eksekusi selektif tanpa menonaktifkan seluruh sandbox.
 
 ### Kasus Penggunaan
 
@@ -210,13 +206,12 @@ Untuk kontrol maksimum, pasangkan mode sandbox dengan model izin:
 }
 ```text
 
-> 📖 Detail lengkap: [Dokumentasi izin](https://www.antigravity.google/docs/permissions)
+> 📖 Detail lengkap: [Dokumentasi Izin](https://www.antigravity.google/docs/permissions)
 
 ---
+## 3.5 — Hook & Aturan <span class="duration-badge">5 menit</span>
 
-## 3.5 — Hook & Aturan <span class="duration-badge">5 min</span>
-
-> **Pola: Pagar Pengaman & Otomatisasi** — menegakkan standar dan memicu tindakan pada titik siklus hidup utama.
+> **Pola: Pagar Pengaman & Otomatisasi** — menegakkan standar dan memicu tindakan pada titik-titik siklus hidup utama.
 
 ### Hook
 
@@ -255,21 +250,19 @@ Contoh `.agents/rules.md`:
 > 📖 Detail lengkap: [Dokumentasi Aturan & Alur Kerja](https://www.antigravity.google/docs/rules-workflows)
 
 ---
-
 ## Latihan Modul 3
 
 <div class="exercise-card" markdown>
 
-#### :material-file-document: Latihan 3: Pipeline --print
+### :material-file-document: Latihan 3: Pipeline --print
 
-**Berkas:** `exercises/ex03_print_mode_pipeline.md`
+**File:** `exercises/ex03_print_mode_pipeline.md`
 **Durasi:** 20 menit
 **Tujuan:** Membangun pipeline shell multi-langkah menggunakan agy --print. Meninjau perubahan yang di-stage, menghasilkan dokumentasi, dan menyambungkan alur kerja GitHub Actions.
 
 </div>
 
 ---
-
 ## Modul Selanjutnya
 
 → **[Modul 4: Multi-Agen & Lanjutan](../multi-agent-advanced.md)** — sub-agen, pengarahan di tengah tugas /btw, penjadwalan.

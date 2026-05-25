@@ -1,44 +1,42 @@
-# 모듈 2: 플러그인 생태계 <span class="duration-badge">45분</span>
+# 참조: 플러그인 생태계
 
-> **agy-cli의 가장 뛰어난 기능입니다.** 다른 어떤 AI 코딩 CLI도 Gemini CLI와 Claude Code의 플러그인을 단일 인터페이스로 연결할 수 없습니다. 이 모듈에서는 가져오기, 설치, 활성화, 비활성화 및 검증과 같은 전체 플러그인 수명 주기를 다룹니다.
+> **agy-cli의 플러그인 시스템에 대한 심층 참조입니다.** 필수 명령어는 [모듈 1 — 섹션 1.7](sdlc-productivity.md#17-extend-with-plugins)에서 다룹니다. 이 페이지는 커스텀 플러그인을 구축하고 유지 관리하는 팀을 위한 전체 수명 주기 세부 정보를 제공합니다.
 
 ---
 
 ## 2.0 — 플러그인이 중요한 이유 <span class="duration-badge">5 min</span>
 
-agy-cli의 플러그인 시스템은 독특한 기능을 제공합니다. 재설치나 재구성 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 이어집니다.
+agy-cli의 플러그인 시스템은 특별한 기능을 제공합니다. 재설치나 재구성이 필요 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 유지됩니다.
 
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
-```text
+```bash
 
-출력은 각 플러그인의 이름, 소스, 가져온 날짜 및 구성 요소(스킬, 명령어, mcpServers, 에이전트)를 보여주는 JSON입니다.
+출력은 각 플러그인의 이름, 출처, 가져온 날짜 및 구성 요소(스킬, 명령어, mcpServers, 에이전트)를 보여주는 JSON입니다.
 
 ```bash
 # More readable
 agy plugin list | python3 -m json.tool
-```text
+```bash
 
 > 📖 공식 문서: [플러그인](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [스킬](https://www.antigravity.google/docs/skills)
 
 ---
-
 ## 2.1 — Gemini CLI에서 가져오기 <span class="duration-badge">10분</span>
 
-> **패턴: 교차 도구 플러그인 브릿지(Cross-Tool Plugin Bridge)** — 전체 Gemini CLI 플러그인 설정을 agy로 가져옵니다.
+> **패턴: 교차 도구 플러그인 브리지** — 전체 Gemini CLI 플러그인 설정을 agy로 가져옵니다.
 
 ### 모든 Gemini CLI 플러그인 가져오기
 
 ```bash
 agy plugin import gemini
-```text
+```bash
 
-agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을 찾고, 해당 구성 요소(스킬, 명령어, MCP 서버, 에이전트)를 `~/.gemini/antigravity-cli/`에 있는 agy의 설정으로 스테이징합니다.
+agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을 검색하고, 해당 구성 요소(스킬, 명령어, MCP 서버, 에이전트)를 `~/.gemini/antigravity-cli/`에 있는 agy의 설정으로 스테이징합니다.
 
 출력은 다음과 같습니다:
-
-```text
+```bash
   [ok]    code-review
           ✔ skills      : 3 processed
           ✔ commands    : 2 processed
@@ -47,7 +45,7 @@ agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을
           ✔ commands    : 1 processed
           ✔ mcpServers  : 1 processed
   [skip]  superpowers (already imported)
-```text
+```yaml
 
 !!! tip "--force를 사용하여 다시 가져오기"
     이미 가져온 플러그인은 기본적으로 건너뜁니다. 플러그인 업데이트 후 강제로 다시 가져오려면 다음을 실행하세요:
@@ -74,7 +72,7 @@ agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을
 
 ```bash
 agy plugin import claude
-```text
+```yaml
 
 Same mechanic — agy discovers your Claude Code extension installations and bridges compatible components.
 
@@ -98,7 +96,7 @@ agy plugin enable gemini-deep-research
 
 # 현재 상태 확인
 agy plugin list
-```text
+```bash
 
 ### Plugin Locations
 
@@ -117,7 +115,7 @@ agy plugin install <plugin-name>
 
 # 특정 버전 설치
 agy plugin install <plugin-name>@<version>
-```text
+```bash
 
 ---
 
@@ -128,12 +126,12 @@ agy plugin install <plugin-name>@<version>
 ### Validate an Existing Plugin Directory
 
 ```bash
-# 플러그인 디렉토리 유효성 검사
+# 플러그인 디렉터리 유효성 검사
 agy plugin validate ./path/to/my-plugin
 
-# 또는 현재 디렉토리 유효성 검사
+# 또는 현재 디렉터리 유효성 검사
 agy plugin validate .
-```text
+```bash
 
 This checks that the plugin's `plugin.json` manifest is well-formed and all referenced components exist.
 
@@ -141,34 +139,34 @@ This checks that the plugin's `plugin.json` manifest is well-formed and all refe
 
 A valid agy plugin needs a `plugin.json` manifest. Here's the official structure:
 
-```text
+```bash
 my-plugin/
 ├── plugin.json          ← 매니페스트 (필수)
 ├── mcp_config.json      ← MCP 서버 정의 (선택 사항)
 ├── hooks.json           ← 훅 이벤트 핸들러 (선택 사항)
-├── skills/              ← YAML 프런트매터가 있는 SKILL.md 파일
+├── skills/              ← YAML 프런트매터가 포함된 SKILL.md 파일
 │   └── my-skill/
 │       └── SKILL.md
 ├── agents/              ← 서브에이전트 정의 (선택 사항)
 └── rules/               ← 규칙 파일 (선택 사항)
     └── my-rules.md
-```text
+```bash
 
 ```json
 {
   "name": "my-plugin",
   "version": "1.0.0",
-  "description": "내 사용자 지정 agy 플러그인",
+  "description": "내 사용자 정의 agy 플러그인",
   "components": ["skills"]
 }
-```text
+```bash
 
 ```bash
 # 유효성 검사
 agy plugin validate ./my-plugin
 
 # 유효한 경우 다음이 표시됩니다: ✔ Plugin manifest is valid
-```text
+```bash
 
 ### Interacting with Plugin Components
 
@@ -185,7 +183,7 @@ The workshop repo includes a sample plugin at `samples/plugins/workshop-helpers/
 
 ```bash
 agy plugin validate samples/plugins/workshop-helpers/
-```text
+```yaml
 
 ---
 
@@ -201,11 +199,11 @@ graph LR
     A --> AG[에이전트]
     A --> RU[규칙]
     A --> HK[훅]
-```text
+```bash
 
 Plugin staging directory structure:
 
-```text
+```bash
 ~/.gemini/antigravity-cli/plugins/<name>/
 ├── plugin.json
 ├── mcp_config.json
@@ -213,15 +211,14 @@ Plugin staging directory structure:
 ├── skills/
 ├── agents/
 └── rules/
-```text
+```yaml
 
 ---
-
-## 모듈 2 실습
+## 모듈 2 연습 문제
 
 <div class="exercise-card" markdown>
 
-#### :material-file-document: 실습 2: 플러그인 브릿지
+### :material-file-document: 연습 문제 2: 플러그인 브릿지
 
 **파일:** `exercises/ex02_plugin_bridge.md`
 **소요 시간:** 20분
@@ -230,7 +227,8 @@ Plugin staging directory structure:
 </div>
 
 ---
+## 워크숍으로 돌아가기
 
-## 다음 모듈
+→ **[모듈 1: SDLC 생산성 향상](sdlc-productivity.md)** — 섹션 1.7에서 플러그인이 소개됩니다
 
-→ **[모듈 3: DevOps 및 자동화](../devops-automation.md)** — 비대화형 파이프라인, CI/CD, 다중 디렉터리 작업 공간.
+→ **[치트시트](cheatsheet.md)** — 모든 플러그인 명령어를 한곳에 모아두었습니다

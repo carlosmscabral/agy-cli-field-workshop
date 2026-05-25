@@ -1,7 +1,7 @@
 # Lembar Contekan agy-cli
 
 > Referensi cepat untuk semua yang dibahas dalam lokakarya ini.
-> Semua perintah telah diverifikasi dengan [antigravity.google/docs](https://antigravity.google/docs/cli-overview).
+> Semua perintah telah diverifikasi terhadap [antigravity.google/docs](https://antigravity.google/docs/cli-overview).
 
 ---
 
@@ -13,23 +13,21 @@ agy --help         # Show all flags and subcommands
 agy changelog      # Show release notes
 agy update         # Self-update
 agy install        # Configure PATH and shell aliases
-```text
+```bash
 
 ---
-
 ## Mode Peluncuran
 
 | Mode | Perintah | Kapan digunakan |
 | :-- | :-- | :-- |
-| **Interaktif** | `agy` | Bawaan — sesi percakapan penuh |
-| **Interaktif dengan awalan** | `agy -i "<prompt>"` | Mulai dengan arahan, lanjutkan secara percakapan |
-| **Cetak (mode headless)** | `agy -p "<prompt>"` | Satu kali jalan, teruskan (pipe) ke stdout |
+| **Interaktif** | `agy` | Default — sesi percakapan penuh |
+| **Interaktif dengan seed** | `agy -i "<prompt>"` | Mulai dengan arahan, lanjutkan secara percakapan |
+| **Cetak (mode headless)** | `agy -p "<prompt>"` | Satu kali eksekusi, teruskan ke stdout |
 | **Lanjutkan terakhir** | `agy -c` | Lanjutkan sesi paling baru |
-| **Lanjutkan berdasarkan ID** | `agy --conversation <id>` | Lanjutkan sesi masa lalu yang spesifik |
+| **Lanjutkan berdasarkan ID** | `agy --conversation <id>` | Lanjutkan sesi spesifik sebelumnya |
 | **Lanjutkan dalam sesi** | `/resume` atau `/switch` | Beralih percakapan tanpa meninggalkan agy |
 
 ---
-
 ## Flag Utama
 
 > Sumber: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
@@ -38,21 +36,20 @@ agy install        # Configure PATH and shell aliases
 | :-- | :-- | :-- |
 | `--print "<prompt>"` | `-p` | Prompt tunggal non-interaktif |
 | `--prompt-interactive "<prompt>"` | `-i` | Sesi interaktif dengan seed |
-| `--continue` | `-c` | Melanjutkan percakapan terbaru |
-| `--conversation <id>` | — | Melanjutkan berdasarkan ID percakapan |
-| `--add-dir <path>` | — | Menambahkan direktori ke ruang kerja (dapat diulang) |
-| `--sandbox` | — | Mengaktifkan pembatasan sandbox terminal |
-| `--dangerously-skip-permissions` | — | Menyetujui otomatis semua permintaan alat (hanya CI) |
+| `--continue` | `-c` | Lanjutkan percakapan paling baru |
+| `--conversation <id>` | — | Lanjutkan berdasarkan ID percakapan |
+| `--add-dir <path>` | — | Tambahkan direktori ke ruang kerja (dapat diulang) |
+| `--sandbox` | — | Aktifkan pembatasan sandbox terminal |
+| `--dangerously-skip-permissions` | — | Setujui otomatis semua permintaan alat (hanya CI) |
 | `--print-timeout <duration>` | — | Batas waktu untuk mode cetak (bawaan: 5m) |
-| `--log-file <path>` | — | Menimpa jalur keluaran log |
+| `--log-file <path>` | — | Timpa jalur keluaran log |
 
 > **Catatan:** Pemilihan model dan mode ketat diatur melalui perintah garis miring `/model` dan `/permissions`, bukan flag CLI. Lihat [Dokumentasi fitur](https://antigravity.google/docs/cli-features).
 
 ---
-
 ## Perintah Slash (Mode Interaktif)
 
-> Sumber: [Fitur CLI — Perintah Slash Inti](https://antigravity.google/docs/cli-features) · [Menggunakan CLI AGY](https://antigravity.google/docs/cli-using)
+> Sumber: [Fitur CLI — Perintah Slash Inti](https://antigravity.google/docs/cli-features) · [Menggunakan Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 | Perintah | Kategori | Tujuan |
 | :-- | :-- | :-- |
@@ -73,7 +70,6 @@ agy install        # Configure PATH and shell aliases
 | `/logout` | Akun | Keluar dan hapus kredensial yang di-cache |
 
 ---
-
 ## Tips Cepat
 
 > Sumber: [Menggunakan Antigravity CLI — Tips Cepat & Pintasan Keyboard](https://antigravity.google/docs/cli-using)
@@ -83,7 +79,7 @@ agy install        # Configure PATH and shell aliases
 | `@` | Pelengkapan otomatis jalur file (ketik `@` untuk memicu saran jalur) |
 | `!` | Jalankan perintah terminal langsung dari prompt |
 | `esc esc` | Bersihkan kotak prompt Anda (saat tidak ada streaming yang aktif) |
-| `?` | Dapatkan bantuan dan tampilkan semua perintah slash |
+| `?` | Dapatkan bantuan dan daftar semua perintah garis miring |
 | `alt+enter` / `ctrl+j` / `shift+enter` | Sisipkan baris baru tanpa mengirimkan |
 | `ctrl+g` | Edit prompt di dalam editor shell default Anda |
 | `ctrl+l` | Bersihkan layar TUI |
@@ -93,7 +89,6 @@ agy install        # Configure PATH and shell aliases
 | `ctrl+k` | Setujui cepat izin sub-agen yang tertunda dari percakapan utama |
 
 ---
-
 ## Perintah Plugin
 
 ```bash
@@ -122,13 +117,12 @@ agy plugin validate ./my-plugin
 
 # Generate marketplace link
 agy plugin link <marketplace> <target>
-```text
+```yaml
 
 ---
-
 ## Ruang Kerja & Konteks
 
-```text
+```bash
 # Project config directory:
 .agents/                    # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
 
@@ -143,7 +137,7 @@ AGENTS.md
 
 # agy also reads:
 .gemini/                    # Gemini CLI config (compatible)
-```text
+```bash
 
 ### Pola AGENTS.md
 
@@ -156,10 +150,9 @@ Brief description of what this project is.
 - Language: TypeScript, Node 20
 - Testing: Jest + Supertest
 - DO NOT run database migrations without explicit approval
-```text
+```yaml
 
 ---
-
 ## Pola yang Berguna
 
 ```bash
@@ -183,13 +176,12 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Schedule a recurring task (in interactive mode)
 # > Schedule a daily code quality report at 9am weekdays.
-```text
+```yaml
 
 ---
-
 ## Pola Multi-Agen
 
-```text
+```bash
 # Spawn parallel subagents (in interactive mode)
 > Spawn a security auditor and a performance auditor in parallel (branch mode).
 
@@ -201,10 +193,9 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Background task
 > In the background, audit all dependencies for known CVEs. Notify me when done.
-```text
+```yaml
 
 ---
-
 ## Contoh Pipeline Mode Cetak
 
 ```bash
@@ -220,17 +211,16 @@ for f in src/*.ts; do
   agy --add-dir "$(dirname $f)" \
       -p "Add JSDoc to all exported functions in $(basename $f)."
 done
-```text
+```bash
 
 ---
-
 ## Dokumentasi Resmi
 
 | Topik | Tautan |
 | :-- | :-- |
 | Gambaran Umum CLI | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | Memulai | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
-| Menggunakan Antigravity CLI (pengaturan, tips, pintasan keyboard) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
+| Menggunakan Antigravity CLI (pengaturan, tips, pintasan tombol) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
 | Fitur (plugin, sandbox, perintah garis miring, sub-agen) | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
 | Migrasi dari Gemini CLI | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
 | Izin | [antigravity.google/docs/permissions](https://antigravity.google/docs/permissions) |

@@ -1,6 +1,6 @@
 # agy-cli 치트시트
 
-> 이 워크숍에서 다루는 모든 내용에 대한 빠른 참조입니다.
+> 이 워크샵에서 다루는 모든 내용에 대한 빠른 참조입니다.
 > 모든 명령어는 [antigravity.google/docs](https://antigravity.google/docs/cli-overview)를 기준으로 검증되었습니다.
 
 ---
@@ -13,77 +13,73 @@ agy --help         # Show all flags and subcommands
 agy changelog      # Show release notes
 agy update         # Self-update
 agy install        # Configure PATH and shell aliases
-```text
+```bash
 
 ---
-
 ## 실행 모드
 
 | 모드 | 명령어 | 사용 시기 |
 | :-- | :-- | :-- |
-| **대화형 (Interactive)** | `agy` | 기본값 — 전체 대화형 세션 |
-| **시드 기반 대화형 (Seeded interactive)** | `agy -i "<프롬프트>"` | 지시사항으로 시작하여 대화형으로 계속 진행 |
-| **출력 (헤드리스 모드)** | `agy -p "<프롬프트>"` | 단일 실행, 표준 출력(stdout)으로 파이프 |
-| **마지막 세션 계속하기 (Continue last)** | `agy -c` | 가장 최근 세션 재개 |
-| **ID로 재개 (Resume by ID)** | `agy --conversation <id>` | 특정 과거 세션 재개 |
-| **세션 내 재개 (Resume in-session)** | `/resume` 또는 `/switch` | agy를 종료하지 않고 대화 전환 |
+| **대화형** | `agy` | 기본값 — 전체 대화형 세션 |
+| **시드 대화형** | `agy -i "<프롬프트>"` | 지시사항으로 시작하여 대화형으로 계속 진행 |
+| **출력 (헤드리스 모드)** | `agy -p "<프롬프트>"` | 단일 실행, stdout으로 파이프 |
+| **마지막 세션 계속하기** | `agy -c` | 가장 최근 세션 재개 |
+| **ID로 재개** | `agy --conversation <id>` | 특정 과거 세션 재개 |
+| **세션 내 재개** | `/resume` 또는 `/switch` | agy를 종료하지 않고 대화 전환 |
 
 ---
-
 ## 주요 플래그
 
 > 출처: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
 
-| 플래그 | 단축형 | 설명 |
+| 플래그 | 단축 | 설명 |
 | :-- | :-- | :-- |
-| `--print "<프롬프트>"` | `-p` | 비대화형 단일 프롬프트 |
-| `--prompt-interactive "<프롬프트>"` | `-i` | 초기 프롬프트가 포함된 대화형 세션 |
+| `--print "<prompt>"` | `-p` | 비대화형 단일 프롬프트 |
+| `--prompt-interactive "<prompt>"` | `-i` | 시드된 대화형 세션 |
 | `--continue` | `-c` | 가장 최근 대화 재개 |
 | `--conversation <id>` | — | 대화 ID로 재개 |
 | `--add-dir <path>` | — | 작업 공간에 디렉터리 추가 (반복 가능) |
 | `--sandbox` | — | 터미널 샌드박스 제한 활성화 |
 | `--dangerously-skip-permissions` | — | 모든 도구 요청 자동 승인 (CI 전용) |
-| `--print-timeout <duration>` | — | print 모드 시간 초과 (기본값: 5분) |
+| `--print-timeout <duration>` | — | 인쇄 모드 시간 초과 (기본값: 5분) |
 | `--log-file <path>` | — | 로그 출력 경로 재정의 |
 
 > **참고:** 모델 선택 및 엄격 모드는 CLI 플래그가 아닌 `/model` 및 `/permissions` 슬래시 명령을 통해 설정됩니다. [기능 문서](https://antigravity.google/docs/cli-features)를 참조하세요.
 
 ---
-
 ## 슬래시 명령어 (대화형 모드)
 
 > 출처: [CLI 기능 — 핵심 슬래시 명령어](https://antigravity.google/docs/cli-features) · [Antigravity CLI 사용하기](https://antigravity.google/docs/cli-using)
 
 | 명령어 | 카테고리 | 목적 |
 | :-- | :-- | :-- |
-| `/resume` (`/switch`) | 대화 | 대화 선택기를 열어 세션을 재개하거나 전환합니다 |
-| `/rewind` (`/undo`) | 대화 | 대화 기록을 이전 체크포인트로 되돌립니다 |
-| `/rename <name>` | 대화 | 활성 대화 스레드의 이름을 변경합니다 |
-| `/permissions` | 설정 | 자율성 수준을 설정합니다: `request-review`, `always-proceed`, `strict` |
-| `/model` | 설정 | 기본 추론 모델을 선택합니다 (세션 간 유지됨) |
-| `/config` (`/settings`) | 설정 | 전체 화면 설정 오버레이를 엽니다 |
-| `/keybindings` | 설정 | 대화형 키보드 단축키 편집기를 엽니다 |
-| `/statusline` | 설정 | 실시간 CLI 상태 표시줄 표시기를 사용자 정의합니다 |
-| `/tasks` | 모니터링 | 백그라운드 작업을 모니터링하거나, 로그를 보거나, 종료합니다 |
-| `/skills` | 모니터링 | 로컬 및 글로벌 에이전트 스킬을 탐색합니다 |
-| `/mcp` | 모니터링 | MCP 서버를 구성하고 관리합니다 |
-| `/agents` | 모니터링 | 서브에이전트 작업을 보고, 관리하고, 승인합니다 |
-| `/open <path>` | 유틸리티 | 선호하는 외부 편집기에서 파일을 엽니다 |
-| `/usage` | 유틸리티 | 인라인 대화형 도움말 매뉴얼을 엽니다 |
-| `/logout` | 계정 | 로그아웃하고 캐시된 자격 증명을 지웁니다 |
+| `/resume` (`/switch`) | 대화 | 대화 선택기를 열어 세션을 재개하거나 전환 |
+| `/rewind` (`/undo`) | 대화 | 대화 기록을 이전 체크포인트로 롤백 |
+| `/rename <name>` | 대화 | 활성 대화 스레드의 이름 변경 |
+| `/permissions` | 구성 | 자율성 수준 설정: `request-review`, `always-proceed`, `strict` |
+| `/model` | 구성 | 기본 추론 모델 선택 (세션 간 유지됨) |
+| `/config` (`/settings`) | 구성 | 전체 화면 설정 오버레이 열기 |
+| `/keybindings` | 구성 | 대화형 키보드 단축키 편집기 열기 |
+| `/statusline` | 구성 | 실시간 CLI 상태 표시줄 표시기 사용자 정의 |
+| `/tasks` | 모니터링 | 백그라운드 작업 모니터링, 로그 보기 또는 종료 |
+| `/skills` | 모니터링 | 로컬 및 글로벌 에이전트 스킬 찾아보기 |
+| `/mcp` | 모니터링 | MCP 서버 구성 및 관리 |
+| `/agents` | 모니터링 | 서브에이전트 작업 보기, 관리 및 승인 |
+| `/open <path>` | 유틸리티 | 선호하는 외부 편집기에서 파일 열기 |
+| `/usage` | 유틸리티 | 인라인 대화형 도움말 매뉴얼 열기 |
+| `/logout` | 계정 | 로그아웃 및 캐시된 자격 증명 지우기 |
 
 ---
-
 ## 빠른 팁
 
-> 출처: [Antigravity CLI 사용 — 빠른 팁 및 키 바인딩](https://antigravity.google/docs/cli-using)
+> 출처: [Antigravity CLI 사용하기 — 빠른 팁 및 키 바인딩](https://antigravity.google/docs/cli-using)
 
 | 단축키 / 팁 | 동작 |
 | :-- | :-- |
 | `@` | 파일 경로 자동 완성 (`@`를 입력하여 경로 제안 트리거) |
-| `!` | 프롬프트에서 직접 터미널 명령 실행 |
+| `!` | 프롬프트에서 직접 터미널 명령어 실행 |
 | `esc esc` | 프롬프트 상자 지우기 (활성화된 스트리밍이 없을 때) |
-| `?` | 도움말 보기 및 모든 슬래시 명령 나열 |
+| `?` | 도움말 보기 및 모든 슬래시 명령어 목록 표시 |
 | `alt+enter` / `ctrl+j` / `shift+enter` | 제출하지 않고 줄 바꿈 삽입 |
 | `ctrl+g` | 기본 셸 편집기에서 프롬프트 편집 |
 | `ctrl+l` | TUI 화면 지우기 |
@@ -93,7 +89,6 @@ agy install        # Configure PATH and shell aliases
 | `ctrl+k` | 메인 대화에서 대기 중인 서브에이전트 권한 빠른 승인 |
 
 ---
-
 ## 플러그인 명령어
 
 ```bash
@@ -122,13 +117,12 @@ agy plugin validate ./my-plugin
 
 # Generate marketplace link
 agy plugin link <marketplace> <target>
-```text
+```yaml
 
 ---
-
 ## 워크스페이스 및 컨텍스트
 
-```text
+```bash
 # Project config directory:
 .agents/                    # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
 
@@ -143,7 +137,7 @@ AGENTS.md
 
 # agy also reads:
 .gemini/                    # Gemini CLI config (compatible)
-```text
+```bash
 
 ### AGENTS.md 패턴
 
@@ -156,10 +150,9 @@ Brief description of what this project is.
 - Language: TypeScript, Node 20
 - Testing: Jest + Supertest
 - DO NOT run database migrations without explicit approval
-```text
+```yaml
 
 ---
-
 ## 유용한 패턴
 
 ```bash
@@ -183,13 +176,12 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Schedule a recurring task (in interactive mode)
 # > Schedule a daily code quality report at 9am weekdays.
-```text
+```yaml
 
 ---
+## 다중 에이전트 패턴
 
-## 멀티 에이전트 패턴
-
-```text
+```bash
 # Spawn parallel subagents (in interactive mode)
 > Spawn a security auditor and a performance auditor in parallel (branch mode).
 
@@ -201,10 +193,9 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Background task
 > In the background, audit all dependencies for known CVEs. Notify me when done.
-```text
+```yaml
 
 ---
-
 ## 프린트 모드 파이프라인 예시
 
 ```bash
@@ -220,10 +211,9 @@ for f in src/*.ts; do
   agy --add-dir "$(dirname $f)" \
       -p "Add JSDoc to all exported functions in $(basename $f)."
 done
-```text
+```bash
 
 ---
-
 ## 공식 문서
 
 | 주제 | 링크 |
