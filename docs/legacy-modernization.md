@@ -470,6 +470,6 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 ## Next Step
 
-→ Back to **[Module 4: Multi-Agent & Advanced Patterns](multi-agent-advanced.md)**
+→ Continue to **[Module 3: Building AGY Agents with the SDK](agy-sdk.md)**
 
 → **[Cheatsheet](cheatsheet.md)** — all commands in one place

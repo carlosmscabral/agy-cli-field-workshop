@@ -1,6 +1,6 @@
-# Module 2: Plugin Ecosystem <span class="duration-badge">45 min</span>
+# Reference: Plugin Ecosystem
 
-> **agy-cli's standout feature.** No other AI coding CLI can bridge plugins from Gemini CLI and Claude Code into a single interface. This module covers the full plugin lifecycle: import, install, enable, disable, and validate.
+> **Deep reference for agy-cli's plugin system.** The essential commands are covered in [Module 1 — Section 1.7](sdlc-productivity.md#17--extend-with-plugins). This page has the full lifecycle detail for teams building and maintaining custom plugins.
 
 ---
 
@@ -230,6 +230,8 @@ Plugin staging directory structure:
 
 ---
 
-## Next Module
+## Back to Workshop
 
-→ **[Module 3: DevOps & Automation](devops-automation.md)** — non-interactive pipelines, CI/CD, multi-directory workspaces.
+→ **[Module 1: SDLC Productivity](sdlc-productivity.md)** — plugins are introduced in Section 1.7
+
+→ **[Cheatsheet](cheatsheet.md)** — all plugin commands in one place
