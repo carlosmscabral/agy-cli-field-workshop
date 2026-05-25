@@ -191,7 +191,7 @@ Selain AGENTS.md, agy juga memuat:
 
 > **Pola: Kelancaran Terminal** — ketahui pintasan yang membuat sesi agy menjadi cepat.
 
-> 📖 Referensi lengkap: [Menggunakan AGY CLI](https://www.antigravity.google/docs/cli-using)
+> 📖 Referensi lengkap: [Menggunakan Antigravity CLI](https://www.antigravity.google/docs/cli-using)
 
 ### Perintah Slash Utama
 
@@ -225,7 +225,7 @@ Selain AGENTS.md, agy juga memuat:
 | `ctrl+l` | Membersihkan layar TUI |
 | `ctrl+d` | Keluar dari CLI |
 
-> 📖 Referensi lengkap keybinding: [Menggunakan AGY CLI](https://antigravity.google/docs/cli-using)
+> 📖 Referensi lengkap keybinding: [Menggunakan Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 ---
 ## Latihan Modul 1

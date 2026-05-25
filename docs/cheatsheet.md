@@ -13,7 +13,7 @@ agy --help         # Show all flags and subcommands
 agy changelog      # Show release notes
 agy update         # Self-update
 agy install        # Configure PATH and shell aliases
-```
+```bash
 
 ---
 
@@ -52,7 +52,7 @@ agy install        # Configure PATH and shell aliases
 
 ## Slash Commands (Interactive Mode)
 
-> Source: [CLI Features — Core Slash Commands](https://antigravity.google/docs/cli-features) · [Using AGY CLI](https://antigravity.google/docs/cli-using)
+> Source: [CLI Features — Core Slash Commands](https://antigravity.google/docs/cli-features) · [Using Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 | Command | Category | Purpose |
 |---|---|---|
@@ -76,7 +76,7 @@ agy install        # Configure PATH and shell aliases
 
 ## Quick Tips
 
-> Source: [Using AGY CLI — Quick Tips & Keybindings](https://antigravity.google/docs/cli-using)
+> Source: [Using Antigravity CLI — Quick Tips & Keybindings](https://antigravity.google/docs/cli-using)
 
 | Shortcut / Tip | Action |
 |---|---|
@@ -122,13 +122,13 @@ agy plugin validate ./my-plugin
 
 # Generate marketplace link
 agy plugin link <marketplace> <target>
-```
+```yaml
 
 ---
 
 ## Workspace & Context
 
-```
+```bash
 # Project config directory:
 .agents/                    # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
 
@@ -143,7 +143,7 @@ AGENTS.md
 
 # agy also reads:
 .gemini/                    # Gemini CLI config (compatible)
-```
+```bash
 
 ### AGENTS.md Pattern
 
@@ -156,7 +156,7 @@ Brief description of what this project is.
 - Language: TypeScript, Node 20
 - Testing: Jest + Supertest
 - DO NOT run database migrations without explicit approval
-```
+```yaml
 
 ---
 
@@ -183,13 +183,13 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Schedule a recurring task (in interactive mode)
 # > Schedule a daily code quality report at 9am weekdays.
-```
+```yaml
 
 ---
 
 ## Multi-Agent Patterns
 
-```
+```bash
 # Spawn parallel subagents (in interactive mode)
 > Spawn a security auditor and a performance auditor in parallel (branch mode).
 
@@ -201,7 +201,7 @@ agy --sandbox --dangerously-skip-permissions \
 
 # Background task
 > In the background, audit all dependencies for known CVEs. Notify me when done.
-```
+```yaml
 
 ---
 
@@ -220,7 +220,7 @@ for f in src/*.ts; do
   agy --add-dir "$(dirname $f)" \
       -p "Add JSDoc to all exported functions in $(basename $f)."
 done
-```
+```bash
 
 ---
 
@@ -230,7 +230,7 @@ done
 |---|---|
 | CLI Overview | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | Getting Started | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
-| Using AGY CLI (settings, tips, keybindings) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
+| Using Antigravity CLI (settings, tips, keybindings) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
 | Features (plugins, sandbox, slash commands, subagents) | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
 | Migration from Gemini CLI | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
 | Permissions | [antigravity.google/docs/permissions](https://antigravity.google/docs/permissions) |

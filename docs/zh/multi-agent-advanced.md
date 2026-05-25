@@ -180,7 +180,7 @@ agy 支持 cron 风格的调度，用于定期分析：
 
 > **模式：长时间运行的工作** — 准确地从你离开的地方继续。
 
-> 📖 完整参考：[使用 AGY CLI](https://www.antigravity.google/docs/cli-using)
+> 📖 完整参考：[使用 Antigravity CLI](https://www.antigravity.google/docs/cli-using)
 
 ### 恢复最近的会话
 

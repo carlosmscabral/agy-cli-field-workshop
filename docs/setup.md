@@ -23,7 +23,7 @@
 
 ```bash
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```
+```bash
 
 ### Windows
 
@@ -33,7 +33,7 @@ irm https://antigravity.google/cli/install.ps1 | iex
 
 # Or via WSL (recommended)
 curl -fsSL https://antigravity.google/cli/install.sh | bash
-```
+```bash
 
 After install, verify the binary is available:
 
@@ -43,7 +43,7 @@ which agy
 
 # Confirm the version
 agy changelog
-```
+```yaml
 
 ---
 
@@ -57,13 +57,13 @@ agy uses **browser-based Google Sign-In**. On first run, it will:
 ```bash
 # Start agy — auth will trigger automatically on first run
 agy
-```
+```bash
 
 To sign out:
 
-```
+```bash
 /logout
-```
+```bash
 
 > 📖 For enterprise authentication via GCP project, see the [Enterprise docs](https://www.antigravity.google/docs/enterprise).
 
@@ -71,7 +71,7 @@ Once auth is configured, run a quick smoke test:
 
 ```bash
 agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
-```
+```yaml
 
 Expected output: `Workshop ready!`
 
@@ -88,7 +88,7 @@ cd agy-cli-field-workshop
 
 # agy will create .agents/ on first run
 agy --print "List the files in the current directory."
-```
+```bash
 
 You'll see a `.agents/` folder created with project config files (settings.json, mcp.json, etc.).
 
@@ -111,7 +111,7 @@ agy plugin list | python3 -m json.tool
 
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
-```
+```yaml
 
 Checklist before the workshop starts:
 

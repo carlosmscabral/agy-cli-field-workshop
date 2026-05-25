@@ -191,7 +191,7 @@ agy 会自动将你的 AGENTS.md 整合到随后的每个会话中。
 
 > **模式：终端熟练度** — 了解让 agy 会话变得更快的快捷键。
 
-> 📖 完整参考：[使用 AGY CLI](https://www.antigravity.google/docs/cli-using)
+> 📖 完整参考：[使用 Antigravity CLI](https://www.antigravity.google/docs/cli-using)
 
 ### 关键斜杠命令
 
@@ -225,7 +225,7 @@ agy 会自动将你的 AGENTS.md 整合到随后的每个会话中。
 | `ctrl+l` | 清除 TUI 屏幕 |
 | `ctrl+d` | 退出 CLI |
 
-> 📖 完整快捷键参考：[使用 AGY CLI](https://antigravity.google/docs/cli-using)
+> 📖 完整快捷键参考：[使用 Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 ---
 ## 模块 1 练习

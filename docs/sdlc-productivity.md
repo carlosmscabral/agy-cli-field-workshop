@@ -11,13 +11,13 @@ Launch agy-cli in your workshop project directory:
 ```bash
 cd agy-cli-field-workshop
 agy
-```
+```bash
 
 You'll land in the interactive prompt. Try:
 
-```
+```bash
 > What files are in this project and what does each one do?
-```
+```yaml
 
 Observe how agy reads your workspace — it indexes the git repo, reads file contents, and responds with context. This is **automatic**: no config, no prompts to write first.
 
@@ -35,15 +35,15 @@ Observe how agy reads your workspace — it indexes the git repo, reads file con
 ```bash
 # Start with --prompt-interactive: give agy an initial task, then continue conversationally
 agy -i "Give me a high-level architecture overview of this project. What are the main components and how do they connect?"
-```
+```bash
 
 Then follow up interactively:
 
-```
+```bash
 > Which file handles the entry point?
 > What external dependencies does this project have?
 > Are there any obvious code smells or tech debt?
-```
+```yaml
 
 !!! tip "Use -i for seeded sessions"
     `agy -i "<task>"` (short for `--prompt-interactive`) starts with a prompt but stays interactive. Great for oriented exploration — you set the direction, then steer with follow-ups.
@@ -58,17 +58,17 @@ Then follow up interactively:
 
 ```bash
 agy
-```
+```bash
 
-```
+```bash
 > I want to refactor the error handling in this project. First, show me all the places where errors are currently caught or returned — don't change anything yet.
-```
+```bash
 
 Review the findings. Then:
 
-```
+```bash
 > Now propose a refactored version of [specific function] using a consistent error handling pattern. Show me the diff before applying.
-```
+```bash
 
 Only apply after you've read the proposed change.
 
@@ -91,7 +91,7 @@ Use the `/permissions` slash command to view or change the current level. You ca
     "deny": ["command(rm -rf)"]
   }
 }
-```
+```bash
 
 > 📖 Full details: [Permissions docs](https://www.antigravity.google/docs/permissions) · [Strict Mode docs](https://www.antigravity.google/docs/strict-mode)
 
@@ -105,17 +105,17 @@ Use the `/permissions` slash command to view or change the current level. You ca
 
 ```bash
 agy
-```
+```bash
 
-```
+```bash
 > Look at [specific function or file]. Generate a comprehensive unit test suite for it. Include happy path, edge cases, and error conditions. Use the testing framework already in this project.
-```
+```yaml
 
 Then:
 
-```
+```bash
 > Run the tests and fix any that fail.
-```
+```yaml
 
 !!! tip "Let agy run the tests"
     agy can execute shell commands. It will run your test suite and iterate on failures without you having to copy-paste error messages. Watch it self-correct.
@@ -134,18 +134,18 @@ git add -p
 
 # Start agy and review what's staged
 agy
-```
+```bash
 
-```
+```bash
 > Review my staged changes for: (1) correctness, (2) security issues, (3) missing test coverage, (4) anything that would block a PR. Be direct — don't soften findings.
-```
+```bash
 
 ### Headless Variant (for scripting)
 
 ```bash
 # Review changes non-interactively — useful in pre-commit hooks or CI
 git diff --cached | agy --print "Review these changes. Flag any bugs, security issues, or missing tests. Output as markdown."
-```
+```bash
 
 ---
 
@@ -169,13 +169,13 @@ This is a [your project description]. Key conventions:
 ## Architecture
 [Brief architecture summary]
 EOF
-```
+```bash
 
 Now start a new session:
 
 ```bash
 agy --print "What do you know about this project?"
-```
+```yaml
 
 agy will incorporate your AGENTS.md into every subsequent session automatically.
 
@@ -197,8 +197,7 @@ Beyond AGENTS.md, agy also loads:
 ## 1.6 — Interactive Navigation <span class="duration-badge">5 min</span>
 
 > **Pattern: Terminal Fluency** — know the shortcuts that make agy sessions fast.
-
-> 📖 Full reference: [Using AGY CLI](https://www.antigravity.google/docs/cli-using)
+> 📖 Full reference: [Using Antigravity CLI](https://www.antigravity.google/docs/cli-using)
 
 ### Key Slash Commands
 
@@ -232,7 +231,7 @@ Beyond AGENTS.md, agy also loads:
 | `ctrl+l` | Clear TUI screen |
 | `ctrl+d` | Exit the CLI |
 
-> 📖 Full keybindings reference: [Using AGY CLI](https://antigravity.google/docs/cli-using)
+> 📖 Full keybindings reference: [Using Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 ---
 
@@ -240,7 +239,7 @@ Beyond AGENTS.md, agy also loads:
 
 <div class="exercise-card" markdown>
 
-#### :material-file-document: Exercise 1: First Session
+### :material-file-document: Exercise 1: First Session
 
 **File:** `exercises/ex01_first_session.md`
 **Duration:** 15 min

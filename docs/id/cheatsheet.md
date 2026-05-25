@@ -71,7 +71,7 @@ agy install        # Configure PATH and shell aliases
 ---
 ## Tips Cepat
 
-> Sumber: [Menggunakan AGY CLI — Tips Cepat & Pintasan Keyboard](https://antigravity.google/docs/cli-using)
+> Sumber: [Menggunakan Antigravity CLI — Tips Cepat & Pintasan Keyboard](https://antigravity.google/docs/cli-using)
 
 | Pintasan / Tips | Aksi |
 |---|---|
@@ -219,7 +219,7 @@ done
 |---|---|
 | Gambaran Umum CLI | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | Memulai | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
-| Menggunakan AGY CLI (pengaturan, tips, pintasan keyboard) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
+| Menggunakan Antigravity CLI (pengaturan, tips, pintasan keyboard) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
 | Fitur (plugin, sandbox, perintah garis miring, sub-agen) | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
 | Migrasi dari Gemini CLI | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
 | Izin | [antigravity.google/docs/permissions](https://antigravity.google/docs/permissions) |

@@ -7,7 +7,7 @@
 #   make test-structure   Validate file structure and config syntax
 #   make test-blocks      Validate code blocks in documentation
 #   make test-drift       Check for doc ↔ code drift (local)
-#   make test-drift-full  Drift check + upstream AGY docs (needs network)
+#   make test-drift-full  Drift check + upstream Antigravity CLI docs (needs network)
 #   make test-links       Check for dead links (needs network)
 #   make test-build       Build site with strict mode
 #   make test-live        Live agy smoke test (needs GCP auth)
@@ -123,7 +123,7 @@ test-drift:  ## Check for doc ↔ code drift (local only)
 	@chmod +x scripts/detect-drift.sh
 	@./scripts/detect-drift.sh
 
-test-drift-full:  ## Drift check + upstream AGY docs (needs network)
+test-drift-full:  ## Drift check + upstream Antigravity CLI docs (needs network)
 	@chmod +x scripts/detect-drift.sh
 	@./scripts/detect-drift.sh --upstream
 
@@ -235,7 +235,7 @@ AGY_VENV_PYTHON := ../gemini-cli-field-workshop/.venv/bin/python
 AGY_TRANSLATE_ENV := GOOGLE_CLOUD_PROJECT=$${GOOGLE_CLOUD_PROJECT:-gpu-launchpad-playground} GOOGLE_CLOUD_LOCATION=global AGY_REPO_ROOT=$(PWD)
 
 translate-list:  ## Show available languages and translation status
-	@echo "🌐 AGY CLI Workshop — Translation Status"
+	@echo "🌐 Antigravity CLI Field Workshop — Translation Status"
 	@echo ""
 	@for lang in ko zh id; do \
 		count=$$(ls docs/$$lang/*.md 2>/dev/null | wc -l | tr -d ' '); \
@@ -261,7 +261,7 @@ _check-translate-env:
 	fi
 
 translate: _check-translate-env  ## Translate all docs to target language (L=ko|zh|id)
-	@echo "🌐 Translating all AGY CLI docs → $(L)..."
+	@echo "🌐 Translating all Antigravity CLI docs → $(L)..."
 	@for doc in docs/setup.md docs/sdlc-productivity.md docs/plugin-ecosystem.md \
 	            docs/devops-automation.md docs/multi-agent-advanced.md \
 	            docs/cheatsheet.md docs/facilitator-guide.md docs/migration-guide.md; do \

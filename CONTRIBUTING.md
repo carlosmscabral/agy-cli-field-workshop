@@ -13,7 +13,8 @@ cd agy-cli-field-workshop
 
 # Start AGY CLI — it auto-reads AGENTS.md for project context
 agy
-```
+
+```bash
 
 ### Key Context Files
 
@@ -40,7 +41,8 @@ agy "What docs exist under docs/ko/ and what's missing compared to docs/?"
 
 # "I want to validate migration guide accuracy"
 agy "Run the migration-validator agent against the migration guide examples"
-```
+
+```bash
 
 ## How to Contribute
 
@@ -77,6 +79,7 @@ All issues are automatically triaged with type, area, and priority labels.
   - `PreInvocation` (not `SessionStart`)
   - `PreToolUse` (not `BeforeTool`)
   - `PostToolUse` (not `AfterTool`)
+
 - **Tool names:** AGY uses `edit` (not `replace_in_file`), `write_file`, `read_file`, `glob`, `grep_search`.
 - **Models:** Use `gemini-3.1-flash-lite-preview` or `gemini-3-flash-preview` for cost-efficient agents. Use `gemini-3.1-pro-preview` for orchestrators and heavy reasoning. Never reference deprecated models (`gemini-1.5-flash`, `gemini-1.5-pro`).
 - **Config paths:** AGY uses `~/.gemini/antigravity-cli/settings.json` and project-level `.agents/` (not `.gemini/`).
@@ -96,6 +99,7 @@ The workshop supports multiple languages via an automated Gemini-powered pipelin
 | Chinese (Simplified) | `zh` | Active |
 
 **If you change English source files:**
+
 - Note in your PR which docs changed — translation owners will regenerate
 - Never edit `docs/{lang}/*.md` directly — these are generated files
 - Translation owners run (from the `gemini-cli-field-workshop` shared pipeline):

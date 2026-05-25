@@ -180,7 +180,7 @@ Ekspresi cron (hingga 5 bidang) didukung:
 
 > **Pola: Pekerjaan Berjalan Lama** — lanjutkan tepat dari titik terakhir Anda tinggalkan.
 
-> 📖 Referensi lengkap: [Menggunakan AGY CLI](https://www.antigravity.google/docs/cli-using)
+> 📖 Referensi lengkap: [Menggunakan Antigravity CLI](https://www.antigravity.google/docs/cli-using)
 
 ### Melanjutkan Sesi Terbaru
 

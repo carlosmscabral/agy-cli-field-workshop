@@ -48,7 +48,7 @@ agy install        # Configure PATH and shell aliases
 ---
 ## 슬래시 명령어 (대화형 모드)
 
-> 출처: [CLI 기능 — 핵심 슬래시 명령어](https://antigravity.google/docs/cli-features) · [AGY CLI 사용하기](https://antigravity.google/docs/cli-using)
+> 출처: [CLI 기능 — 핵심 슬래시 명령어](https://antigravity.google/docs/cli-features) · [Antigravity CLI 사용하기](https://antigravity.google/docs/cli-using)
 
 | 명령어 | 카테고리 | 목적 |
 |---|---|---|
@@ -71,7 +71,7 @@ agy install        # Configure PATH and shell aliases
 ---
 ## 빠른 팁
 
-> 출처: [AGY CLI 사용 — 빠른 팁 및 키 바인딩](https://antigravity.google/docs/cli-using)
+> 출처: [Antigravity CLI 사용 — 빠른 팁 및 키 바인딩](https://antigravity.google/docs/cli-using)
 
 | 단축키 / 팁 | 동작 |
 |---|---|
@@ -219,7 +219,7 @@ done
 |---|---|
 | CLI 개요 | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | 시작하기 | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
-| AGY CLI 사용 (설정, 팁, 키 바인딩) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
+| Antigravity CLI 사용 (설정, 팁, 키 바인딩) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
 | 기능 (플러그인, 샌드박스, 슬래시 명령어, 서브에이전트) | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
 | Gemini CLI에서 마이그레이션 | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
 | 권한 | [antigravity.google/docs/permissions](https://antigravity.google/docs/permissions) |

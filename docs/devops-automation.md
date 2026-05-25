@@ -260,7 +260,7 @@ Example `.agents/rules.md`:
 
 <div class="exercise-card" markdown>
 
-#### :material-file-document: Exercise 3: --print Pipeline
+### :material-file-document: Exercise 3: --print Pipeline
 
 **File:** `exercises/ex03_print_mode_pipeline.md`
 **Duration:** 20 min

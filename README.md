@@ -1,6 +1,6 @@
-# agy-cli Field Workshop
+# Antigravity CLI Field Workshop
 
-> **Hands-on field workshop for Antigravity CLI (agy-cli).**
+> **Hands-on field workshop for Antigravity CLI.**
 
 📚 **Official Docs:** [antigravity.google/docs](https://www.antigravity.google/docs/cli-overview)
 
@@ -38,7 +38,7 @@ make check-env
 # Serve the docs locally
 make install-deps
 make serve
-```
+```bash
 
 Open [http://localhost:8000](http://localhost:8000) for the workshop site.
 
@@ -46,7 +46,7 @@ Open [http://localhost:8000](http://localhost:8000) for the workshop site.
 
 ## Repository Structure
 
-```
+```bash
 ├── docs/                    # Workshop documentation (MkDocs Material)
 │   ├── index.md             # Home page
 │   ├── setup.md             # Environment setup
@@ -63,7 +63,7 @@ Open [http://localhost:8000](http://localhost:8000) for the workshop site.
 │   └── check-env.sh         # Pre-workshop validator
 ├── Makefile
 └── mkdocs.yml
-```
+```bash
 
 ---
 

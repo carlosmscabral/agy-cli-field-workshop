@@ -48,7 +48,7 @@ agy install        # Configure PATH and shell aliases
 ---
 ## 斜杠命令（交互模式）
 
-> 来源：[CLI 功能 — 核心斜杠命令](https://antigravity.google/docs/cli-features) · [使用 AGY CLI](https://antigravity.google/docs/cli-using)
+> 来源：[CLI 功能 — 核心斜杠命令](https://antigravity.google/docs/cli-features) · [使用 Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 | 命令 | 类别 | 用途 |
 |---|---|---|
@@ -71,7 +71,7 @@ agy install        # Configure PATH and shell aliases
 ---
 ## 快速提示
 
-> 来源：[使用 AGY CLI — 快速提示与快捷键](https://antigravity.google/docs/cli-using)
+> 来源：[使用 Antigravity CLI — 快速提示与快捷键](https://antigravity.google/docs/cli-using)
 
 | 快捷键 / 提示 | 操作 |
 |---|---|
@@ -219,7 +219,7 @@ done
 |---|---|
 | CLI 概述 | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | 快速入门 | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
-| 使用 AGY CLI（设置、技巧、快捷键） | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
+| 使用 Antigravity CLI（设置、技巧、快捷键） | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
 | 功能（插件、沙盒、斜杠命令、子代理） | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
 | 从 Gemini CLI 迁移 | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
 | 权限 | [antigravity.google/docs/permissions](https://antigravity.google/docs/permissions) |

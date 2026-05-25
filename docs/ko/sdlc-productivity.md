@@ -191,7 +191,7 @@ AGENTS.md 외에도 agy는 다음을 로드합니다:
 
 > **패턴: 터미널 유창성** — agy 세션을 빠르게 만드는 단축키를 알아두세요.
 
-> 📖 전체 참조: [AGY CLI 사용하기](https://www.antigravity.google/docs/cli-using)
+> 📖 전체 참조: [Antigravity CLI 사용하기](https://www.antigravity.google/docs/cli-using)
 
 ### 주요 슬래시 명령어
 
@@ -225,7 +225,7 @@ AGENTS.md 외에도 agy는 다음을 로드합니다:
 | `ctrl+l` | TUI 화면을 지웁니다 |
 | `ctrl+d` | CLI를 종료합니다 |
 
-> 📖 전체 키바인딩 참조: [AGY CLI 사용하기](https://antigravity.google/docs/cli-using)
+> 📖 전체 키바인딩 참조: [Antigravity CLI 사용하기](https://antigravity.google/docs/cli-using)
 
 ---
 ## 모듈 1 연습 문제

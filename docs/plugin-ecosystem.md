@@ -11,14 +11,14 @@ agy-cli's plugin system does something unique: it can **import plugins you've al
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
-```
+```bash
 
 The output is JSON showing each plugin's name, source, import date, and components (skills, commands, mcpServers, agents).
 
 ```bash
 # More readable
 agy plugin list | python3 -m json.tool
-```
+```bash
 
 > 📖 Official docs: [Plugins](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [Skills](https://www.antigravity.google/docs/skills)
 
@@ -32,12 +32,12 @@ agy plugin list | python3 -m json.tool
 
 ```bash
 agy plugin import gemini
-```
+```bash
 
 agy scans your local Gemini CLI installation, discovers all installed plugins, and stages their components (skills, commands, MCP servers, agents) into agy's config at `~/.gemini/antigravity-cli/`.
 
 Output looks like:
-```
+```bash
   [ok]    code-review
           ✔ skills      : 3 processed
           ✔ commands    : 2 processed
@@ -46,7 +46,7 @@ Output looks like:
           ✔ commands    : 1 processed
           ✔ mcpServers  : 1 processed
   [skip]  superpowers (already imported)
-```
+```yaml
 
 !!! tip "Re-import with --force"
     Already imported plugins are skipped by default. To force re-import after a plugin update:
@@ -73,7 +73,7 @@ Output looks like:
 
 ```bash
 agy plugin import claude
-```
+```yaml
 
 Same mechanic — agy discovers your Claude Code extension installations and bridges compatible components.
 
@@ -97,7 +97,7 @@ agy plugin enable gemini-deep-research
 
 # Check current state
 agy plugin list
-```
+```bash
 
 ### Plugin Locations
 
@@ -116,7 +116,7 @@ agy plugin install <plugin-name>
 
 # Install a specific version
 agy plugin install <plugin-name>@<version>
-```
+```bash
 
 ---
 
@@ -132,7 +132,7 @@ agy plugin validate ./path/to/my-plugin
 
 # Or validate the current directory
 agy plugin validate .
-```
+```bash
 
 This checks that the plugin's `plugin.json` manifest is well-formed and all referenced components exist.
 
@@ -140,7 +140,7 @@ This checks that the plugin's `plugin.json` manifest is well-formed and all refe
 
 A valid agy plugin needs a `plugin.json` manifest. Here's the official structure:
 
-```
+```bash
 my-plugin/
 ├── plugin.json          ← manifest (required)
 ├── mcp_config.json      ← MCP server definitions (optional)
@@ -151,7 +151,7 @@ my-plugin/
 ├── agents/              ← subagent definitions (optional)
 └── rules/               ← rules files (optional)
     └── my-rules.md
-```
+```bash
 
 ```json
 {
@@ -160,14 +160,14 @@ my-plugin/
   "description": "My custom agy plugin",
   "components": ["skills"]
 }
-```
+```bash
 
 ```bash
 # Validate it
 agy plugin validate ./my-plugin
 
 # If valid, you'll see: ✔ Plugin manifest is valid
-```
+```bash
 
 ### Interacting with Plugin Components
 
@@ -184,7 +184,7 @@ The workshop repo includes a sample plugin at `samples/plugins/workshop-helpers/
 
 ```bash
 agy plugin validate samples/plugins/workshop-helpers/
-```
+```yaml
 
 ---
 
@@ -200,11 +200,11 @@ graph LR
     A --> AG[Agents]
     A --> RU[Rules]
     A --> HK[Hooks]
-```
+```bash
 
 Plugin staging directory structure:
 
-```
+```bash
 ~/.gemini/antigravity-cli/plugins/<name>/
 ├── plugin.json
 ├── mcp_config.json
@@ -212,7 +212,7 @@ Plugin staging directory structure:
 ├── skills/
 ├── agents/
 └── rules/
-```
+```yaml
 
 ---
 
@@ -220,7 +220,7 @@ Plugin staging directory structure:
 
 <div class="exercise-card" markdown>
 
-#### :material-file-document: Exercise 2: Plugin Bridge
+### :material-file-document: Exercise 2: Plugin Bridge
 
 **File:** `exercises/ex02_plugin_bridge.md`
 **Duration:** 20 min

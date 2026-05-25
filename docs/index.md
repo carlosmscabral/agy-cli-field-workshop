@@ -15,7 +15,7 @@ hide:
 
 <div class="grid cards" markdown>
 
--   :material-rocket-launch:{ .lg .middle } **Module 1 — SDLC Productivity**
+- :material-rocket-launch:{ .lg .middle } **Module 1 — SDLC Productivity**
 
     ---
 
@@ -23,7 +23,7 @@ hide:
 
     [:octicons-arrow-right-24: Start Module 1](sdlc-productivity.md)
 
--   :material-puzzle:{ .lg .middle } **Module 2 — Plugin Ecosystem**
+- :material-puzzle:{ .lg .middle } **Module 2 — Plugin Ecosystem**
 
     ---
 
@@ -31,7 +31,7 @@ hide:
 
     [:octicons-arrow-right-24: Start Module 2](plugin-ecosystem.md)
 
--   :material-console:{ .lg .middle } **Module 3 — DevOps & Automation**
+- :material-console:{ .lg .middle } **Module 3 — DevOps & Automation**
 
     ---
 
@@ -39,7 +39,7 @@ hide:
 
     [:octicons-arrow-right-24: Start Module 3](devops-automation.md)
 
--   :material-sitemap:{ .lg .middle } **Module 4 — Multi-Agent & Advanced**
+- :material-sitemap:{ .lg .middle } **Module 4 — Multi-Agent & Advanced**
 
     ---
 

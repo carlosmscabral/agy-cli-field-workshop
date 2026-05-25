@@ -180,7 +180,7 @@ Cron 표현식(최대 5개 필드)이 지원됩니다:
 
 > **패턴: 장기 실행 작업** — 중단한 부분부터 정확히 다시 시작합니다.
 
-> 📖 전체 참조: [AGY CLI 사용하기](https://www.antigravity.google/docs/cli-using)
+> 📖 전체 참조: [Antigravity CLI 사용하기](https://www.antigravity.google/docs/cli-using)
 
 ### 가장 최근 세션 재개
 
