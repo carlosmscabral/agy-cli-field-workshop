@@ -25,6 +25,7 @@ agy
     在您的首次会话之后，请检查 `.agents/` 目录——agy 创建了跟踪您工作区的项目配置文件。这就是它在未来的运行中知道该索引哪些内容的方式。
 
 ---
+
 ## 1.1 — 代码理解 <span class="duration-badge">10 分钟</span>
 
 > **模式：动手前先解释** — 在修改代码之前先理解它。
@@ -48,6 +49,7 @@ agy -i "Give me a high-level architecture overview of this project. What are the
     `agy -i "<task>"`（`--prompt-interactive` 的简写）以一个提示词开始，但保持交互状态。非常适合有导向的探索 —— 你设定方向，然后通过跟进进行引导。
 
 ---
+
 ## 1.2 — 重构 <span class="duration-badge">10 分钟</span>
 
 > **模式：提议、审查、应用** — 永远不要应用你没有阅读过的更改。
@@ -94,6 +96,7 @@ agy 具有一个**三级权限模型**，用于控制其处理工具批准的方
 > 📖 完整详情：[权限文档](https://www.antigravity.google/docs/permissions) · [严格模式文档](https://www.antigravity.google/docs/strict-mode)
 
 ---
+
 ## 1.3 — 测试生成 <span class="duration-badge">10 分钟</span>
 
 > **模式：测试现有代码** — 为真实代码生成测试，而不是假设的代码。
@@ -118,6 +121,7 @@ agy
     agy 可以执行 shell 命令。它将运行你的测试套件并在失败时进行迭代，而无需你复制粘贴错误消息。观察它的自我修正过程。
 
 ---
+
 ## 1.4 — 代码审查 <span class="duration-badge">10 分钟</span>
 
 > **模式：提交前审查** — 在每次推送之前，将 agy 作为高级审查员使用。
@@ -144,6 +148,7 @@ git diff --cached | agy --print "Review these changes. Flag any bugs, security i
 ```text
 
 ---
+
 ## 1.5 — 使用 AGENTS.md 设置项目上下文 <span class="duration-badge">5 min</span>
 
 > **模式：持久化上下文** — 告诉 agy 一次，它会在每个会话中记住。
@@ -188,6 +193,7 @@ agy 会自动将你的 AGENTS.md 整合到随后的每个会话中。
 > 📖 完整详情：[规则与工作流文档](https://www.antigravity.google/docs/rules-workflows)
 
 ---
+
 ## 1.6 — 交互式导航 <span class="duration-badge">5 分钟</span>
 
 > **模式：终端熟练度** — 了解能让 agy 会话变快的快捷键。
@@ -228,6 +234,7 @@ agy 会自动将你的 AGENTS.md 整合到随后的每个会话中。
 > 📖 完整快捷键参考：[使用 Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 ---
+
 ## 1.7 — 使用插件扩展 <span class="duration-badge">15 分钟</span>
 
 > **模式：自带工具链** — 插件为 agy 添加技能、MCP 服务器、代理和规则。一次安装，在每个会话中均可使用。
@@ -336,6 +343,7 @@ agy plugin validate ./my-plugin
 > 📖 完整参考：[插件](https://www.antigravity.google/docs/plugins) · [迁移指南](https://www.antigravity.google/docs/gcli-migration)
 
 ---
+
 ## 模块 1 练习
 
 <div class="exercise-card" markdown>
@@ -359,6 +367,7 @@ agy plugin validate ./my-plugin
 </div>
 
 ---
+
 ## 下一模块
 
 → **[Legacy Modernization](../legacy-modernization.md)** —— 严格模式、代理自我引导、子代理，以及作为安全网的 `/rewind`。

@@ -46,7 +46,7 @@ Output looks like:
           ✔ commands    : 1 processed
           ✔ mcpServers  : 1 processed
   [skip]  superpowers (already imported)
-```yaml
+```text
 
 !!! tip "Re-import with --force"
     Already imported plugins are skipped by default. To force re-import after a plugin update:
@@ -73,7 +73,7 @@ Output looks like:
 
 ```bash
 agy plugin import claude
-```yaml
+```text
 
 Same mechanic — agy discovers your Claude Code extension installations and bridges compatible components.
 

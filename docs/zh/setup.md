@@ -46,6 +46,7 @@ agy changelog
 ```yaml
 
 ---
+
 ## 第 2 步：身份验证
 
 agy 使用 **基于浏览器的 Google 登录**。在首次运行时，它将：
@@ -75,6 +76,7 @@ agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
 预期输出：`Workshop ready!`
 
 ---
+
 ## 第 3 步：初始化您的项目工作区
 
 agy 通过从当前目录向上查找来自动发现项目配置，寻找 `.agents/` 文件夹。为本次研讨会创建一个：
@@ -94,6 +96,7 @@ agy --print "List the files in the current directory."
     agy 也会读取 `.gemini/` 目录——如果您已经有了 Gemini CLI 项目环境设置，这将非常有用。这两个配置位置都会被识别。
 
 ---
+
 ## 第 4 步：验证所有内容
 
 ```bash
@@ -117,6 +120,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 - [ ] `agy --print "..."` 返回响应
 
 ---
+
 ## 故障排除
 
 | 问题 | 解决方案 |
@@ -128,6 +132,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 | 配置未加载 | 检查 `~/.gemini/antigravity-cli/settings.json`（用户设置）和 `.agents/`（项目设置） |
 
 ---
+
 ## 下一步
 
 → 从 **[模块 1：SDLC 生产力提升](sdlc-productivity.md)** 开始

@@ -22,7 +22,7 @@ Use `/model` to switch the active model mid-session — useful when you want hea
 
 ```bash
 /model
-```yaml
+```text
 
 This opens a model picker showing available options (Gemini 3.5 Flash, Gemini 3.1 Pro, Claude Sonnet 4.6, etc.).
 
@@ -95,7 +95,7 @@ Watch three independent analyses run simultaneously. When they finish, agy synth
 > Spawn a subagent to act as an adversarial reviewer for the changes in this branch.
 > Its only job: find reasons why this code should NOT be merged.
 > It should challenge every assumption and look for edge cases the implementer missed.
-```yaml
+```text
 
 The adversarial reviewer pattern is particularly powerful for security-sensitive changes, infrastructure modifications, or any PR where "looks good to me" isn't sufficient.
 
@@ -173,7 +173,7 @@ Cron expressions (up to 5 fields) are supported:
 
 # Run every 15 minutes
 */15 * * * *
-```yaml
+```text
 
 !!! warning "Scheduling is session-persistent"
     Scheduled tasks persist across sessions as long as agy is running. Check `/tasks` to view and manage scheduled tasks.
@@ -228,7 +228,7 @@ agy --conversation <conversation-id>
 
 ```bash
 > What was the last thing we decided about the payment API schema?
-```yaml
+```text
 
 agy will have the full context, including code written, decisions made, and open questions.
 

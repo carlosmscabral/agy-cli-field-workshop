@@ -43,7 +43,7 @@ which agy
 
 # Confirm the version
 agy changelog
-```yaml
+```text
 
 ---
 
@@ -71,7 +71,7 @@ Once auth is configured, run a quick smoke test:
 
 ```bash
 agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
-```yaml
+```text
 
 Expected output: `Workshop ready!`
 

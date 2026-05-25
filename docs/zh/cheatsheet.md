@@ -20,7 +20,7 @@ agy install        # Configure PATH and shell aliases
 ## 启动模式
 
 | 模式 | 命令 | 何时使用 |
-|---|---|---|
+| :-- | :-- | :-- |
 | **交互式** | `agy` | 默认 — 完整的对话会话 |
 | **预设交互式** | `agy -i "<提示词>"` | 带着方向启动，随后继续对话 |
 | **打印 (无头模式)** | `agy -p "<提示词>"` | 单次执行，通过管道输出到标准输出 |
@@ -35,7 +35,7 @@ agy install        # Configure PATH and shell aliases
 > 来源：[`agy --help`](https://antigravity.google/docs/cli-getting-started) · [CLI 使用](https://antigravity.google/docs/cli-using)
 
 | 标志 | 简写 | 描述 |
-|---|---|---|
+| :-- | :-- | :-- |
 | `--print "<提示词>"` | `-p` | 非交互式单一提示词 |
 | `--prompt-interactive "<提示词>"` | `-i` | 带初始提示词的交互式会话 |
 | `--continue` | `-c` | 恢复最近的会话 |
@@ -55,7 +55,7 @@ agy install        # Configure PATH and shell aliases
 > 来源：[CLI 功能 — 核心斜杠命令](https://antigravity.google/docs/cli-features) · [使用 Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 | 命令 | 类别 | 用途 |
-|---|---|---|
+| :-- | :-- | :-- |
 | `/resume` (`/switch`) | 对话 | 打开对话选择器以恢复或切换会话 |
 | `/rewind` (`/undo`) | 对话 | 将对话历史回滚到上一个检查点 |
 | `/rename <name>` | 对话 | 重命名当前活动的对话线程 |
@@ -79,7 +79,7 @@ agy install        # Configure PATH and shell aliases
 > 来源：[使用 Antigravity CLI — 快速提示与快捷键](https://antigravity.google/docs/cli-using)
 
 | 快捷键 / 提示 | 操作 |
-|---|---|
+| :-- | :-- |
 | `@` | 文件路径自动补全（输入 `@` 触发路径建议） |
 | `!` | 直接从提示词运行终端命令 |
 | `esc esc` | 清空提示词框（当没有活动的流式传输时） |
@@ -227,7 +227,7 @@ done
 ## 官方文档
 
 | 主题 | 链接 |
-|---|---|
+| :-- | :-- |
 | CLI 概览 | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | 快速入门 | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
 | 使用 Antigravity CLI（设置、技巧、快捷键） | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |

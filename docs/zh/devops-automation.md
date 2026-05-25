@@ -30,6 +30,7 @@ agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
 ```text
 
 ---
+
 ## 3.1 — Shell 管道 <span class="duration-badge">10 min</span>
 
 > **模式：将 agy 作为 Unix 命令** — 将其与标准 shell 工具组合使用。
@@ -69,6 +70,7 @@ done
 ```text
 
 ---
+
 ## 3.2 — 使用 --add-dir 的多目录工作区 <span class="duration-badge">10 分钟</span>
 
 > **模式：跨仓库上下文** — 让 agy 同时具备对多个代码库的可见性。
@@ -98,6 +100,7 @@ agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
     `--add-dir` 是可重复的 — 可以根据需要添加任意数量的目录。agy 会将它们与主 git 仓库一起进行索引。
 
 ---
+
 ## 3.3 — CI/CD 集成 <span class="duration-badge">10 分钟</span>
 
 > **模式：流水线中的 agy** — 在每个 PR 上进行自动化的代码审查和分析。
@@ -160,6 +163,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 ```text
 
 ---
+
 ## 3.4 — 沙盒模式 <span class="duration-badge">5 分钟</span>
 
 > **模式：受限执行** — 使用操作系统级别的终端隔离运行 agy。
@@ -209,6 +213,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 > 📖 完整详情：[权限文档](https://www.antigravity.google/docs/permissions)
 
 ---
+
 ## 3.5 — 钩子与规则 <span class="duration-badge">5 min</span>
 
 > **模式：护栏与自动化** — 在关键生命周期节点强制执行标准并触发操作。
@@ -250,6 +255,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 > 📖 完整详情：[规则与工作流文档](https://www.antigravity.google/docs/rules-workflows)
 
 ---
+
 ## 模块 3 练习
 
 <div class="exercise-card" markdown>
@@ -263,6 +269,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 </div>
 
 ---
+
 ## 下一模块
 
 → **[模块 4：多代理与高级功能](../multi-agent-advanced.md)** — 子代理、/btw 任务中引导、调度。

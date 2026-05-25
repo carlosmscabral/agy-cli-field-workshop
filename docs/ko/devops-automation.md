@@ -30,6 +30,7 @@ agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
 ```text
 
 ---
+
 ## 3.1 — 셸 파이프라인 <span class="duration-badge">10 min</span>
 
 > **패턴: Unix 명령어로서의 agy** — 표준 셸 도구와 함께 구성합니다.
@@ -69,6 +70,7 @@ done
 ```text
 
 ---
+
 ## 3.2 — --add-dir을 사용한 다중 디렉터리 작업 공간 <span class="duration-badge">10분</span>
 
 > **패턴: 교차 저장소 컨텍스트** — agy가 여러 코드베이스를 동시에 볼 수 있도록 합니다.
@@ -98,6 +100,7 @@ agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
     `--add-dir`은 반복해서 사용할 수 있습니다. 필요한 만큼 디렉터리를 추가하세요. agy는 기본 git 저장소와 함께 이 모든 디렉터리를 인덱싱합니다.
 
 ---
+
 ## 3.3 — CI/CD 통합 <span class="duration-badge">10 min</span>
 
 > **패턴: 파이프라인의 agy** — 모든 PR에 대한 자동화된 코드 리뷰 및 분석.
@@ -160,6 +163,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 ```text
 
 ---
+
 ## 3.4 — 샌드박스 모드 <span class="duration-badge">5분</span>
 
 > **패턴: 제한된 실행** — OS 수준의 터미널 격리 환경에서 agy를 실행합니다.
@@ -209,6 +213,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 > 📖 전체 세부 정보: [권한 문서](https://www.antigravity.google/docs/permissions)
 
 ---
+
 ## 3.5 — 훅 및 규칙 <span class="duration-badge">5분</span>
 
 > **패턴: 가드레일 및 자동화** — 표준을 강제하고 주요 수명 주기 시점에서 작업을 트리거합니다.
@@ -250,6 +255,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 > 📖 전체 세부 정보: [규칙 및 워크플로 문서](https://www.antigravity.google/docs/rules-workflows)
 
 ---
+
 ## 모듈 3 연습 문제
 
 <div class="exercise-card" markdown>
@@ -263,6 +269,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 </div>
 
 ---
+
 ## 다음 모듈
 
 → **[모듈 4: 멀티 에이전트 및 고급 기능](../multi-agent-advanced.md)** — 서브에이전트, /btw 작업 중 스티어링, 스케줄링.

@@ -46,6 +46,7 @@ agy changelog
 ```yaml
 
 ---
+
 ## Langkah 2: Autentikasi
 
 agy menggunakan **Google Sign-In berbasis browser**. Pada saat dijalankan pertama kali, ini akan:
@@ -75,6 +76,7 @@ agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
 Keluaran yang diharapkan: `Workshop ready!`
 
 ---
+
 ## Langkah 3: Inisialisasi Ruang Kerja Proyek Anda
 
 agy menemukan konfigurasi proyek secara otomatis dengan menelusuri ke atas dari direktori Anda saat ini, mencari folder `.agents/`. Buat satu untuk lokakarya ini:
@@ -94,6 +96,7 @@ Anda akan melihat folder `.agents/` dibuat dengan file-file konfigurasi proyek (
     agy juga membaca direktori `.gemini/` — berguna jika Anda sudah memiliki pengaturan proyek Gemini CLI. Kedua lokasi konfigurasi tersebut diakui.
 
 ---
+
 ## Langkah 4: Verifikasi Semuanya
 
 ```bash
@@ -117,6 +120,7 @@ Daftar periksa sebelum lokakarya dimulai:
 - [ ] `agy --print "..."` mengembalikan respons
 
 ---
+
 ## Pemecahan Masalah
 
 | Masalah | Solusi |
@@ -128,6 +132,7 @@ Daftar periksa sebelum lokakarya dimulai:
 | Konfigurasi tidak dimuat | Periksa `~/.gemini/antigravity-cli/settings.json` (pengaturan pengguna) dan `.agents/` (pengaturan proyek) |
 
 ---
+
 ## Langkah Selanjutnya
 
 → Mulai dengan **[Modul 1: Produktivitas SDLC](sdlc-productivity.md)**

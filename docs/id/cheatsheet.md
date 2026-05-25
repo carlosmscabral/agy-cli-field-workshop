@@ -20,7 +20,7 @@ agy install        # Configure PATH and shell aliases
 ## Mode Peluncuran
 
 | Mode | Perintah | Kapan digunakan |
-|---|---|---|
+| :-- | :-- | :-- |
 | **Interaktif** | `agy` | Bawaan — sesi percakapan penuh |
 | **Interaktif dengan seed** | `agy -i "<prompt>"` | Mulai dengan arahan, lanjutkan secara percakapan |
 | **Cetak (mode headless)** | `agy -p "<prompt>"` | Sekali jalan, teruskan ke stdout |
@@ -35,7 +35,7 @@ agy install        # Configure PATH and shell aliases
 > Sumber: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
 
 | Flag | Singkat | Deskripsi |
-|---|---|---|
+| :-- | :-- | :-- |
 | `--print "<prompt>"` | `-p` | Prompt tunggal non-interaktif |
 | `--prompt-interactive "<prompt>"` | `-i` | Sesi interaktif dengan seed |
 | `--continue` | `-c` | Lanjutkan percakapan terbaru |
@@ -55,7 +55,7 @@ agy install        # Configure PATH and shell aliases
 > Sumber: [Fitur CLI — Perintah Slash Inti](https://antigravity.google/docs/cli-features) · [Menggunakan Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 | Perintah | Kategori | Tujuan |
-|---|---|---|
+| :-- | :-- | :-- |
 | `/resume` (`/switch`) | Percakapan | Buka pemilih percakapan untuk melanjutkan atau beralih sesi |
 | `/rewind` (`/undo`) | Percakapan | Kembalikan riwayat percakapan ke checkpoint sebelumnya |
 | `/rename <name>` | Percakapan | Ganti nama utas percakapan aktif |
@@ -79,7 +79,7 @@ agy install        # Configure PATH and shell aliases
 > Sumber: [Menggunakan Antigravity CLI — Tips Cepat & Pintasan Keyboard](https://antigravity.google/docs/cli-using)
 
 | Pintasan / Tips | Tindakan |
-|---|---|
+| :-- | :-- |
 | `@` | Pelengkapan otomatis jalur file (ketik `@` untuk memicu saran jalur) |
 | `!` | Jalankan perintah terminal langsung dari prompt |
 | `esc esc` | Bersihkan kotak prompt Anda (saat tidak ada streaming yang aktif) |
@@ -227,7 +227,7 @@ done
 ## Dokumentasi Resmi
 
 | Topik | Tautan |
-|---|---|
+| :-- | :-- |
 | Gambaran Umum CLI | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | Memulai | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
 | Menggunakan Antigravity CLI (pengaturan, kiat, pintasan keyboard) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |

@@ -46,6 +46,7 @@ agy changelog
 ```yaml
 
 ---
+
 ## 2단계: 인증
 
 agy는 **브라우저 기반 Google 로그인**을 사용합니다. 처음 실행 시 다음과 같이 동작합니다:
@@ -75,6 +76,7 @@ agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
 예상 출력: `Workshop ready!`
 
 ---
+
 ## 3단계: 프로젝트 작업 공간 초기화
 
 agy는 현재 디렉토리에서 상위로 이동하며 `.agents/` 폴더를 찾아 프로젝트 구성을 자동으로 검색합니다. 워크샵을 위해 하나를 생성하세요:
@@ -94,6 +96,7 @@ agy --print "List the files in the current directory."
     agy는 `.gemini/` 디렉토리도 읽습니다. 이는 이미 Gemini CLI 프로젝트 설정이 있는 경우 유용합니다. 두 구성 위치 모두 적용됩니다.
 
 ---
+
 ## 4단계: 모든 항목 확인
 
 ```bash
@@ -117,6 +120,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 - [ ] `agy --print "..."`가 응답을 반환함
 
 ---
+
 ## 문제 해결
 
 | 문제 | 해결 방법 |
@@ -128,6 +132,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 | 구성이 로드되지 않음 | `~/.gemini/antigravity-cli/settings.json`(사용자 설정) 및 `.agents/`(프로젝트 설정)를 확인하세요. |
 
 ---
+
 ## 다음 단계
 
 → **[모듈 1: SDLC 생산성 향상](sdlc-productivity.md)**으로 시작하기

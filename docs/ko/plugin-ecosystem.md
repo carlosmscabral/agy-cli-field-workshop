@@ -57,7 +57,7 @@ agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을
 ### What Gets Imported
 
 | Component | What it means |
-|---|---|
+| :-- | :-- |
 | `skills` | SKILL.md files with YAML frontmatter — injected into agy's context |
 | `commands` | Slash commands available inside agy sessions |
 | `mcpServers` | MCP tool servers (GitHub, gcloud, Workspace, etc.) — stdio or SSE |
@@ -104,7 +104,7 @@ agy plugin list
 Plugins can be installed at two levels:
 
 | Scope | Path |
-|---|---|
+| :-- | :-- |
 | **Global** | `~/.gemini/config/plugins/` |
 | **Project** | `.agents/plugins/` |
 
@@ -174,7 +174,7 @@ agy plugin validate ./my-plugin
 Use slash commands to inspect active plugin components in a session:
 
 | Command | What it shows |
-|---|---|
+| :-- | :-- |
 | `/skills` | All loaded skills (from plugins, project, global) |
 | `/mcp` | Active MCP servers and their status |
 
