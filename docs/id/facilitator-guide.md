@@ -1,15 +1,15 @@
 # Panduan Fasilitator
 
-> Panduan internal untuk fasilitator lokakarya. Jangan bagikan kepada peserta.
+> Panduan internal untuk fasilitator workshop. Jangan bagikan kepada peserta.
 
 ---
 
 ## Gambaran Umum
 
-Ini adalah **lokakarya langsung 4 modul, ~5,5 jam** untuk Antigravity CLI. Ini dirancang untuk audiens pengembang: insinyur, pemimpin teknis, dan arsitek solusi yang mengevaluasi atau mengadopsi Antigravity CLI.
+Ini adalah **lokakarya langsung 4 modul, ~5,5 jam** untuk Antigravity CLI. Ini dirancang untuk audiens pengembang: insinyur, pemimpin teknis, dan arsitek solusi yang sedang mengevaluasi atau mengadopsi Antigravity CLI.
 
 !!! warning "Penghentian Gemini CLI: 18 Juni 2026"
-    Gemini CLI mencapai akhir masa pakainya pada **18 Juni 2026**. Ketika peserta bertanya tentang migrasi, arahkan mereka ke `agy plugin import gemini` — ini adalah jalur migrasi utama. Semua plugin Gemini CLI terbawa dalam satu perintah.
+    Gemini CLI mencapai akhir masa pakai pada **18 Juni 2026**. Ketika peserta bertanya tentang migrasi, arahkan mereka ke `agy plugin import gemini` — ini adalah jalur migrasi utama. Semua plugin Gemini CLI terbawa hanya dalam satu perintah.
 
 ---
 
@@ -31,30 +31,30 @@ Ini adalah **lokakarya langsung 4 modul, ~5,5 jam** untuk Antigravity CLI. Ini d
 - [ ] Peserta memiliki git dan basis kode demo yang sesuai
 - [ ] Fasilitator telah menjalankan semua latihan dari awal hingga akhir pada versi agy-cli saat ini
 - [ ] Berbagi layar / proyeksi telah diuji
-- [ ] Untuk Modul 2: konfirmasikan peserta dapat menjalankan `dotnet` atau `mvn` (atau menggunakan kontainer yang disediakan)
-- [ ] Untuk Modul 3: konfirmasikan `pip install google-adk` dan `gcloud auth application-default login` berfungsi
+- [ ] Untuk Modul 2: pastikan peserta dapat menjalankan `dotnet` atau `mvn` (atau gunakan kontainer yang disediakan)
+- [ ] Untuk Modul 3: pastikan `pip install google-adk` dan `gcloud auth application-default login` berfungsi
 
 !!! warning "Autentikasi adalah titik kegagalan #1"
     Selalu jalankan pemeriksaan autentikasi pra-lokakarya 30 menit sebelum sesi:
     ```bash
     agy --print "Say READY" --print-timeout 30s
     ```
-    Jika peserta tidak bisa mendapatkan respons, hentikan dan lakukan debug sebelum memulai.
+    Jika peserta tidak bisa mendapatkan respons, berhenti dan lakukan debug sebelum memulai.
 
 ---
 
-## Catatan Penyampaian Modul-demi-Modul
+## Catatan Penyampaian per Modul
 
-### Modul 1 — Produktivitas SDLC (75 mnt)
+### Modul 1 — Produktivitas SDLC (75 menit)
 
-**Pesan utama:** agy menggantikan beban mental dalam menavigasi basis kode yang tidak dikenal. Ini bukan pelengkapan otomatis — ini adalah insinyur senior yang bisa Anda tanyakan apa saja.
+**Pesan utama:** agy menggantikan beban mental dalam menavigasi basis kode yang tidak dikenal. Ini bukan pelengkapan otomatis — ini adalah insinyur senior yang bisa Anda tanyai apa saja.
 
 - **Demo terlebih dahulu, latihan kemudian.** Lakukan demo langsung bagian 1.1 (pemahaman kode) pada basis kode Anda sendiri sebelum meminta peserta untuk mencoba basis kode mereka.
 - **Gesekan umum:** peserta mencoba menulis prompt yang sempurna. Dorong penggunaan bahasa alami. "Beri tahu saya bagaimana auth bekerja" lebih baik daripada "Tolong jelaskan arsitektur autentikasi dari basis kode ini."
 - **Momen AGENTS.md:** bagian 1.5 adalah demo bernilai tinggi. Buat AGENTS.md secara langsung di layar dan tunjukkan bagaimana sesi berikutnya segera menjadi lebih pintar.
 - **Demo impor plugin (bagian 1.7):** jalankan `agy plugin import gemini` secara langsung — keluaran visualnya sangat menarik. Catatan: **tema kustom diabaikan secara diam-diam** selama impor dan tidak dapat dimigrasikan. Jika peserta bertanya mengapa tema mereka tidak terbawa, ini adalah perilaku yang diharapkan — tidak ada kesalahan, komponen tersebut hanya dilewati.
 
-### Modul 2 — Modernisasi Legacy Basis Kode (90 mnt)
+### Modul 2 — Modernisasi Basis Kode Legacy (90 menit)
 
 **Pesan utama:** mode ketat (strict mode) + orientasi mandiri (self-onboarding) mengubah migrasi selama seminggu menjadi sore yang terstruktur. Agen menulis konteksnya sendiri, lalu mengeksekusinya.
 
@@ -62,26 +62,26 @@ Ini adalah **lokakarya langsung 4 modul, ~5,5 jam** untuk Antigravity CLI. Ini d
 
 1. Kloning repo target .NET atau Java (sudah dilakukan sebelumnya untuk menghemat waktu)
 2. Masuk ke mode ketat: `/permissions strict`
-3. Jalankan prompt investigasi — tunjukkan kepada peserta bagaimana agen membaca seluruh basis kode
-4. Biarkan agen menghasilkan AGENTS.md — baca dengan lantang untuk menunjukkan bahwa ia menangkap konteks yang sebenarnya
-5. `ctrl+g` — buka rencana yang dihasilkan di editor, buat satu pengeditan yang terlihat untuk menunjukkan kendali manusia
+3. Jalankan prompt investigasi — tunjukkan kepada peserta agen yang membaca seluruh basis kode
+4. Biarkan agen menghasilkan AGENTS.md — baca dengan lantang untuk menunjukkan bahwa ia menangkap konteks yang nyata
+5. `ctrl+g` — buka rencana yang dihasilkan di editor, buat satu suntingan yang terlihat untuk menunjukkan kendali manusia
 6. Beralih ke `request-review`, eksekusi Fase 1 saja
 7. Tunjukkan `/rewind` — kembalikan fase jika ada yang salah
-8. Total demo: ~15 mnt, kemudian peserta melakukannya sendiri
+8. Total demo: ~15 menit, kemudian peserta melakukannya sendiri
 
-- **Pertanyaan umum:** "Bisakah ia melakukan seluruh migrasi?" — Ya, tetapi nilainya ada pada peninjauan dan pengarahan, bukan hanya melihatnya berjalan. Dorong mereka untuk mengedit rencana tersebut.
-- **Catatan waktu fasilitator:** Fase 0–1 secara bersamaan memakan waktu ~20 mnt per peserta. Biarkan mereka mengerjakan Fase 2 sementara Anda berkeliling.
+- **Pertanyaan umum:** "Bisakah ia melakukan seluruh migrasi?" — Ya, tetapi nilainya ada pada peninjauan dan pengarahan, bukan hanya melihatnya berjalan. Dorong mereka untuk menyunting rencana tersebut.
+- **Catatan waktu fasilitator:** Fase 0–1 bersama-sama membutuhkan waktu ~20 menit per peserta. Biarkan mereka mengerjakan Fase 2 sementara Anda berkeliling.
 
-### Modul 3 — Membangun Agen AGY dengan SDK (90 mnt)
+### Modul 3 — Membangun Agen AGY dengan SDK (90 menit)
 
-**Pesan utama:** CLI adalah untuk individu. Agen SDK adalah layanan spesialis yang dapat dipanggil oleh seluruh tim Anda.
+**Pesan utama:** CLI ditujukan untuk individu. Agen SDK adalah layanan spesialis yang dapat dipanggil oleh seluruh tim Anda.
 
 - **Gerbang pengaturan:** pastikan semua orang telah menginstal `google-adk` dan autentikasi Vertex AI berfungsi sebelum memulai. Ini adalah penghalang yang paling umum.
 - **Momen `adk web .`:** setelah peserta menjalankan agen pertama mereka di UI peramban, energinya berubah — mereka melihatnya merespons alat-alat mereka.
 - **Tabel pemilihan model:** tekankan Flash-lite untuk pembuatan, Pro untuk orkestrasi. Kesadaran akan biaya adalah sebuah fitur, bukan kompromi.
-- **Latihan 11 (pipeline):** pola penjaga `SequentialAgent` + `BaseAgent` adalah wawasan arsitektur utama. Habiskan 5 menit untuk menjelaskan penjaga tanpa biaya sebelum mereka memulai.
+- **Latihan 11 (pipeline):** pola penjaga `SequentialAgent` + `BaseAgent` adalah wawasan arsitektur utama. Luangkan waktu 5 menit untuk menjelaskan penjaga tanpa biaya (zero-cost guards) sebelum mereka memulai.
 
-### Modul 4 — Multi-Agen & Lanjutan (60 mnt)
+### Modul 4 — Multi-Agen & Lanjutan (60 menit)
 
 **Pesan utama:** sub-agen + `/btw` adalah lompatan kualitatif. Di sinilah agy menjadi orkestrator, bukan sekadar chatbot.
 
@@ -100,19 +100,19 @@ Ini adalah **lokakarya langsung 4 modul, ~5,5 jam** untuk Antigravity CLI. Ini d
 | "Bisakah saya menggunakan kunci API saya sendiri?" | agy menggunakan Google Sign-In berbasis peramban. Pengguna enterprise menghubungkan proyek GCP. Lihat [Dokumentasi enterprise](https://www.antigravity.google/docs/enterprise). |
 | "Apakah kode dikirim ke Google?" | Lihat [FAQ](https://www.antigravity.google/docs/faq) untuk detail penanganan data. |
 | "Bagaimana dengan hook?" | agy-cli mendukung hook melalui `hooks.json`. Lihat [Dokumentasi hook](https://www.antigravity.google/docs/hooks). |
-| "Di mana log percakapan disimpan?" | `~/.gemini/antigravity-cli/conversations/` |
+| "Di mana log percakapan disimpan?" | `~/.gemini/antigravity/conversations/` |
 | "Tema Gemini CLI saya tidak terimpor." | Sesuai perkiraan — tema kustom diabaikan secara diam-diam selama `agy plugin import gemini`. Skill, server MCP, dan agen tetap terbawa. |
 | "Bisakah saya men-deploy agen SDK ke Cloud Run?" | Ya — `adk deploy cloud_run`. Lihat Modul 3 bagian 3.6. |
 
 ---
 
-## Pemecahan Masalah Selama Workshop
+## Pemecahan Masalah Selama Lokakarya
 
 | Gejala | Solusi |
 | :-- | :-- |
 | `agy: command not found` | Periksa PATH. Jalankan `which agy` atau `which agy-cli`. |
-| Kesalahan Autentikasi / 401 | Kredensial sesi mungkin telah kedaluwarsa. Distribusikan ulang autentikasi. |
-| Kesalahan `agy plugin list` | Periksa apakah `~/.gemini/antigravity-cli/` ada |
+| Kesalahan autentikasi / 401 | Kredensial sesi mungkin telah kedaluwarsa. Distribusikan ulang autentikasi. |
+| Kesalahan `agy plugin list` | Periksa apakah `~/.gemini/antigravity/` ada |
 | Respons lambat | Periksa jaringan. Proses pertama setelah diam mungkin lebih lambat karena pengindeksan ruang kerja. |
 | Sub-agen tidak muncul | Pastikan peserta berada dalam mode interaktif (bukan `--print`) |
 | Kesalahan impor `google-adk` (M3) | Pastikan venv diaktifkan: `source .venv/bin/activate` |
@@ -124,4 +124,4 @@ Ini adalah **lokakarya langsung 4 modul, ~5,5 jam** untuk Antigravity CLI. Ini d
 
 1. Kumpulkan umpan balik menggunakan formulir umpan balik lokakarya standar
 2. Catat setiap bug agy-cli atau perilaku tak terduga yang diamati — laporkan ke tim agy-cli
-3. Setiap latihan yang memerlukan solusi sementara harus ditandai untuk pembaruan dokumen di `CONTRIBUTING.md`
+3. Latihan apa pun yang memerlukan solusi sementara harus ditandai untuk pembaruan dokumen di `CONTRIBUTING.md`

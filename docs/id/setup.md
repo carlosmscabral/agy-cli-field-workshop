@@ -3,16 +3,18 @@
 > Selesaikan ini sebelum memulai modul apa pun. Membutuhkan waktu sekitar 15 menit.
 
 ---
+
 ## Persyaratan Sistem
 
 | Komponen | Minimum | Catatan |
 | :-- | :-- | :-- |
 | **agy** | Terbaru | Instruksi instalasi di bawah |
 | **Git** | v2.30+ | Untuk repositori latihan |
-| **Terminal** | Apa saja | iTerm2, Terminal macOS, atau terintegrasi VS Code |
+| **Terminal** | Apa saja | iTerm2, macOS Terminal, atau terintegrasi dengan VS Code |
 | **jq** | Opsional | Berguna untuk mem-parsing output JSON `--print` |
 
 ---
+
 ## Langkah 1: Instal agy
 
 > 📖 Instruksi lengkap: [Dokumentasi Memulai](https://www.antigravity.google/docs/cli-getting-started)
@@ -44,12 +46,13 @@ agy --version
 ```
 
 ---
+
 ## Langkah 2: Autentikasi
 
 agy menggunakan **Google Sign-In berbasis browser**. Pada saat pertama kali dijalankan, ini akan:
 
 - **Mesin lokal:** Secara otomatis membuka browser bawaan Anda untuk masuk.
-- **SSH / sesi jarak jauh:** Mencetak URL untuk ditempelkan ke browser apa pun, lalu menempelkan kembali kode autentikasi ke dalam terminal.
+- **Sesi SSH / jarak jauh:** Mencetak URL untuk ditempelkan ke browser apa pun, lalu menempelkan kembali kode autentikasi ke dalam terminal.
 
 ```bash
 # Start agy — auth will trigger automatically on first run
@@ -65,7 +68,7 @@ Untuk keluar:
 
 > 📖 Untuk autentikasi enterprise melalui proyek GCP, lihat [Dokumentasi enterprise](https://www.antigravity.google/docs/enterprise).
 
-Setelah autentikasi dikonfigurasi, jalankan *smoke test* cepat:
+Setelah autentikasi dikonfigurasi, jalankan *smoke test* singkat:
 
 ```bash
 agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
@@ -74,9 +77,10 @@ agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
 Keluaran yang diharapkan: `Workshop ready!`
 
 ---
+
 ## Langkah 3: Inisialisasi Ruang Kerja Proyek Anda
 
-agy menemukan konfigurasi proyek secara otomatis dengan menelusuri ke atas dari direktori Anda saat ini, mencari folder `.agents/`. Buat satu untuk lokakarya ini:
+agy secara otomatis menemukan konfigurasi proyek dengan menelusuri ke atas dari direktori Anda saat ini, mencari folder `.agents/`. Buat satu untuk lokakarya ini:
 
 ```bash
 # Clone the workshop exercises repo
@@ -87,12 +91,13 @@ cd agy-cli-field-workshop
 agy --print "List the files in the current directory."
 ```
 
-Anda akan melihat folder `.agents/` dibuat dengan file-file konfigurasi proyek (settings.json, mcp.json, dll.).
+Anda akan melihat folder `.agents/` dibuat dengan file konfigurasi proyek (settings.json, mcp.json, dll.).
 
 !!! info "Kompatibilitas .gemini/"
     agy juga membaca direktori `.gemini/` — berguna jika Anda sudah memiliki pengaturan proyek Gemini CLI. Kedua lokasi konfigurasi tersebut didukung.
 
 ---
+
 ## Langkah 4: Verifikasi Semuanya
 
 ```bash
@@ -116,6 +121,7 @@ Daftar periksa sebelum lokakarya dimulai:
 - [ ] `agy --print "..."` mengembalikan respons
 
 ---
+
 ## Pemecahan Masalah
 
 | Masalah | Solusi |
@@ -127,6 +133,7 @@ Daftar periksa sebelum lokakarya dimulai:
 | Konfigurasi tidak dimuat | Periksa `~/.gemini/antigravity/settings.json` (pengaturan pengguna) dan `.agents/` (pengaturan proyek) |
 
 ---
+
 ## Langkah Selanjutnya
 
 → Mulai dengan **[Modul 1: Produktivitas SDLC](sdlc-productivity.md)**

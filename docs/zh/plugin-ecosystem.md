@@ -1,18 +1,19 @@
 # 参考：插件生态系统
 
-> **agy-cli 插件系统的深度参考。** 基本命令已在 [模块 1 — 第 1.7 节](sdlc-productivity.md#17-extend-with-plugins) 中介绍。本页面为构建和维护自定义插件的团队提供了完整的生命周期详细信息。
+> **agy-cli 插件系统的深度参考。** 基本命令已在 [模块 1 — 1.7 节](sdlc-productivity.md#17-extend-with-plugins) 中介绍。本页面为构建和维护自定义插件的团队提供了完整的生命周期详细信息。
 
 ---
-## 2.0 — 为什么插件很重要 <span class="duration-badge">5 分钟</span>
 
-agy-cli 的插件系统有一个独特之处：它可以**导入您已经在 Gemini CLI 或 Claude Code 中安装的插件**——无需重新安装或重新配置。您在扩展上的现有投资可以无缝继承。
+## 2.0 — 为什么插件很重要 <span class="duration-badge">5 min</span>
+
+agy-cli 的插件系统有一个独特之处：它可以**导入你已经在 Gemini CLI 或 Claude Code 中安装的插件** —— 无需重新安装或重新配置。你在扩展上的现有投资可以无缝延续。
 
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
 ```
 
-输出是 JSON 格式，显示每个插件的名称、来源、导入日期和组件（技能、命令、mcpServers、代理）。
+输出是 JSON 格式，显示每个插件的名称、来源、导入日期和组件（技能、命令、MCP 服务器、代理）。
 
 ```bash
 # More readable
@@ -22,9 +23,10 @@ agy plugin list | python3 -m json.tool
 > 📖 官方文档：[插件](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [技能](https://www.antigravity.google/docs/skills)
 
 ---
+
 ## 2.1 — 从 Gemini CLI 导入 <span class="duration-badge">10 分钟</span>
 
-> **模式：跨工具插件桥接** — 将您完整的 Gemini CLI 插件环境设置拉取到 agy 中。
+> **模式：跨工具插件桥接** — 将你整个 Gemini CLI 插件环境设置拉取到 agy 中。
 
 ### 导入所有 Gemini CLI 插件
 
@@ -32,7 +34,7 @@ agy plugin list | python3 -m json.tool
 agy plugin import gemini
 ```
 
-agy 会扫描您本地的 Gemini CLI 安装，发现所有已安装的插件，并将它们的组件（技能、命令、MCP 服务器、代理）暂存到位于 `~/.gemini/antigravity/` 的 agy 配置中。
+agy 会扫描你本地的 Gemini CLI 安装，发现所有已安装的插件，并将它们的组件（技能、命令、MCP 服务器、代理）暂存到位于 `~/.gemini/antigravity/` 的 agy 配置中。
 
 输出如下所示：
 
@@ -88,7 +90,7 @@ Same mechanic — agy discovers your Claude Code extension installations and bri
 ### Enable / Disable
 
 ```bash
-# 为当前会话/项目禁用插件
+# 在当前会话/项目中禁用插件
 agy plugin disable gemini-deep-research
 
 # 重新启用它
@@ -129,7 +131,7 @@ agy plugin install <plugin-name>@<version>
 # 验证插件目录
 agy plugin validate ./path/to/my-plugin
 
-# 或验证当前目录
+# 或者验证当前目录
 agy plugin validate .
 ```
 
@@ -141,10 +143,10 @@ A valid agy plugin needs a `plugin.json` manifest. Here's the official structure
 
 ```text
 my-plugin/
-├── plugin.json          ← 清单文件（必填）
+├── plugin.json          ← 清单（必填）
 ├── mcp_config.json      ← MCP 服务器定义（可选）
 ├── hooks.json           ← 钩子事件处理程序（可选）
-├── skills/              ← 带有 YAML 前言的 SKILL.md 文件
+├── skills/              ← 带有 YAML 前置元数据的 SKILL.md 文件
 │   └── my-skill/
 │       └── SKILL.md
 ├── agents/              ← 子代理定义（可选）
@@ -165,7 +167,7 @@ my-plugin/
 # 验证它
 agy plugin validate ./my-plugin
 
-# 如果有效，您将看到：✔ Plugin manifest is valid
+# 如果有效，你将看到：✔ Plugin manifest is valid
 ```
 
 ### Interacting with Plugin Components
@@ -199,7 +201,7 @@ graph LR
     A --> AG[代理]
     A --> RU[规则]
     A --> HK[钩子]
-    A --> SD[Sidecar]
+    A --> SD[Sidecars]
 ```
 
 Plugin staging directory structure:
@@ -212,7 +214,7 @@ Plugin staging directory structure:
 ├── skills/
 ├── agents/
 ├── rules/
-└── sidecars/          ← 插件范围的后台进程
+└── sidecars/          ← 插件作用域的后台进程
 ```
 
 ---
@@ -243,7 +245,7 @@ Sidecars are discovered from two locations:
 # 全局 sidecar（在所有项目中可用）
 ~/.gemini/config/sidecars/<sidecar-name>/sidecar.json
 
-# 插件范围的 sidecar（随插件提供）
+# 插件作用域的 sidecar（随插件提供）
 ~/.gemini/config/plugins/<plugin-name>/sidecars/<sidecar-name>/sidecar.json
 ```
 
@@ -297,7 +299,7 @@ The `schedule` builtin takes a cron expression as its first arg, then the comman
 
 ```json
 {
-  "description": "每小时 PR 分类 — 总结传入的审查请求",
+  "description": "每小时 PR 分类 — 总结收到的审查请求",
   "builtin": "schedule",
   "args": [
     "0 * * * *",
@@ -311,11 +313,11 @@ The `schedule` builtin takes a cron expression as its first arg, then the comman
 `agentapi` is automatically available to sidecars — it lets them **programmatically create or message conversations**:
 
 ```bash
-# 从 sidecar 启动新对话
-agentapi new-conversation "<提示词>"
+# 从 sidecar 启动新会话
+agentapi new-conversation "<prompt>"
 
-# 向现有对话发送消息
-agentapi send-message <conversation_id> "<提示词>"
+# 向现有会话发送消息
+agentapi send-message <conversation_id> "<prompt>"
 ```
 
 !!! warning "projectId required for agentapi"
@@ -343,6 +345,7 @@ Sidecar output is stored at:
 ```
 
 ---
+
 ## 模块 2 练习
 
 <div class="exercise-card" markdown>
@@ -360,23 +363,24 @@ Sidecar output is stored at:
 ### :material-clock-outline: 练习 2B：你的第一个 Sidecar
 
 > **时长：** 20 分钟
-> **构建：** 一个定时执行的**每日站会 Sidecar**，在早上 9 点触发，创建一个新的 AGY 对话，并要求它总结你所有代码仓库中昨天的 git 提交。
+> **构建：** 一个定时的**每日站会 Sidecar**，在上午 9 点触发，创建一个新的 AGY 对话，并要求它总结昨天在你所有仓库中的 git 提交。
 
-**你将要做什么：**
+**你将执行以下操作：**
 
 1. 使用 `schedule` 内置功能创建 `~/.gemini/config/sidecars/standup/sidecar.json`
-2. 将 cron 设置为 `0 9 * * 1-5`（周一至周五早上 9 点）
-3. 使用 `agentapi new-conversation` 结合你的站会提示词打开一个对话
+2. 将 cron 设置为 `0 9 * * 1-5`（周一至周五上午 9 点）
+3. 使用 `agentapi new-conversation` 打开一个带有你的站会提示词的对话
 4. 在 `~/.gemini/config/config.json` 中启用它
 5. 验证它是否出现在 `~/.gemini/antigravity/sidecar_data/standup/logs/` 的日志中
 
-**延伸目标：** 使用 `command: python3` 添加第二个 Sidecar，它会监视本地文件的更改，并在检测到差异时向现有对话发送消息。
+**延伸目标：** 使用 `command: python3` 添加第二个 Sidecar，用于监视本地文件的更改，并在检测到差异时向现有对话发送消息。
 
 </div>
 
 ---
+
 ## 返回工作坊
 
-→ **[模块 1：SDLC 生产力提升](sdlc-productivity.md)** — 插件在第 1.7 节中介绍
+→ **[模块 1：SDLC 生产力提升](sdlc-productivity.md)** — 插件在 1.7 节中介绍
 
 → **[速查表](cheatsheet.md)** — 所有插件和 sidecar 命令集中于一处

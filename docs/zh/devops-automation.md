@@ -1,11 +1,12 @@
 # 参考：DevOps 与自动化模式
 
-> **无需人工干预的 agy。** 针对非交互式 `--print` 流水线、CI/CD 集成、多仓库工作区和沙盒执行的深度参考。基本命令已在[速查表](cheatsheet.md)中提供链接。
+> **无需人工干预的 agy。** 针对非交互式 `--print` 流水线、CI/CD 集成、多仓库工作区和沙盒执行的深度参考。基本命令已在[速查表](cheatsheet.md)中链接。
 
 ---
-## DevOps 1 — 打印模式：非交互式核心 <span class="duration-badge">5 min</span>
 
-`--print`（简写：`-p`）是 agy 的无头模式。它运行单个提示词，打印响应，然后退出。没有交互式会话，没有输入提示。
+## DevOps 1 — 打印模式：非交互式核心 <span class="duration-badge">5 分钟</span>
+
+`--print`（简写：`-p`）是 agy 的无头模式。它运行单个提示词，打印响应，然后退出。没有交互式会话，也没有提示。
 
 ```bash
 # Basic usage
@@ -18,7 +19,7 @@ agy --print "Generate a full test suite for auth.js" --print-timeout 10m
 agy -p "What does this project do?"
 ```
 
-输出会发送到 stdout —— 你可以通过管道传递它、重定向它或存储它。
+输出会发送到标准输出（stdout）——你可以通过管道传递、重定向或存储它。
 
 ```bash
 # Pipe into a file
@@ -29,7 +30,8 @@ agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
 ```
 
 ---
-## DevOps 2 — Shell 管道 <span class="duration-badge">10 分钟</span>
+
+## DevOps 2 — Shell 管道 <span class="duration-badge">10 min</span>
 
 > **模式：将 agy 作为 Unix 命令** — 将其与标准 shell 工具组合使用。
 
@@ -71,6 +73,7 @@ done
 ```
 
 ---
+
 ## DevOps 3 — 使用 --add-dir 的多目录工作区 <span class="duration-badge">10 分钟</span>
 
 > **模式：跨仓库上下文** — 让 agy 同时具备对多个代码库的可见性。
@@ -96,10 +99,11 @@ agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
     -p "Map the dependency graph between these three packages and flag any circular dependencies."
 ```
 
-!!! tip "可重复的标志"
-    `--add-dir` 是可重复的 — 你可以根据需要添加任意数量的目录。agy 会将它们与主 git 仓库一起进行索引。
+!!! tip "可重复使用的标志"
+    `--add-dir` 是可重复使用的 — 你可以根据需要添加任意数量的目录。agy 会将它们与主 git 仓库一起进行索引。
 
 ---
+
 ## DevOps 4 — CI/CD 集成 <span class="duration-badge">10 分钟</span>
 
 > **模式：流水线中的 agy** — 在每个 PR 上进行自动化的代码审查和分析。
@@ -162,13 +166,14 @@ git diff --cached | agy --dangerously-skip-permissions \
 ```
 
 ---
+
 ## DevOps 5 — 沙盒模式 <span class="duration-badge">5 min</span>
 
-> **模式：受限执行** — 在操作系统级别的终端隔离下运行 agy。
+> **模式：受限执行** — 使用操作系统级别的终端隔离运行 agy。
 
 ### 启用沙盒
 
-沙盒通过 `settings.json`（项目级别的 `.agents/settings.json` 或用户级别的 `~/.gemini/antigravity/settings.json`）进行配置：
+沙盒通过 `settings.json`（项目 `.agents/settings.json` 或用户 `~/.gemini/antigravity/settings.json`）进行配置：
 
 ```json
 {
@@ -184,19 +189,19 @@ git diff --cached | agy --dangerously-skip-permissions \
 | **macOS** | sandbox-exec |
 | **Windows** | AppContainer |
 
-### 按命令绕过
+### 逐命令绕过
 
-在启用沙盒的情况下，当命令需要突破沙盒时，agy 将**提示请求批准**。您将看到一个按命令绕过的提示 —— 允许选择性执行，而无需禁用整个沙盒。
+在启用沙盒的情况下，当命令需要突破沙盒时，agy 将**提示要求批准**。您将看到一个逐命令绕过提示 — 允许选择性执行，而无需禁用整个沙盒。
 
 ### 使用场景
 
 - 在不受信任的代码上运行 agy
-- 审计敏感内容而不会产生副作用
+- 在没有副作用的情况下审计敏感内容
 - 任何执行都需要批准的治理敏感环境
 
-### 结合权限
+### 与权限结合使用
 
-为了实现最大程度的控制，请将沙盒模式与权限模型结合使用：
+为了获得最大程度的控制，请将沙盒模式与权限模型结合使用：
 
 ```json
 {
@@ -211,9 +216,10 @@ git diff --cached | agy --dangerously-skip-permissions \
 > 📖 完整详情：[权限文档](https://www.antigravity.google/docs/permissions)
 
 ---
-## DevOps 6 — 钩子与规则 <span class="duration-badge">5 min</span>
 
-> **模式：护栏与自动化** — 在关键的生命周期节点强制执行标准并触发操作。
+## DevOps 6 — 钩子与规则 <span class="duration-badge">5 分钟</span>
+
+> **模式：护栏与自动化** — 在关键生命周期点强制执行标准并触发操作。
 
 ### 钩子
 
@@ -222,10 +228,10 @@ git diff --cached | agy --dangerously-skip-permissions \
 | 事件 | 触发时机 |
 | :-- | :-- |
 | `PreToolUse` | 在 agy 调用任何工具（读取文件、运行命令等）之前 |
-| `PostToolUse` | 工具调用完成之后 |
+| `PostToolUse` | 在工具调用完成之后 |
 | `PreInvocation` | 在 agy 开始处理提示词之前 |
 | `PostInvocation` | 在 agy 完成响应之后 |
-| `Stop` | 会话结束时 |
+| `Stop` | 在会话结束时 |
 
 在 `hooks.json`（项目级别位于 `.agents/`，全局级别位于 `~/.gemini/config/`）中配置钩子。钩子脚本通过标准输入（stdin）接收 JSON，并通过标准输出（stdout）返回 JSON。
 
@@ -233,14 +239,14 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 ### 规则
 
-规则是注入到 agy 系统提示词中的 markdown 文件，作为 `RULE` 块 — 这是 agy 必须遵循的硬性约束。
+规则是作为 `RULE` 块注入到 agy 系统提示词中的 markdown 文件 —— 这是 agy 必须遵循的硬性约束。
 
 | 作用域 | 位置 |
 | :-- | :-- |
 | **项目** | `.agents/rules.md` 或 `.agents/rules/*.md` |
 | **全局** | `~/.gemini/config/rules.md` 或 `~/.gemini/config/rules/*.md` |
 
-示例 `.agents/rules.md`：
+`.agents/rules.md` 示例：
 
 ```markdown
 - Never delete migration files
@@ -252,6 +258,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 > 📖 完整详情：[规则与工作流文档](https://www.antigravity.google/docs/rules-workflows)
 
 ---
+
 ## 练习
 
 <div class="exercise-card" markdown>
@@ -265,6 +272,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 </div>
 
 ---
+
 ## 下一模块
 
-→ **[模块 4：多代理与高级](../multi-agent-advanced.md)** — 子代理、/btw 任务中引导、调度。
+→ **[模块 4：多代理与高级功能](multi-agent-advanced.md)** — 子代理、/btw 任务中途引导、调度。

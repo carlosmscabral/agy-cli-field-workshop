@@ -1,8 +1,9 @@
 # 모듈 1: SDLC 생산성 향상 <span class="duration-badge">75분</span>
 
-> **여러분의 첫 번째 실제 Antigravity CLI 세션입니다.** 이 모듈에서는 핵심적인 일상 워크플로 — 코드 이해, 리팩터링, 테스트 생성 및 변경 사항 검토 — 와 더불어 팀의 툴체인에 맞게 플러그인을 사용하여 CLI를 확장하는 방법을 다룹니다.
+> **첫 번째 실제 Antigravity CLI 세션입니다.** 이 모듈에서는 코드 이해, 리팩토링, 테스트 생성, 변경 사항 검토와 같은 핵심 일상 워크플로우를 다루며, 팀의 툴체인에 맞게 플러그인으로 CLI를 확장하는 방법도 알아봅니다.
 
 ---
+
 ## 1.0 — 첫 번째 대화형 세션 <span class="duration-badge">5분</span>
 
 워크숍 프로젝트 디렉토리에서 Antigravity CLI를 실행합니다:
@@ -12,30 +13,31 @@ cd agy-cli-field-workshop
 agy
 ```
 
-대화형 프롬프트로 진입하게 됩니다. 다음을 시도해 보세요:
+대화형 프롬프트가 나타납니다. 다음을 시도해 보세요:
 
 ```text
 > What files are in this project and what does each one do?
 ```
 
-agy가 작업 공간을 어떻게 읽는지 관찰해 보세요. git 저장소를 색인화하고, 파일 내용을 읽고, 컨텍스트와 함께 응답합니다. 이는 **자동**으로 이루어집니다. 별도의 설정이나 미리 작성해야 할 프롬프트가 없습니다.
+agy가 작업 공간을 어떻게 읽는지 관찰해 보세요. git 저장소를 색인화하고, 파일 내용을 읽으며, 컨텍스트와 함께 응답합니다. 이는 **자동**으로 이루어집니다. 설정이나 먼저 작성해야 할 프롬프트가 없습니다.
 
 !!! tip ".agents/ 폴더"
-    첫 번째 세션 이후 `.agents/`를 확인해 보세요. agy가 작업 공간을 추적하는 프로젝트 설정 파일을 생성했습니다. 이를 통해 향후 실행 시 무엇을 색인화할지 알 수 있습니다.
+    첫 번째 세션 후 `.agents/`를 확인해 보세요. agy가 작업 공간을 추적하는 프로젝트 설정 파일을 생성했습니다. 이를 통해 향후 실행 시 무엇을 색인화할지 알 수 있습니다.
 
 ---
+
 ## 1.1 — 코드 이해 <span class="duration-badge">10분</span>
 
-> **패턴: 수정 전 설명** — 코드를 변경하기 전에 코드를 이해하세요.
+> **패턴: 수정하기 전에 설명하기** — 코드를 변경하기 전에 코드를 이해하세요.
 
-### 실습: 익숙하지 않은 코드베이스 파악하기
+### 실습: 낯선 코드베이스 파악하기
 
 ```bash
 # -i seeds the session with an initial prompt and stays interactive
 agy -i "Give me a high-level architecture overview of this project. What are the main components and how do they connect?"
 ```
 
-그런 다음 대화형으로 후속 질문을 이어가세요:
+그런 다음 대화형으로 후속 질문을 합니다:
 
 ```text
 > Which file handles the entry point?
@@ -43,11 +45,12 @@ agy -i "Give me a high-level architecture overview of this project. What are the
 > Are there any obvious code smells or tech debt?
 ```
 
-!!! tip "시드 세션에 -i 사용"
-    `agy -i "<task>"`(`--prompt-interactive`의 약자)는 프롬프트와 함께 시작하지만 대화형 상태를 유지합니다. 방향을 설정한 다음 후속 질문으로 방향을 조정할 수 있어 목적이 있는 탐색에 매우 유용합니다.
+!!! tip "시드 세션(seeded sessions)에 -i 사용하기"
+    `agy -i "<task>"`(`--prompt-interactive`의 약자)는 프롬프트로 시작하지만 대화형 상태를 유지합니다. 방향성 있는 탐색에 매우 유용합니다. 방향을 설정한 다음 후속 질문으로 이끌어갈 수 있습니다.
 
 ---
-## 1.2 — 리팩터링 <span class="duration-badge">10분</span>
+
+## 1.2 — 리팩터링 <span class="duration-badge">10 min</span>
 
 > **패턴: 제안, 검토, 적용** — 읽지 않은 변경 사항은 절대 적용하지 마세요.
 
@@ -93,9 +96,10 @@ agy는 도구 승인 처리 방식을 제어하는 **3단계 권한 모델**을 
 > 📖 전체 세부 정보: [권한 문서](https://www.antigravity.google/docs/permissions) · [엄격 모드 문서](https://www.antigravity.google/docs/strict-mode)
 
 ---
+
 ## 1.3 — 테스트 생성 <span class="duration-badge">10분</span>
 
-> **패턴: 존재하는 것 테스트하기** — 가상의 코드가 아닌 실제 코드에 대한 테스트를 생성합니다.
+> **패턴: 존재하는 것 테스트하기** — 가상의 코드가 아닌 실제 코드를 위한 테스트를 생성합니다.
 
 ### 실습: 단위 테스트 생성
 
@@ -117,6 +121,7 @@ agy
     agy는 셸 명령을 실행할 수 있습니다. 오류 메시지를 복사해서 붙여넣을 필요 없이 테스트 스위트를 실행하고 실패 시 반복 작업을 수행합니다. 스스로 수정하는 과정을 지켜보세요.
 
 ---
+
 ## 1.4 — 코드 리뷰 <span class="duration-badge">10분</span>
 
 > **패턴: 커밋 전 리뷰** — 모든 푸시 전에 agy를 시니어 리뷰어로 사용하세요.
@@ -135,7 +140,7 @@ agy
 > Review my staged changes for: (1) correctness, (2) security issues, (3) missing test coverage, (4) anything that would block a PR. Be direct — don't soften findings.
 ```
 
-### 헤드리스 변형 (스크립팅용)
+### 헤드리스 버전 (스크립팅용)
 
 ```bash
 # Review changes non-interactively — useful in pre-commit hooks or CI
@@ -143,9 +148,10 @@ git diff --cached | agy --print "Review these changes. Flag any bugs, security i
 ```
 
 ---
-## 1.5 — AGENTS.md를 사용한 프로젝트 컨텍스트 <span class="duration-badge">5분</span>
 
-> **패턴: 영구 컨텍스트** — agy에게 한 번 알려주면, 모든 세션에서 기억합니다.
+## 1.5 — AGENTS.md를 활용한 프로젝트 컨텍스트 <span class="duration-badge">5분</span>
+
+> **패턴: 영구적인 컨텍스트** — agy에게 한 번 알려주면 모든 세션에서 기억합니다.
 
 agy는 세션 시작 시 컨텍스트 파일을 읽습니다. 프로젝트 루트에 하나를 생성하세요:
 
@@ -181,22 +187,23 @@ agy --print "What do you know about this project?"
 agy는 이후의 모든 세션에 AGENTS.md를 자동으로 포함시킵니다.
 
 !!! info "컨텍스트 계층 구조"
-    agy는 현재 디렉토리 → 상위 디렉토리 → 홈 디렉토리 순으로 AGENTS.md를 읽습니다. 더 구체적인 컨텍스트가 더 넓은 범위의 컨텍스트보다 우선합니다.
+    agy는 현재 디렉토리 → 상위 디렉토리 → 홈 디렉토리 순으로 AGENTS.md를 읽습니다. 더 구체적인 컨텍스트가 더 넓은 범위의 컨텍스트를 덮어씁니다.
 
 ### 추가 컨텍스트 소스
 
 AGENTS.md 외에도 agy는 다음을 로드합니다:
 
-- **`.agents/rules.md`** (또는 `.agents/rules/*.md`) — 시스템 프롬프트 지시문으로 주입되는 프로젝트 수준 규칙입니다. "마이그레이션 파일을 절대 삭제하지 마세요" 또는 "항상 TypeScript 엄격 모드를 사용하세요"와 같은 필수 요구 사항에 이를 사용하세요.
+- **`.agents/rules.md`** (또는 `.agents/rules/*.md`) — 시스템 프롬프트 지시문으로 주입되는 프로젝트 수준의 규칙입니다. "마이그레이션 파일을 절대 삭제하지 마세요" 또는 "항상 TypeScript 엄격 모드를 사용하세요"와 같은 필수 요구 사항에 이를 사용하세요.
 - **`.gemini/`** — Gemini CLI 호환성을 위해 agy는 `.agents/`와 함께 `.gemini/` 디렉토리를 읽습니다.
 - **`~/.gemini/config/rules.md`** — 모든 세션에 적용되는 전역 규칙입니다.
 
 > 📖 전체 세부 정보: [규칙 및 워크플로우 문서](https://www.antigravity.google/docs/rules-workflows)
 
 ---
+
 ## 1.6 — 대화형 탐색 <span class="duration-badge">5분</span>
 
-> **패턴: 터미널 유창성** — agy 세션을 빠르게 만드는 단축키를 알아두세요.
+> **패턴: 터미널 능숙도** — agy 세션을 빠르게 만드는 단축키를 알아두세요.
 > 📖 전체 참조: [Antigravity CLI 사용하기](https://www.antigravity.google/docs/cli-using)
 
 ### 주요 슬래시 명령어
@@ -205,7 +212,7 @@ AGENTS.md 외에도 agy는 다음을 로드합니다:
 | :-- | :-- |
 | `/rewind` (또는 `/undo`) | 대화 기록을 이전 체크포인트로 롤백합니다 |
 | `/resume` (또는 `/switch`) | 대화 선택기를 열어 세션을 재개하거나 전환합니다 |
-| `/rename <name>` | 활성 대화 스레드의 이름을 바꿉니다 |
+| `/rename <name>` | 활성 대화 스레드의 이름을 변경합니다 |
 | `/config` (또는 `/settings`) | 전체 화면 설정 오버레이를 엽니다 |
 | `/permissions` | 에이전트 자율성 수준을 설정합니다 (`request-review`, `always-proceed`, `strict`) |
 | `/model` | 추론 모델을 선택합니다 (세션 간 유지됨) |
@@ -213,7 +220,7 @@ AGENTS.md 외에도 agy는 다음을 로드합니다:
 | `/agents` | 서브에이전트 작업을 보고, 관리하고, 승인합니다 |
 | `/open <path>` | 선호하는 외부 편집기에서 파일을 엽니다 |
 | `/usage` | 인라인 대화형 도움말 매뉴얼을 엽니다 |
-| `/skills` | 로컬 및 글로벌 에이전트 스킬을 찾아봅니다 |
+| `/skills` | 로컬 및 글로벌 에이전트 스킬을 탐색합니다 |
 | `/mcp` | MCP 서버를 구성하고 관리합니다 |
 
 > 📖 전체 슬래시 명령어 참조: [CLI 기능](https://antigravity.google/docs/cli-features)
@@ -226,19 +233,20 @@ AGENTS.md 외에도 agy는 다음을 로드합니다:
 | `!` | agy를 종료하지 않고 터미널 명령어를 직접 실행합니다 |
 | `esc esc` | 현재 프롬프트 입력을 지웁니다 (스트리밍이 활성화되지 않은 경우) |
 | `?` | 도움말을 얻고 모든 슬래시 명령어를 나열합니다 |
-| `alt+enter` / `ctrl+j` / `shift+enter` | 프롬프트에 줄 바꿈을 삽입합니다 (여러 줄 입력) |
+| `alt+enter` / `ctrl+j` / `shift+enter` | 프롬프트에 줄바꿈을 삽입합니다 (여러 줄 입력) |
 | `ctrl+g` | 기본 셸 편집기 내에서 프롬프트를 편집합니다 |
 | `ctrl+l` | TUI 화면을 지웁니다 |
 | `ctrl+d` | CLI를 종료합니다 |
 
-> 📖 전체 키 바인딩 참조: [Antigravity CLI 사용하기](https://antigravity.google/docs/cli-using)
+> 📖 전체 키바인딩 참조: [Antigravity CLI 사용하기](https://antigravity.google/docs/cli-using)
 
 ---
+
 ## 1.7 — 플러그인으로 확장하기 <span class="duration-badge">15분</span>
 
 > **패턴: 자체 툴체인 가져오기(Bring Your Toolchain)** — 플러그인은 agy에 스킬, MCP 서버, 에이전트 및 규칙을 추가합니다. 한 번 설치하면 모든 세션에서 사용할 수 있습니다.
 
-Antigravity CLI의 플러그인 시스템은 독특한 기능을 제공합니다. 재설치나 재구성 없이 **Gemini CLI에 이미 설치한 플러그인을 가져올 수 있습니다**. 기존에 투자한 환경이 그대로 유지됩니다.
+Antigravity CLI의 플러그인 시스템은 독특한 기능을 제공합니다. 재설치나 재구성 없이 **Gemini CLI에 이미 설치한 플러그인을 가져올 수 있습니다**. 기존의 설정이 그대로 이어집니다.
 
 ### 활성화된 항목 확인하기
 
@@ -254,7 +262,7 @@ agy plugin list
 agy plugin import gemini
 ```
 
-agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을 찾고, 해당 구성 요소를 `~/.gemini/antigravity/`에 스테이징합니다. 출력:
+agy는 로컬의 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을 찾고, 해당 구성 요소를 `~/.gemini/antigravity/`에 스테이징합니다. 출력 결과:
 
 ```text
   [ok]    code-review
@@ -268,10 +276,10 @@ agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을
 ```
 
 !!! warning "사용자 지정 테마는 조용히 삭제됩니다"
-    사용자 지정 테마 구성 요소는 agy의 모델로 1:1 마이그레이션할 수 없으며 가져오기 중에 오류 없이 건너뜁니다. 워크플로우에서 테마가 중요한 경우 가져온 후 활성화된 플러그인을 확인하세요.
+    사용자 지정 테마 구성 요소는 agy의 모델로 1:1 마이그레이션할 수 없으며 가져오기 중에 오류 없이 건너뜁니다. 워크플로에서 테마가 중요한 경우 가져오기 후 활성화된 플러그인을 확인하세요.
 
 !!! tip "플러그인 업데이트 후 다시 가져오기"
-    이미 가져온 플러그인은 기본적으로 건너뜁니다. 강제로 다시 가져오려면 다음을 실행하세요:
+    이미 가져온 플러그인은 기본적으로 건너뜁니다. 강제로 다시 가져오기:
     ```bash
     agy plugin import gemini --force
     ```
@@ -342,29 +350,31 @@ agy plugin validate ./my-plugin
 > 📖 전체 참조: [플러그인](https://www.antigravity.google/docs/plugins) · [마이그레이션 가이드](https://www.antigravity.google/docs/gcli-migration)
 
 ---
-## 모듈 1 실습
+
+## 모듈 1 연습 문제
 
 <div class="exercise-card" markdown>
 
-### :material-file-document: 실습 1: 첫 번째 세션
+### :material-file-document: 연습 문제 1: 첫 번째 세션
 
 **파일:** `exercises/ex01_first_session.md`  
 **소요 시간:** 15분  
-**목표:** agy 실행, 코드베이스 탐색, AGENTS.md 생성.
+**목표:** agy를 실행하고, 코드베이스를 탐색하며, AGENTS.md를 생성합니다.
 
 </div>
 
 <div class="exercise-card" markdown>
 
-### :material-puzzle: 실습 2: 플러그인 브릿지
+### :material-puzzle: 연습 문제 2: 플러그인 브리지
 
 **파일:** `exercises/ex02_plugin_bridge.md`  
 **소요 시간:** 20분  
-**목표:** Gemini CLI에서 플러그인 가져오기, 선택적으로 활성화/비활성화, 사용자 지정 플러그인 유효성 검사.
+**목표:** Gemini CLI에서 플러그인을 가져오고, 선택적으로 활성화/비활성화하며, 사용자 지정 플러그인을 검증합니다.
 
 </div>
 
 ---
+
 ## 다음 모듈
 
-→ **[모듈 2: 레거시 코드베이스 현대화](legacy-modernization.md)** — 엄격 모드, 에이전트 셀프 온보딩, 서브에이전트, 그리고 안전망 역할을 하는 `/rewind`.
+→ **[모듈 2: 레거시 코드베이스 현대화](legacy-modernization.md)** — 엄격 모드, 에이전트 자체 온보딩, 서브에이전트, 그리고 안전망 역할을 하는 `/rewind`.

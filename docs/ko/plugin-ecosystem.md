@@ -1,11 +1,12 @@
 # 참조: 플러그인 생태계
 
-> **agy-cli의 플러그인 시스템에 대한 심층 참조입니다.** 필수 명령어는 [모듈 1 — 섹션 1.7](sdlc-productivity.md#17-extend-with-plugins)에서 다룹니다. 이 페이지에는 사용자 지정 플러그인을 구축하고 유지 관리하는 팀을 위한 전체 수명 주기 세부 정보가 포함되어 있습니다.
+> **agy-cli의 플러그인 시스템에 대한 심층 참조입니다.** 필수 명령어는 [모듈 1 — 섹션 1.7](sdlc-productivity.md#17-extend-with-plugins)에서 다룹니다. 이 페이지는 사용자 지정 플러그인을 구축하고 유지 관리하는 팀을 위한 전체 수명주기 세부 정보를 제공합니다.
 
 ---
-## 2.0 — 플러그인이 중요한 이유 <span class="duration-badge">5분</span>
 
-agy-cli의 플러그인 시스템은 독특한 기능을 수행합니다. 재설치나 재구성 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 유지됩니다.
+## 2.0 — 플러그인이 중요한 이유 <span class="duration-badge">5 min</span>
+
+agy-cli의 플러그인 시스템은 독특한 기능을 수행합니다. 재설치나 재구성 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 이어집니다.
 
 ```bash
 # See what plugins are currently active in agy
@@ -22,9 +23,10 @@ agy plugin list | python3 -m json.tool
 > 📖 공식 문서: [플러그인](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [스킬](https://www.antigravity.google/docs/skills)
 
 ---
+
 ## 2.1 — Gemini CLI에서 가져오기 <span class="duration-badge">10분</span>
 
-> **패턴: 교차 도구 플러그인 브릿지** — 전체 Gemini CLI 플러그인 설정을 agy로 가져옵니다.
+> **패턴: 교차 도구 플러그인 브리지** — 전체 Gemini CLI 플러그인 설정을 agy로 가져옵니다.
 
 ### 모든 Gemini CLI 플러그인 가져오기
 
@@ -32,7 +34,7 @@ agy plugin list | python3 -m json.tool
 agy plugin import gemini
 ```
 
-agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을 검색하고, 해당 구성 요소(스킬, 명령어, MCP 서버, 에이전트)를 `~/.gemini/antigravity/`에 있는 agy의 설정으로 스테이징합니다.
+agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을 찾고, 해당 구성 요소(스킬, 명령, MCP 서버, 에이전트)를 `~/.gemini/antigravity/`의 agy 설정에 스테이징합니다.
 
 출력은 다음과 같습니다:
 
@@ -47,7 +49,7 @@ agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을
   [skip]  superpowers (already imported)
 ```
 
-!!! tip "--force를 사용하여 다시 가져오기"
+!!! tip "--force로 다시 가져오기"
     이미 가져온 플러그인은 기본적으로 건너뜁니다. 플러그인 업데이트 후 강제로 다시 가져오려면:
     ```bash
     agy plugin import gemini --force
@@ -343,11 +345,12 @@ Sidecar output is stored at:
 ```
 
 ---
+
 ## 모듈 2 연습 문제
 
 <div class="exercise-card" markdown>
 
-### :material-file-document: 연습 문제 2: 플러그인 브릿지
+### :material-file-document: 연습 문제 2: 플러그인 브리지
 
 **파일:** `exercises/ex02_plugin_bridge.md`
 **소요 시간:** 20분
@@ -360,7 +363,7 @@ Sidecar output is stored at:
 ### :material-clock-outline: 연습 문제 2B: 첫 번째 사이드카
 
 > **소요 시간:** 20분
-> **빌드:** 오전 9시에 실행되어 새로운 AGY 대화를 생성하고, 저장소 전체에서 어제의 git 커밋을 요약하도록 요청하는 예약된 **일일 스탠드업 사이드카**를 빌드합니다.
+> **구축:** 오전 9시에 실행되어 새로운 AGY 대화를 생성하고, 모든 리포지토리에서 어제 수행한 git 커밋을 요약하도록 요청하는 예약된 **일일 스탠드업 사이드카**를 구축합니다.
 
 **수행할 작업:**
 
@@ -370,13 +373,14 @@ Sidecar output is stored at:
 4. `~/.gemini/config/config.json`에서 이를 활성화합니다.
 5. `~/.gemini/antigravity/sidecar_data/standup/logs/`의 로그에 나타나는지 확인합니다.
 
-**추가 목표:** `command: python3`를 사용하여 로컬 파일의 변경 사항을 감시하고, 차이점을 감지하면 기존 대화로 메시지를 보내는 두 번째 사이드카를 추가합니다.
+**추가 목표:** `command: python3`을 사용하여 로컬 파일의 변경 사항을 감시하고, 차이점을 감지하면 기존 대화에 메시지를 보내는 두 번째 사이드카를 추가합니다.
 
 </div>
 
 ---
+
 ## 워크숍으로 돌아가기
 
-→ **[모듈 1: SDLC 생산성 향상](sdlc-productivity.md)** — 섹션 1.7에서 플러그인이 소개됩니다.
+→ **[모듈 1: SDLC 생산성 향상](sdlc-productivity.md)** — 섹션 1.7에서 플러그인이 소개됩니다
 
-→ **[치트시트](cheatsheet.md)** — 모든 플러그인 및 사이드카 명령어가 한곳에 모여 있습니다.
+→ **[치트시트](cheatsheet.md)** — 모든 플러그인 및 사이드카 명령어를 한곳에 모아두었습니다

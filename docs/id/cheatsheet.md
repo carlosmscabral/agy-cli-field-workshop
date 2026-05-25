@@ -1,9 +1,10 @@
-# agy-cli Lembar Contekan
+# Lembar Contekan agy-cli
 
 > Referensi cepat untuk semua yang dibahas dalam lokakarya ini.
 > Semua perintah telah diverifikasi terhadap [antigravity.google/docs](https://antigravity.google/docs/cli-overview).
 
 ---
+
 ## Instalasi & Versi
 
 ```bash
@@ -15,37 +16,40 @@ agy install        # Configure PATH and shell aliases
 ```
 
 ---
+
 ## Mode Peluncuran
 
 | Mode | Perintah | Kapan digunakan |
 | :-- | :-- | :-- |
 | **Interaktif** | `agy` | Bawaan — sesi percakapan penuh |
 | **Interaktif dengan awalan** | `agy -i "<prompt>"` | Mulai dengan arahan, lanjutkan secara percakapan |
-| **Cetak (mode headless)** | `agy -p "<prompt>"` | Satu kali jalan, teruskan (pipe) ke stdout |
-| **Lanjutkan terakhir** | `agy -c` | Lanjutkan sesi paling baru |
+| **Cetak (headless)** | `agy -p "<prompt>"` | Sekali jalan, teruskan ke stdout |
+| **Lanjutkan yang terakhir** | `agy -c` | Lanjutkan sesi paling baru |
 | **Lanjutkan berdasarkan ID** | `agy --conversation <id>` | Lanjutkan sesi masa lalu yang spesifik |
 | **Lanjutkan dalam sesi** | `/resume` atau `/switch` | Beralih percakapan tanpa meninggalkan agy |
 
 ---
+
 ## Flag Utama
 
-> Sumber: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [penggunaan cli](https://antigravity.google/docs/cli-using)
+> Sumber: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
 
 | Flag | Singkat | Deskripsi |
 | :-- | :-- | :-- |
 | `--print "<prompt>"` | `-p` | Prompt tunggal non-interaktif |
 | `--prompt-interactive "<prompt>"` | `-i` | Sesi interaktif dengan seed |
-| `--continue` | `-c` | Melanjutkan percakapan terbaru |
-| `--conversation <id>` | — | Melanjutkan berdasarkan ID percakapan |
-| `--add-dir <path>` | — | Menambahkan direktori ke ruang kerja (dapat diulang) |
-| `--sandbox` | — | Mengaktifkan pembatasan sandbox terminal |
-| `--dangerously-skip-permissions` | — | Menyetujui otomatis semua permintaan alat (hanya CI) |
+| `--continue` | `-c` | Lanjutkan percakapan paling baru |
+| `--conversation <id>` | — | Lanjutkan berdasarkan ID percakapan |
+| `--add-dir <path>` | — | Tambahkan direktori ke ruang kerja (dapat diulang) |
+| `--sandbox` | — | Aktifkan pembatasan sandbox terminal |
+| `--dangerously-skip-permissions` | — | Setujui otomatis semua permintaan alat (hanya CI) |
 | `--print-timeout <duration>` | — | Batas waktu untuk mode cetak (bawaan: 5m) |
-| `--log-file <path>` | — | Menimpa jalur keluaran log |
+| `--log-file <path>` | — | Timpa jalur keluaran log |
 
 > **Catatan:** Pemilihan model dan mode ketat diatur melalui perintah garis miring `/model` dan `/permissions`, bukan flag CLI. Lihat [Dokumentasi fitur](https://antigravity.google/docs/cli-features).
 
 ---
+
 ## Perintah Slash (Mode Interaktif)
 
 > Sumber: [Fitur CLI — Perintah Slash Inti](https://antigravity.google/docs/cli-features) · [Menggunakan Antigravity CLI](https://antigravity.google/docs/cli-using)
@@ -62,14 +66,15 @@ agy install        # Configure PATH and shell aliases
 | `/keybindings` | Konfigurasi | Buka editor pintasan keyboard interaktif |
 | `/statusline` | Konfigurasi | Sesuaikan indikator bilah status CLI waktu nyata |
 | `/tasks` | Pemantauan | Pantau, lihat log untuk, atau hentikan tugas latar belakang |
-| `/skills` | Pemantauan | Telusuri skill agen lokal dan global |
+| `/skills` | Pemantauan | Jelajahi skill agen lokal dan global |
 | `/mcp` | Pemantauan | Konfigurasi dan kelola server MCP |
 | `/agents` | Pemantauan | Lihat, kelola, dan setujui tindakan sub-agen |
 | `/open <path>` | Utilitas | Buka berkas di editor eksternal pilihan Anda |
-| `/usage` | Utilitas | Buka manual bantuan interaktif sebaris |
+| `/usage` | Utilitas | Buka panduan bantuan interaktif sebaris |
 | `/logout` | Akun | Keluar dan bersihkan kredensial yang di-cache |
 
 ---
+
 ## Tips Cepat
 
 > Sumber: [Menggunakan Antigravity CLI — Tips Cepat & Pintasan Keyboard](https://antigravity.google/docs/cli-using)
@@ -89,6 +94,7 @@ agy install        # Configure PATH and shell aliases
 | `ctrl+k` | Setujui cepat izin sub-agen yang tertunda dari percakapan utama |
 
 ---
+
 ## Perintah Plugin
 
 ```bash
@@ -120,7 +126,8 @@ agy plugin link <marketplace> <target>
 ```
 
 ---
-## Sidecar
+
+## Sidecars
 
 > Proses latar belakang yang dikelola AGY untuk Anda — diluncurkan, dimulai ulang, dan berjalan secara independen dari percakapan apa pun. Sumber: [antigravity.google/docs/sidecars](https://antigravity.google/docs/sidecars)
 
@@ -156,6 +163,7 @@ Minimal `sidecar.json` — tugas berulang terjadwal:
 ```
 
 ---
+
 ## Ruang Kerja & Konteks
 
 ```bash
@@ -189,7 +197,8 @@ Brief description of what this project is.
 ```
 
 ---
-## Pola yang Berguna
+
+## Pola Berguna
 
 ```bash
 # Review staged changes before commit
@@ -215,6 +224,7 @@ agy --sandbox --dangerously-skip-permissions \
 ```
 
 ---
+
 ## Pola Multi-Agen
 
 ```text
@@ -232,6 +242,7 @@ agy --sandbox --dangerously-skip-permissions \
 ```
 
 ---
+
 ## Contoh Pipeline Mode Cetak
 
 ```bash
@@ -250,6 +261,7 @@ done
 ```
 
 ---
+
 ## Dokumentasi Resmi
 
 | Topik | Tautan |

@@ -1,11 +1,12 @@
 # Modul 1: Produktivitas SDLC <span class="duration-badge">75 menit</span>
 
-> **Sesi Antigravity CLI nyata pertama Anda.** Modul ini mencakup alur kerja utama sehari-hari — memahami kode, refactoring, menghasilkan pengujian, dan meninjau perubahan — ditambah cara memperluas CLI dengan plugin untuk toolchain tim Anda.
+> **Sesi Antigravity CLI nyata pertama Anda.** Modul ini mencakup alur kerja utama sehari-hari — memahami kode, melakukan refactoring, membuat pengujian, dan meninjau perubahan — ditambah cara memperluas CLI dengan plugin untuk toolchain tim Anda.
 
 ---
+
 ## 1.0 — Sesi Interaktif Pertama <span class="duration-badge">5 menit</span>
 
-Jalankan Antigravity CLI di direktori proyek lokakarya Anda:
+Jalankan Antigravity CLI di direktori proyek workshop Anda:
 
 ```bash
 cd agy-cli-field-workshop
@@ -18,17 +19,18 @@ Anda akan masuk ke prompt interaktif. Coba:
 > What files are in this project and what does each one do?
 ```
 
-Perhatikan bagaimana agy membaca ruang kerja Anda — ia mengindeks repo git, membaca isi file, dan merespons dengan konteks. Ini **otomatis**: tanpa konfigurasi, tanpa prompt yang harus ditulis terlebih dahulu.
+Perhatikan bagaimana agy membaca ruang kerja Anda — ia mengindeks repositori git, membaca isi file, dan merespons dengan konteks. Ini **otomatis**: tanpa konfigurasi, tanpa prompt yang harus ditulis terlebih dahulu.
 
 !!! tip "Folder .agents/"
-    Setelah sesi pertama Anda, periksa `.agents/` — agy membuat file konfigurasi proyek yang melacak ruang kerja Anda. Beginilah cara ia mengetahui apa yang harus diindeks saat dijalankan di masa mendatang.
+    Setelah sesi pertama Anda, periksa `.agents/` — agy membuat file konfigurasi proyek yang melacak ruang kerja Anda. Ini adalah cara ia mengetahui apa yang harus diindeks pada proses berikutnya.
 
 ---
+
 ## 1.1 — Pemahaman Kode <span class="duration-badge">10 menit</span>
 
-> **Pola: Jelaskan Sebelum Menyentuh** — pahami kode sebelum mengubahnya.
+> **Pola: Jelaskan Sebelum Anda Menyentuhnya** — pahami kode sebelum mengubahnya.
 
-### Latihan: Memetakan Basis Kode yang Tidak Dikenal
+### Latihan: Memetakan Basis Kode yang Belum Dikenal
 
 ```bash
 # -i seeds the session with an initial prompt and stays interactive
@@ -43,15 +45,16 @@ Kemudian tindak lanjuti secara interaktif:
 > Are there any obvious code smells or tech debt?
 ```
 
-!!! tip "Gunakan -i untuk sesi yang diinisialisasi"
+!!! tip "Gunakan -i untuk sesi dengan prompt awal"
     `agy -i "<task>"` (singkatan dari `--prompt-interactive`) dimulai dengan sebuah prompt tetapi tetap interaktif. Sangat bagus untuk eksplorasi yang terarah — Anda menentukan arahnya, lalu mengarahkannya dengan tindak lanjut.
 
 ---
+
 ## 1.2 — Refactoring <span class="duration-badge">10 min</span>
 
 > **Pola: Usulkan, Tinjau, Terapkan** — jangan pernah menerapkan perubahan yang belum Anda baca.
 
-### Latihan: Refactor Bertarget
+### Latihan: Refactoring Bertarget
 
 ```bash
 agy
@@ -76,10 +79,10 @@ agy memiliki **model izin 3 tingkat** yang mengontrol bagaimana ia menangani per
 | Tingkat | Perilaku |
 | :-- | :-- |
 | `request-review` | **Bawaan.** agy meminta persetujuan sebelum menulis file atau menjalankan perintah |
-| `always-proceed` | Menyetujui otomatis semua panggilan alat — berguna untuk skrip tepercaya dan CI |
-| `strict` | Menolak semua penggunaan alat kecuali diizinkan secara eksplisit — kontrol maksimum |
+| `always-proceed` | Setujui otomatis semua panggilan alat — berguna untuk skrip tepercaya dan CI |
+| `strict` | Tolak semua penggunaan alat kecuali diizinkan secara eksplisit — kontrol maksimum |
 
-Gunakan perintah garis miring `/permissions` untuk melihat atau mengubah tingkat saat ini. Anda juga dapat mengatur aturan terperinci di `settings.json`:
+Gunakan perintah garis miring `/permissions` untuk melihat atau mengubah tingkat saat ini. Anda juga dapat menetapkan aturan terperinci di `settings.json`:
 
 ```json
 {
@@ -93,9 +96,10 @@ Gunakan perintah garis miring `/permissions` untuk melihat atau mengubah tingkat
 > 📖 Detail lengkap: [Dokumentasi Izin](https://www.antigravity.google/docs/permissions) · [Dokumentasi Mode Ketat](https://www.antigravity.google/docs/strict-mode)
 
 ---
+
 ## 1.3 — Pembuatan Pengujian <span class="duration-badge">10 min</span>
 
-> **Pola: Uji Apa yang Ada** — buat pengujian untuk kode nyata, bukan hipotetis.
+> **Pola: Uji Apa yang Ada** — buat pengujian untuk kode nyata, bukan hipotesis.
 
 ### Latihan: Buat Pengujian Unit
 
@@ -117,6 +121,7 @@ Kemudian:
     agy dapat mengeksekusi perintah shell. Ia akan menjalankan rangkaian pengujian Anda dan melakukan iterasi pada kegagalan tanpa Anda harus menyalin-tempel pesan kesalahan. Perhatikan ia mengoreksi dirinya sendiri.
 
 ---
+
 ## 1.4 — Tinjauan Kode <span class="duration-badge">10 menit</span>
 
 > **Pola: Tinjauan Pra-Commit** — gunakan agy sebagai peninjau senior sebelum setiap push.
@@ -143,11 +148,12 @@ git diff --cached | agy --print "Review these changes. Flag any bugs, security i
 ```
 
 ---
-## 1.5 — Konteks Proyek dengan AGENTS.md <span class="duration-badge">5 menit</span>
+
+## 1.5 — Konteks Proyek dengan AGENTS.md <span class="duration-badge">5 min</span>
 
 > **Pola: Konteks Persisten** — beri tahu agy sekali, ia akan mengingatnya di setiap sesi.
 
-agy membaca berkas konteks pada saat sesi dimulai. Buat satu di akar proyek:
+agy membaca file konteks saat sesi dimulai. Buat satu di root proyek:
 
 ```bash
 cat > AGENTS.md << 'EOF'
@@ -187,13 +193,14 @@ agy akan memasukkan AGENTS.md Anda ke dalam setiap sesi berikutnya secara otomat
 
 Selain AGENTS.md, agy juga memuat:
 
-- **`.agents/rules.md`** (atau `.agents/rules/*.md`) — aturan tingkat proyek yang disuntikkan sebagai arahan prompt sistem. Gunakan ini untuk persyaratan mutlak seperti "jangan pernah menghapus berkas migrasi" atau "selalu gunakan mode ketat TypeScript."
+- **`.agents/rules.md`** (atau `.agents/rules/*.md`) — aturan tingkat proyek yang disuntikkan sebagai arahan prompt sistem. Gunakan ini untuk persyaratan mutlak seperti "jangan pernah menghapus file migrasi" atau "selalu gunakan mode ketat TypeScript."
 - **`.gemini/`** — untuk kompatibilitas Gemini CLI, agy membaca direktori `.gemini/` bersama dengan `.agents/`.
 - **`~/.gemini/config/rules.md`** — aturan global yang diterapkan ke semua sesi.
 
-> 📖 Detail lengkap: [Dokumentasi Aturan & Alur Kerja](https://www.antigravity.google/docs/rules-workflows)
+> 📖 Detail lengkap: [Dokumentasi Rules & Workflows](https://www.antigravity.google/docs/rules-workflows)
 
 ---
+
 ## 1.6 — Navigasi Interaktif <span class="duration-badge">5 menit</span>
 
 > **Pola: Kelancaran Terminal** — ketahui pintasan yang membuat sesi agy menjadi cepat.
@@ -201,7 +208,7 @@ Selain AGENTS.md, agy juga memuat:
 
 ### Perintah Garis Miring Utama
 
-| Perintah | Fungsinya |
+| Perintah | Apa yang dilakukannya |
 | :-- | :-- |
 | `/rewind` (atau `/undo`) | Mengembalikan riwayat percakapan ke checkpoint sebelumnya |
 | `/resume` (atau `/switch`) | Membuka pemilih percakapan untuk melanjutkan atau beralih sesi |
@@ -212,7 +219,7 @@ Selain AGENTS.md, agy juga memuat:
 | `/tasks` | Memantau, melihat log untuk, atau menghentikan tugas latar belakang |
 | `/agents` | Melihat, mengelola, dan menyetujui tindakan sub-agen |
 | `/open <path>` | Membuka file di editor eksternal pilihan Anda |
-| `/usage` | Membuka panduan bantuan interaktif sebaris |
+| `/usage` | Membuka manual bantuan interaktif sebaris |
 | `/skills` | Menelusuri skill agen lokal dan global |
 | `/mcp` | Mengonfigurasi dan mengelola server MCP |
 
@@ -220,7 +227,7 @@ Selain AGENTS.md, agy juga memuat:
 
 ### Tips Cepat
 
-| Pintasan | Fungsinya |
+| Pintasan | Apa yang dilakukannya |
 | :-- | :-- |
 | `@` | Pelengkapan otomatis jalur file — ketik `@` untuk memicu saran jalur |
 | `!` | Menjalankan perintah terminal secara langsung tanpa meninggalkan agy |
@@ -234,11 +241,12 @@ Selain AGENTS.md, agy juga memuat:
 > 📖 Referensi lengkap pengikatan tombol: [Menggunakan Antigravity CLI](https://antigravity.google/docs/cli-using)
 
 ---
+
 ## 1.7 — Perluas dengan Plugin <span class="duration-badge">15 menit</span>
 
 > **Pola: Bawa Toolchain Anda** — plugin menambahkan skill, server MCP, agen, dan aturan ke agy. Instal sekali, tersedia di setiap sesi.
 
-Sistem plugin Antigravity CLI melakukan sesuatu yang unik: sistem ini dapat **mengimpor plugin yang sudah Anda instal di Gemini CLI** — tanpa menginstal ulang atau mengonfigurasi ulang. Investasi Anda yang ada akan terbawa.
+Sistem plugin Antigravity CLI melakukan sesuatu yang unik: sistem ini dapat **mengimpor plugin yang telah Anda instal di Gemini CLI** — tanpa menginstal ulang atau mengonfigurasi ulang. Investasi Anda yang ada akan terbawa.
 
 ### Lihat Apa yang Aktif
 
@@ -246,7 +254,7 @@ Sistem plugin Antigravity CLI melakukan sesuatu yang unik: sistem ini dapat **me
 agy plugin list
 ```
 
-Menampilkan nama, sumber, tanggal impor, dan komponen (skill, perintah, mcpServers, agen) dari setiap plugin.
+Menampilkan nama setiap plugin, sumber, tanggal impor, dan komponen (skill, perintah, mcpServers, agen).
 
 ### Impor dari Gemini CLI
 
@@ -342,6 +350,7 @@ agy plugin validate ./my-plugin
 > 📖 Referensi lengkap: [Plugin](https://www.antigravity.google/docs/plugins) · [Panduan Migrasi](https://www.antigravity.google/docs/gcli-migration)
 
 ---
+
 ## Latihan Modul 1
 
 <div class="exercise-card" markdown>
@@ -350,7 +359,7 @@ agy plugin validate ./my-plugin
 
 **Berkas:** `exercises/ex01_first_session.md`  
 **Durasi:** 15 menit  
-**Tujuan:** Meluncurkan agy, menjelajahi basis kode, menghasilkan sebuah AGENTS.md.
+**Tujuan:** Menjalankan agy, menjelajahi basis kode, menghasilkan AGENTS.md.
 
 </div>
 
@@ -365,6 +374,7 @@ agy plugin validate ./my-plugin
 </div>
 
 ---
+
 ## Modul Selanjutnya
 
-→ **[Modul 2: Modernisasi Basis Kode Legacy](legacy-modernization.md)** — mode ketat, orientasi mandiri agen, sub-agen, dan `/rewind` sebagai jaring pengaman Anda.
+→ **[Modul 2: Modernisasi Basis Kode Legacy](legacy-modernization.md)** — mode ketat, onboarding mandiri agen, sub-agen, dan `/rewind` sebagai jaring pengaman Anda.

@@ -4,6 +4,7 @@
 > 모든 명령어는 [antigravity.google/docs](https://antigravity.google/docs/cli-overview)를 기준으로 검증되었습니다.
 
 ---
+
 ## 설치 및 버전
 
 ```bash
@@ -15,6 +16,7 @@ agy install        # Configure PATH and shell aliases
 ```
 
 ---
+
 ## 실행 모드
 
 | 모드 | 명령어 | 사용 시기 |
@@ -22,30 +24,32 @@ agy install        # Configure PATH and shell aliases
 | **대화형** | `agy` | 기본값 — 전체 대화형 세션 |
 | **시드 대화형** | `agy -i "<프롬프트>"` | 지시사항으로 시작하여 대화형으로 계속 진행 |
 | **출력 (헤드리스 모드)** | `agy -p "<프롬프트>"` | 단일 실행, stdout으로 파이프 |
-| **마지막 세션 계속** | `agy -c` | 가장 최근 세션 재개 |
+| **마지막 세션 계속하기** | `agy -c` | 가장 최근 세션 재개 |
 | **ID로 재개** | `agy --conversation <id>` | 특정 과거 세션 재개 |
 | **세션 내 재개** | `/resume` 또는 `/switch` | agy를 종료하지 않고 대화 전환 |
 
 ---
+
 ## 주요 플래그
 
 > 출처: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
 
-| 플래그 | 단축어 | 설명 |
+| 플래그 | 단축형 | 설명 |
 | :-- | :-- | :-- |
 | `--print "<prompt>"` | `-p` | 비대화형 단일 프롬프트 |
-| `--prompt-interactive "<prompt>"` | `-i` | 시드된 대화형 세션 |
+| `--prompt-interactive "<prompt>"` | `-i` | 시드가 지정된 대화형 세션 |
 | `--continue` | `-c` | 가장 최근 대화 재개 |
 | `--conversation <id>` | — | 대화 ID로 재개 |
 | `--add-dir <path>` | — | 작업 공간에 디렉터리 추가 (반복 가능) |
 | `--sandbox` | — | 터미널 샌드박스 제한 활성화 |
 | `--dangerously-skip-permissions` | — | 모든 도구 요청 자동 승인 (CI 전용) |
-| `--print-timeout <duration>` | — | print 모드 타임아웃 (기본값: 5분) |
+| `--print-timeout <duration>` | — | 출력 모드 시간 초과 (기본값: 5분) |
 | `--log-file <path>` | — | 로그 출력 경로 재정의 |
 
 > **참고:** 모델 선택 및 엄격 모드는 CLI 플래그가 아닌 `/model` 및 `/permissions` 슬래시 명령어를 통해 설정됩니다. [기능 문서](https://antigravity.google/docs/cli-features)를 참조하세요.
 
 ---
+
 ## 슬래시 명령어 (대화형 모드)
 
 > 출처: [CLI 기능 — 핵심 슬래시 명령어](https://antigravity.google/docs/cli-features) · [Antigravity CLI 사용하기](https://antigravity.google/docs/cli-using)
@@ -53,14 +57,14 @@ agy install        # Configure PATH and shell aliases
 | 명령어 | 카테고리 | 목적 |
 | :-- | :-- | :-- |
 | `/resume` (`/switch`) | 대화 | 대화 선택기를 열어 세션을 재개하거나 전환합니다 |
-| `/rewind` (`/undo`) | 대화 | 대화 기록을 이전 체크포인트로 되돌립니다 |
-| `/fork` | 대화 | 현재 대화를 병렬의 격리된 작업 공간으로 분기합니다 — 원본에 영향을 주지 않고 위험한 단계를 시험해 봅니다 |
-| `/rename <name>` | 대화 | 활성 대화 스레드의 이름을 변경합니다 |
+| `/rewind` (`/undo`) | 대화 | 대화 기록을 이전 체크포인트로 롤백합니다 |
+| `/fork` | 대화 | 현재 대화를 병렬 격리된 작업 공간으로 분기합니다 — 원본에 영향을 주지 않고 위험한 단계를 시험해 봅니다 |
+| `/rename <name>` | 대화 | 활성 대화 스레드의 이름을 바꿉니다 |
 | `/permissions` | 설정 | 자율성 수준 설정: `request-review`, `always-proceed`, `strict` |
 | `/model` | 설정 | 기본 추론 모델을 선택합니다 (세션 간 유지됨) |
 | `/config` (`/settings`) | 설정 | 전체 화면 설정 오버레이를 엽니다 |
 | `/keybindings` | 설정 | 대화형 키보드 단축키 편집기를 엽니다 |
-| `/statusline` | 설정 | 실시간 CLI 상태 표시줄 표시기를 사용자 지정합니다 |
+| `/statusline` | 설정 | 실시간 CLI 상태 표시줄 표시기를 사용자 정의합니다 |
 | `/tasks` | 모니터링 | 백그라운드 작업을 모니터링하거나, 로그를 보거나, 종료합니다 |
 | `/skills` | 모니터링 | 로컬 및 글로벌 에이전트 스킬을 탐색합니다 |
 | `/mcp` | 모니터링 | MCP 서버를 구성하고 관리합니다 |
@@ -70,9 +74,10 @@ agy install        # Configure PATH and shell aliases
 | `/logout` | 계정 | 로그아웃하고 캐시된 자격 증명을 지웁니다 |
 
 ---
+
 ## 빠른 팁
 
-> 출처: [Antigravity CLI 사용하기 — 빠른 팁 및 키 바인딩](https://antigravity.google/docs/cli-using)
+> 출처: [Antigravity CLI 사용 — 빠른 팁 및 키 바인딩](https://antigravity.google/docs/cli-using)
 
 | 단축키 / 팁 | 동작 |
 | :-- | :-- |
@@ -81,7 +86,7 @@ agy install        # Configure PATH and shell aliases
 | `esc esc` | 프롬프트 상자 지우기 (스트리밍이 활성화되지 않은 경우) |
 | `?` | 도움말 보기 및 모든 슬래시 명령어 나열 |
 | `alt+enter` / `shift+enter` | 제출하지 않고 줄 바꿈 삽입 |
-| `ctrl+g` | 기본 셸 편집기 내에서 프롬프트 편집 |
+| `ctrl+g` | 기본 셸 편집기에서 프롬프트 편집 |
 | `ctrl+l` | TUI 화면 지우기 |
 | `ctrl+d` | CLI 세션 종료 |
 | `ctrl+z` | CLI를 터미널 백그라운드로 일시 중단 |
@@ -89,6 +94,7 @@ agy install        # Configure PATH and shell aliases
 | `ctrl+k` | 메인 대화에서 대기 중인 서브에이전트 권한 빠른 승인 |
 
 ---
+
 ## 플러그인 명령어
 
 ```bash
@@ -120,9 +126,10 @@ agy plugin link <marketplace> <target>
 ```
 
 ---
+
 ## 사이드카
 
-> AGY가 관리하는 백그라운드 프로세스입니다. 대화와 독립적으로 시작, 재시작 및 실행됩니다. 출처: [antigravity.google/docs/sidecars](https://antigravity.google/docs/sidecars)
+> AGY가 사용자를 위해 관리하는 백그라운드 프로세스입니다. 대화와 독립적으로 실행, 재시작 및 작동합니다. 출처: [antigravity.google/docs/sidecars](https://antigravity.google/docs/sidecars)
 
 ```bash
 # Config locations:
@@ -140,13 +147,13 @@ agentapi new-conversation "<prompt>"
 agentapi send-message <conversation_id> "<prompt>"
 ```
 
-최소한의 `sidecar.json` — 백그라운드 스크립트:
+최소 `sidecar.json` — 백그라운드 스크립트:
 
 ```json
 { "command": "python3", "args": ["worker.py"], "restart_policy": "on-failure" }
 ```
 
-최소한의 `sidecar.json` — 예약된 반복 작업:
+최소 `sidecar.json` — 예약된 반복 작업:
 
 ```json
 {
@@ -156,7 +163,8 @@ agentapi send-message <conversation_id> "<prompt>"
 ```
 
 ---
-## 작업 공간 및 컨텍스트
+
+## 워크스페이스 및 컨텍스트
 
 ```bash
 # Project config directory:
@@ -189,6 +197,7 @@ Brief description of what this project is.
 ```
 
 ---
+
 ## 유용한 패턴
 
 ```bash
@@ -215,7 +224,8 @@ agy --sandbox --dangerously-skip-permissions \
 ```
 
 ---
-## 다중 에이전트 패턴
+
+## 멀티 에이전트 패턴
 
 ```text
 # Spawn parallel subagents (in interactive mode)
@@ -232,7 +242,8 @@ agy --sandbox --dangerously-skip-permissions \
 ```
 
 ---
-## 프린트 모드 파이프라인 예제
+
+## 프린트 모드 파이프라인 예시
 
 ```bash
 # Step 1: plan
@@ -250,6 +261,7 @@ done
 ```
 
 ---
+
 ## 공식 문서
 
 | 주제 | 링크 |
@@ -258,7 +270,7 @@ done
 | 시작하기 | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
 | Antigravity CLI 사용 (설정, 팁, 키 바인딩) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
 | 기능 (플러그인, 샌드박스, 슬래시 명령어, 서브에이전트) | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
-| Gemini CLI에서의 마이그레이션 | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
+| Gemini CLI에서 마이그레이션 | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
 | 권한 | [antigravity.google/docs/permissions](https://antigravity.google/docs/permissions) |
 | 엄격 모드 | [antigravity.google/docs/strict-mode](https://antigravity.google/docs/strict-mode) |
 | 플러그인 | [antigravity.google/docs/plugins](https://antigravity.google/docs/plugins) |

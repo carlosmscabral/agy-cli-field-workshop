@@ -1,6 +1,6 @@
 # Modul 4: Multi-Agen & Lanjutan <span class="duration-badge">45 menit</span>
 
-> **Di mana agy melampaui asisten obrolan.** Modul ini mencakup fitur-fitur yang membedakan agy-cli dari setiap alat pengkodean AI lainnya: sub-agen paralel, pengarahan di tengah tugas dengan `/btw`, penjadwalan latar belakang, dan pelanjutan sesi.
+> **Di mana agy melampaui asisten obrolan.** Modul ini membahas fitur-fitur yang membedakan agy-cli dari alat pengodean AI lainnya: sub-agen paralel, pengarahan di tengah tugas dengan `/btw`, penjadwalan latar belakang, dan pemulihan sesi.
 
 ---
 
@@ -10,21 +10,21 @@ agy-cli dapat memunculkan **sub-agen** — pelaksana tugas terisolasi yang berop
 
 Tiga mode ruang kerja:
 
-| Mode | Apa artinya | Gunakan ketika |
+| Mode | Artinya | Gunakan saat |
 | :-- | :-- | :-- |
 | `inherit` | Sub-agen berbagi ruang kerja yang sama | Tugas tambahan — tidak ada konflik yang diharapkan |
-| `branch` | Sub-agen mendapatkan klon yang terisolasi | Perubahan paralel pada berkas yang sama |
-| `share` | Git worktree — cabang terisolasi, repositori bersama | Pengembangan paralel yang sebenarnya |
+| `branch` | Sub-agen mendapatkan klon yang terisolasi | Perubahan paralel pada file yang sama |
+| `share` | git worktree — cabang terisolasi, repositori bersama | Pengembangan paralel yang sesungguhnya |
 
 ### Beralih Model
 
-Gunakan `/model` untuk beralih model aktif di tengah sesi — berguna ketika Anda menginginkan penalaran yang lebih berat untuk tugas tertentu:
+Gunakan `/model` untuk beralih model aktif di tengah sesi — berguna saat Anda menginginkan penalaran yang lebih berat untuk tugas tertentu:
 
 ```bash
 /model
 ```
 
-Ini membuka pemilih model yang menunjukkan opsi yang tersedia (Gemini 3.5 Flash, Gemini 3.1 Pro, Claude Sonnet 4.6, dll.).
+Ini akan membuka pemilih model yang menunjukkan opsi yang tersedia (Gemini 3.5 Flash, Gemini 3.1 Pro, Claude Sonnet 4.6, dll.).
 
 > 📖 Daftar model lengkap: [Dokumentasi model](https://www.antigravity.google/docs/models)
 
@@ -32,12 +32,12 @@ Ini membuka pemilih model yang menunjukkan opsi yang tersedia (Gemini 3.5 Flash,
 
 ## 4.1 — Memunculkan Sub-agen <span class="duration-badge">15 min</span>
 
-> **Pola: Eksekusi Paralel** — mengirimkan beberapa agen untuk bekerja secara bersamaan.
+> **Pola: Eksekusi Paralel** — mengirim beberapa agen untuk bekerja secara bersamaan.
 > 📖 Referensi lengkap: [Dokumentasi sub-agen](https://www.antigravity.google/docs/subagents)
 
 ### Dari Sesi Interaktif
 
-```bash
+```text
 > Spawn a subagent to write unit tests for the auth module while I work on the API refactor.
 ```
 
@@ -47,7 +47,7 @@ agy akan memunculkan sub-agen, melaporkan ID-nya, dan melanjutkan sesi utama And
 > What's the status of the test-writing subagent?
 ```
 
-```bash
+```text
 > Show me what the test subagent produced.
 ```
 
@@ -63,15 +63,15 @@ Pintasan utama dari percakapan utama:
 
 | Pintasan | Aksi |
 | :-- | :-- |
-| `Ctrl+J` | Berpindah ke sub-agen yang menunggu persetujuan — lompat langsung untuk meninjau permintaannya |
+| `Ctrl+J` | Teleportasi ke sub-agen yang menunggu persetujuan — lompat langsung untuk meninjau permintaannya |
 | `Ctrl+K` | Persetujuan cepat dari percakapan utama — menyetujui aksi sub-agen yang tertunda tanpa berpindah |
 
 Siklus hidup sub-agen: **Berjalan → Menganggur → Dihentikan**
 
-### Batasan dan Tipe Bawaan
+### Batasan dan Jenis Bawaan
 
-- **Kedalaman maksimal:** 10 (sub-agen dapat memunculkan sub-agen mereka sendiri, hingga 10 tingkat)
-- **Tipe bawaan:** `research` (riset web), `browser` (otomatisasi peramban), `self` (tujuan umum)
+- **Kedalaman maksimum:** 10 (sub-agen dapat memunculkan sub-agen mereka sendiri, hingga 10 tingkat)
+- **Jenis bawaan:** `research` (riset web), `browser` (otomatisasi peramban), `self` (tujuan umum)
 
 ### Pola Audit Paralel
 
@@ -84,20 +84,20 @@ Siklus hidup sub-agen: **Berjalan → Menganggur → Dihentikan**
 > Use branch workspace mode for each. Report back when all three complete.
 ```
 
-Saksikan tiga analisis independen berjalan secara bersamaan. Ketika selesai, agy menyintesis hasilnya.
+Saksikan tiga analisis independen berjalan secara bersamaan. Saat selesai, agy menyintesis hasilnya.
 
 !!! tip "Momen Wow"
     Tiga agen khusus berjalan secara paralel pada basis kode Anda, masing-masing dengan konteks penuh, masing-masing menghasilkan temuan independen. Ini adalah pola yang membuat agy secara kualitatif berbeda dari asisten berbasis obrolan.
 
 ### Pola Tinjauan Adversarial
 
-```bash
+```text
 > Spawn a subagent to act as an adversarial reviewer for the changes in this branch.
 > Its only job: find reasons why this code should NOT be merged.
 > It should challenge every assumption and look for edge cases the implementer missed.
 ```
 
-Pola peninjau adversarial sangat kuat untuk perubahan yang sensitif terhadap keamanan, modifikasi infrastruktur, atau PR apa pun di mana "terlihat bagus bagi saya" tidaklah cukup.
+Pola peninjau adversarial sangat kuat untuk perubahan yang sensitif terhadap keamanan, modifikasi infrastruktur, atau PR apa pun di mana "terlihat bagus bagi saya" saja tidak cukup.
 
 ---
 
@@ -109,7 +109,7 @@ Pola peninjau adversarial sangat kuat untuk perubahan yang sensitif terhadap kea
 
 ### Cara Kerjanya
 
-```bash
+```text
 > Refactor the entire authentication module to use JWT instead of sessions. This will touch multiple files. Start with the backend.
 ```
 
@@ -119,7 +119,7 @@ Pola peninjau adversarial sangat kuat untuk perubahan yang sensitif terhadap kea
 /btw Actually, keep backward compatibility with sessions for 30 days — implement a dual-mode auth.
 ```
 
-agy menggabungkan catatan Anda ke dalam tugas yang sedang berlangsung tanpa berhenti. Ini seperti meninggalkan catatan tempel untuk seorang pengembang di tengah sprint — mereka melihatnya dan menyesuaikan.
+agy memasukkan catatan Anda ke dalam tugas yang sedang berlangsung tanpa berhenti. Ini seperti meninggalkan catatan tempel untuk seorang pengembang di tengah-tengah sprint — mereka melihatnya dan menyesuaikan.
 
 ### Kasus Penggunaan untuk /btw
 
@@ -135,7 +135,7 @@ agy menggabungkan catatan Anda ke dalam tugas yang sedang berlangsung tanpa berh
 /btw Skip the frontend changes for now, just focus on the backend API.
 ```
 
-!!! info "Perbandingan dengan menginterupsi"
+!!! info "Kontras dengan menginterupsi"
     Tanpa `/btw`, mengarahkan tugas yang berjalan lama berarti membatalkannya, menyesuaikan prompt Anda, dan memulai ulang — kehilangan semua kemajuan. `/btw` memungkinkan Anda mengoreksi arah tanpa biaya tersebut.
 
 ---
@@ -146,19 +146,19 @@ agy menggabungkan catatan Anda ke dalam tugas yang sedang berlangsung tanpa berh
 
 ### Tugas Latar Belakang
 
-agy mendukung eksekusi asinkronus — Anda dapat memulai tugas dan terus bekerja. agy memberi tahu Anda saat tugas tersebut selesai.
+agy mendukung eksekusi asinkronus — Anda dapat memulai sebuah tugas dan terus bekerja. agy akan memberi tahu Anda saat tugas tersebut selesai.
 
-```bash
+```text
 > In the background, do a comprehensive security audit of this entire codebase. Take as long as you need. Notify me when done.
 ```
 
-agy menjalankan audit tanpa memblokir terminal Anda. Saat selesai, Anda menerima pemberitahuan dengan hasilnya.
+agy menjalankan audit tanpa memblokir terminal Anda. Saat selesai, Anda akan menerima pemberitahuan berisi hasilnya.
 
 ### Tugas Terjadwal
 
 agy mendukung penjadwalan bergaya cron untuk analisis berulang:
 
-```bash
+```text
 > Schedule a nightly code quality report every day at 2am. It should check for new TODOs, failing tests, and dependency updates. Save the report to reports/nightly-YYYY-MM-DD.md.
 ```
 
@@ -176,7 +176,7 @@ Ekspresi cron (hingga 5 bidang) didukung:
 ```
 
 !!! warning "Penjadwalan bersifat persisten dalam sesi"
-    Tugas terjadwal tetap ada di seluruh sesi selama agy berjalan. Periksa `/tasks` untuk melihat dan mengelola tugas terjadwal.
+    Tugas terjadwal akan tetap ada di seluruh sesi selama agy berjalan. Periksa `/tasks` untuk melihat dan mengelola tugas terjadwal.
 
 ---
 
@@ -201,7 +201,7 @@ Ini akan membuka pemilih sesi yang menampilkan percakapan terbaru Anda. Pilih sa
 /switch
 ```
 
-Sama seperti `/resume` — kedua perintah membuka pemilih sesi.
+Sama seperti `/resume` — kedua perintah tersebut membuka pemilih sesi.
 
 ### Lanjutkan Otomatis saat Keluar
 
@@ -226,21 +226,21 @@ agy --conversation <conversation-id>
 # /resume
 ```
 
-```bash
+```text
 > What was the last thing we decided about the payment API schema?
 ```
 
-agy akan memiliki konteks penuh, termasuk kode yang ditulis, keputusan yang dibuat, dan pertanyaan yang terbuka.
+agy akan memiliki konteks lengkap, termasuk kode yang ditulis, keputusan yang dibuat, dan pertanyaan yang terbuka.
 
 ---
 
 ## 4.5 — Lanjutan: Menggabungkan Pola <span class="duration-badge">Opsional</span>
 
-> **Tumpukan kekuatan penuh:** sub-agen + /btw + latar belakang + penjadwalan + kelanjutan percakapan.
+> **Tumpukan kekuatan penuh:** sub-agen + /btw + proses latar belakang + penjadwalan + pelanjutan percakapan.
 
 ### Respons Insiden Enterprise
 
-```bash
+```text
 > I'm starting an incident response for a production issue. Spawn:
 > 1. A log-analyzer subagent (branch mode) — read the last 1000 lines of app.log and identify the root cause
 > 2. A config-checker subagent (branch mode) — review all environment configs and recent deploys for anomalies
@@ -254,7 +254,7 @@ Saat mereka berjalan:
 /btw The incident started at 14:32 UTC. Focus analysis on that window.
 ```
 
-Ini adalah triase insiden multi-agen — dua investigasi paralel, dapat diarahkan saat berjalan.
+Ini adalah triase insiden multi-agen — dua investigasi paralel, yang dapat diarahkan di tengah proses.
 
 ---
 
@@ -296,6 +296,6 @@ Ini adalah triase insiden multi-agen — dua investigasi paralel, dapat diarahka
 
 → **[Lembar Contekan](cheatsheet.md)** — setiap perintah dari keempat modul di satu tempat
 
-→ **[Referensi: Pola DevOps](../devops-automation.md)** — pipeline `--print`, CI/CD, pembahasan mendalam sandbox
+→ **[Referensi: Pola DevOps](devops-automation.md)** — pipeline `--print`, CI/CD, pembahasan mendalam sandbox
 
-→ **[Referensi: Ekosistem Plugin](../plugin-ecosystem.md)** — referensi siklus hidup plugin lengkap
+→ **[Referensi: Ekosistem Plugin](plugin-ecosystem.md)** — referensi lengkap siklus hidup plugin

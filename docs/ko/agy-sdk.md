@@ -2,27 +2,29 @@
 
 <div class="module-header" markdown>
 **소요 시간:** 약 90분  
-**목표:** `google-antigravity` 파이썬 라이브러리를 사용하여 처음부터 프로덕션 수준의 AGY 에이전트 구축하기 — 도구, 훅, 정책, 세션 상태, 다중 에이전트 오케스트레이션 및 구조화된 출력.  
+**목표:** `google-antigravity` Python 라이브러리를 사용하여 처음부터 프로덕션 수준의 AGY 에이전트 구축하기 — 도구, 훅, 정책, 세션 상태, 다중 에이전트 오케스트레이션 및 구조화된 출력 포함.  
 **실습:** 실습 10: 첫 번째 에이전트 · 실습 11: 다중 에이전트 파이프라인
 </div>
 
 > 📖 출처: [SDK 개요](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [스킬](https://antigravity.google/docs/skills)
 
 ---
-## CLI를 사용하는 대신 에이전트를 구축하는 이유는 무엇인가요?
 
-CLI는 **범용 어시스턴트**입니다. SDK로 구축하는 에이전트는 **전문가**입니다. 좁은 범위의 작업, 도메인 특화 도구, 세심하게 엔지니어링된 시스템 프롬프트를 가지며, 전체 팀이 호출할 수 있는 서비스로 배포될 수 있습니다.
+## CLI를 사용하는 대신 에이전트를 구축해야 하는 이유
+
+CLI는 **범용 어시스턴트**입니다. SDK로 구축한 에이전트는 **전문가**입니다. 즉, 좁은 범위의 작업을 수행하고, 도메인별 도구와 신중하게 엔지니어링된 시스템 프롬프트를 갖추고 있으며, 팀 전체가 호출할 수 있는 서비스로 배포될 수 있습니다.
 
 | | Antigravity CLI | AGY SDK 에이전트 |
 | :-- | :-- | :-- |
-| **사용자** | 개인 개발자 | 팀 / API 소비자 |
+| **사용자** | 개별 개발자 | 팀 / API 소비자 |
 | **커스터마이징** | AGENTS.md + 플러그인 | 전체 코드 제어 |
-| **도구** | 내장 CLI 도구 | 작성한 모든 Python 함수 |
+| **도구** | 내장 CLI 도구 | 직접 작성한 모든 Python 함수 |
 | **정책** | 대화형 승인 프롬프트 | 프로그래밍 방식의 `policy.*` 규칙 |
 | **배포** | 로컬 대화형 세션 | API를 통해 호출 가능한 Cloud Run 서비스 |
 | **멀티 에이전트** | CLI 세션의 서브에이전트 | `asyncio.gather` + `START_SUBAGENT` |
 
 ---
+
 ## 3.1 — SDK 설정 <span class="duration-badge">10분</span>
 
 ### 사전 요구 사항
@@ -46,18 +48,17 @@ from google.antigravity.hooks import policy
 print("google-antigravity installed ✅")
 ```
 
-> **API 키 vs Vertex AI:** 빠른 로컬 개발을 위해서는 `LocalAgentConfig`에서
-> `api_key="AIza..."`를 사용하세요. GCP 프로덕션 환경의 경우,
-> `gcloud auth application-default login`으로 인증하세요. 라이브러리가 ADC를 자동으로 인식합니다.
+> **API 키 vs Vertex AI:** 빠른 로컬 개발을 위해서는 `LocalAgentConfig`에서 `api_key="AIza..."`를 사용하세요. GCP의 프로덕션 환경의 경우, `gcloud auth application-default login`으로 인증하세요. 라이브러리가 ADC를 자동으로 인식합니다.
 
 ---
-## 3.2 — 핵심 기본 요소: 에이전트, Config, 도구 <span class="duration-badge">20분</span>
 
-`google-antigravity` SDK에는 세 가지 구성 요소가 있습니다: `Agent`, `LocalAgentConfig`, 그리고 도구(일반 Python 함수)입니다. 이것들을 배우면 무엇이든 구축할 수 있습니다.
+## 3.2 — 핵심 기본 요소: 에이전트, 구성, 도구 <span class="duration-badge">20분</span>
+
+`google-antigravity` SDK에는 `Agent`, `LocalAgentConfig`, 그리고 도구(일반 Python 함수)라는 세 가지 구성 요소가 있습니다. 이것들을 익히면 무엇이든 빌드할 수 있습니다.
 
 ### 도구
 
-도구는 **일반 Python 함수**입니다. 래퍼(wrapper) 클래스나 데코레이터가 없습니다. 에이전트는 독스트링(docstring)을 기반으로 언제 호출할지 결정합니다. 이것이 인터페이스 계약의 전부입니다.
+도구는 **일반 Python 함수**입니다. 래퍼 클래스나 데코레이터가 없습니다. 에이전트는 독스트링을 기반으로 언제 호출할지 결정하며, 이것이 인터페이스 계약의 전부입니다.
 
 ```python
 def get_file_contents(file_path: str) -> str:
@@ -81,7 +82,7 @@ def get_file_contents(file_path: str) -> str:
 > - 명시적인 타입 어노테이션을 사용하세요 — `str`, `int`, `bool`, `list[str]`. `typing.Optional`은 사용하지 마세요.
 > - 선택적 매개변수에는 기본값으로 `None`을 사용하세요: `param: str = None`
 > - 독스트링은 도구의 스키마입니다 — 모델은 이를 읽고 도구를 언제 어떻게 호출할지 결정합니다. 사람이 아닌 모델을 위해 작성하세요.
-> - 도구는 좁은 범위에 집중하도록 유지하세요. 도구당 하나의 작업만 수행해야 합니다.
+> - 도구는 좁고 집중된 범위를 유지하세요. 하나의 도구당 하나의 작업만 수행해야 합니다.
 
 ### 세션 상태를 가진 도구
 
@@ -111,7 +112,7 @@ def record_finding(
     return {"status": "recorded", "index": len(findings) - 1}
 ```
 
-### 에이전트 + Config
+### 에이전트 + 구성
 
 `Agent`는 단일 진입점입니다. 모든 구성은 `LocalAgentConfig`에 들어갑니다:
 
@@ -144,20 +145,21 @@ async def main():
 asyncio.run(main())
 ```
 
-> **`async with Agent(config) as agent:`** — 항상 컨텍스트 관리자를 사용하세요. 이는 Go 런타임 브리지(`bin/localharness`)를 시작하고 종료 시 깔끔하게 해제합니다.
+> **`async with Agent(config) as agent:`** — 항상 컨텍스트 관리자를 사용하세요. 이는
+> Go 런타임 브리지(`bin/localharness`)를 시작하고 종료 시 깔끔하게 해제합니다.
 
 ### 모델 선택
 
-작업에 맞는 모델을 선택하세요. 비용을 고려한 정책:
+작업에 맞는 모델을 선택하세요. 비용을 고려한 정책은 다음과 같습니다:
 
-| 역할 | 모델 | 근거 |
+| 역할 | 모델 | 이유 |
 | :-- | :-- | :-- |
 | 일반 작업, 코드 리뷰 | `gemini-3.5-flash` | SDK 기본값 — 비용 효율적, 빠름 |
 | 오케스트레이션, 라우팅, 계획 | `gemini-3.1-pro-preview` | 복잡한 추론, 다단계 결정 |
 | 이미지 생성 작업 | `gemini-3.1-flash-image-preview` | 이미지 생성을 위한 SDK 기본값 |
-| 고위험 분석 | `ThinkingLevel.HIGH`가 적용된 `gemini-3.1-pro-preview` | 규정 준수/보안을 위한 심층 추론 |
+| 고위험 분석 | `ThinkingLevel.HIGH`가 적용된 `gemini-3.1-pro-preview` | 규정 준수/보안을 위한 깊은 추론 |
 
-> `gemini-1.5-flash`, `gemini-1.5-pro`는 **절대 사용하지 마세요**. 지원 중단되었습니다.
+> `gemini-1.5-flash`, `gemini-1.5-pro`는 **절대 사용하지 마세요**. 더 이상 사용되지 않습니다.
 
 ### 스킬
 
@@ -192,9 +194,10 @@ config = LocalAgentConfig(
 스킬은 `LocalAgentConfig(skills_paths=["/path/to/skills/"])`를 통해 기본적으로 로드할 수도 있습니다 — SDK가 `SKILL.md` 파일을 자동으로 검색합니다.
 
 ---
+
 ## 3.3 — 정책 및 안전 <span class="duration-badge">10분</span>
 
-**정책은 가장 먼저 설정해야 하는 항목입니다** — 사람의 승인 없이 에이전트가 수행할 수 있는 작업을 제어합니다. 모든 `LocalAgentConfig`에는 `policies=` 목록이 필요합니다:
+**정책은 가장 먼저 설정해야 하는 항목입니다.** — 이는 사람의 승인 없이 에이전트가 수행할 수 있는 작업을 제어합니다. 모든 `LocalAgentConfig`에는 `policies=` 목록이 필요합니다:
 
 ```python
 from google.antigravity.hooks import policy
@@ -227,9 +230,10 @@ policy.workspace_only(["/path/to/project"])
 > **우선순위:** `specific_deny` > `specific_ask` > `specific_allow` > `wildcard_deny` > `wildcard_ask` > `wildcard_allow`
 
 ---
-## 3.4 — 훅: 관찰 가능성 및 제어 <span class="duration-badge">10 min</span>
 
-훅을 사용하면 로깅, 감사, 가드레일 또는 사용자 지정 승인 흐름을 위해 에이전트 수명 주기의 모든 이벤트를 가로채고 반응할 수 있습니다:
+## 3.4 — 훅: 관찰 가능성 및 제어 <span class="duration-badge">10분</span>
+
+훅은 로깅, 감사, 가드레일 또는 사용자 정의 승인 흐름을 위해 에이전트 수명 주기 내의 모든 이벤트를 가로채고 반응할 수 있게 해줍니다:
 
 ```python
 from google.antigravity.hooks import hooks
@@ -265,23 +269,24 @@ config = LocalAgentConfig(
 
 **훅 유형:**
 
-| 훅 | 실행 차단 | 데이터 수정 | 용도 |
+| 훅 | 실행 차단 여부 | 데이터 수정 여부 | 사용 목적 |
 | :-- | :-- | :-- | :-- |
 | `@hooks.pre_tool_call_decide` | 예 | 아니요 | 도구 호출 승인/거부 |
-| `@hooks.post_tool_call` | 아니요 | 아니요 | 로깅, 지표 |
+| `@hooks.post_tool_call` | 아니요 | 아니요 | 로깅, 메트릭 |
 | `@hooks.pre_turn` | 아니요 | 아니요 | 턴(Turn) 수준 로깅 |
 | `@hooks.post_turn` | 아니요 | 아니요 | 응답 로깅 |
-| `@hooks.on_session_start/end` | 아니요 | 아니요 | 설정/해제 |
+| `@hooks.on_session_start/end` | 아니요 | 아니요 | 설정/정리 |
 | `@hooks.on_tool_error` | 예 | 예 | 오류 복구 |
 
 ---
-## 3.5 — 다중 에이전트 오케스트레이션 <span class="duration-badge">15분</span>
 
-`google-antigravity`에는 `SequentialAgent` 또는 `ParallelAgent` 클래스가 없습니다. 다중 에이전트는 두 가지 방식으로 수행됩니다. **모델 기반(model-driven)** 방식(에이전트가 서브에이전트를 생성하도록 함) 또는 **Python 기반(Python-driven)** 방식(`Agent` 인스턴스를 직접 오케스트레이션함)입니다.
+## 3.5 — 멀티 에이전트 오케스트레이션 <span class="duration-badge">15분</span>
 
-### 패턴 A — 모델 기반 서브에이전트
+`google-antigravity`에는 `SequentialAgent` 또는 `ParallelAgent` 클래스가 없습니다. 멀티 에이전트는 두 가지 방식으로 구현됩니다: **모델 주도** (에이전트가 서브에이전트를 생성하도록 허용) 또는 **파이썬 주도** (사용자가 직접 `Agent` 인스턴스를 오케스트레이션).
 
-기능(capabilities)에서 `START_SUBAGENT`를 활성화합니다. 모델이 위임하기로 결정하면 이를 호출합니다:
+### 패턴 A — 모델 주도 서브에이전트
+
+capabilities에서 `START_SUBAGENT`를 활성화합니다. 모델이 위임을 결정할 때 이를 호출합니다:
 
 ```python
 from google.antigravity.types import BuiltinTools, CapabilitiesConfig
@@ -299,7 +304,7 @@ Synthesise their outputs into a final summary.""",
 )
 ```
 
-### 패턴 B — 순차 파이프라인 (Python 기반)
+### 패턴 B — 순차적 파이프라인 (파이썬 주도)
 
 한 에이전트의 출력을 다음 에이전트의 입력으로 전달합니다:
 
@@ -320,7 +325,7 @@ async def sequential_review(file_path: str):
 
 ### 패턴 C — 병렬 분석
 
-`asyncio.gather`를 사용하여 독립적인 에이전트를 동시에 실행합니다:
+`asyncio.gather`를 사용하여 독립적인 에이전트들을 동시에 실행합니다:
 
 ```python
 async def parallel_analysis(file_path: str):
@@ -343,9 +348,10 @@ async def parallel_analysis(file_path: str):
     }
 ```
 
-> **병렬 처리를 사용해야 할 때:** N개의 독립적인 분석이 필요한 모든 경우에 사용합니다. 이를 통해 순차적으로 실행할 때와 비교하여 실제 소요 시간(wall-clock time)을 60–80% 단축할 수 있습니다.
+> **병렬 처리를 사용해야 할 때:** N개의 독립적인 분석이 필요한 모든 경우에 사용합니다. 순차적으로 실행할 때와 비교하여 실제 소요 시간(wall-clock time)을 60–80% 단축합니다.
 
 ---
+
 ## 3.6 — 스트리밍 및 구조화된 출력 <span class="duration-badge">5분</span>
 
 ### 스트리밍 응답
@@ -396,7 +402,8 @@ asyncio.run(main())
 ```
 
 ---
-## 3.7 — 세션 재개 및 지속성 <span class="duration-badge">5 min</span>
+
+## 3.7 — 세션 재개 및 지속성 <span class="duration-badge">5분</span>
 
 ```python
 # First session — save the conversation ID
@@ -416,6 +423,7 @@ async with Agent(resume_config) as agent:
 ```
 
 ---
+
 ## 3.8 — 트리거: 자율 백그라운드 에이전트 <span class="duration-badge">5분</span>
 
 ```python
@@ -452,7 +460,8 @@ asyncio.run(main())
 ```
 
 ---
-## 3.9 — 프로젝트 구조 규칙 <span class="duration-badge">5 min</span>
+
+## 3.9 — 프로젝트 구조 규칙 <span class="duration-badge">5분</span>
 
 유지보수성을 위해 에이전트 프로젝트를 다음과 같이 구성하세요:
 
@@ -501,7 +510,8 @@ gcloud run deploy my-code-reviewer \
 > **팁:** 실행하기 전에 `GOOGLE_CLOUD_PROJECT` 및 `GOOGLE_CLOUD_REGION`(예: `us-central1`)을 설정하세요.
 
 ---
-## 실습 연습문제
+
+## 핸즈온 실습
 
 <div class="exercise-card" markdown>
 
@@ -509,61 +519,63 @@ gcloud run deploy my-code-reviewer \
 
 **파일:** `exercises/ex10_first_agent.md`  
 **소요 시간:** 45분  
-**구축:** 파일을 읽고, 문제를 식별하며, 구조화된 리뷰 보고서를 생성하는 **코드 리뷰 에이전트(Code Review Agent)**.
+**구축 목표:** 파일을 읽고, 문제를 식별하며, 구조화된 리뷰 보고서를 생성하는 **코드 리뷰 에이전트(Code Review Agent)**.
 
 **구현할 내용:**
 
-1. 3가지 도구 정의: `read_file`, `list_directory`, `record_finding` (`ToolContext` 사용)
+1. 3개의 도구 정의: `read_file`, `list_directory`, `record_finding` (`ToolContext` 사용)
 2. 리뷰 루브릭이 포함된 시스템 프롬프트 작성 (`SKILL.md`에서 로드)
 3. `policy.allow_all()` 및 `CapabilitiesConfig`를 사용하여 `LocalAgentConfig` 설정
 4. `@hooks.pre_tool_call_decide` 보안 가드 추가
-5. 스트리밍 출력 및 구조화된 `ReviewResult` Pydantic 스키마로 실행
+5. 스트리밍 출력 및 구조화된 `ReviewResult` Pydantic 스키마를 사용하여 실행
 
 </div>
 
 <div class="exercise-card" markdown>
 
-### :material-graph: 연습문제 11: 다중 에이전트 파이프라인
+### :material-graph: 연습문제 11: 멀티 에이전트 파이프라인
 
 **파일:** `exercises/ex11_multi_agent_pipeline.md`  
 **소요 시간:** 45분  
-**구축:** **작성 후 감사 파이프라인(Write-then-Audit Pipeline)** — 테크니컬 라이터 에이전트가 문서를 작성한 후, 컴플라이언스 분석가가 GDPR 위반 사항이 없는지 감사합니다.
+**구축 목표:** **작성 후 감사 파이프라인(Write-then-Audit Pipeline)** — 테크니컬 라이터 에이전트가 문서를 생성한 다음, 컴플라이언스 분석가가 GDPR 위반 사항이 없는지 감사합니다.
 
 **구현할 내용:**
 
-1. `skills_paths`를 통해 로드된 GDPR SKILL.md를 사용하는 `technical_writer` 에이전트 구축
-2. `response_schema=ComplianceReport`를 사용하는 `compliance_analyst` 에이전트 구축
+1. `skills_paths`를 통해 로드된 GDPR SKILL.md를 사용하여 `technical_writer` 에이전트 구축
+2. `response_schema=ComplianceReport`를 사용하여 `compliance_analyst` 에이전트 구축
 3. 순차적으로 연결: 작성자의 출력을 분석가의 입력으로 전달
-4. 동시 초안 작성 및 법률 검토를 위해 `asyncio.gather`를 사용하는 병렬 변형 추가
+4. 초안 작성과 법률 검토를 동시에 수행하기 위해 `asyncio.gather`를 사용하는 병렬 변형 추가
 5. 세션 재개 추가: 분석가가 작성자의 `conversation_id`를 읽어 컨텍스트 로드
 6. `gcloud run deploy`를 사용하여 Cloud Run에 `my-pipeline`으로 배포
 
 </div>
 
 ---
+
 ## 요약: SDK 빌딩 블록
 
 | 기본 요소 | 기능 | 사용 시기 |
 | :-- | :-- | :-- |
-| `Agent` | 도구, 훅, 정책을 갖춘 단일 LLM 에이전트 | 핵심 요소 — 모든 에이전트의 시작점 |
-| `LocalAgentConfig` | 모든 설정을 한 곳에서 관리 (모델, 도구, 정책, 훅) | 항상 |
-| `tools=[fn]` | 일반 Python 콜러블(callable), docstring이 스키마 역할 수행 | 모든 외부 작업 |
-| `ToolContext` | 도구에 주입되는 상태 읽기/쓰기 | 파이프라인 내 상태 저장(Stateful) 도구 |
-| `policy.allow_all()` | 모든 도구 호출을 자율적으로 승인 | 신뢰할 수 있는 샌드박스 환경의 에이전트 |
+| `Agent` | 도구, 훅, 정책을 갖춘 단일 LLM 에이전트 | 핵심 요소 — 모든 에이전트는 여기서 시작됨 |
+| `LocalAgentConfig` | 모든 설정을 한 곳에 모음 (모델, 도구, 정책, 훅) | 항상 |
+| `tools=[fn]` | 일반 Python 호출 가능 객체(callable), docstring이 스키마 역할을 함 | 모든 외부 작업 |
+| `ToolContext` | 도구에 주입되는 상태 읽기/쓰기 | 파이프라인 내 상태 저장(stateful) 도구 |
+| `policy.allow_all()` | 모든 도구 호출을 자율적으로 승인 | 신뢰할 수 있는 샌드박스 처리된 에이전트 |
 | `policy.deny("run_command")` | 특정 도구 유형 차단 | 안전 가드레일 |
 | `@hooks.pre_tool_call_decide` | 실행 전 도구 호출 차단/승인 | 보안 가드 |
 | `@hooks.post_tool_call` | 완료된 도구 호출 관찰 | 감사 로깅 |
 | `response_schema=` | 출력을 Pydantic 스키마에 바인딩 | 구조화된 데이터 추출 |
-| `async for delta in response:` | 도착하는 대로 텍스트 스트리밍 | 장문 생성 |
-| `asyncio.gather(...)` | 에이전트 병렬 실행 | 독립적인 분석 |
-| `every(60, handler)` | 일정 간격으로 에이전트 트리거 | 백그라운드 모니터 |
-| `on_file_change(path, fn)` | 파일 시스템 이벤트 발생 시 에이전트 트리거 | 라이브 코드 감시자(watcher) |
+| `async for delta in response:` | 텍스트가 도착하는 대로 스트리밍 | 긴 형식의 텍스트 생성 |
+| `asyncio.gather(...)` | 에이전트를 병렬로 실행 | 독립적인 분석 |
+| `every(60, handler)` | 주기적으로 에이전트 트리거 | 백그라운드 모니터 |
+| `on_file_change(path, fn)` | 파일 시스템 이벤트 발생 시 에이전트 트리거 | 실시간 코드 감시자 |
 | `skills_paths=[...]` | 런타임에 SKILL.md 파일 로드 | 이식 가능한 도메인 전문 지식 |
 | `conversation_id=` | 이전 세션 재개 | 다중 세션 워크플로우 |
 
 ---
+
 ## 다음 단계
 
-→ **[모듈 4: 멀티 에이전트 및 고급 패턴](../multi-agent-advanced.md)**으로 계속 진행하세요
+→ **[모듈 4: 멀티 에이전트 및 고급 패턴](multi-agent-advanced.md)**으로 계속 진행합니다.
 
-→ 참고: **[치트시트](cheatsheet.md)** — 모든 명령어를 한곳에서 확인하세요
+→ 참고: **[치트시트](cheatsheet.md)** — 모든 명령어를 한 곳에서 확인하세요.
