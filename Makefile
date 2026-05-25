@@ -272,13 +272,14 @@ setup-hooks:  ## Install git pre-commit hook
 # Run from: engagements/gemini-cli-field-workshop/
 #
 # Usage: make translate L=ko
-#        make translate L=ko P=8   (8 parallel workers)
+#        make translate L=ko P=8 FP=4  (8 section workers, 4 file workers)
+#        make translate-all             (all languages in parallel!)
 #        make translate-file FILE=docs/setup.md L=ko
 #        make translate-validate L=ko
-#        make translate-drift L=ko
-#        make translate-list
+#        make translate-drift
 
 P ?= 6
+FP ?= 3
 AGY_TRANSLATE_SCRIPT := ../gemini-cli-field-workshop/tools/i18n/translate.py
 AGY_VENV_PYTHON := ../gemini-cli-field-workshop/.venv/bin/python
 AGY_TRANSLATE_ENV := GOOGLE_CLOUD_PROJECT=$${GOOGLE_CLOUD_PROJECT} GOOGLE_CLOUD_LOCATION=global AGY_REPO_ROOT=$(PWD)
@@ -341,21 +342,29 @@ _check-translate-env:
 	fi
 
 translate: _check-translate-env  ## Translate all docs to target language (L=ko|zh|id)
-	@echo "🌐 Translating all Antigravity CLI docs → $(L)..."
-	@for doc in docs/setup.md docs/sdlc-productivity.md docs/plugin-ecosystem.md \
-	            docs/devops-automation.md docs/multi-agent-advanced.md \
-	            docs/cheatsheet.md docs/facilitator-guide.md docs/migration-guide.md; do \
-		[ -f "$$doc" ] || continue; \
-		$(AGY_TRANSLATE_ENV) $(AGY_VENV_PYTHON) $(AGY_TRANSLATE_SCRIPT) \
-			$$doc --lang $(L) --parallel $(P) --model gemini-3.1-pro-preview; \
-	done
-	@echo "  ℹ️  Run: make post-translate L=$(L)  to normalize lint"
+	$(AGY_TRANSLATE_ENV) $(AGY_VENV_PYTHON) $(AGY_TRANSLATE_SCRIPT) \
+		--all --lang $(L) --parallel $(P) --file-parallel $(FP) --model gemini-3.1-pro-preview
 
 translate-file: _check-translate-env  ## Translate one file (FILE=docs/setup.md L=ko)
 	@test -n "$(FILE)" || (echo "❌ Specify FILE=docs/setup.md" && exit 1)
 	$(AGY_TRANSLATE_ENV) $(AGY_VENV_PYTHON) $(AGY_TRANSLATE_SCRIPT) \
 		$(FILE) --lang $(L) --parallel $(P) --model gemini-3.1-pro-preview
-	@echo "  ℹ️  Run: make post-translate L=$(L)  to normalize lint"
+
+translate-all:  ## Translate all docs to ALL languages in parallel (ko, zh, id)
+	@if [ -z "$${GOOGLE_CLOUD_PROJECT:-}" ]; then \
+		echo "❌ Set GOOGLE_CLOUD_PROJECT first"; exit 1; \
+	fi
+	@if [ ! -f "$(AGY_VENV_PYTHON)" ]; then \
+		echo "❌ Translation venv not found at $(AGY_VENV_PYTHON)"; exit 1; \
+	fi
+	$(AGY_TRANSLATE_ENV) $(AGY_VENV_PYTHON) $(AGY_TRANSLATE_SCRIPT) \
+		--all --langs ko,zh,id --parallel $(P) --file-parallel $(FP) --model gemini-3.1-pro-preview
+	@echo ""
+	@echo "  Post-translating all languages..."
+	@for lang in ko zh id; do \
+		$(MAKE) post-translate L=$$lang; \
+	done
+	@echo "✅ All languages translated and normalized"
 
 post-translate:  ## Normalize translated files after translation (run after make translate)
 	@echo "🔧 Post-translation normalization for $(L)..."

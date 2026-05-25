@@ -1,19 +1,18 @@
 # 참조: 플러그인 생태계
 
-> **agy-cli의 플러그인 시스템에 대한 심층 참조입니다.** 필수 명령어는 [모듈 1 — 섹션 1.7](sdlc-productivity.md#17-extend-with-plugins)에서 다룹니다. 이 페이지에는 사용자 지정 플러그인을 빌드하고 유지 관리하는 팀을 위한 전체 수명 주기 세부 정보가 포함되어 있습니다.
+> **agy-cli의 플러그인 시스템에 대한 심층 참조입니다.** 필수 명령어는 [모듈 1 — 섹션 1.7](sdlc-productivity.md#17-extend-with-plugins)에서 다룹니다. 이 페이지에는 사용자 지정 플러그인을 구축하고 유지 관리하는 팀을 위한 전체 수명 주기 세부 정보가 포함되어 있습니다.
 
 ---
+## 2.0 — 플러그인이 중요한 이유 <span class="duration-badge">5분</span>
 
-## 2.0 — 플러그인이 중요한 이유 <span class="duration-badge">5 min</span>
-
-agy-cli의 플러그인 시스템은 독특한 기능을 제공합니다. 재설치나 재구성이 필요 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 유지됩니다.
+agy-cli의 플러그인 시스템은 독특한 기능을 수행합니다. 재설치나 재구성 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 유지됩니다.
 
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
 ```
 
-출력은 각 플러그인의 이름, 소스, 가져오기 날짜 및 구성 요소(스킬, 명령어, mcpServers, 에이전트)를 보여주는 JSON입니다.
+출력은 각 플러그인의 이름, 소스, 가져온 날짜 및 구성 요소(스킬, 명령어, mcpServers, 에이전트)를 보여주는 JSON입니다.
 
 ```bash
 # More readable
@@ -23,10 +22,9 @@ agy plugin list | python3 -m json.tool
 > 📖 공식 문서: [플러그인](https://www.antigravity.google/docs/plugins) · [MCP](https://www.antigravity.google/docs/mcp) · [스킬](https://www.antigravity.google/docs/skills)
 
 ---
-
 ## 2.1 — Gemini CLI에서 가져오기 <span class="duration-badge">10분</span>
 
-> **패턴: 교차 도구 플러그인 브리지** — 전체 Gemini CLI 플러그인 설정을 agy로 가져옵니다.
+> **패턴: 교차 도구 플러그인 브릿지** — 전체 Gemini CLI 플러그인 설정을 agy로 가져옵니다.
 
 ### 모든 Gemini CLI 플러그인 가져오기
 
@@ -50,8 +48,7 @@ agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을
 ```
 
 !!! tip "--force를 사용하여 다시 가져오기"
-    이미 가져온 플러그인은 기본적으로 건너뜁니다. 플러그인 업데이트 후 강제로 다시 가져오려면 다음을 실행하세요:
-
+    이미 가져온 플러그인은 기본적으로 건너뜁니다. 플러그인 업데이트 후 강제로 다시 가져오려면:
     ```bash
     agy plugin import gemini --force
     ```
@@ -91,13 +88,13 @@ Same mechanic — agy discovers your Claude Code extension installations and bri
 ### Enable / Disable
 
 ```bash
-# 이 세션/프로젝트에 대해 플러그인 비활성화
+# Disable a plugin for this session/project
 agy plugin disable gemini-deep-research
 
-# 다시 활성화
+# Re-enable it
 agy plugin enable gemini-deep-research
 
-# 현재 상태 확인
+# Check current state
 agy plugin list
 ```
 
@@ -113,10 +110,10 @@ Plugins can be installed at two levels:
 ### Install a Specific Plugin
 
 ```bash
-# 이름으로 설치 (구성된 소스에서)
+# Install by name (from configured source)
 agy plugin install <plugin-name>
 
-# 특정 버전 설치
+# Install a specific version
 agy plugin install <plugin-name>@<version>
 ```
 
@@ -128,11 +125,11 @@ agy plugin install <plugin-name>@<version>
 
 ### Validate an Existing Plugin Directory
 
-```text
-# 플러그인 디렉터리 유효성 검사
+```bash
+# Validate a plugin directory
 agy plugin validate ./path/to/my-plugin
 
-# 또는 현재 디렉터리 유효성 검사
+# Or validate the current directory
 agy plugin validate .
 ```
 
@@ -144,14 +141,14 @@ A valid agy plugin needs a `plugin.json` manifest. Here's the official structure
 
 ```text
 my-plugin/
-├── plugin.json          ← 매니페스트 (필수)
-├── mcp_config.json      ← MCP 서버 정의 (선택 사항)
-├── hooks.json           ← 훅 이벤트 핸들러 (선택 사항)
-├── skills/              ← YAML 프런트매터가 있는 SKILL.md 파일
+├── plugin.json          ← manifest (required)
+├── mcp_config.json      ← MCP server definitions (optional)
+├── hooks.json           ← hook event handlers (optional)
+├── skills/              ← SKILL.md files with YAML frontmatter
 │   └── my-skill/
 │       └── SKILL.md
-├── agents/              ← 서브에이전트 정의 (선택 사항)
-└── rules/               ← 규칙 파일 (선택 사항)
+├── agents/              ← subagent definitions (optional)
+└── rules/               ← rules files (optional)
     └── my-rules.md
 ```
 
@@ -159,16 +156,16 @@ my-plugin/
 {
   "name": "my-plugin",
   "version": "1.0.0",
-  "description": "내 사용자 지정 agy 플러그인",
+  "description": "My custom agy plugin",
   "components": ["skills"]
 }
 ```
 
 ```bash
-# 유효성 검사
+# Validate it
 agy plugin validate ./my-plugin
 
-# 유효한 경우 다음이 표시됩니다: ✔ Plugin manifest is valid
+# If valid, you'll see: ✔ Plugin manifest is valid
 ```
 
 ### Interacting with Plugin Components
@@ -194,30 +191,158 @@ agy plugin validate samples/plugins/workshop-helpers/
 
 ```mermaid
 graph LR
-    GC["Gemini CLI\n플러그인"] -->|agy plugin import gemini| S["플러그인 스테이징\n~/.gemini/antigravity/plugins/"]
-    CC["Claude Code\n확장 프로그램"] -->|agy plugin import claude| S
-    S -->|agy plugin enable/disable| A[agy 세션]
-    A --> SK[스킬]
-    A --> MCP[MCP 서버]
-    A --> AG[에이전트]
-    A --> RU[규칙]
-    A --> HK[훅]
+    GC["Gemini CLI\nPlugins"] --> |agy plugin import gemini| S["Plugin Staging\n~/.gemini/antigravity/plugins/"]
+    CC["Claude Code\nExtensions"] --> |agy plugin import claude| S
+    S --> |agy plugin enable/disable| A[agy session]
+    A --> SK[Skills]
+    A --> MCP[MCP Servers]
+    A --> AG[Agents]
+    A --> RU[Rules]
+    A --> HK[Hooks]
+    A --> SD[Sidecars]
 ```
 
 Plugin staging directory structure:
 
-```bash
+```text
 ~/.gemini/antigravity/plugins/<name>/
 ├── plugin.json
 ├── mcp_config.json
 ├── hooks.json
 ├── skills/
 ├── agents/
-└── rules/
+├── rules/
+└── sidecars/          ← plugin-scoped background processes
 ```
 
 ---
 
+## 2.6 — Sidecars: Persistent Background Processes <span class="duration-badge">15 min</span>
+
+> **Pattern: Always-On Agent** — sidecars run alongside AGY CLI, independently of any conversation. Use them for scheduled tasks, event watchers, and persistent background workers.
+>
+> 📖 Source: [sidecars](https://antigravity.google/docs/sidecars)
+
+### What Sidecars Are
+
+A sidecar is a background process that AGY manages for you: it launches automatically when AGY starts, restarts on crash, and runs independently of your active conversation. Unlike hooks (which fire in response to conversation events), sidecars are **always running**.
+
+**Three use cases:**
+
+| Use case | Example |
+| :-- | :-- |
+| Persistent background worker | Python script that watches a queue |
+| Scheduled recurring task | Hourly PR triage via `schedule` builtin |
+| Event-reactive agent | `agentapi` call that spins up a new conversation |
+
+### Configuration
+
+Sidecars are discovered from two locations:
+
+```bash
+# Global sidecars (available in all projects)
+~/.gemini/config/sidecars/<sidecar-name>/sidecar.json
+
+# Plugin-scoped sidecars (shipped with a plugin)
+~/.gemini/config/plugins/<plugin-name>/sidecars/<sidecar-name>/sidecar.json
+```
+
+The directory name becomes the sidecar's ID. Plugin sidecars get the ID `<pluginName>/<sidecarName>`.
+
+**Sidecars are disabled by default.** Enable them explicitly in `~/.gemini/config/config.json`:
+
+```json
+{
+  "sidecars": {
+    "pr-triage": {
+      "enabled": true
+    },
+    "my-plugin/log-watcher": {
+      "enabled": true,
+      "projectId": "<conversation-project-id>"
+    }
+  }
+}
+```
+
+### sidecar.json Schema
+
+| Field | Type | Description |
+| :-- | :-- | :-- |
+| `command` | string | Executable to run (e.g. `python3`). Mutually exclusive with `builtin`. |
+| `builtin` | string | Built-in function. Currently only `schedule`. Mutually exclusive with `command`. |
+| `args` | string[] | Arguments passed to the command or builtin. |
+| `restart_policy` | string | `always` (default), `on-failure`, or `never`. |
+| `description` | string | Human-readable label shown in AGY UI. |
+| `env` | object | Environment variables for the sidecar process. |
+| `display_name` | string | Display name in the UI. |
+
+### Example 1: Background Worker Script
+
+```json
+{
+  "description": "Watches the build queue and notifies on failures",
+  "command": "python3",
+  "args": ["watch_builds.py"],
+  "restart_policy": "on-failure",
+  "env": {
+    "BUILD_QUEUE_URL": "https://ci.example.com/api/queue"
+  }
+}
+```
+
+### Example 2: Scheduled Recurring Task (the `schedule` builtin)
+
+The `schedule` builtin takes a cron expression as its first arg, then the command + args to run:
+
+```json
+{
+  "description": "Hourly PR triage — summarises incoming review requests",
+  "builtin": "schedule",
+  "args": [
+    "0 * * * *",
+    "agentapi",
+    "new-conversation",
+    "Summarise all open PRs waiting for my review. Group by urgency."
+  ]
+}
+```
+
+`agentapi` is automatically available to sidecars — it lets them **programmatically create or message conversations**:
+
+```bash
+# Start a new conversation from a sidecar
+agentapi new-conversation "<prompt>"
+
+# Send a message to an existing conversation
+agentapi send-message <conversation_id> "<prompt>"
+```
+
+!!! warning "projectId required for agentapi"
+    Sidecars that use `agentapi new-conversation` must have a `projectId` set in `config.json` — this scopes which conversation project the new session is created under.
+
+### Runtime Data
+
+Sidecar output is stored at:
+
+```text
+~/.gemini/antigravity/sidecar_data/<sidecarId>/
+├── data/     ← persistent storage (ANTIGRAVITY_EXECUTABLE_DATA_DIR env var)
+├── logs/     ← timestamped stdout/stderr logs
+└── events/   ← JSON records of agentapi calls
+```
+
+### Directory Structure for a Plugin Sidecar
+
+```text
+~/.gemini/config/plugins/my-plugin/
+└── sidecars/
+    └── pr-triage/
+        ├── sidecar.json   ← config (required)
+        └── triage.py      ← helper script (optional, runs in this dir)
+```
+
+---
 ## 모듈 2 연습 문제
 
 <div class="exercise-card" markdown>
@@ -230,10 +355,28 @@ Plugin staging directory structure:
 
 </div>
 
----
+<div class="exercise-card" markdown>
 
+### :material-clock-outline: 연습 문제 2B: 첫 번째 사이드카
+
+> **소요 시간:** 20분
+> **빌드:** 오전 9시에 실행되어 새로운 AGY 대화를 생성하고, 저장소 전체에서 어제의 git 커밋을 요약하도록 요청하는 예약된 **일일 스탠드업 사이드카**를 빌드합니다.
+
+**수행할 작업:**
+
+1. `schedule` 내장 기능을 사용하여 `~/.gemini/config/sidecars/standup/sidecar.json`을 생성합니다.
+2. cron을 `0 9 * * 1-5`(월요일~금요일 오전 9시)로 설정합니다.
+3. `agentapi new-conversation`을 사용하여 스탠드업 프롬프트로 대화를 엽니다.
+4. `~/.gemini/config/config.json`에서 이를 활성화합니다.
+5. `~/.gemini/antigravity/sidecar_data/standup/logs/`의 로그에 나타나는지 확인합니다.
+
+**추가 목표:** `command: python3`를 사용하여 로컬 파일의 변경 사항을 감시하고, 차이점을 감지하면 기존 대화로 메시지를 보내는 두 번째 사이드카를 추가합니다.
+
+</div>
+
+---
 ## 워크숍으로 돌아가기
 
-→ **[모듈 1: SDLC 생산성 향상](sdlc-productivity.md)** — 플러그인은 섹션 1.7에서 소개됩니다
+→ **[모듈 1: SDLC 생산성 향상](sdlc-productivity.md)** — 섹션 1.7에서 플러그인이 소개됩니다.
 
-→ **[치트시트](cheatsheet.md)** — 모든 플러그인 명령어가 한곳에 있습니다
+→ **[치트시트](cheatsheet.md)** — 모든 플러그인 및 사이드카 명령어가 한곳에 모여 있습니다.

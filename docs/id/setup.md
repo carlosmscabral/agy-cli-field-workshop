@@ -3,18 +3,16 @@
 > Selesaikan ini sebelum memulai modul apa pun. Membutuhkan waktu sekitar 15 menit.
 
 ---
-
 ## Persyaratan Sistem
 
 | Komponen | Minimum | Catatan |
 | :-- | :-- | :-- |
 | **agy** | Terbaru | Instruksi instalasi di bawah |
-| **Git** | v2.30+ | Untuk repo latihan |
-| **Terminal** | Apa saja | iTerm2, macOS Terminal, atau terintegrasi VS Code |
-| **jq** | Opsional | Berguna untuk mengurai keluaran JSON `--print` |
+| **Git** | v2.30+ | Untuk repositori latihan |
+| **Terminal** | Apa saja | iTerm2, Terminal macOS, atau terintegrasi VS Code |
+| **jq** | Opsional | Berguna untuk mem-parsing output JSON `--print` |
 
 ---
-
 ## Langkah 1: Instal agy
 
 > 📖 Instruksi lengkap: [Dokumentasi Memulai](https://www.antigravity.google/docs/cli-getting-started)
@@ -42,14 +40,13 @@ Setelah instalasi, verifikasi bahwa berkas biner tersedia:
 which agy
 
 # Confirm the version
-agy changelog
+agy --version
 ```
 
 ---
-
 ## Langkah 2: Autentikasi
 
-agy menggunakan **Google Sign-In berbasis browser**. Pada saat dijalankan pertama kali, ini akan:
+agy menggunakan **Google Sign-In berbasis browser**. Pada saat pertama kali dijalankan, ini akan:
 
 - **Mesin lokal:** Secara otomatis membuka browser bawaan Anda untuk masuk.
 - **SSH / sesi jarak jauh:** Mencetak URL untuk ditempelkan ke browser apa pun, lalu menempelkan kembali kode autentikasi ke dalam terminal.
@@ -61,13 +58,14 @@ agy
 
 Untuk keluar:
 
-```bash
+```text
+# Run this inside an agy interactive session (not in your terminal):
 /logout
 ```
 
-> 📖 Untuk autentikasi enterprise melalui proyek GCP, lihat [Dokumentasi Enterprise](https://www.antigravity.google/docs/enterprise).
+> 📖 Untuk autentikasi enterprise melalui proyek GCP, lihat [Dokumentasi enterprise](https://www.antigravity.google/docs/enterprise).
 
-Setelah autentikasi dikonfigurasi, jalankan *smoke test* singkat:
+Setelah autentikasi dikonfigurasi, jalankan *smoke test* cepat:
 
 ```bash
 agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
@@ -76,7 +74,6 @@ agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
 Keluaran yang diharapkan: `Workshop ready!`
 
 ---
-
 ## Langkah 3: Inisialisasi Ruang Kerja Proyek Anda
 
 agy menemukan konfigurasi proyek secara otomatis dengan menelusuri ke atas dari direktori Anda saat ini, mencari folder `.agents/`. Buat satu untuk lokakarya ini:
@@ -93,10 +90,9 @@ agy --print "List the files in the current directory."
 Anda akan melihat folder `.agents/` dibuat dengan file-file konfigurasi proyek (settings.json, mcp.json, dll.).
 
 !!! info "Kompatibilitas .gemini/"
-    agy juga membaca direktori `.gemini/` — berguna jika Anda sudah memiliki pengaturan proyek Gemini CLI. Kedua lokasi konfigurasi tersebut diakui.
+    agy juga membaca direktori `.gemini/` — berguna jika Anda sudah memiliki pengaturan proyek Gemini CLI. Kedua lokasi konfigurasi tersebut didukung.
 
 ---
-
 ## Langkah 4: Verifikasi Semuanya
 
 ```bash
@@ -120,19 +116,17 @@ Daftar periksa sebelum lokakarya dimulai:
 - [ ] `agy --print "..."` mengembalikan respons
 
 ---
-
 ## Pemecahan Masalah
 
 | Masalah | Solusi |
 | :-- | :-- |
-| `agy: command not found` | Periksa apakah berkas biner ada di dalam PATH Anda. Jalankan `echo $PATH` dan pastikan direktori instalasi disertakan. Jalankan ulang skrip instalasi jika diperlukan |
+| `agy: command not found` | Periksa apakah berkas biner ada di PATH Anda. Jalankan `echo $PATH` dan pastikan direktori instalasi disertakan. Jalankan kembali skrip instalasi jika diperlukan |
 | Kesalahan autentikasi / peramban tidak terbuka | Untuk sesi SSH, salin URL yang dicetak secara manual. Untuk lokal, periksa pengaturan peramban bawaan. Jalankan `/logout` dan coba lagi |
-| `agy plugin list` mengembalikan `{}` kosong | Hal ini wajar pada instalasi baru. Anda akan mengisi plugin di Modul 2 |
+| `agy plugin list` mengembalikan `{}` kosong | Diharapkan pada instalasi baru. Anda akan mengisi plugin di Modul 2 |
 | Respons pertama lambat | Proses pertama mungkin lebih lambat karena agy mengindeks ruang kerja Anda |
-| Konfigurasi tidak dimuat | Periksa `~/.gemini/antigravity-cli/settings.json` (pengaturan pengguna) dan `.agents/` (pengaturan proyek) |
+| Konfigurasi tidak dimuat | Periksa `~/.gemini/antigravity/settings.json` (pengaturan pengguna) dan `.agents/` (pengaturan proyek) |
 
 ---
-
 ## Langkah Selanjutnya
 
 → Mulai dengan **[Modul 1: Produktivitas SDLC](sdlc-productivity.md)**
