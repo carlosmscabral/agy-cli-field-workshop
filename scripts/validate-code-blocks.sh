@@ -146,6 +146,13 @@ with open(sys.argv[1]) as f:
             SKIPPED=$((SKIPPED + 1))
             continue
           fi
+          # Skip bash blocks that contain <placeholder> arguments — these are
+          # documentation snippets (e.g. `agy plugin install <name>`), not
+          # runnable scripts. bash -n treats bare < as a redirect and fails.
+          if grep -qE '<[a-zA-Z][a-zA-Z0-9_-]*>' "$block_file"; then
+            SKIPPED=$((SKIPPED + 1))
+            continue
+          fi
           if ! bash -n "$block_file" 2>/dev/null; then
             log_fail "Invalid bash syntax in $md_file (block $((i+1)))"
             echo "     Preview: ${preview}"

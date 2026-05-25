@@ -1,4 +1,4 @@
-# Contributing to AGY CLI Field Workshop
+# Contributing to Antigravity CLI Field Workshop
 
 Thanks for your interest in improving this workshop! Every contribution — from typo fixes to new exercises — helps enterprise developers get up and running with Antigravity CLI faster.
 

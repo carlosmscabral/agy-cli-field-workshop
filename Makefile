@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════
-# AGY CLI Field Workshop — Build & Test Harness
+# Antigravity CLI Field Workshop — Build & Test Harness
 # ═══════════════════════════════════════════════════════════
 #
 # Usage:
@@ -232,7 +232,7 @@ lint-md:  ## Lint markdown files
 P ?= 6
 AGY_TRANSLATE_SCRIPT := ../gemini-cli-field-workshop/tools/i18n/translate.py
 AGY_VENV_PYTHON := ../gemini-cli-field-workshop/.venv/bin/python
-AGY_TRANSLATE_ENV := GOOGLE_CLOUD_PROJECT=$${GOOGLE_CLOUD_PROJECT:-gpu-launchpad-playground} GOOGLE_CLOUD_LOCATION=global
+AGY_TRANSLATE_ENV := GOOGLE_CLOUD_PROJECT=$${GOOGLE_CLOUD_PROJECT:-gpu-launchpad-playground} GOOGLE_CLOUD_LOCATION=global AGY_REPO_ROOT=$(PWD)
 
 translate-list:  ## Show available languages and translation status
 	@echo "🌐 AGY CLI Workshop — Translation Status"
