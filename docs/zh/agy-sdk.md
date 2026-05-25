@@ -1,38 +1,38 @@
-# Module 3: Building AGY Agents with the SDK
+# 模块 3：使用 SDK 构建 AGY 代理
 
 <div class="module-header" markdown>
-**Duration:** ~90 minutes  
-**Goal:** Build a production-ready AGY agent from scratch using the `google-antigravity` Python library — tools, hooks, policy, session state, multi-agent orchestration, and structured output.  
-**Exercises:** [Exercise 10: Your First Agent](exercises/ex10_first_agent.md) · [Exercise 11: Multi-Agent Pipeline](exercises/ex11_multi_agent_pipeline.md)
+**时长：** 约 90 分钟  
+**目标：** 使用 `google-antigravity` Python 库从头开始构建一个生产就绪的 AGY 代理 —— 工具、钩子、策略、会话状态、多代理编排和结构化输出。  
+**练习：** [练习 10：你的第一个代理](exercises/ex10_first_agent.md) · [练习 11：多代理流水线](exercises/ex11_multi_agent_pipeline.md)
 </div>
 
-> 📖 Sources: [SDK Overview](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [Skills](https://antigravity.google/docs/skills)
+> 📖 来源：[SDK 概述](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [技能](https://antigravity.google/docs/skills)
 
 ---
 
-## Why Build an Agent Instead of Just Using the CLI?
+## 为什么要构建代理而不是仅仅使用 CLI？
 
-The CLI is a **general-purpose assistant**. An agent you build with the SDK is a **specialist** — it has a narrow job, domain-specific tools, a carefully engineered system prompt, and it can be deployed as a service that your whole team calls.
+CLI 是一个**通用助手**。您使用 SDK 构建的代理是一个**专家** —— 它具有特定的工作范围、特定领域的工具、精心设计的系统提示词，并且可以作为您整个团队调用的服务进行部署。
 
-| | Antigravity CLI | AGY SDK Agent |
+| | Antigravity CLI | AGY SDK 代理 |
 | :-- | :-- | :-- |
-| **Who uses it** | Individual developer | Team / API consumers |
-| **Customization** | AGENTS.md + plugins | Full code control |
-| **Tools** | Built-in CLI tools | Any Python function you write |
-| **Policy** | Interactive approval prompts | Programmatic `policy.*` rules |
-| **Deployment** | Local interactive session | Cloud Run service, callable via API |
-| **Multi-agent** | Subagents in CLI session | `asyncio.gather` + `START_SUBAGENT` |
+| **使用者** | 个人开发者 | 团队 / API 消费者 |
+| **定制化** | AGENTS.md + 插件 | 完全的代码控制 |
+| **工具** | 内置 CLI 工具 | 您编写的任何 Python 函数 |
+| **策略** | 交互式审批提示词 | 编程式的 `policy.*` 规则 |
+| **部署** | 本地交互式会话 | Cloud Run 服务，可通过 API 调用 |
+| **多代理** | CLI 会话中的子代理 | `asyncio.gather` + `START_SUBAGENT` |
 
 ---
 
-## 3.1 — SDK Setup <span class="duration-badge">10 min</span>
+## 3.1 — SDK 环境设置 <span class="duration-badge">10 分钟</span>
 
-### Prerequisites
+### 前置条件
 
 - Python 3.11+
-- A Gemini API key — set as `GEMINI_API_KEY` or pass via `api_key=` in config
+- Gemini API 密钥 — 设置为 `GEMINI_API_KEY` 或通过配置中的 `api_key=` 传递
 
-### Install
+### 安装
 
 ```bash
 python -m venv .venv
@@ -40,7 +40,7 @@ source .venv/bin/activate
 pip install google-antigravity
 ```
 
-### Verify
+### 验证
 
 ```python
 from google.antigravity import Agent, LocalAgentConfig
@@ -48,19 +48,17 @@ from google.antigravity.hooks import policy
 print("google-antigravity installed ✅")
 ```
 
-> **API key vs Vertex AI:** For quick local development, use `api_key="AIza..."` in
-> `LocalAgentConfig`. For production on GCP, authenticate with
-> `gcloud auth application-default login` — the library picks up ADC automatically.
+> **API 密钥与 Vertex AI：** 对于快速的本地开发，请在 `LocalAgentConfig` 中使用 `api_key="AIza..."`。对于 GCP 上的生产环境，请使用 `gcloud auth application-default login` 进行身份验证 — 该库会自动获取 ADC。
 
 ---
 
-## 3.2 — Core Primitives: Agent, Config, Tool <span class="duration-badge">20 min</span>
+## 3.2 — 核心原语：代理、配置、工具 <span class="duration-badge">20 分钟</span>
 
-The `google-antigravity` SDK has three building blocks: `Agent`, `LocalAgentConfig`, and tools (plain Python functions). Learn these and you can build anything.
+`google-antigravity` SDK 有三个构建块：`Agent`、`LocalAgentConfig` 和工具（普通的 Python 函数）。掌握这些，你就可以构建任何东西。
 
-### The Tool
+### 工具
 
-A tool is a **plain Python function**. No wrapper class, no decorator. The agent decides when to call it based on the docstring — that's the entire interface contract.
+工具是一个**普通的 Python 函数**。没有包装类，没有装饰器。代理根据文档字符串决定何时调用它——这就是完整的接口契约。
 
 ```python
 def get_file_contents(file_path: str) -> str:
@@ -79,17 +77,17 @@ def get_file_contents(file_path: str) -> str:
         return f"Error: File not found at {file_path}"
 ```
 
-> **Critical rules for tools:**
+> **工具的关键规则：**
 >
-> - Use explicit type annotations — `str`, `int`, `bool`, `list[str]`. No `typing.Optional`.
-> - Use a default of `None` for optional parameters: `param: str = None`
-> - The docstring is the tool's schema — the model reads it to decide when and how to call the tool. Write it for the model, not a human.
-> - Keep tools narrow and focused. One job per tool.
+> - 使用显式的类型注解——`str`、`int`、`bool`、`list[str]`。不要使用 `typing.Optional`。
+> - 对于可选参数，使用 `None` 作为默认值：`param: str = None`
+> - 文档字符串就是工具的 schema——模型通过读取它来决定何时以及如何调用该工具。它是为模型编写的，而不是为人类编写的。
+> - 保持工具的狭窄和专注。每个工具只做一件事。
 
-### Tools with Session State
+### 带有会话状态的工具
 
-To read/write **session state** inside a tool, declare a parameter typed as `ToolContext`.
-The SDK auto-detects it, injects it at call time, and **strips it from the schema shown to the model**:
+要在工具内部读写**会话状态**，请声明一个类型为 `ToolContext` 的参数。
+SDK 会自动检测它，在调用时将其注入，并**从展示给模型的 schema 中将其剥离**：
 
 ```python
 from google.antigravity.tools.tool_context import ToolContext
@@ -114,9 +112,9 @@ def record_finding(
     return {"status": "recorded", "index": len(findings) - 1}
 ```
 
-### The Agent + Config
+### 代理 + 配置
 
-`Agent` is the single entry point. All configuration goes in `LocalAgentConfig`:
+`Agent` 是唯一的入口点。所有配置都放在 `LocalAgentConfig` 中：
 
 ```python
 import asyncio
@@ -147,25 +145,25 @@ async def main():
 asyncio.run(main())
 ```
 
-> **`async with Agent(config) as agent:`** — always use the context manager. It starts
-> the Go runtime bridge (`bin/localharness`) and tears it down cleanly on exit.
+> **`async with Agent(config) as agent:`** —— 始终使用上下文管理器。它会启动
+> Go 运行时桥接器（`bin/localharness`）并在退出时干净地将其卸载。
 
-### Model Selection
+### 模型选择
 
-Match the model to the job. Cost-conscious policy:
+根据任务匹配模型。注重成本的策略：
 
-| Role | Model | Rationale |
+| 角色 | 模型 | 理由 |
 | :-- | :-- | :-- |
-| General tasks, code review | `gemini-3.5-flash` | SDK default — cost-efficient, fast |
-| Orchestration, routing, planning | `gemini-3.1-pro-preview` | Complex reasoning, multi-step decisions |
-| Image generation tasks | `gemini-3.1-flash-image-preview` | SDK default for image generation |
-| High-stakes analysis | `gemini-3.1-pro-preview` with `ThinkingLevel.HIGH` | Deep reasoning for compliance/security |
+| 一般任务、代码审查 | `gemini-3.5-flash` | SDK 默认——高性价比、速度快 |
+| 编排、路由、规划 | `gemini-3.1-pro-preview` | 复杂推理、多步决策 |
+| 图像生成任务 | `gemini-3.1-flash-image-preview` | SDK 默认的图像生成模型 |
+| 高风险分析 | 带有 `ThinkingLevel.HIGH` 的 `gemini-3.1-pro-preview` | 用于合规/安全的深度推理 |
 
-> **Never use** `gemini-1.5-flash`, `gemini-1.5-pro`. Deprecated.
+> **切勿使用** `gemini-1.5-flash`、`gemini-1.5-pro`。已弃用。
 
-### The Skill
+### 技能
 
-Skills are `SKILL.md` files loaded at runtime to inject domain knowledge. Keep your system prompt lean — load expertise from files:
+技能是在运行时加载的 `SKILL.md` 文件，用于注入领域知识。保持你的系统提示词精简——从文件中加载专业知识：
 
 ```python
 from pathlib import Path
@@ -193,13 +191,13 @@ config = LocalAgentConfig(
 )
 ```
 
-Skills can also be loaded natively via `LocalAgentConfig(skills_paths=["/path/to/skills/"])` — the SDK discovers `SKILL.md` files automatically.
+技能也可以通过 `LocalAgentConfig(skills_paths=["/path/to/skills/"])` 原生加载——SDK 会自动发现 `SKILL.md` 文件。
 
 ---
 
-## 3.3 — Policy and Safety <span class="duration-badge">10 min</span>
+## 3.3 — 策略与安全 <span class="duration-badge">10 分钟</span>
 
-**Policy is the first thing you configure** — it controls what the agent is allowed to do without human approval. Every `LocalAgentConfig` needs a `policies=` list:
+**策略是您首先要配置的内容** —— 它控制代理在未经人工批准的情况下允许执行的操作。每个 `LocalAgentConfig` 都需要一个 `policies=` 列表：
 
 ```python
 from google.antigravity.hooks import policy
@@ -229,13 +227,13 @@ policy.deny("run_command", when=lambda args: "rm -rf" in args.get("CommandLine",
 policy.workspace_only(["/path/to/project"])
 ```
 
-> **Priority order:** `specific_deny` > `specific_ask` > `specific_allow` > `wildcard_deny` > `wildcard_ask` > `wildcard_allow`
+> **优先级顺序：** `specific_deny` > `specific_ask` > `specific_allow` > `wildcard_deny` > `wildcard_ask` > `wildcard_allow`
 
 ---
 
-## 3.4 — Hooks: Observability and Control <span class="duration-badge">10 min</span>
+## 3.4 — 钩子：可观测性与控制 <span class="duration-badge">10 min</span>
 
-Hooks let you intercept and react to every event in the agent lifecycle — for logging, auditing, guardrails, or custom approval flows:
+钩子允许您拦截并响应代理生命周期中的每个事件——用于日志记录、审计、护栏或自定义审批流：
 
 ```python
 from google.antigravity.hooks import hooks
@@ -269,26 +267,26 @@ config = LocalAgentConfig(
 )
 ```
 
-**Hook types:**
+**钩子类型：**
 
-| Hook | Blocks execution | Modifies data | Use for |
+| 钩子 | 阻塞执行 | 修改数据 | 用途 |
 | :-- | :-- | :-- | :-- |
-| `@hooks.pre_tool_call_decide` | Yes | No | Approve/deny tool calls |
-| `@hooks.post_tool_call` | No | No | Logging, metrics |
-| `@hooks.pre_turn` | No | No | Turn-level logging |
-| `@hooks.post_turn` | No | No | Response logging |
-| `@hooks.on_session_start/end` | No | No | Setup/teardown |
-| `@hooks.on_tool_error` | Yes | Yes | Error recovery |
+| `@hooks.pre_tool_call_decide` | 是 | 否 | 批准/拒绝工具调用 |
+| `@hooks.post_tool_call` | 否 | 否 | 日志记录、指标 |
+| `@hooks.pre_turn` | 否 | 否 | 轮次级别日志记录 |
+| `@hooks.post_turn` | 否 | 否 | 响应日志记录 |
+| `@hooks.on_session_start/end` | 否 | 否 | 环境设置/清理 |
+| `@hooks.on_tool_error` | 是 | 是 | 错误恢复 |
 
 ---
 
-## 3.5 — Multi-Agent Orchestration <span class="duration-badge">15 min</span>
+## 3.5 — 多代理编排 <span class="duration-badge">15 min</span>
 
-`google-antigravity` has no `SequentialAgent` or `ParallelAgent` classes. Multi-agent is done two ways: **model-driven** (let the agent spawn subagents) or **Python-driven** (you orchestrate `Agent` instances directly).
+`google-antigravity` 没有 `SequentialAgent` 或 `ParallelAgent` 类。多代理通过两种方式实现：**模型驱动**（让代理生成子代理）或 **Python 驱动**（直接编排 `Agent` 实例）。
 
-### Pattern A — Model-Driven Subagents
+### 模式 A — 模型驱动的子代理
 
-Enable `START_SUBAGENT` in capabilities. The model calls it when it decides to delegate:
+在功能（capabilities）中启用 `START_SUBAGENT`。当模型决定委派任务时，它会调用此功能：
 
 ```python
 from google.antigravity.types import BuiltinTools, CapabilitiesConfig
@@ -306,9 +304,9 @@ Synthesise their outputs into a final summary.""",
 )
 ```
 
-### Pattern B — Sequential Pipeline (Python-Driven)
+### 模式 B — 顺序流水线（Python 驱动）
 
-Pass the output of one agent as the input to the next:
+将一个代理的输出作为下一个代理的输入：
 
 ```python
 async def sequential_review(file_path: str):
@@ -325,9 +323,9 @@ async def sequential_review(file_path: str):
     return report
 ```
 
-### Pattern C — Parallel Analysis
+### 模式 C — 并行分析
 
-Run independent agents simultaneously with `asyncio.gather`:
+使用 `asyncio.gather` 同时运行独立的代理：
 
 ```python
 async def parallel_analysis(file_path: str):
@@ -350,14 +348,13 @@ async def parallel_analysis(file_path: str):
     }
 ```
 
-> **When to use parallel:** Any time you have N independent analyses. This cuts wall-clock
-> time by 60–80% compared to running them sequentially.
+> **何时使用并行：** 任何时候只要你有 N 个独立的分析任务。与顺序运行相比，这可以将总耗时减少 60–80%。
 
 ---
 
-## 3.6 — Streaming and Structured Output <span class="duration-badge">5 min</span>
+## 3.6 — 流式传输与结构化输出 <span class="duration-badge">5 min</span>
 
-### Streaming Responses
+### 流式响应
 
 ```python
 async with Agent(config) as agent:
@@ -372,9 +369,9 @@ async with Agent(config) as agent:
         print(f"[thinking] {thought}")
 ```
 
-### Structured Output
+### 结构化输出
 
-Bind the agent's output to a Pydantic schema:
+将代理的输出绑定到 Pydantic 模式：
 
 ```python
 import asyncio
@@ -406,7 +403,7 @@ asyncio.run(main())
 
 ---
 
-## 3.7 — Session Resume and Persistence <span class="duration-badge">5 min</span>
+## 3.7 — 会话恢复与持久化 <span class="duration-badge">5 分钟</span>
 
 ```python
 # First session — save the conversation ID
@@ -427,7 +424,7 @@ async with Agent(resume_config) as agent:
 
 ---
 
-## 3.8 — Triggers: Autonomous Background Agents <span class="duration-badge">5 min</span>
+## 3.8 — 触发器：自主后台代理 <span class="duration-badge">5 分钟</span>
 
 ```python
 import asyncio
@@ -464,9 +461,9 @@ asyncio.run(main())
 
 ---
 
-## 3.9 — Project Structure Conventions <span class="duration-badge">5 min</span>
+## 3.9 — 项目结构约定 <span class="duration-badge">5 min</span>
 
-Structure your agent project for maintainability:
+组织您的代理项目以提高可维护性：
 
 ```text
 my_agent/
@@ -489,9 +486,9 @@ my_agent/
 └── README.md
 ```
 
-### Deployment to Cloud Run
+### 部署到 Cloud Run
 
-Deploy as a standard Python async application:
+作为标准的 Python 异步应用程序进行部署：
 
 ```dockerfile
 FROM python:3.11-slim
@@ -510,71 +507,71 @@ gcloud run deploy my-code-reviewer \
   --allow-unauthenticated
 ```
 
-> **Tip:** Set `GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_REGION` (e.g. `us-central1`) before running.
+> **提示：** 在运行之前设置 `GOOGLE_CLOUD_PROJECT` 和 `GOOGLE_CLOUD_REGION`（例如 `us-central1`）。
 
 ---
 
-## Hands-On Exercises
+## 动手实践练习
 
 <div class="exercise-card" markdown>
 
-### :material-code-braces: Exercise 10: Your First AGY Agent
+### :material-code-braces: 练习 10：你的第一个 AGY 代理
 
-**File:** `exercises/ex10_first_agent.md`  
-**Duration:** 45 min  
-**Build:** A **Code Review Agent** that reads files, identifies issues, and produces a structured review report.
+**文件：** `exercises/ex10_first_agent.md`  
+**时长：** 45 分钟  
+**构建：** 一个**代码审查代理**，它能够读取文件、识别问题并生成结构化的审查报告。
 
-**What you'll implement:**
+**你将实现的内容：**
 
-1. Define 3 tools: `read_file`, `list_directory`, `record_finding` (with `ToolContext`)
-2. Write a system prompt with a review rubric (loaded from a `SKILL.md`)
-3. Configure `LocalAgentConfig` with `policy.allow_all()` and `CapabilitiesConfig`
-4. Add a `@hooks.pre_tool_call_decide` security guard
-5. Run with streaming output and structured `ReviewResult` Pydantic schema
+1. 定义 3 个工具：`read_file`、`list_directory`、`record_finding`（使用 `ToolContext`）
+2. 编写带有审查标准的系统提示词（从 `SKILL.md` 加载）
+3. 使用 `policy.allow_all()` 和 `CapabilitiesConfig` 配置 `LocalAgentConfig`
+4. 添加一个 `@hooks.pre_tool_call_decide` 安全护栏
+5. 使用流式输出和结构化的 `ReviewResult` Pydantic 模式运行
 
-### :material-graph: Exercise 11: Multi-Agent Pipeline
+### :material-graph: 练习 11：多代理流水线
 
-**File:** `exercises/ex11_multi_agent_pipeline.md`  
-**Duration:** 45 min  
-**Build:** A **Write-then-Audit Pipeline** — a Technical Writer agent produces a document, then a Compliance Analyst audits it for GDPR gaps.
+**文件：** `exercises/ex11_multi_agent_pipeline.md`  
+**时长：** 45 分钟  
+**构建：** 一个**先写后审流水线** — 技术文档撰写员代理生成文档，然后合规分析师对其进行 GDPR 漏洞审计。
 
-**What you'll implement:**
+**你将实现的内容：**
 
-1. Build a `technical_writer` agent with a GDPR SKILL.md loaded via `skills_paths`
-2. Build a `compliance_analyst` agent with `response_schema=ComplianceReport`
-3. Wire them sequentially: output of writer passed as input to analyst
-4. Add a parallel variant using `asyncio.gather` for simultaneous draft + legal check
-5. Add session resume: analyst reads the writer's `conversation_id` to load context
-6. Deploy to Cloud Run as `my-pipeline` using `gcloud run deploy`
+1. 构建一个 `technical_writer` 代理，通过 `skills_paths` 加载 GDPR SKILL.md
+2. 构建一个 `compliance_analyst` 代理，设置 `response_schema=ComplianceReport`
+3. 将它们按顺序连接：撰写员的输出作为输入传递给分析师
+4. 添加一个使用 `asyncio.gather` 的并行变体，用于同时进行草稿编写和法律审查
+5. 添加会话恢复：分析师读取撰写员的 `conversation_id` 以加载上下文
+6. 使用 `gcloud run deploy` 将其作为 `my-pipeline` 部署到 Cloud Run
 
 </div>
 
 ---
 
-## Summary: SDK Building Blocks
+## 总结：SDK 构建块
 
-| Primitive | What It Does | When to Use |
+| 原语 | 作用 | 何时使用 |
 | :-- | :-- | :-- |
-| `Agent` | Single LLM agent with tools, hooks, policy | The core — every agent starts here |
-| `LocalAgentConfig` | All config in one place (model, tools, policy, hooks) | Always |
-| `tools=[fn]` | Plain Python callable, docstring is the schema | Any external operation |
-| `ToolContext` | State read/write injected into tools | Stateful tools in pipelines |
-| `policy.allow_all()` | Approve all tool calls autonomously | Trusted, sandboxed agents |
-| `policy.deny("run_command")` | Block specific tool types | Safety guardrails |
-| `@hooks.pre_tool_call_decide` | Block/approve tool calls before execution | Security guards |
-| `@hooks.post_tool_call` | Observe completed tool calls | Audit logging |
-| `response_schema=` | Bind output to Pydantic schema | Structured data extraction |
-| `async for delta in response:` | Stream text as it arrives | Long-form generation |
-| `asyncio.gather(...)` | Run agents in parallel | Independent analyses |
-| `every(60, handler)` | Trigger agent on interval | Background monitors |
-| `on_file_change(path, fn)` | Trigger agent on filesystem events | Live code watchers |
-| `skills_paths=[...]` | Load SKILL.md files at runtime | Portable domain expertise |
-| `conversation_id=` | Resume a previous session | Multi-session workflows |
+| `Agent` | 带有工具、钩子、策略的单个 LLM 代理 | 核心 — 每个代理都从这里开始 |
+| `LocalAgentConfig` | 所有配置集中在一处（模型、工具、策略、钩子） | 总是 |
+| `tools=[fn]` | 普通的 Python 可调用对象，docstring 即为 schema | 任何外部操作 |
+| `ToolContext` | 注入到工具中的状态读/写 | 流水线中的有状态工具 |
+| `policy.allow_all()` | 自主批准所有工具调用 | 受信任的、沙盒化的代理 |
+| `policy.deny("run_command")` | 阻止特定工具类型 | 安全护栏 |
+| `@hooks.pre_tool_call_decide` | 在执行前阻止/批准工具调用 | 安全防护 |
+| `@hooks.post_tool_call` | 观察已完成的工具调用 | 审计日志 |
+| `response_schema=` | 将输出绑定到 Pydantic schema | 结构化数据提取 |
+| `async for delta in response:` | 在文本到达时进行流式传输 | 长文本生成 |
+| `asyncio.gather(...)` | 并行运行代理 | 独立分析 |
+| `every(60, handler)` | 按时间间隔触发代理 | 后台监控器 |
+| `on_file_change(path, fn)` | 在文件系统事件发生时触发代理 | 实时代码监视器 |
+| `skills_paths=[...]` | 在运行时加载 SKILL.md 文件 | 可移植的领域专业知识 |
+| `conversation_id=` | 恢复之前的会话 | 多会话工作流 |
 
 ---
 
-## Next Step
+## 下一步
 
-→ Continue to **[Module 4: Multi-Agent & Advanced Patterns](multi-agent-advanced.md)**
+→ 继续前往 **[模块 4：多代理与高级模式](../multi-agent-advanced.md)**
 
-→ Reference: **[Cheatsheet](cheatsheet.md)** — all commands in one place
+→ 参考：**[速查表](cheatsheet.md)** — 所有命令一览

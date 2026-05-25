@@ -80,10 +80,23 @@ jobs:
           done
           echo "  ✅ All hook event names are AGY-correct"
 
+      - name: Check for internal project references
+        run: |
+          echo "📋 Checking for internal project/infra references..."
+          # These patterns must never appear in public workshop docs
+          PATTERNS="gpu-launchpad|paul-sdlc|googleplex|corp\.google|buganizer|google3|critique\.corp|piper\/"
+          if grep -rqE "$PATTERNS" docs/ samples/ scripts/ *.md 2>/dev/null; then
+            echo "  ❌ Internal reference found — replace with generic placeholder"
+            grep -rnoE "$PATTERNS" docs/ samples/ scripts/ *.md | head -10
+            exit 1
+          else
+            echo "  ✅ No internal project references"
+          fi
+
       - name: Validate mkdocs.yml nav alignment
         run: |
           echo "📋 Checking nav alignment..."
-          pip install mkdocs-material -q
+          pip install mkdocs-material mkdocs-static-i18n mkdocs-minify-plugin -q
           mkdocs build --strict
           echo "  ✅ MkDocs build (strict) passed"
 
