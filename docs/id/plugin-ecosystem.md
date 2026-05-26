@@ -1,6 +1,6 @@
 # Referensi: Ekosistem Plugin
 
-> **Referensi mendalam untuk sistem plugin agy-cli.** Perintah-perintah penting dibahas dalam [Modul 1 — Bagian 1.7](sdlc-productivity.md#17-extend-with-plugins). Halaman ini memiliki detail siklus hidup lengkap untuk tim yang membangun dan memelihara plugin kustom.
+> **Referensi mendalam untuk sistem plugin agy-cli.** Perintah-perintah penting dibahas dalam [Modul 1 — Bagian 1.7](sdlc-productivity.md#17-extend-with-plugins-15-min). Halaman ini memiliki detail siklus hidup lengkap untuk tim yang membangun dan memelihara plugin kustom.
 
 ---
 

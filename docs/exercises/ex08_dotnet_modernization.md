@@ -1,6 +1,6 @@
 # PRD: .NET 5 → .NET 8 Cloud-Native Migration
 
-> **Workshop Use:** Practice exercise for [Module 2 — Legacy Codebase Modernization](../docs/legacy-modernization.md). Demonstrates agy strict mode, agent self-onboarding with AGENTS.md, subagent planning, and `ctrl+g` plan editing. The target repository includes a reference `modernization-prompt.md` authored by GCP Cloud Solutions Architects — a gold-standard example of prompt engineering for migration tasks.
+> **Workshop Use:** Practice exercise for [Module 2 — Legacy Codebase Modernization](../legacy-modernization.md). Demonstrates agy strict mode, agent self-onboarding with AGENTS.md, subagent planning, and `ctrl+g` plan editing. The target repository includes a reference `modernization-prompt.md` authored by GCP Cloud Solutions Architects — a gold-standard example of prompt engineering for migration tasks.
 
 ## Problem
 

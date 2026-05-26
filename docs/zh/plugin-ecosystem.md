@@ -1,6 +1,6 @@
 # 参考：插件生态系统
 
-> **agy-cli 插件系统的深度参考。** 基本命令已在 [模块 1 — 1.7 节](sdlc-productivity.md#17-extend-with-plugins) 中介绍。本页面为构建和维护自定义插件的团队提供了完整的生命周期详细信息。
+> **agy-cli 插件系统的深度参考。** 基本命令已在 [模块 1 — 1.7 节](sdlc-productivity.md#17-extend-with-plugins-15-min) 中介绍。本页面为构建和维护自定义插件的团队提供了完整的生命周期详细信息。
 
 ---
 
