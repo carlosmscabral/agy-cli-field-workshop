@@ -290,7 +290,7 @@ AGY_TRANSLATE_ENV := GOOGLE_CLOUD_PROJECT=$${GOOGLE_CLOUD_PROJECT} GOOGLE_CLOUD_
 translate-list:  ## Show available languages and translation status
 	@echo "🌐 Antigravity CLI Field Workshop — Translation Status"
 	@echo ""
-	@LANGS=$$(find docs -mindepth 1 -maxdepth 1 -type d 2>/dev/null | xargs -I{} basename {} | sort); \
+	@LANGS=$$(find docs -mindepth 1 -maxdepth 1 -type d 2>/dev/null | xargs -I{} basename {} | grep -E '^[a-z]{2}(-[A-Z]{2})?$$' | sort); \
 	if [ -z "$$LANGS" ]; then \
 		echo "  ⬚  No translated languages found under docs/"; \
 	else \
@@ -309,7 +309,7 @@ translate-list:  ## Show available languages and translation status
 check-translations:  ## Report translation drift and missing files (advisory, non-blocking, no GCP needed)
 	@echo "🌐 Translation status check..."
 	@echo ""
-	@LANGS=$$(find docs -mindepth 1 -maxdepth 1 -type d 2>/dev/null | xargs -I{} basename {} | sort); \
+	@LANGS=$$(find docs -mindepth 1 -maxdepth 1 -type d 2>/dev/null | xargs -I{} basename {} | grep -E '^[a-z]{2}(-[A-Z]{2})?$$' | sort); \
 	if [ -z "$$LANGS" ]; then \
 		echo "  ℹ️  No translated languages found under docs/"; \
 	else \

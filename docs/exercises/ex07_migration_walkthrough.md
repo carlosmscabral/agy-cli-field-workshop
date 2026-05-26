@@ -193,7 +193,7 @@ The `migration-validator` subagent will check:
 
 Add a `PreToolUse` hook to the migrated project that blocks the agent from calling `git push` without a confirmation. Use the hook `decision: deny` pattern.
 
-Refer to [`samples/hooks/secret-scanner.sh`](https://github.com/pauldatta/agy-cli-field-workshop/blob/main/samples/hooks/secret-scanner.sh) as a template for the decision pattern.
+Refer to [`samples/hooks/secret-scanner.sh`](../samples/hooks/secret-scanner.sh) as a template for the decision pattern.
 
 ---
 

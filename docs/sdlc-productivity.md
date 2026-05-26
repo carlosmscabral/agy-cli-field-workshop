@@ -199,6 +199,14 @@ Beyond AGENTS.md, agy also loads:
 
 > 📖 Full details: [Rules & Workflows docs](https://www.antigravity.google/docs/rules-workflows)
 
+### Sample Agent Definitions (in `samples/agents/`)
+
+| Agent | Model | Purpose |
+| :-- | :-- | :-- |
+| `doc-writer.md` | `gemini-3.5-flash` | Generates API docs, README sections, and inline comments from source |
+| `pr-reviewer.md` | `gemini-3.5-flash` | Reviews code changes for quality, bugs, and style violations |
+| `migration-validator.md` | `gemini-3.5-flash` | Validates Gemini CLI → Antigravity CLI migration completeness |
+
 ---
 
 ## 1.6 — Interactive Navigation <span class="duration-badge">5 min</span>

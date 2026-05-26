@@ -235,6 +235,15 @@ Hooks let you run custom logic at 5 lifecycle events:
 
 Configure hooks in `hooks.json` (in `.agents/` for project or `~/.gemini/config/` for global). Hook scripts receive JSON on stdin and return JSON on stdout.
 
+#### Sample Hooks (in `samples/hooks/`)
+
+| Script | Event | Purpose |
+| :-- | :-- | :-- |
+| `secret-scanner.sh` | `PreToolUse` | Blocks writes that contain hardcoded credentials |
+| `git-context-injector.sh` | `PreToolUse` | Injects recent git history for the target file before writes |
+| `test-nudge.sh` | `PostToolUse` | Nudges the agent to run tests after file writes |
+| `session-context.sh` | `PreInvocation` | Injects branch, pending changes, and dependencies at session start |
+
 > 📖 Full details: [Hooks docs](https://www.antigravity.google/docs/hooks)
 
 ### Rules

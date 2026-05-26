@@ -1,6 +1,6 @@
 # Reference: Plugin Ecosystem
 
-> **Deep reference for agy-cli's plugin system.** The essential commands are covered in [Module 1 — Section 1.7](sdlc-productivity.md#17-extend-with-plugins). This page has the full lifecycle detail for teams building and maintaining custom plugins.
+> **Deep reference for agy-cli's plugin system.** The essential commands are covered in [Module 1 — Section 1.7](sdlc-productivity.md#17-extend-with-plugins-15-min). This page has the full lifecycle detail for teams building and maintaining custom plugins.
 
 ---
 

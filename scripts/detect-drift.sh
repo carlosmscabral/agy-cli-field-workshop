@@ -137,50 +137,74 @@ if [ -f "mkdocs.yml" ]; then
 fi
 
 # ═══════════════════════════════════════════════════════════
-# UPSTREAM DRIFT CHECKS (optional, needs network)
+# UPSTREAM DRIFT CHECKS (validates against AUDIT.md ground truth)
 # ═══════════════════════════════════════════════════════════
 
 if $CHECK_UPSTREAM; then
-  log_section "🌐 Upstream Drift Detection (antigravity.google docs)"
+  log_section "🌐 Upstream Drift Detection (against AUDIT.md ground truth)"
 
-  AGY_DOCS_CACHE="/tmp/agy-cli-ref-cache.html"
-  CACHE_MAX_AGE=1440  # minutes (24h)
-
-  if [ ! -f "$AGY_DOCS_CACHE" ] || [ "$(find "$AGY_DOCS_CACHE" -mmin +${CACHE_MAX_AGE} -print 2>/dev/null)" ]; then
-    echo "  Fetching AGY CLI reference from antigravity.google..."
-    if curl -sL "https://antigravity.google/docs/cli-overview" > "$AGY_DOCS_CACHE" 2>/dev/null; then
-      log_ok "Fetched AGY CLI reference (cached for 24h)"
-    else
-      log_warn "Could not fetch AGY CLI reference — skipping upstream checks"
-      AGY_DOCS_CACHE=""
-    fi
+  AUDIT_FILE="AUDIT.md"
+  if [ ! -f "$AUDIT_FILE" ]; then
+    log_fail "AUDIT.md not found — cannot run upstream checks"
   else
-    echo "  Using cached AGY CLI reference (< 24h old)"
-  fi
+    log_ok "Using AUDIT.md as verified ground truth"
 
-  if [ -n "$AGY_DOCS_CACHE" ] && [ -f "$AGY_DOCS_CACHE" ]; then
-    # Check agy CLI flags used in our docs
-    log_section "  Checking agy CLI flags against upstream reference..."
+    # --- Check CLI flags used in docs are grounded in AUDIT.md ---
+    log_section "  Checking agy CLI flags against AUDIT.md..."
     grep -rhoE 'agy --[a-z-]+' docs/*.md 2>/dev/null | sed 's/agy //' | sort -u | while read -r flag; do
-      if grep -qi -- "$flag" "$AGY_DOCS_CACHE"; then
-        log_ok "CLI flag '$flag' found in upstream reference"
+      if grep -q -- "$flag" "$AUDIT_FILE"; then
+        log_ok "CLI flag '$flag' grounded in AUDIT.md"
       else
-        log_warn "CLI flag '$flag' used in workshop but not found in AGY CLI reference"
+        log_warn "CLI flag '$flag' used in workshop but NOT in AUDIT.md — verify against official docs"
       fi
     done
 
-    # Check slash commands used in our docs
-    log_section "  Checking slash commands against upstream reference..."
-    KNOWN_SLASH_CMDS="model agents btw clear compact fork open permissions resume rewind skills mcp usage config keybindings statusline"
-    for cmd_name in $KNOWN_SLASH_CMDS; do
-      if grep -rqw "/${cmd_name}" docs/*.md 2>/dev/null; then
-        if grep -qi -- "$cmd_name" "$AGY_DOCS_CACHE"; then
-          log_ok "Slash command '/${cmd_name}' found in upstream reference"
-        else
-          log_warn "Slash command '/${cmd_name}' used in workshop but not found in AGY CLI reference"
-        fi
+    # --- Check slash commands used in docs are grounded in AUDIT.md ---
+    log_section "  Checking slash commands against AUDIT.md..."
+    grep -rhoE '/[a-z]+' docs/*.md 2>/dev/null | grep -E '^/[a-z]{2,}$' | sort -u | while read -r cmd; do
+      cmd_name="${cmd#/}"
+      # Skip common false positives (file paths, URLs)
+      case "$cmd_name" in dev|bin|etc|usr|tmp|src|var|opt|home|docs) continue ;; esac
+      if grep -qw "$cmd_name" "$AUDIT_FILE"; then
+        log_ok "Slash command '${cmd}' grounded in AUDIT.md"
+      else
+        log_warn "Slash command '${cmd}' used in workshop but NOT in AUDIT.md — verify or add"
       fi
     done
+
+    # --- Check AUDIT.md source URLs are still reachable ---
+    log_section "  Checking AUDIT.md source URLs are reachable..."
+    grep -oE 'https://[^ )|>]+' "$AUDIT_FILE" | sort -u | while read -r url; do
+      # Only check antigravity.google and developers.googleblog.com
+      case "$url" in
+        *antigravity.google*|*developers.googleblog.com*)
+          status=$(curl -sL -o /dev/null -w "%{http_code}" --max-time 5 "$url" 2>/dev/null || echo "000")
+          if [ "$status" = "200" ]; then
+            log_ok "URL reachable ($status): $url"
+          elif [ "$status" = "000" ]; then
+            log_warn "URL unreachable (timeout/DNS): $url"
+          else
+            log_warn "URL returned $status: $url"
+          fi
+          ;;
+      esac
+    done
+
+    # --- Check AUDIT.md freshness ---
+    log_section "  Checking AUDIT.md freshness..."
+    audit_date=$(grep -oE 'Audit date:.*[0-9]{4}-[0-9]{2}-[0-9]{2}' "$AUDIT_FILE" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
+    if [ -n "$audit_date" ]; then
+      days_old=$(( ( $(date +%s) - $(date -j -f "%Y-%m-%d" "$audit_date" +%s 2>/dev/null || echo 0) ) / 86400 ))
+      if [ "$days_old" -lt 30 ]; then
+        log_ok "AUDIT.md is ${days_old} days old (fresh)"
+      elif [ "$days_old" -lt 90 ]; then
+        log_warn "AUDIT.md is ${days_old} days old — consider refreshing (see VERIFICATION.md)"
+      else
+        log_fail "AUDIT.md is ${days_old} days old — needs refresh (see VERIFICATION.md)"
+      fi
+    else
+      log_warn "Could not parse audit date from AUDIT.md"
+    fi
   fi
 else
   echo ""
