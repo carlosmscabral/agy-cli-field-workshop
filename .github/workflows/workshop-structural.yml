@@ -86,10 +86,11 @@ jobs:
         run: |
           echo "📋 Checking for internal project/infra references..."
           # These patterns must never appear in public workshop docs
+          # Exclude precommit-checks.sh — it contains these patterns as grep targets
           PATTERNS="gpu-launchpad|paul-sdlc|googleplex|corp\.google|buganizer|google3|critique\.corp|piper\/"
-          if grep -rqE "$PATTERNS" docs/ samples/ scripts/ *.md 2>/dev/null; then
+          if grep -rqE --exclude="precommit-checks.sh" "$PATTERNS" docs/ samples/ scripts/ *.md 2>/dev/null; then
             echo "  ❌ Internal reference found — replace with generic placeholder"
-            grep -rnoE "$PATTERNS" docs/ samples/ scripts/ *.md | head -10
+            grep -rnoE --exclude="precommit-checks.sh" "$PATTERNS" docs/ samples/ scripts/ *.md | head -10
             exit 1
           else
             echo "  ✅ No internal project references"
