@@ -357,7 +357,7 @@ agy plugin validate ./my-plugin
 
 ### :material-file-document: Exercise 1: First Session
 
-**File:** `exercises/ex01_first_session.md`  
+**File:** [`ex01_first_session.md`](exercises/ex01_first_session.md)  
 **Duration:** 15 min  
 **Objective:** Launch agy, explore a codebase, generate an AGENTS.md.
 
@@ -367,7 +367,7 @@ agy plugin validate ./my-plugin
 
 ### :material-puzzle: Exercise 2: Plugin Bridge
 
-**File:** `exercises/ex02_plugin_bridge.md`  
+**File:** [`ex02_plugin_bridge.md`](exercises/ex02_plugin_bridge.md)  
 **Duration:** 20 min  
 **Objective:** Import plugins from Gemini CLI, enable/disable selectively, validate a custom plugin.
 

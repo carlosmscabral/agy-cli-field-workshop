@@ -426,7 +426,7 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 ### :material-file-document: Exercise 8: Legacy Modernization
 
-**Files:** `exercises/ex08_dotnet_modernization.md` · `exercises/ex09_java_upgrade.md`  
+**Files:** [`ex08_dotnet_modernization.md`](exercises/ex08_dotnet_modernization.md) · [`ex09_java_upgrade.md`](exercises/ex09_java_upgrade.md)  
 **Duration:** 45 min  
 **Objective:** Walk through a full migration using the AGY primitives from this module.
 

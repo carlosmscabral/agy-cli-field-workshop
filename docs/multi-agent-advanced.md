@@ -264,7 +264,7 @@ This is multi-agent incident triage — two parallel investigations, steerable m
 
 ### :material-file-document: Exercise 4: Subagents
 
-**File:** `exercises/ex04_subagents.md`
+**File:** [`ex04_subagents.md`](exercises/ex04_subagents.md)
 **Duration:** 20 min
 **Objective:** Spawn a parallel audit team. Practice the adversarial reviewer pattern.
 
@@ -274,7 +274,7 @@ This is multi-agent incident triage — two parallel investigations, steerable m
 
 ### :material-file-document: Exercise 5: /btw & Scheduling
 
-**File:** `exercises/ex05_btw_scheduling.md`
+**File:** [`ex05_btw_scheduling.md`](exercises/ex05_btw_scheduling.md)
 **Duration:** 20 min
 **Objective:** Use /btw to steer a long-running task. Schedule a recurring code quality report.
 
@@ -284,7 +284,7 @@ This is multi-agent incident triage — two parallel investigations, steerable m
 
 ### :material-file-document: Exercise 6: Sandbox Governance
 
-**File:** `exercises/ex06_sandbox_governance.md`  
+**File:** [`ex06_sandbox_governance.md`](exercises/ex06_sandbox_governance.md)  
 **Duration:** 15 min  
 **Objective:** Configure sandbox mode in settings.json and test with the permissions model.
 

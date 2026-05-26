@@ -49,6 +49,14 @@ nav:
       - "3. Building AGY Agents": agy-sdk.md
       - "4. Multi-Agent & Advanced": multi-agent-advanced.md
   - "🧪 Exercises":
+      - "First Session (ex01)": exercises/ex01_first_session.md
+      - "Plugin Bridge (ex02)": exercises/ex02_plugin_bridge.md
+      - "First Sidecar (ex02b)": exercises/ex02b_first_sidecar.md
+      - "--print Pipeline (ex03)": exercises/ex03_print_mode_pipeline.md
+      - "Subagents (ex04)": exercises/ex04_subagents.md
+      - "/btw & Scheduling (ex05)": exercises/ex05_btw_scheduling.md
+      - "Sandbox Governance (ex06)": exercises/ex06_sandbox_governance.md
+      - "Migration Walkthrough (ex07)": exercises/ex07_migration_walkthrough.md
       - ".NET Modernization (ex08)": exercises/ex08_dotnet_modernization.md
       - "Java Upgrade (ex09)": exercises/ex09_java_upgrade.md
       - "First Agent (ex10)": exercises/ex10_first_agent.md

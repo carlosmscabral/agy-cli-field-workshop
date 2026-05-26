@@ -352,7 +352,7 @@ Sidecar output is stored at:
 
 ### :material-file-document: Exercise 2: Plugin Bridge
 
-**File:** `exercises/ex02_plugin_bridge.md`
+**File:** [`ex02_plugin_bridge.md`](exercises/ex02_plugin_bridge.md)
 **Duration:** 20 min
 **Objective:** Import plugins from Gemini CLI, enable/disable selectively, validate a custom plugin.
 
@@ -361,6 +361,8 @@ Sidecar output is stored at:
 <div class="exercise-card" markdown>
 
 ### :material-clock-outline: Exercise 2B: Your First Sidecar
+
+**File:** [`ex02b_first_sidecar.md`](exercises/ex02b_first_sidecar.md)
 
 > **Duration:** 20 min
 > **Build:** A scheduled **daily standup sidecar** that fires at 9am, creates a new AGY conversation, and asks it to summarise yesterday's git commits across your repos.
