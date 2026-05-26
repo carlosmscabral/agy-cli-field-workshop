@@ -43,19 +43,22 @@ test: lint-md test-structure test-blocks test-drift  ## Run all offline tests
 precommit:  ## Run ALL checks locally before committing — same as CI
 	@echo "🚦 Pre-commit checks (mirrors CI exactly)..."
 	@echo ""
-	@echo "[1/5] Markdown lint..."
+	@echo "[1/6] Markdown lint..."
 	@$(MAKE) lint-md
 	@echo ""
-	@echo "[2/5] Code block validation..."
+	@echo "[2/6] Code block validation..."
 	@bash scripts/validate-code-blocks.sh docs/
 	@echo ""
-	@echo "[3/5] MkDocs strict build..."
+	@echo "[3/6] Structural checks (stale refs, hook names, internal refs)..."
+	@bash scripts/precommit-checks.sh 2>&1 | grep -E '(📋|✅|❌|💥|🎉)' || true
+	@echo ""
+	@echo "[4/6] MkDocs strict build..."
 	@$(MAKE) test-build
 	@echo ""
-	@echo "[4/5] Drift detection..."
+	@echo "[5/6] Drift detection..."
 	@bash scripts/detect-drift.sh
 	@echo ""
-	@echo "[5/5] Shell & JSON validation..."
+	@echo "[6/6] Shell & JSON validation..."
 	@for f in scripts/*.sh samples/hooks/*.sh; do [ -f "$$f" ] && bash -n "$$f" && echo "  ✅ $$f"; done
 	@for f in samples/configs/*.json; do jq . "$$f" > /dev/null && echo "  ✅ $$f"; done
 	@echo ""
@@ -258,9 +261,9 @@ lint-md-fix:  ## Auto-fix markdown lint errors where possible
 	@echo "✅ Auto-fix complete — re-run lint-md to verify"
 
 setup-hooks:  ## Install git pre-commit hook
-	@cp scripts/pre-commit.sh .git/hooks/pre-commit
+	@printf '#!/usr/bin/env bash\nset -euo pipefail\nWD="$$(git rev-parse --show-toplevel)/engagements/agy-cli-field-workshop"\n[ -d "$$WD" ] || WD="$$(git rev-parse --show-toplevel)"\ncd "$$WD"\nbash scripts/precommit-checks.sh\n' > .git/hooks/pre-commit
 	@chmod +x .git/hooks/pre-commit
-	@echo "✅ Pre-commit hook installed"
+	@echo "✅ Pre-commit hook installed — runs scripts/precommit-checks.sh"
 
 # ───────────────────────────────────────────────────────────
 # Translation Pipeline (Vertex AI / gemini-3.1-pro-preview)
