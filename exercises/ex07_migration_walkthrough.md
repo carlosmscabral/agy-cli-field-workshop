@@ -1,6 +1,6 @@
 # Exercise 7 — Migration Walkthrough
 
-> **Module:** M09 — Gemini CLI → Antigravity CLI Migration
+> **Module:** Appendix — Migration Guide
 > **Time:** 20 min
 > **Format:** Individual or pair
 

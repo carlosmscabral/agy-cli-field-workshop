@@ -51,7 +51,7 @@ hide:
 
     Spawn isolated subagents, steer tasks mid-flight with `/btw`, schedule recurring jobs, and resume long-running sessions by ID.
 
-    **60 min** · Exercises: ex04–ex07
+    **60 min** · Exercises: ex04–ex06
 
     [:octicons-arrow-right-24: Start Module 4](multi-agent-advanced.md)
 

@@ -6,11 +6,11 @@
 
 ## Objective
 
-Import your Gemini CLI plugin library into agy-cli, selectively enable/disable plugins, and validate a sample custom plugin.
+Import your existing plugin library into Antigravity CLI, selectively enable/disable plugins, and validate a sample custom plugin.
 
 ---
 
-## Part 1: Import from Gemini CLI (7 min)
+## Part 1: Import Plugins (7 min)
 
 ```bash
 # Check what's currently in agy
@@ -97,7 +97,7 @@ Restore the manifest when done.
 
 ## Completion Criteria
 
-- [ ] `agy plugin import gemini` ran successfully and imported at least one plugin
+- [ ] `agy plugin import` ran successfully and imported at least one plugin
 - [ ] Tested at least one command from an imported plugin
 - [ ] Successfully disabled and re-enabled a plugin
 - [ ] `agy plugin validate` returned a valid result on the sample plugin
