@@ -83,7 +83,7 @@ cat > scripts/review.sh << 'EOF'
 #!/usr/bin/env bash
 gemini -p "Review the diff: $(git diff HEAD~1)" > review.md
 EOF
-```text
+```
 
 ---
 
@@ -97,7 +97,7 @@ Migrate the project yourself:
 mkdir -p .agents/hooks
 # AGY reads .agents/ instead of .gemini/ for project config
 cp .gemini/GEMINI.md .agents/AGENTS.md
-```text
+```
 
 ### Step 2: Separate MCP config
 
@@ -115,7 +115,7 @@ cat > .agents/mcp.json << 'EOF'
   }
 }
 EOF
-```text
+```
 
 ### Step 3: Rewrite hook event names in settings.json
 
@@ -145,13 +145,13 @@ EOF
     ]
   }
 }
-```text
+```
 
 ### Step 4: Update binary references
 
 ```bash
 sed -i 's/\bgemini\b/agy/g' scripts/review.sh
-```text
+```
 
 ---
 
@@ -162,13 +162,13 @@ Start AGY CLI and launch the migration validator:
 ```bash
 cd ~/gemini-migration-lab
 agy
-```text
+```
 
 Inside the AGY REPL:
 
 ```text
 Use the migration-validator agent to check this project directory for any remaining Gemini CLI configuration.
-```text
+```
 
 The `migration-validator` subagent will check:
 

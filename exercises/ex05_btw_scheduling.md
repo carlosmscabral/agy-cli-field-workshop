@@ -16,23 +16,23 @@ Launch agy and kick off a substantial task:
 
 ```bash
 agy
-```text
+```
 
 ```text
 > I want to refactor the error handling across this entire project to use a consistent pattern. Start by analyzing all error handling in the codebase, then propose and implement a unified approach. This will touch multiple files — start with the analysis phase.
-```text
+```
 
 As agy starts working (during the analysis phase), inject a constraint:
 
 ```text
 /btw Only touch files in the backend/ directory for now. Leave frontend untouched.
-```text
+```
 
 Then add another note:
 
 ```text
 /btw Use the Result<T, E> pattern if the language supports it. Otherwise use a custom Error class hierarchy.
-```text
+```
 
 Observe:
 
@@ -52,17 +52,17 @@ Resume the most recent session:
 
 ```bash
 agy -c
-```text
+```
 
 ```text
 > Remind me what we decided about the error handling refactor. What was the approach?
-```text
+```
 
 agy will have full context. Now continue the work:
 
 ```text
 > Let's implement step 1 of the plan we discussed.
-```text
+```
 
 ---
 
@@ -70,7 +70,7 @@ agy will have full context. Now continue the work:
 
 ```bash
 agy
-```text
+```
 
 ```text
 > Schedule a daily dependency check every weekday morning at 8am. It should:
@@ -79,13 +79,13 @@ agy
 > 3. Save the report to reports/deps-YYYY-MM-DD.md
 >
 > Create the reports/ directory if it doesn't exist.
-```text
+```
 
 Confirm the schedule was accepted. Ask:
 
 ```text
 > What scheduled tasks are currently active?
-```text
+```
 
 ---
 

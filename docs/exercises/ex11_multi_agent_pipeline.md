@@ -21,11 +21,11 @@ cd ~/agy-pipeline
 python3 -m venv .venv
 source .venv/bin/activate
 pip install google-antigravity pydantic
-```text
+```
 
 ```bash
 export GEMINI_API_KEY="your-api-key-here"
-```text
+```
 
 ---
 
@@ -73,7 +73,7 @@ When writing privacy-related documentation, ensure coverage of:
 ### Data Protection Impact Assessment (Article 35)
 - Required for high-risk processing
 - Must be conducted before processing begins
-```text
+```
 
 Create `writer_agent.py`:
 
@@ -100,7 +100,7 @@ Output a complete, ready-to-review privacy policy document.
     tools=[],
     policies=[policy.allow_all()],
 )
-```text
+```
 
 > **Key concept:** `skills_paths=["skills/"]` tells the SDK to auto-discover all `SKILL.md` files under that directory. The writer agent gets the GDPR skill injected automatically.
 
@@ -160,7 +160,7 @@ Return your findings as structured output.
     tools=[],
     policies=[policy.allow_all()],
 )
-```text
+```
 
 ---
 
@@ -229,13 +229,13 @@ async def sequential_pipeline():
 
 if __name__ == "__main__":
     asyncio.run(sequential_pipeline())
-```text
+```
 
 ### Run It
 
 ```bash
 python main.py
-```text
+```
 
 ---
 
@@ -292,7 +292,7 @@ specific use case. Return structured output.""",
 
     print(f"\nFinal Score: {report['overall_score']}/100")
     return report
-```text
+```
 
 > **When to use parallel:** Any time you have N independent analyses. Running the writer and legal pre-check simultaneously cuts wall-clock time by ~50%.
 
@@ -345,7 +345,7 @@ async def resume_and_refine(writer_conv_id: str, original_report: dict):
 
     print(f"Revised Score: {final_report['overall_score']}/100 "
           f"(was {original_report['overall_score']}/100)")
-```text
+```
 
 Update the `__main__` block:
 
@@ -353,7 +353,7 @@ Update the `__main__` block:
 if __name__ == "__main__":
     policy_text, report, conv_id = asyncio.run(sequential_pipeline())
     asyncio.run(resume_and_refine(conv_id, report))
-```text
+```
 
 ---
 
@@ -364,7 +364,7 @@ Create `requirements.txt`:
 ```text
 google-antigravity
 pydantic
-```text
+```
 
 Create `Dockerfile`:
 
@@ -375,7 +375,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .
 CMD ["python", "main.py"]
-```text
+```
 
 Deploy:
 
@@ -385,7 +385,7 @@ gcloud run deploy my-pipeline \
   --project $GOOGLE_CLOUD_PROJECT \
   --region $GOOGLE_CLOUD_REGION \
   --allow-unauthenticated
-```text
+```
 
 > **Tip:** Set `GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_REGION` (e.g. `us-central1`) before deploying. For production, remove `--allow-unauthenticated` and add proper IAM controls.
 

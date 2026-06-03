@@ -22,7 +22,7 @@ Create the sidecar directory and configuration file:
 
 ```bash
 mkdir -p ~/.gemini/config/sidecars/standup
-```text
+```
 
 Create `~/.gemini/config/sidecars/standup/sidecar.json`:
 
@@ -37,7 +37,7 @@ Create `~/.gemini/config/sidecars/standup/sidecar.json`:
     "Summarise all git commits from yesterday across my repos. Group by repo, list the most impactful changes first, and flag any commits that touch security-sensitive files."
   ]
 }
-```text
+```
 
 **Key decisions:**
 
@@ -54,7 +54,7 @@ Sidecars are **disabled by default**. Enable it in `~/.gemini/config/config.json
 ```bash
 # View current config (create if it doesn't exist)
 cat ~/.gemini/config/config.json 2>/dev/null || echo '{}'
-```text
+```
 
 Edit `~/.gemini/config/config.json` to include the sidecar entry:
 
@@ -66,7 +66,7 @@ Edit `~/.gemini/config/config.json` to include the sidecar entry:
     }
   }
 }
-```text
+```
 
 > **Note:** If you already have content in `config.json`, merge the `sidecars` block into your existing JSON — don't replace the file.
 
@@ -78,19 +78,19 @@ Start AGY and check that the sidecar was discovered:
 
 ```bash
 agy
-```text
+```
 
 Inside the session, ask:
 
 ```text
 > What sidecars are currently configured? Is the standup sidecar active?
-```text
+```
 
 Check the sidecar's runtime data directory:
 
 ```bash
 ls -la ~/.gemini/antigravity/sidecar_data/standup/logs/
-```text
+```
 
 If the directory exists, the sidecar has been registered. Log files appear here with timestamped stdout/stderr output after each scheduled run.
 
@@ -105,7 +105,7 @@ Examine the full sidecar data structure:
 ```bash
 # The sidecar runtime directory layout
 find ~/.gemini/antigravity/sidecar_data/standup/ -type f 2>/dev/null
-```text
+```
 
 Expected structure:
 
@@ -114,7 +114,7 @@ Expected structure:
 ├── data/     ← persistent storage (ANTIGRAVITY_EXECUTABLE_DATA_DIR env var)
 ├── logs/     ← timestamped stdout/stderr logs
 └── events/   ← JSON records of agentapi calls
-```text
+```
 
 ---
 
@@ -134,7 +134,7 @@ Create `~/.gemini/config/sidecars/file-watcher/sidecar.json`:
     "WATCH_FILE": "/path/to/your/important-file.yaml"
   }
 }
-```text
+```
 
 Create `~/.gemini/config/sidecars/file-watcher/watch.py`:
 
@@ -172,7 +172,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-```text
+```
 
 Enable it in `~/.gemini/config/config.json`:
 
@@ -187,7 +187,7 @@ Enable it in `~/.gemini/config/config.json`:
     }
   }
 }
-```text
+```
 
 ---
 

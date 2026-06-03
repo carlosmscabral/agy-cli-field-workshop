@@ -16,7 +16,7 @@ Launch agy interactively:
 
 ```bash
 agy
-```text
+```
 
 Dispatch a parallel audit team:
 
@@ -26,19 +26,19 @@ Dispatch a parallel audit team:
 > 2. A test coverage auditor — identify: untested public functions, missing edge cases, and integration test gaps
 >
 > Report back when both complete with a combined findings summary.
-```text
+```
 
 While they run, ask:
 
 ```text
 > What's the status of the subagents?
-```text
+```
 
 When they finish:
 
 ```text
 > Show me the combined findings from both audits. What are the top 3 things to fix?
-```text
+```
 
 ---
 
@@ -50,7 +50,7 @@ Pick a recent PR, branch, or any set of changes:
 git checkout -b feature/my-test-branch
 # (make a few changes)
 git add -A
-```text
+```
 
 Back in agy:
 
@@ -59,7 +59,7 @@ Back in agy:
 > Its only job: find reasons why these changes should NOT be merged.
 > It should challenge assumptions, look for edge cases, and be skeptical of everything.
 > Be harsh — this is an adversarial review, not a supportive one.
-```text
+```
 
 Read the adversarial findings. The goal is to identify what a thorough code review would catch.
 
@@ -69,7 +69,7 @@ Read the adversarial findings. The goal is to identify what a thorough code revi
 
 ```text
 > One of the subagent findings mentioned [specific issue]. Let's fix it. Create a subagent in inherit mode to implement the fix.
-```text
+```
 
 Note the difference from branch mode: `inherit` means the subagent works in the same directory as your main session — appropriate for targeted, non-conflicting fixes.
 

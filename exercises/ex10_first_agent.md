@@ -21,13 +21,13 @@ cd ~/agy-review-agent
 python3 -m venv .venv
 source .venv/bin/activate
 pip install google-antigravity pydantic
-```text
+```
 
 Set your API key:
 
 ```bash
 export GEMINI_API_KEY="your-api-key-here"
-```text
+```
 
 ---
 
@@ -77,7 +77,7 @@ def list_directory(directory_path: str) -> str:
         return f"Contents of {directory_path}:\n" + "\n".join(result_lines)
     except FileNotFoundError:
         return f"Error: Directory not found at {directory_path}"
-```text
+```
 
 Create `tools/state_tools.py` with a stateful tool using `ToolContext`:
 
@@ -113,7 +113,7 @@ def record_finding(
     findings.append(finding)
     ctx.set_state("findings", findings)
     return {"status": "recorded", "index": len(findings) - 1, "total": len(findings)}
-```text
+```
 
 > **Key concept:** The `ctx: ToolContext` parameter is auto-injected by the SDK at call time and stripped from the schema shown to the model. The model never sees it — it just calls `record_finding(severity, message, file_path)`.
 
@@ -158,7 +158,7 @@ When reviewing Python code, evaluate against these criteria:
 - **critical**: Security vulnerabilities, data loss risks, crashes
 - **warning**: Logic bugs, performance issues, missing error handling
 - **info**: Style issues, minor improvements, documentation gaps
-```text
+```
 
 ---
 
@@ -211,7 +211,7 @@ Never guess at code contents. If you can't read a file, say so.
     ),
     policies=[policy.allow_all()],
 )
-```text
+```
 
 ---
 
@@ -248,7 +248,7 @@ async def block_writes(tool_call: ToolCall) -> HookResult:
             )
 
     return HookResult(allow=True)
-```text
+```
 
 > **Why this matters:** Even with `policy.allow_all()`, the hook fires before every tool call and can deny it. Defense in depth — policy sets the baseline, hooks enforce guardrails.
 
@@ -338,7 +338,7 @@ if __name__ == "__main__":
 
     target = sys.argv[1] if len(sys.argv) > 1 else "."
     asyncio.run(run_review(target))
-```text
+```
 
 ### Run It
 
@@ -348,7 +348,7 @@ python main.py .
 
 # Review a specific project directory
 python main.py /path/to/your/project/src
-```text
+```
 
 ---
 

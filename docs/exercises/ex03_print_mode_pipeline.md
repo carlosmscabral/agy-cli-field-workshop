@@ -20,14 +20,14 @@ echo "// TODO: refactor this" >> src/index.js   # or equivalent
 
 # Stage it
 git add src/index.js
-```text
+```
 
 Now run a headless review:
 
 ```bash
 git diff --cached | agy -p "Review these staged changes. Flag any issues. Output as markdown." \
   --print-timeout 60s
-```text
+```
 
 **Notice:** no interactive session needed. agy consumed stdin and printed to stdout.
 
@@ -45,7 +45,7 @@ cat src/routes/api.js | \
 
 # Verify the output
 cat docs/api-generated.yaml
-```text
+```
 
 ---
 
@@ -58,7 +58,7 @@ If you have another repo or directory available:
 agy --add-dir ../another-project \
     -p "Compare the error handling approaches in both projects. Which is more consistent?" \
     --print-timeout 90s
-```text
+```
 
 If you only have one repo, use two subdirectories:
 
@@ -66,7 +66,7 @@ If you only have one repo, use two subdirectories:
 agy --add-dir ./backend --add-dir ./frontend \
     -p "Are there any API contracts defined in the backend that aren't implemented in the frontend?" \
     --print-timeout 2m
-```text
+```
 
 ---
 
@@ -77,7 +77,7 @@ agy -p "Write a GitHub Actions workflow that: (1) checks out the repo, (2) runs 
   --print-timeout 2m > .github/workflows/agy-review.yml
 
 cat .github/workflows/agy-review.yml
-```text
+```
 
 ---
 

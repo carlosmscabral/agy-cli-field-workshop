@@ -141,10 +141,10 @@ some content
 ```
 
 <!-- CORRECT — always tag the fence -->
-```text
+```
 some content
 ```
-````
+```
 
 ### MD060 — Table separator style must be consistent
 

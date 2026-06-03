@@ -20,7 +20,7 @@ agy --sandbox \
     --print-timeout 5m > audit-sandbox.md
 
 cat audit-sandbox.md
-```text
+```
 
 Key properties of this run:
 
@@ -46,7 +46,7 @@ Key properties of this run:
 agy --sandbox --dangerously-skip-permissions \
     --print "List all TODO comments in this codebase and generate a prioritized backlog." \
     --print-timeout 3m
-```text
+```
 
 Without `--sandbox`, this flag would allow agy to write files, run tests, and execute commands without prompting. **Only use it:**
 
@@ -69,7 +69,7 @@ Model a two-phase governance workflow:
 agy --sandbox \
     --print "Analyze all database operations in this codebase. Flag any that lack transaction safety or input validation." \
     --print-timeout 3m > phase1-analysis.md
-```text
+```
 
 ### Phase 2: Human reviews, then approves interactive session
 
@@ -78,7 +78,7 @@ cat phase1-analysis.md  # human reviews findings
 
 # If approved, continue with interactive session for remediation
 agy -i "Based on the findings in phase1-analysis.md, fix the top 3 database safety issues."
-```text
+```
 
 This pattern is the enterprise-grade model: **read without trust, write only after review**.
 
