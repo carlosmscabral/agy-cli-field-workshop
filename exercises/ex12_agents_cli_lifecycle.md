@@ -32,8 +32,9 @@ agents-cli scaffold create meeting-notes \
   --agent-guidance-filename GEMINI.md
 ```
 
-!!! info "Why `--prototype`?"
-    The prototype flag skips CI/CD and Terraform — you focus on getting the agent working first, then add deployment later with `scaffold enhance`.
+> **Why `--prototype`?**
+>
+> The prototype flag skips CI/CD and Terraform — you focus on getting the agent working first, then add deployment later with `scaffold enhance`.
 
 ### Step 2: Explore the Scaffolded Structure
 
@@ -70,8 +71,9 @@ The scaffold creates a `pyproject.toml` with the correct ADK dependency. Install
 uv sync
 ```
 
-!!! note "google-adk ≠ google-antigravity"
-    Module 3 uses `google-antigravity` (the Antigravity SDK for building agents within agy). Module 5 uses `google-adk` (the Agent Development Kit for building standalone ADK agents deployed to Google Cloud). They are different packages with different APIs. `agents-cli scaffold` always sets up `google-adk` automatically.
+> **google-adk ≠ google-antigravity**
+>
+> Module 3 uses `google-antigravity` (the Antigravity SDK for building agents within agy). Module 5 uses `google-adk` (the Agent Development Kit for building standalone ADK agents deployed to Google Cloud). They are different packages with different APIs. `agents-cli scaffold` always sets up `google-adk` automatically.
 
 ### Step 4: Configure Environment
 
@@ -84,8 +86,9 @@ echo 'GOOGLE_CLOUD_PROJECT=your-project-id' >> .env
 echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 ```
 
-!!! tip "Location Choice"
-    Using `global` for `GOOGLE_CLOUD_LOCATION` is generally recommended on the Agent Platform to ensure compatibility with all model families. If you must use a regional endpoint (e.g., `us-central1` or `us-east5`), ensure the models you are using are available in that region in your GCP project.
+> **Location Choice**
+>
+> Using `global` for `GOOGLE_CLOUD_LOCATION` is generally recommended on the Agent Platform to ensure compatibility with all model families. If you must use a regional endpoint (e.g., `us-central1` or `us-east5`), ensure the models you are using are available in that region in your GCP project.
 
 ---
 
@@ -273,10 +276,11 @@ custom_metrics:
       Return JSON: {"score": <1-5 average>, "explanation": "<detailed reasoning>"}
 ```
 
-!!! warning "Agent Platform Judge Model Name Requirements"
-    1. **Default Model Availability**: By default, `agents-cli eval grade` uses `gemini-1.5-pro` as the judge model. In some GCP projects/regions, `gemini-1.5-pro` may not be available or permitted, resulting in `NOT_FOUND` errors.
-    2. **Resource Path Format**: When configuring a custom `judge_model`, the Agent Platform requires a fully qualified path in the format: `projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`. See the [Agent Platform Judge Model Configuration](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model) documentation.
-    3. **No Short Names**: Do not use short names like `gemini-3.1-flash-lite` directly for `judge_model` — doing so will fail with a `400 INVALID_ARGUMENT` (Invalid autorater model resource name) error.
+> **Agent Platform Judge Model Name Requirements**
+>
+> 1. **Default Model Availability**: By default, `agents-cli eval grade` uses `gemini-1.5-pro` as the judge model. In some GCP projects/regions, `gemini-1.5-pro` may not be available or permitted, resulting in `NOT_FOUND` errors.
+> 2. **Resource Path Format**: When configuring a custom `judge_model`, the Agent Platform requires a fully qualified path in the format: `projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`. See the [Agent Platform Judge Model Configuration](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model) documentation.
+> 3. **No Short Names**: Do not use short names like `gemini-3.1-flash-lite` directly for `judge_model` — doing so will fail with a `400 INVALID_ARGUMENT` (Invalid autorater model resource name) error.
 
 ### Step 3: Run the Eval
 
