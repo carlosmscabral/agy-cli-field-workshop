@@ -6,7 +6,7 @@
 
 ## Overview
 
-This is a **4-module, ~5.5-hour hands-on workshop** for Antigravity CLI. It is designed for developer audiences: engineers, tech leads, and solution architects evaluating or adopting Antigravity CLI.
+This is a **5-module, ~7-hour hands-on workshop** for Antigravity CLI. It is designed for developer audiences: engineers, tech leads, and solution architects evaluating or adopting Antigravity CLI.
 
 !!! warning "Gemini CLI Sunset: June 18, 2026"
     Gemini CLI reaches end-of-life on **June 18, 2026**. When participants ask about migration, direct them to `agy plugin import gemini` — this is the primary migration path. All Gemini CLI plugins carry over in one command.
@@ -19,8 +19,8 @@ This is a **4-module, ~5.5-hour hands-on workshop** for Antigravity CLI. It is d
 | :-- | :-- | :-- |
 | ⚡ Lightning | Module 1 + Module 2 highlights | 1.5 hrs |
 | 📋 Half-day | Modules 1 + 2 | 2.5 hrs |
-| 📦 Full day | All four modules | ~5.5 hrs |
-| 🏗️ Extended | All modules + open lab | 7 hrs |
+| 📦 Full day | Modules 1–4 | ~5.5 hrs |
+| 🏗️ Extended | All 5 modules + open lab | 7 hrs |
 
 ---
 
@@ -32,7 +32,8 @@ This is a **4-module, ~5.5-hour hands-on workshop** for Antigravity CLI. It is d
 - [ ] Facilitator has run through all exercises end-to-end on the current agy-cli version
 - [ ] Screen sharing / projection tested
 - [ ] For Module 2: confirm participants can run `dotnet` or `mvn` (or use the provided container)
-- [ ] For Module 3: confirm `pip install google-adk` and `gcloud auth application-default login` work
+- [ ] For Module 3: confirm `pip install google-antigravity` and `gcloud auth application-default login` work
+- [ ] For Module 5: confirm `uv` and `agents-cli` are installed (`uvx google-agents-cli setup`)
 
 !!! warning "Auth is the #1 failure point"
     Always run a pre-workshop auth check 30 minutes before the session:
@@ -76,10 +77,19 @@ This is a **4-module, ~5.5-hour hands-on workshop** for Antigravity CLI. It is d
 
 **Key message:** the CLI is for individuals. An SDK agent is a specialist service your whole team can call.
 
-- **Setup gate:** ensure everyone has `google-adk` installed and Vertex AI auth working before starting. This is the most common blocker.
+- **Setup gate:** ensure everyone has `google-antigravity` installed and Vertex AI or AI Studio auth working before starting. This is the most common blocker.
 - **The `adk web .` moment:** once participants get their first agent running in the browser UI, the energy changes — they see it responding to their tools.
 - **Model selection table:** emphasize Flash-lite for generation, Pro for orchestration. Cost-consciousness is a feature, not a compromise.
-- **Exercise 11 (pipeline):** the `SequentialAgent` + `BaseAgent` guard pattern is the key architecture insight. Spend 5 min explaining zero-cost guards before they start.
+- **Exercise 11 (pipeline):** the `asyncio.gather` + `START_SUBAGENT` multi-agent pattern is the key architecture insight. Spend 5 min explaining how subagents compose before they start.
+
+### Module 5 — ADK Agents with agents-cli (75 min)
+
+**Key message:** agents-cli turns your coding agent into an ADK expert. The 7-phase lifecycle (scaffold → build → eval → deploy) is where agents go from demos to production.
+
+- **Setup gate:** ensure `uv` and `agents-cli` are installed. Run `agents-cli info` to verify.
+- **The eval loop is the teaching moment.** Spend time on Phase 4 (evaluation) — this is what differentiates a toy from a production agent. Let participants see scores fail, then iterate.
+- **google-adk ≠ google-antigravity:** Module 3 uses `google-antigravity` (the Antigravity SDK). Module 5 uses `google-adk` (the ADK). They are different packages. `agents-cli scaffold` manages the right dependency automatically.
+- **Exercise 12 pacing:** Parts 1–2 go fast (scaffold + build). Part 3–4 (eval + fix loop) is where time is spent. Emphasize that 5–10 iterations is normal.
 
 ### Module 4 — Multi-Agent & Advanced (60 min)
 

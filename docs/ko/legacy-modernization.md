@@ -2,8 +2,8 @@
 
 <div class="module-header" markdown>
 **소요 시간:** 약 75분  
-**목표:** 엄격한 권한 제어, 에이전트 셀프 온보딩, 병렬 서브에이전트 분석, 가드레일로서의 훅, 그리고 안전망으로서의 `/rewind` 등 Antigravity CLI 기본 요소를 사용하여 레거시 애플리케이션을 안전하게 마이그레이션합니다.  
-**연습 문제 PRD:** [.NET 현대화](exercises/ex08_dotnet_modernization.md) · [Java 업그레이드](exercises/ex09_java_upgrade.md)
+**목표:** 엄격한 권한 제어, 에이전트 자체 온보딩, 병렬 서브에이전트 분석, 가드레일로서의 훅, 안전망으로서의 `/rewind` 등 Antigravity CLI 기본 요소를 사용하여 레거시 애플리케이션을 안전하게 마이그레이션합니다.  
+**실습 PRD:** [.NET 현대화](exercises/ex08_dotnet_modernization.md) · [Java 업그레이드](exercises/ex09_java_upgrade.md)
 </div>
 
 > 📖 출처: [권한](https://antigravity.google/docs/permissions) · [엄격 모드](https://antigravity.google/docs/strict-mode) · [서브에이전트](https://antigravity.google/docs/subagents) · [스킬](https://antigravity.google/docs/skills) · [훅](https://antigravity.google/docs/hooks) · [cli-features](https://antigravity.google/docs/cli-features) · [cli-using](https://antigravity.google/docs/cli-using)
@@ -14,17 +14,17 @@
 
 대규모 마이그레이션의 위험은 코드 변경이 아니라 **미지의 요소**입니다. 망가지기 전까지는 무엇이 망가질지 알 수 없습니다. 세 가지 실패 유형은 다음과 같습니다:
 
-1. **범위 확장(Scope creep)** — 에이전트가 건드리라고 요청하지 않은 부분까지 리팩터링합니다.
-2. **컨텍스트 붕괴(Context collapse)** — 긴 세션 후 에이전트가 마이그레이션 제약 조건을 놓칩니다.
-3. **롤백 불가(No rollback)** — 잘못된 변경 사항이 중단하기도 전에 연쇄적으로 퍼집니다.
+1. **범위 확장(Scope creep)** — 에이전트가 건드리지 말라고 한 부분까지 리팩토링하는 경우
+2. **컨텍스트 붕괴(Context collapse)** — 긴 세션 후 에이전트가 마이그레이션 제약 조건을 잃어버리는 경우
+3. **롤백 불가(No rollback)** — 잘못된 변경 사항이 멈출 새도 없이 연쇄적으로 발생하는 경우
 
 AGY의 기본 요소는 이 세 가지 문제를 모두 직접적으로 해결합니다.
 
 ---
 
-## 2.1 — 엄격한 권한: 쓰기 전에 읽기 <span class="duration-badge">15분</span>
+## 2.1 — 엄격한 권한: 쓰기 전에 읽기 <span class="duration-badge">15 min</span>
 
-AGY에서 "플랜 모드"에 해당하는 것은 **엄격한 권한(strict permissions)**입니다. 이는 사용자가 명시적으로 허용할 때까지 모든 파일 쓰기 및 셸 명령을 거부하는 강력한 제어 장치입니다.
+AGY에서 "플랜 모드"에 해당하는 것은 **엄격한 권한(strict permissions)**입니다. 이는 명시적으로 허용할 때까지 모든 파일 쓰기 및 셸 명령을 거부하는 강력한 제어 장치입니다.
 
 ### 탐색 전 잠금 설정
 
@@ -47,9 +47,9 @@ AGY에서 "플랜 모드"에 해당하는 것은 **엄격한 권한(strict permi
 }
 ```
 
-`strict` 모드에서 에이전트는 파일을 읽고, 웹을 검색하고, 추론할 수 있지만 **어떤 것도 쓰거나, 삭제하거나, 실행할 수 없습니다**. 이는 부드러운 프롬프트가 아니라 강력한 차단벽입니다.
+`strict` 모드에서 에이전트는 파일을 읽고, 웹을 검색하고, 추론할 수 있지만 **어떤 것도 쓰거나, 삭제하거나, 실행할 수 없습니다**. 이는 단순한 프롬프트가 아니라 강력한 차단벽입니다.
 
-> 📖 출처: [엄격한 모드(Strict Mode)](https://antigravity.google/docs/strict-mode) · [권한(Permissions)](https://antigravity.google/docs/permissions)
+> 📖 출처: [엄격 모드](https://antigravity.google/docs/strict-mode) · [권한](https://antigravity.google/docs/permissions)
 
 ### 이제 자유롭게 조사하기
 
@@ -75,20 +75,20 @@ Analyze this entire codebase for a migration. Map:
 ctrl+g
 ```
 
-이 명령은 현재 에이전트 출력과 함께 `$EDITOR`를 실행합니다. 제약 조건을 편집하고, 팀별 요구 사항을 추가하며, 원하지 않는 범위를 삭제하세요. 저장하고 종료하면 에이전트가 수정 사항을 반영합니다.
+그러면 현재 에이전트 출력과 함께 `$EDITOR`로 이동합니다. 제약 조건을 편집하고, 팀별 요구 사항을 추가하며, 원하지 않는 범위를 삭제하세요. 저장하고 종료하면 에이전트가 편집 내용을 반영합니다.
 
 > 📖 출처: [cli-using — 키 바인딩](https://antigravity.google/docs/cli-using) — uid 3_276–3_280: "기본 셸 편집기 내에서 프롬프트 편집"
 
 ### 쓰기 잠금 해제 — 단, 승인한 항목에 대해서만
 
-계획이 승인되면, 선택적으로 쓰기 권한을 복원합니다:
+계획이 승인되면 선택적으로 쓰기 권한을 복원합니다:
 
 ```bash
 /permissions
 # Select: request-review
 ```
 
-`request-review` 모드에서 에이전트는 모든 쓰기 또는 셸 명령을 실행하기 전에 승인을 요청합니다. 에이전트가 무엇을 하려는지 실행 전에 정확히 확인할 수 있습니다.
+`request-review` 모드에서 에이전트는 모든 쓰기 또는 셸 명령 전에 승인을 요청합니다. 에이전트가 수행하려는 작업을 실행 전에 정확히 확인할 수 있습니다.
 
 > **흐름:** `strict` (조사) → 계획 승인 → `request-review` (감독 하에 실행) → 신뢰할 수 있고 충분히 테스트된 최종 단계에만 `always-proceed` 적용.
 
@@ -96,11 +96,11 @@ ctrl+g
 
 ## 2.2 — AGENTS.md: 마이그레이션 표준 인코딩 <span class="duration-badge">10 min</span>
 
-긴 세션에서는 컨텍스트가 손실되기 쉽습니다. AGENTS.md는 이를 방지하는 방법입니다. 대화가 아무리 길어져도 모든 세션에 자동으로 주입되기 때문입니다.
+긴 세션에서는 컨텍스트가 무너집니다. AGENTS.md는 이를 방지하는 방법입니다. 대화가 아무리 오래 지속되더라도 모든 세션에 자동으로 주입됩니다.
 
 ### 에이전트 셀프 온보딩
 
-가장 강력한 패턴은 조사 과정에서 발견한 내용을 바탕으로 에이전트가 **직접 자신의 AGENTS.md를 작성**하도록 하는 것입니다. 에이전트는 자신이 학습한 내용을 이후 작업의 가드레일로 인코딩합니다.
+가장 강력한 패턴은 에이전트가 조사 중에 발견한 내용을 바탕으로 **자체 AGENTS.md를 작성**하도록 하는 것입니다. 에이전트는 자신이 학습한 내용을 이후 작업에 대한 가드레일로 인코딩합니다.
 
 ```text
 Based on your codebase analysis, write an AGENTS.md that:
@@ -117,11 +117,11 @@ Based on your codebase analysis, write an AGENTS.md that:
 Write this to AGENTS.md in the project root.
 ```
 
-> **셀프 온보딩이 효과적인 이유:** 에이전트가 자신을 위한 지침을 작성하기 때문입니다. 이 시점 이후로 내리는 모든 마이그레이션 결정은 자신이 작성한 제약 조건과 대조하여 검사됩니다. 이는 자기 강화 루프입니다. 더 나은 컨텍스트는 더 나은 변경 사항을 생성하고, 이는 더 많은 패턴을 드러내어 다시 컨텍스트를 개선합니다.
+> **셀프 온보딩이 효과적인 이유:** 에이전트는 자신을 위한 지침을 작성합니다. 이 시점부터 에이전트가 내리는 모든 마이그레이션 결정은 자신이 작성한 제약 조건과 대조하여 확인됩니다. 이는 자기 강화 루프입니다. 더 나은 컨텍스트는 더 나은 변경을 생성하고, 이는 더 많은 패턴을 드러내어 컨텍스트를 개선합니다.
 
 ### @file 가져오기를 사용한 모듈식 컨텍스트
 
-대규모 프로젝트의 경우 AGENTS.md를 가볍게 유지하고 상세 사양을 가져옵니다.
+대규모 프로젝트의 경우 AGENTS.md를 간결하게 유지하고 세부 사양을 가져옵니다.
 
 ```markdown
 # AGENTS.md
@@ -150,9 +150,9 @@ Write this to AGENTS.md in the project root.
 
 ---
 
-## 2.3 — 서브에이전트: 병렬 분석 팀 <span class="duration-badge">15분</span>
+## 2.3 — 서브에이전트: 병렬 분석 팀 <span class="duration-badge">15 min</span>
 
-대규모 마이그레이션에는 보안, 성능, API 계약, 테스트 커버리지 등 여러 독립적인 고려 사항이 있습니다. 이를 순차적으로 실행하면 속도가 느려지고 에이전트의 컨텍스트 윈도우를 낭비하게 됩니다. 서브에이전트를 사용하여 병렬화하세요.
+대규모 마이그레이션에는 보안, 성능, API 계약, 테스트 커버리지 등 여러 독립적인 관심사가 있습니다. 이를 순차적으로 실행하면 속도가 느려지고 에이전트의 컨텍스트 윈도우가 낭비됩니다. 서브에이전트를 사용하여 병렬화하세요.
 
 ### 병렬 분석 팀 생성
 
@@ -178,13 +178,13 @@ Run all three concurrently. I'll review the reports before we start Phase 1.
 /agents
 ```
 
-패널에는 실행 중인 모든 서브에이전트가 `running`, `done`, `killed` 상태와 함께 표시됩니다. 세 개가 모두 동시에 완료되는 것을 지켜보세요.
+패널에는 실행 중인 모든 서브에이전트가 `running`, `done`, `killed` 상태와 함께 표시됩니다. 세 가지가 모두 동시에 완료되는 것을 지켜보세요.
 
 ```text
 ctrl+j
 ```
 
-승인을 기다리는 다음 서브에이전트로 이동합니다. 서브에이전트 중 하나가 권한 경계에 도달하여 승인이 필요할 때 유용합니다.
+승인을 기다리고 있는 다음 서브에이전트로 이동시켜 줍니다. 서브에이전트가 권한 경계에 도달하여 승인이 필요한 경우에 유용합니다.
 
 ```text
 ctrl+k
@@ -230,7 +230,7 @@ Never modify any file. Never execute any command.
 
 ## 2.4 — 스킬: 재사용 가능한 마이그레이션 전문 지식 <span class="duration-badge">10 min</span>
 
-스킬은 에이전트가 읽고 관련이 있을 때 활성화하는 명령어 세트입니다. 반복 가능한 마이그레이션(Java 8→21, .NET Framework→.NET 8, Express→Fastify)의 경우, 패턴을 한 번 스킬로 인코딩합니다.
+스킬은 에이전트가 읽고 관련성이 있을 때 활성화하는 명령어 세트입니다. 반복 가능한 마이그레이션(Java 8→21, .NET Framework→.NET 8, Express→Fastify)의 경우, 해당 패턴을 한 번 스킬로 인코딩합니다.
 
 ### 사용 가능한 스킬 찾아보기
 
@@ -238,13 +238,13 @@ Never modify any file. Never execute any command.
 /skills
 ```
 
-### 마이그레이션 스킬 만들기
+### 마이그레이션 스킬 생성
 
 ```bash
 mkdir -p ~/.gemini/antigravity/skills/java-migration
 ```
 
-`~/.gemini/antigravity/skills/java-migration/SKILL.md` 파일을 생성합니다:
+`~/.gemini/antigravity/skills/java-migration/SKILL.md` 생성:
 
 ```markdown
 ---
@@ -289,7 +289,7 @@ description: >
 
 ## 2.5 — 훅: 자동화된 가드레일 <span class="duration-badge">10분</span>
 
-엔터프라이즈 마이그레이션의 경우, 단순한 수동 검토가 아닌 자동화된 게이트가 필요합니다. 훅은 CLI 이벤트에서 실행되며, 도구 사용이 발생하기 전에 이를 차단, 경고 또는 로깅할 수 있습니다.
+엔터프라이즈 마이그레이션의 경우 단순한 수동 검토가 아닌 자동화된 게이트가 필요합니다. 훅은 CLI 이벤트에서 실행되며 도구 사용이 발생하기 전에 이를 차단, 경고 또는 로깅할 수 있습니다.
 
 ### 도구 실행 전 훅: 마이그레이션 범위 밖의 쓰기 차단
 
@@ -350,41 +350,41 @@ fi
 
 ---
 
-## 2.6 — /rewind 및 /fork: 안전망 <span class="duration-badge">5 min</span>
+## 2.6 — /rewind 및 /fork: 안전망 <span class="duration-badge">5분</span>
 
-### /rewind — 대화 롤백하기
+### /rewind — 대화 되돌리기
 
-에이전트가 궤도를 벗어나더라도 처음부터 다시 시작할 필요가 없습니다. `/rewind`는 대화 기록을 롤백합니다:
+에이전트가 궤도를 벗어나더라도 처음부터 다시 시작할 필요가 없습니다. `/rewind`는 대화 기록을 되돌립니다:
 
 ```bash
 /rewind
 ```
 
-이 명령은 기록 선택기를 엽니다. 되돌릴 턴을 선택하세요. 코드베이스에 대한 에이전트의 이해도가 해당 시점으로 초기화됩니다. 긴 세션 동안 잘못된 가정이 누적된 경우에 유용합니다.
+그러면 기록 선택기가 열립니다. 되돌릴 턴(turn)을 선택하세요. 코드베이스에 대한 에이전트의 이해도가 해당 시점으로 초기화됩니다. 긴 세션 동안 잘못된 가정이 누적된 경우에 유용합니다.
 
-> 📖 출처: [cli-features](https://antigravity.google/docs/cli-features) — uid 5_220–5_226: "`/rewind` (별칭 `/undo`) — 대화 기록 롤백"
+> 📖 출처: [cli-features](https://antigravity.google/docs/cli-features) — uid 5_220–5_226: "`/rewind` (별칭 `/undo`) — 대화 기록 되돌리기"
 
-### /fork — 위험 없이 탐색하기
+### /fork — 위험 부담 없이 탐색하기
 
-위험한 마이그레이션 단계를 시도하기 전에 대화를 포크하세요:
+위험한 마이그레이션 단계를 시도하기 전에 대화를 포크(fork)하세요:
 
 ```bash
 /fork
 ```
 
-이 명령은 병렬 작업 공간을 만듭니다. 포크에서 위험한 접근 방식을 시도해 볼 수 있습니다. 잘 작동한다면 좋습니다. 그렇지 않다면 포크를 닫고 전혀 변경되지 않은 기본 대화에서 계속 진행하면 됩니다.
+그러면 병렬 작업 공간이 생성됩니다. 포크된 공간에서 위험한 접근 방식을 시도해 볼 수 있습니다. 성공하면 좋고, 실패하더라도 포크를 닫고 전혀 변경되지 않은 기본 대화에서 계속 진행하면 됩니다.
 
-> 📖 출처: [cli-using](https://antigravity.google/docs/cli-using) — uid 3_219–3_224: "별도의 작업 공간을 생성하기 위한 `/fork`"
+> 📖 출처: [cli-using](https://antigravity.google/docs/cli-using) — uid 3_219–3_224: "`/fork`를 사용하여 별도의 작업 공간 생성"
 
-### /resume — 긴 마이그레이션 이어서 하기
+### /resume — 긴 마이그레이션 이어가기
 
-대규모 마이그레이션은 며칠에 걸쳐 진행됩니다. 다시 돌아왔을 때:
+대규모 마이그레이션은 며칠에 걸쳐 진행됩니다. 다시 돌아왔을 때 다음과 같이 입력하세요:
 
 ```bash
 /resume
 ```
 
-이 명령은 타임스탬프와 대화 이름이 포함된 이전 마이그레이션 세션을 보여주는 세션 선택기를 엽니다. 중단했던 부분부터 정확히 계속하려면 올바른 세션을 선택하세요.
+그러면 타임스탬프와 대화 이름이 포함된 이전 마이그레이션 세션을 보여주는 세션 선택기가 열립니다. 올바른 세션을 선택하여 중단했던 부분부터 정확히 이어서 진행하세요.
 
 > 📖 출처: [cli-features](https://antigravity.google/docs/cli-features) — uid 5_213–5_219
 
@@ -396,9 +396,9 @@ fi
 
 ---
 
-## 2.7 — Print 모드: 비대화형 마이그레이션 파이프라인 <span class="duration-badge">5 min</span>
+## 2.7 — 프린트 모드: 비대화형 마이그레이션 파이프라인 <span class="duration-badge">5 min</span>
 
-CI/CD 게이트나 야간 마이그레이션 실행의 경우, 상호 작용 없이 마이그레이션 작업을 파이프라인으로 연결하려면 Print 모드를 사용하세요:
+CI/CD 게이트 또는 야간 마이그레이션 실행의 경우, 상호 작용 없이 마이그레이션 작업을 파이프라인으로 연결하려면 프린트 모드를 사용하세요:
 
 ```bash
 # Dry-run: analyze and report issues — no writes
@@ -426,31 +426,31 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 ### :material-file-document: 실습 8: 레거시 현대화
 
-**파일:** `exercises/ex08_dotnet_modernization.md` · `exercises/ex09_java_upgrade.md`  
+**파일:** [`ex08_dotnet_modernization.md`](exercises/ex08_dotnet_modernization.md) · [`ex09_java_upgrade.md`](exercises/ex09_java_upgrade.md)  
 **소요 시간:** 45분  
 **목표:** 이 모듈의 AGY 기본 요소를 사용하여 전체 마이그레이션을 진행합니다.
 
-**트랙 선택:**
+**트랙을 선택하세요:**
 
-#### 트랙 A: 계획 우선 (엄격 → 조사 → 실행)
+#### 트랙 A: 계획 우선 (엄격(Strict) → 조사(Investigate) → 실행(Execute))
 
-1. `/permissions`를 `strict`로 설정 — 모든 쓰기 잠금
-2. 에이전트에게 전체 조사 권한 부여 (섹션 2.1)
-3. `ctrl+g`를 사용하여 편집기에서 계획을 열고 팀 제약 조건 추가
-4. 마이그레이션 규칙을 인코딩하는 AGENTS.md 작성 (또는 에이전트가 작성하도록 함)
-5. 타협할 수 없는 엄격한 규칙이 포함된 `.agents/rules.md` 추가
-6. `request-review`로 전환 — 감독 하에 1단계 시작
-7. 에이전트가 범위를 벗어나면 `/rewind` 사용
-8. 세션 이름 변경: `/rename "Migration — Phase 1 complete"`
+1. `/permissions`를 `strict`로 설정합니다 — 모든 쓰기를 잠급니다.
+2. 에이전트에게 전체 조사 권한을 부여합니다 (섹션 2.1).
+3. `ctrl+g`를 사용하여 에디터에서 계획을 열고 팀 제약 조건을 추가합니다.
+4. 마이그레이션 규칙을 인코딩하는 AGENTS.md를 작성합니다 (또는 에이전트가 작성하도록 합니다).
+5. 절대 타협할 수 없는 규칙을 담은 `.agents/rules.md`를 추가합니다.
+6. `request-review`로 전환합니다 — 감독 하에 1단계를 시작합니다.
+7. 에이전트가 범위를 벗어나면 `/rewind`를 사용합니다.
+8. 세션 이름 변경: `/rename "마이그레이션 — 1단계 완료"`
 
 #### 트랙 B: 서브에이전트 우선 (병렬 분석 → 컨텍스트 → 실행)
 
-1. 3개의 병렬 서브에이전트 생성: 보안 스캔, 종속성 맵, 테스트 커버리지
-2. `/agents`를 통해 모니터링 — 승인을 위해 `ctrl+j` 및 `ctrl+k` 사용
-3. 보고서를 AGENTS.md로 통합 (에이전트가 합성하도록 함)
-4. `java-migration` 스킬 설치 (섹션 2.4)
-5. 가장 위험한 단계 전에 `/fork` 사용 — 거기서 먼저 시도해 보기
-6. 출력 모드를 사용하여 단계 완료 후 보고서 생성
+1. 3개의 병렬 서브에이전트를 생성합니다: 보안 스캔, 종속성 맵, 테스트 커버리지
+2. `/agents`를 통해 모니터링합니다 — 승인을 위해 `ctrl+j` 및 `ctrl+k`를 사용합니다.
+3. 이들의 보고서를 AGENTS.md로 집계합니다 (에이전트가 종합하도록 합니다).
+4. `java-migration` 스킬을 설치합니다 (섹션 2.4).
+5. 가장 위험한 단계 전에 `/fork`를 사용합니다 — 포크된 곳에서 먼저 시도해 봅니다.
+6. 인쇄 모드를 사용하여 단계 완료 후 보고서를 생성합니다.
 
 </div>
 
@@ -460,18 +460,18 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 | 기본 요소 | 기능 | 사용 시기 |
 | :-- | :-- | :-- |
-| `/permissions strict` | 강력한 읽기 전용 게이트 — 쓰기 또는 명령 불가 | 조사 단계 |
-| `/permissions request-review` | 에이전트가 모든 쓰기 작업 전에 승인 요청 | 통제된 실행 |
-| `ctrl+g` | 협업 편집을 위해 `$EDITOR`에서 플랜 열기 | 플랜 개선 |
-| **AGENTS.md** | 세션 간 지속되는 마이그레이션 표준 | 항상 — 제약 조건 인코딩 |
-| `.agents/rules.md` | 강력한 시스템 프롬프트 지시문 | 타협할 수 없는 가드레일 |
+| `/permissions strict` | 강력한 읽기 전용 게이트 — 쓰기 또는 명령어 실행 불가 | 조사 단계 |
+| `/permissions request-review` | 에이전트가 모든 쓰기 작업 전에 승인 요청 | 제어된 실행 |
+| `ctrl+g` | 협업 편집을 위해 `$EDITOR`에서 계획 열기 | 계획 구체화 |
+| **AGENTS.md** | 세션 간 유지되는 마이그레이션 표준 | 항상 — 제약 조건 인코딩 |
+| `.agents/rules.md` | 강력한 시스템 프롬프트 지시어 | 타협할 수 없는 가드레일 |
 | **서브에이전트** | 병렬 분석 팀 | 다중 관심사 조사 |
 | `/agents` + `ctrl+j` + `ctrl+k` | 서브에이전트 작업 모니터링 및 승인 | 병렬 실행 중 |
-| **훅** (PreToolUse) | 마이그레이션 범위를 벗어난 쓰기 차단 | 자동화된 가드레일 |
-| **훅** (PostToolUse) | 모든 변경 후 자동 테스트 실행 | 테스트 게이트 자동화 |
-| `/rewind` | 에이전트가 경로를 이탈할 경우 대화 롤백 | 세션 중간 경로 수정 |
+| **훅** (PreToolUse) | 마이그레이션 범위 밖의 쓰기 차단 | 자동화된 가드레일 |
+| **훅** (PostToolUse) | 모든 변경 후 테스트 자동 실행 | 테스트 게이트 자동화 |
+| `/rewind` | 에이전트가 벗어날 경우 대화 롤백 | 세션 중간 궤도 수정 |
 | `/fork` | 격리된 브랜치에서 위험한 단계 시도 | 고위험 변경 전 |
-| `/resume` | 며칠에 걸친 마이그레이션 재개 | 세션으로 돌아갈 때 |
+| `/resume` | 며칠에 걸친 마이그레이션 이어하기 | 세션으로 돌아갈 때 |
 | `/rename` | 단계별로 세션에 레이블 지정 | 세션 관리 |
 | `agy -p` | 비대화형 마이그레이션 파이프라인 | CI 게이트, 야간 실행 |
 | **스킬** | 재사용 가능한 마이그레이션 플레이북 | 반복 가능한 마이그레이션 패턴 |
@@ -480,6 +480,6 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 ## 다음 단계
 
-→ **[모듈 3: SDK로 AGY 에이전트 구축하기](agy-sdk.md)**로 계속
+→ **[모듈 3: SDK로 AGY 에이전트 빌드하기](agy-sdk.md)**로 계속 진행하세요
 
-→ **[치트시트](cheatsheet.md)** — 모든 명령어를 한 곳에 정리
+→ **[치트시트](cheatsheet.md)** — 모든 명령어를 한 곳에서 확인하세요

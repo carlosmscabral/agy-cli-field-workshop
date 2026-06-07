@@ -3,16 +3,16 @@
 <div class="module-header" markdown>
 **Durasi:** ~90 menit  
 **Tujuan:** Membangun agen AGY siap produksi dari awal menggunakan pustaka Python `google-antigravity` — alat, hook, kebijakan, status sesi, orkestrasi multi-agen, dan keluaran terstruktur.  
-**Latihan:** Latihan 10: Agen Pertama Anda · Latihan 11: Pipeline Multi-Agen
+**Latihan:** [Latihan 10: Agen Pertama Anda](exercises/ex10_first_agent.md) · [Latihan 11: Pipeline Multi-Agen](exercises/ex11_multi_agent_pipeline.md)
 </div>
 
-> 📖 Sumber: [Ikhtisar SDK](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [Skill](https://antigravity.google/docs/skills)
+> 📖 Sumber: [Ringkasan SDK](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [Skill](https://antigravity.google/docs/skills)
 
 ---
 
 ## Mengapa Membangun Agen Daripada Hanya Menggunakan CLI?
 
-CLI adalah **asisten serbaguna**. Agen yang Anda bangun dengan SDK adalah seorang **spesialis** — ia memiliki pekerjaan yang sempit, alat khusus domain, prompt sistem yang direkayasa dengan cermat, dan dapat di-deploy sebagai layanan yang dipanggil oleh seluruh tim Anda.
+CLI adalah **asisten serbaguna**. Sebuah agen yang Anda bangun dengan SDK adalah seorang **spesialis** — ia memiliki pekerjaan yang sempit, alat khusus domain, prompt sistem yang direkayasa dengan cermat, dan dapat di-deploy sebagai layanan yang dapat dipanggil oleh seluruh tim Anda.
 
 | | Antigravity CLI | Agen SDK AGY |
 | :-- | :-- | :-- |
@@ -30,7 +30,7 @@ CLI adalah **asisten serbaguna**. Agen yang Anda bangun dengan SDK adalah seoran
 ### Prasyarat
 
 - Python 3.11+
-- Kunci API Gemini — atur sebagai `GEMINI_API_KEY` atau teruskan melalui `api_key=` di konfigurasi
+- Kunci API Gemini — ditetapkan sebagai `GEMINI_API_KEY` atau diteruskan melalui `api_key=` dalam konfigurasi
 
 ### Instalasi
 
@@ -49,18 +49,18 @@ print("google-antigravity installed ✅")
 ```
 
 > **Kunci API vs Vertex AI:** Untuk pengembangan lokal yang cepat, gunakan `api_key="AIza..."` di
-> `LocalAgentConfig`. Untuk produksi di GCP, lakukan autentikasi dengan
+> `LocalAgentConfig`. Untuk produksi di GCP, autentikasi dengan
 > `gcloud auth application-default login` — pustaka akan mengambil ADC secara otomatis.
 
 ---
 
 ## 3.2 — Primitif Inti: Agen, Konfigurasi, Alat <span class="duration-badge">20 menit</span>
 
-SDK `google-antigravity` memiliki tiga blok bangunan: `Agent`, `LocalAgentConfig`, dan alat (fungsi Python biasa). Pelajari ini dan Anda dapat membangun apa saja.
+SDK `google-antigravity` memiliki tiga blok penyusun: `Agent`, `LocalAgentConfig`, dan alat (fungsi Python biasa). Pelajari ini dan Anda dapat membangun apa saja.
 
 ### Alat
 
-Sebuah alat adalah **fungsi Python biasa**. Tidak ada kelas pembungkus, tidak ada dekorator. Agen memutuskan kapan akan memanggilnya berdasarkan docstring — itulah keseluruhan kontrak antarmukanya.
+Sebuah alat adalah **fungsi Python biasa**. Tidak ada kelas pembungkus, tidak ada dekorator. Agen memutuskan kapan akan memanggilnya berdasarkan docstring — itulah keseluruhan kontrak antarmuka.
 
 ```python
 def get_file_contents(file_path: str) -> str:
@@ -165,7 +165,7 @@ Sesuaikan model dengan pekerjaannya. Kebijakan sadar biaya:
 
 ### Skill
 
-Skill adalah file `SKILL.md` yang dimuat saat runtime untuk menyuntikkan pengetahuan domain. Jaga agar prompt sistem Anda tetap ringkas — muat keahlian dari file:
+Skill adalah berkas `SKILL.md` yang dimuat pada saat runtime untuk menyuntikkan pengetahuan domain. Jaga agar prompt sistem Anda tetap ringkas — muat keahlian dari berkas:
 
 ```python
 from pathlib import Path
@@ -193,11 +193,11 @@ config = LocalAgentConfig(
 )
 ```
 
-Skill juga dapat dimuat secara native melalui `LocalAgentConfig(skills_paths=["/path/to/skills/"])` — SDK menemukan file `SKILL.md` secara otomatis.
+Skill juga dapat dimuat secara native melalui `LocalAgentConfig(skills_paths=["/path/to/skills/"])` — SDK menemukan berkas `SKILL.md` secara otomatis.
 
 ---
 
-## 3.3 — Kebijakan dan Keamanan <span class="duration-badge">10 min</span>
+## 3.3 — Kebijakan dan Keamanan <span class="duration-badge">10 menit</span>
 
 **Kebijakan adalah hal pertama yang Anda konfigurasikan** — ini mengontrol apa yang diizinkan untuk dilakukan oleh agen tanpa persetujuan manusia. Setiap `LocalAgentConfig` membutuhkan daftar `policies=`:
 
@@ -273,7 +273,7 @@ config = LocalAgentConfig(
 
 | Hook | Memblokir eksekusi | Memodifikasi data | Digunakan untuk |
 | :-- | :-- | :-- | :-- |
-| `@hooks.pre_tool_call_decide` | Ya | Tidak | Menyetujui/menolak pemanggilan alat |
+| `@hooks.pre_tool_call_decide` | Ya | Tidak | Menyetujui/menolak panggilan alat |
 | `@hooks.post_tool_call` | Tidak | Tidak | Pencatatan (logging), metrik |
 | `@hooks.pre_turn` | Tidak | Tidak | Pencatatan (logging) tingkat giliran |
 | `@hooks.post_turn` | Tidak | Tidak | Pencatatan (logging) respons |
@@ -282,13 +282,13 @@ config = LocalAgentConfig(
 
 ---
 
-## 3.5 — Orkestrasi Multi-Agen <span class="duration-badge">15 menit</span>
+## 3.5 — Orkestrasi Multi-Agen <span class="duration-badge">15 min</span>
 
-`google-antigravity` tidak memiliki kelas `SequentialAgent` atau `ParallelAgent`. Multi-agen dilakukan dengan dua cara: **digerakkan oleh model** (biarkan agen memunculkan sub-agen) atau **digerakkan oleh Python** (Anda mengorkestrasi instans `Agent` secara langsung).
+`google-antigravity` tidak memiliki kelas `SequentialAgent` atau `ParallelAgent`. Multi-agen dilakukan dengan dua cara: **didorong oleh model** (biarkan agen memunculkan sub-agen) atau **didorong oleh Python** (Anda mengorkestrasi instans `Agent` secara langsung).
 
-### Pola A — Sub-agen yang Digerakkan oleh Model
+### Pola A — Sub-agen yang Didorong oleh Model
 
-Aktifkan `START_SUBAGENT` dalam kapabilitas. Model memanggilnya ketika memutuskan untuk mendelegasikan:
+Aktifkan `START_SUBAGENT` dalam kemampuan (capabilities). Model memanggilnya ketika memutuskan untuk mendelegasikan:
 
 ```python
 from google.antigravity.types import BuiltinTools, CapabilitiesConfig
@@ -306,7 +306,7 @@ Synthesise their outputs into a final summary.""",
 )
 ```
 
-### Pola B — Pipeline Sekuensial (Digerakkan oleh Python)
+### Pola B — Pipeline Sekuensial (Didorong oleh Python)
 
 Teruskan output dari satu agen sebagai input ke agen berikutnya:
 
@@ -350,11 +350,11 @@ async def parallel_analysis(file_path: str):
     }
 ```
 
-> **Kapan menggunakan paralel:** Kapan pun Anda memiliki N analisis independen. Ini memangkas waktu nyata (wall-clock time) sebesar 60–80% dibandingkan dengan menjalankannya secara sekuensial.
+> **Kapan menggunakan paralel:** Kapan pun Anda memiliki N analisis independen. Ini memangkas waktu nyata (wall-clock) sebesar 60–80% dibandingkan dengan menjalankannya secara sekuensial.
 
 ---
 
-## 3.6 — Streaming dan Output Terstruktur <span class="duration-badge">5 min</span>
+## 3.6 — Streaming dan Output Terstruktur <span class="duration-badge">5 menit</span>
 
 ### Respons Streaming
 
@@ -373,7 +373,7 @@ async with Agent(config) as agent:
 
 ### Output Terstruktur
 
-Ikat output agen ke skema Pydantic:
+Tautkan output agen ke skema Pydantic:
 
 ```python
 import asyncio
@@ -405,7 +405,7 @@ asyncio.run(main())
 
 ---
 
-## 3.7 — Melanjutkan dan Persistensi Sesi <span class="duration-badge">5 menit</span>
+## 3.7 — Melanjutkan Sesi dan Persistensi <span class="duration-badge">5 min</span>
 
 ```python
 # First session — save the conversation ID
@@ -463,9 +463,9 @@ asyncio.run(main())
 
 ---
 
-## 3.9 — Konvensi Struktur Proyek <span class="duration-badge">5 min</span>
+## 3.9 — Konvensi Struktur Proyek <span class="duration-badge">5 menit</span>
 
-Susun proyek agen Anda untuk kemudahan pemeliharaan:
+Strukturkan proyek agen Anda untuk kemudahan pemeliharaan:
 
 ```text
 my_agent/
@@ -509,7 +509,7 @@ gcloud run deploy my-code-reviewer \
   --allow-unauthenticated
 ```
 
-> **Tips:** Tetapkan `GOOGLE_CLOUD_PROJECT` dan `GOOGLE_CLOUD_REGION` (misalnya `us-central1`) sebelum menjalankan.
+> **Tip:** Atur `GOOGLE_CLOUD_PROJECT` dan `GOOGLE_CLOUD_REGION` (misalnya `us-central1`) sebelum menjalankan.
 
 ---
 
@@ -519,7 +519,7 @@ gcloud run deploy my-code-reviewer \
 
 ### :material-code-braces: Latihan 10: Agen AGY Pertama Anda
 
-**Berkas:** `exercises/ex10_first_agent.md`  
+**Berkas:** [`ex10_first_agent.md`](exercises/ex10_first_agent.md)  
 **Durasi:** 45 menit  
 **Bangun:** Sebuah **Agen Tinjauan Kode** yang membaca berkas, mengidentifikasi masalah, dan menghasilkan laporan tinjauan terstruktur.
 
@@ -528,7 +528,7 @@ gcloud run deploy my-code-reviewer \
 1. Tentukan 3 alat: `read_file`, `list_directory`, `record_finding` (dengan `ToolContext`)
 2. Tulis prompt sistem dengan rubrik tinjauan (dimuat dari sebuah `SKILL.md`)
 3. Konfigurasikan `LocalAgentConfig` dengan `policy.allow_all()` dan `CapabilitiesConfig`
-4. Tambahkan penjaga keamanan hook `@hooks.pre_tool_call_decide`
+4. Tambahkan penjaga keamanan `@hooks.pre_tool_call_decide`
 5. Jalankan dengan keluaran streaming dan skema Pydantic `ReviewResult` terstruktur
 
 </div>
@@ -537,41 +537,41 @@ gcloud run deploy my-code-reviewer \
 
 ### :material-graph: Latihan 11: Pipeline Multi-Agen
 
-**Berkas:** `exercises/ex11_multi_agent_pipeline.md`  
+**Berkas:** [`ex11_multi_agent_pipeline.md`](exercises/ex11_multi_agent_pipeline.md)  
 **Durasi:** 45 menit  
-**Bangun:** Sebuah **Pipeline Tulis-lalu-Audit** — agen Penulis Teknis menghasilkan dokumen, lalu Analis Kepatuhan mengauditnya untuk celah GDPR.
+**Bangun:** Sebuah **Pipeline Tulis-lalu-Audit** — agen Penulis Teknis menghasilkan dokumen, kemudian Analis Kepatuhan mengauditnya untuk celah GDPR.
 
 **Apa yang akan Anda implementasikan:**
 
-1. Bangun agen `technical_writer` dengan SKILL.md GDPR yang dimuat melalui `skills_paths`
+1. Bangun agen `technical_writer` dengan `SKILL.md` GDPR yang dimuat melalui `skills_paths`
 2. Bangun agen `compliance_analyst` dengan `response_schema=ComplianceReport`
-3. Hubungkan secara berurutan: keluaran dari penulis diteruskan sebagai masukan ke analis
+3. Rangkai secara berurutan: keluaran dari penulis diteruskan sebagai masukan ke analis
 4. Tambahkan varian paralel menggunakan `asyncio.gather` untuk draf + pemeriksaan hukum secara bersamaan
-5. Tambahkan kelanjutan sesi: analis membaca `conversation_id` penulis untuk memuat konteks
+5. Tambahkan pelanjutan sesi: analis membaca `conversation_id` penulis untuk memuat konteks
 6. Terapkan ke Cloud Run sebagai `my-pipeline` menggunakan `gcloud run deploy`
 
 </div>
 
 ---
 
-## Ringkasan: Blok Penyusun SDK
+## Ringkasan: Blok Bangunan SDK
 
-| Primitif | Apa yang Dilakukannya | Kapan Digunakan |
+| Primitif | Apa Fungsinya | Kapan Digunakan |
 | :-- | :-- | :-- |
-| `Agent` | Agen LLM tunggal dengan alat, hook, kebijakan | Inti — setiap agen dimulai di sini |
+| `Agent` | Agen LLM tunggal dengan alat, hook, kebijakan | Inti — setiap agen dimulai dari sini |
 | `LocalAgentConfig` | Semua konfigurasi di satu tempat (model, alat, kebijakan, hook) | Selalu |
 | `tools=[fn]` | Callable Python biasa, docstring adalah skemanya | Operasi eksternal apa pun |
-| `ToolContext` | Baca/tulis status (state) yang disuntikkan ke dalam alat | Alat stateful dalam pipeline |
-| `policy.allow_all()` | Menyetujui semua pemanggilan alat secara otonom | Agen tepercaya yang di-sandbox |
+| `ToolContext` | Baca/tulis state yang disuntikkan ke dalam alat | Alat stateful dalam pipeline |
+| `policy.allow_all()` | Menyetujui semua pemanggilan alat secara otonom | Agen tepercaya yang berada di dalam sandbox |
 | `policy.deny("run_command")` | Memblokir jenis alat tertentu | Pagar pengaman keselamatan |
 | `@hooks.pre_tool_call_decide` | Memblokir/menyetujui pemanggilan alat sebelum eksekusi | Penjaga keamanan |
 | `@hooks.post_tool_call` | Mengamati pemanggilan alat yang telah selesai | Pencatatan audit |
 | `response_schema=` | Mengikat output ke skema Pydantic | Ekstraksi data terstruktur |
-| `async for delta in response:` | Melakukan streaming teks saat tiba | Pembuatan teks panjang |
+| `async for delta in response:` | Melakukan streaming teks saat tiba | Pembuatan teks bentuk panjang |
 | `asyncio.gather(...)` | Menjalankan agen secara paralel | Analisis independen |
 | `every(60, handler)` | Memicu agen pada interval tertentu | Monitor latar belakang |
-| `on_file_change(path, fn)` | Memicu agen pada peristiwa sistem file | Pengamat kode langsung |
-| `skills_paths=[...]` | Memuat file SKILL.md saat runtime | Keahlian domain portabel |
+| `on_file_change(path, fn)` | Memicu agen pada peristiwa sistem berkas | Pengamat kode langsung |
+| `skills_paths=[...]` | Memuat berkas SKILL.md saat runtime | Keahlian domain portabel |
 | `conversation_id=` | Melanjutkan sesi sebelumnya | Alur kerja multi-sesi |
 
 ---

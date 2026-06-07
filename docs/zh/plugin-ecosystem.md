@@ -1,19 +1,19 @@
 # 参考：插件生态系统
 
-> **agy-cli 插件系统的深度参考。** 基本命令已在 [模块 1 — 1.7 节](sdlc-productivity.md#17-extend-with-plugins-15-min) 中介绍。本页面为构建和维护自定义插件的团队提供了完整的生命周期详细信息。
+> **agy-cli 插件系统的深度参考。** 基本命令已在 [模块 1 — 第 1.7 节](sdlc-productivity.md#17-extend-with-plugins-15-min) 中介绍。本页面为构建和维护自定义插件的团队提供了完整的生命周期详细信息。
 
 ---
 
 ## 2.0 — 为什么插件很重要 <span class="duration-badge">5 min</span>
 
-agy-cli 的插件系统有一个独特之处：它可以**导入你已经在 Gemini CLI 或 Claude Code 中安装的插件** —— 无需重新安装或重新配置。你在扩展上的现有投资可以无缝延续。
+agy-cli 的插件系统具有独特的功能：它可以**导入你已经在 Gemini CLI 或 Claude Code 中安装的插件**——无需重新安装或重新配置。你现有的扩展投资可以无缝结转。
 
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
 ```
 
-输出是 JSON 格式，显示每个插件的名称、来源、导入日期和组件（技能、命令、MCP 服务器、代理）。
+输出是 JSON 格式，显示每个插件的名称、来源、导入日期和组件（技能、命令、mcpServers、代理）。
 
 ```bash
 # More readable
@@ -26,7 +26,7 @@ agy plugin list | python3 -m json.tool
 
 ## 2.1 — 从 Gemini CLI 导入 <span class="duration-badge">10 分钟</span>
 
-> **模式：跨工具插件桥接** — 将你整个 Gemini CLI 插件环境设置拉取到 agy 中。
+> **模式：跨工具插件桥接** — 将您完整的 Gemini CLI 插件环境设置拉取到 agy 中。
 
 ### 导入所有 Gemini CLI 插件
 
@@ -34,7 +34,7 @@ agy plugin list | python3 -m json.tool
 agy plugin import gemini
 ```
 
-agy 会扫描你本地的 Gemini CLI 安装，发现所有已安装的插件，并将它们的组件（技能、命令、MCP 服务器、代理）暂存到位于 `~/.gemini/antigravity/` 的 agy 配置中。
+agy 会扫描您本地的 Gemini CLI 安装，发现所有已安装的插件，并将它们的组件（技能、命令、MCP 服务器、代理）暂存到位于 `~/.gemini/antigravity/` 的 agy 配置中。
 
 输出如下所示：
 
@@ -131,7 +131,7 @@ agy plugin install <plugin-name>@<version>
 # 验证插件目录
 agy plugin validate ./path/to/my-plugin
 
-# 或者验证当前目录
+# 或验证当前目录
 agy plugin validate .
 ```
 
@@ -167,7 +167,7 @@ my-plugin/
 # 验证它
 agy plugin validate ./my-plugin
 
-# 如果有效，你将看到：✔ Plugin manifest is valid
+# 如果有效，您将看到：✔ Plugin manifest is valid
 ```
 
 ### Interacting with Plugin Components
@@ -201,7 +201,7 @@ graph LR
     A --> AG[代理]
     A --> RU[规则]
     A --> HK[钩子]
-    A --> SD[Sidecars]
+    A --> SD[Sidecar]
 ```
 
 Plugin staging directory structure:
@@ -242,10 +242,10 @@ A sidecar is a background process that AGY manages for you: it launches automati
 Sidecars are discovered from two locations:
 
 ```bash
-# 全局 sidecar（在所有项目中可用）
+# 全局 Sidecar（在所有项目中可用）
 ~/.gemini/config/sidecars/<sidecar-name>/sidecar.json
 
-# 插件作用域的 sidecar（随插件提供）
+# 插件作用域的 Sidecar（随插件一起提供）
 ~/.gemini/config/plugins/<plugin-name>/sidecars/<sidecar-name>/sidecar.json
 ```
 
@@ -299,7 +299,7 @@ The `schedule` builtin takes a cron expression as its first arg, then the comman
 
 ```json
 {
-  "description": "每小时 PR 分类 — 总结收到的审查请求",
+  "description": "每小时 PR 分类 — 总结收到的代码审查请求",
   "builtin": "schedule",
   "args": [
     "0 * * * *",
@@ -313,7 +313,7 @@ The `schedule` builtin takes a cron expression as its first arg, then the comman
 `agentapi` is automatically available to sidecars — it lets them **programmatically create or message conversations**:
 
 ```bash
-# 从 sidecar 启动新会话
+# 从 Sidecar 启动新会话
 agentapi new-conversation "<prompt>"
 
 # 向现有会话发送消息
@@ -352,7 +352,7 @@ Sidecar output is stored at:
 
 ### :material-file-document: 练习 2：插件桥接
 
-**文件：** `exercises/ex02_plugin_bridge.md`
+**文件：** [`ex02_plugin_bridge.md`](exercises/ex02_plugin_bridge.md)
 **时长：** 20 分钟
 **目标：** 从 Gemini CLI 导入插件，选择性地启用/禁用，验证自定义插件。
 
@@ -362,10 +362,12 @@ Sidecar output is stored at:
 
 ### :material-clock-outline: 练习 2B：你的第一个 Sidecar
 
+**文件：** [`ex02b_first_sidecar.md`](exercises/ex02b_first_sidecar.md)
+
 > **时长：** 20 分钟
 > **构建：** 一个定时的**每日站会 Sidecar**，在上午 9 点触发，创建一个新的 AGY 对话，并要求它总结昨天在你所有仓库中的 git 提交。
 
-**你将执行以下操作：**
+**你将要做什么：**
 
 1. 使用 `schedule` 内置功能创建 `~/.gemini/config/sidecars/standup/sidecar.json`
 2. 将 cron 设置为 `0 9 * * 1-5`（周一至周五上午 9 点）
@@ -373,7 +375,7 @@ Sidecar output is stored at:
 4. 在 `~/.gemini/config/config.json` 中启用它
 5. 验证它是否出现在 `~/.gemini/antigravity/sidecar_data/standup/logs/` 的日志中
 
-**延伸目标：** 使用 `command: python3` 添加第二个 Sidecar，用于监视本地文件的更改，并在检测到差异时向现有对话发送消息。
+**延伸目标：** 添加第二个 Sidecar，使用 `command: python3` 监听本地文件的更改，并在检测到差异时向现有对话发送消息。
 
 </div>
 

@@ -20,7 +20,7 @@ The workshop's accuracy depends on a **grounded audit trail** in [`AUDIT.md`](AU
            ▼
 ┌────────────────────────┐
 │     AUDIT.md           │  ← Verified ground truth
-│  60+ grounded claims   │     with source URLs + uid refs
+│  90+ grounded claims   │     with source URLs + uid refs
 └──────────┬─────────────┘
            │ (automated)
            ▼

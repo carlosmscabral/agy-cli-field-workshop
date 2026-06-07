@@ -39,7 +39,7 @@ hide:
 
     ---
 
-    Build production agents with the ADK SDK. Tools, session state, SequentialAgent pipelines, and deploy to Cloud Run.
+    Build production agents with the Antigravity SDK. Tools, session state, multi-agent orchestration, and deploy to Cloud Run.
 
     **90 min** · Exercises: ex10, ex11
 
@@ -54,6 +54,16 @@ hide:
     **60 min** · Exercises: ex04–ex06
 
     [:octicons-arrow-right-24: Start Module 4](multi-agent-advanced.md)
+
+- :material-rocket-launch-outline:{ .lg .middle } **Module 5 — ADK Agents with agents-cli**
+
+    ---
+
+    Use agents-cli to scaffold, build, evaluate, and deploy production ADK agents — the full 7-phase lifecycle from prototype to Cloud Run.
+
+    **75 min** · Exercise: ex12
+
+    [:octicons-arrow-right-24: Start Module 5](agents-cli.md)
 
 </div>
 
@@ -70,9 +80,11 @@ hide:
 | `3:15` | :coffee: Break | 10 min |
 | `3:25` | **Module 3:** Building AGY Agents with the SDK | 90 min |
 | `4:55` | **Module 4:** Multi-Agent & Advanced | 60 min |
-| `5:55` | Wrap-up & Q&A | 15 min |
+| `5:55` | :coffee: Break | 10 min |
+| `6:05` | **Module 5:** ADK Agents with agents-cli | 75 min |
+| `7:20` | Wrap-up & Q&A | 15 min |
 
-> **Half-day format:** Modules 1 + 2 only (2.5 hrs). **Lightning format:** Module 1 + Module 2 highlights (1.5 hrs).
+> **Full day:** Modules 1–4 (~5.5 hrs). **Extended:** All 5 modules (7 hrs). **Half-day:** Modules 1 + 2 (2.5 hrs). **Lightning:** Module 1 + M2 highlights (1.5 hrs).
 
 ---
 

@@ -1,10 +1,10 @@
 # Referensi: Pola DevOps & Otomatisasi
 
-> **agy tanpa campur tangan manusia.** Referensi mendalam untuk pipeline `--print` non-interaktif, integrasi CI/CD, ruang kerja multi-repositori, dan eksekusi dalam sandbox. Perintah-perintah penting ditautkan dari [Lembar Contekan](cheatsheet.md).
+> **agy tanpa campur tangan manusia.** Referensi mendalam untuk pipeline `--print` non-interaktif, integrasi CI/CD, ruang kerja multi-repositori, dan eksekusi sandbox. Perintah-perintah penting ditautkan dari [Lembar Contekan](cheatsheet.md).
 
 ---
 
-## DevOps 1 — Print Mode: Inti Non-Interaktif <span class="duration-badge">5 menit</span>
+## DevOps 1 — Mode Print: Inti Non-Interaktif <span class="duration-badge">5 min</span>
 
 `--print` (singkatan: `-p`) adalah mode headless dari agy. Ini menjalankan satu prompt, mencetak respons, dan keluar. Tidak ada sesi interaktif, tidak ada prompt.
 
@@ -74,11 +74,11 @@ done
 
 ---
 
-## DevOps 3 — Ruang Kerja Multi-Direktori dengan --add-dir <span class="duration-badge">10 menit</span>
+## DevOps 3 — Ruang Kerja Multi-Direktori dengan --add-dir <span class="duration-badge">10 min</span>
 
-> **Pola: Konteks Lintas-Repo** — memberikan agy visibilitas ke beberapa basis kode secara bersamaan.
+> **Pola: Konteks Lintas-Repo** — berikan agy visibilitas ke dalam beberapa basis kode secara bersamaan.
 
-Secara default, agy mengindeks repo git yang berisi direktori Anda saat ini. `--add-dir` memperluasnya ke direktori tambahan.
+Secara default, agy mengindeks repo git yang berisi direktori Anda saat ini. `--add-dir` memperluas hal tersebut ke direktori tambahan.
 
 ```bash
 # Give agy access to both your app and its shared library
@@ -91,7 +91,7 @@ agy --add-dir ../api --add-dir ../frontend "Generate an integration test that co
 agy -p "Compare the error handling patterns in app/ vs api/" --add-dir ../api
 ```
 
-### Kasus Penggunaan di Dunia Nyata: Tinjauan Monorepo
+### Kasus Penggunaan Dunia Nyata: Tinjauan Monorepo
 
 ```bash
 # From the root of a monorepo, review cross-package dependencies
@@ -100,7 +100,7 @@ agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
 ```
 
 !!! tip "Flag yang dapat diulang"
-    `--add-dir` dapat diulang — tambahkan sebanyak mungkin direktori yang Anda butuhkan. agy mengindeks semuanya bersama repo git utama.
+    `--add-dir` dapat diulang — tambahkan sebanyak mungkin direktori yang Anda butuhkan. agy mengindeks semuanya bersama dengan repo git utama.
 
 ---
 
@@ -149,9 +149,9 @@ jobs:
 ```
 
 !!! warning "--dangerously-skip-permissions di CI"
-    Selalu gunakan `--dangerously-skip-permissions` di CI — tidak ada manusia yang akan mengklik "setuju". Pasangkan ini dengan mode sandbox untuk membatasi apa yang dapat diakses oleh agy.
+    Selalu gunakan `--dangerously-skip-permissions` di CI — tidak ada manusia yang akan mengklik "setujui". Pasangkan dengan mode sandbox untuk membatasi apa yang dapat diakses oleh agy.
 
-### Pre-Commit Hook
+### Hook Pre-Commit
 
 ```bash
 #!/bin/bash
@@ -191,7 +191,7 @@ Saat diaktifkan, agy menggunakan **isolasi OS native** untuk membatasi eksekusi 
 
 ### Bypass Per-Perintah
 
-Dengan sandbox yang diaktifkan, agy akan **meminta persetujuan** ketika sebuah perintah perlu keluar dari sandbox. Anda akan melihat prompt bypass per-perintah — memungkinkan eksekusi selektif tanpa menonaktifkan seluruh sandbox.
+Dengan sandbox yang diaktifkan, agy akan **meminta persetujuan** ketika sebuah perintah perlu keluar dari sandbox. Anda akan melihat prompt bypass per-perintah — yang memungkinkan eksekusi selektif tanpa menonaktifkan seluruh sandbox.
 
 ### Kasus Penggunaan
 
@@ -201,7 +201,7 @@ Dengan sandbox yang diaktifkan, agy akan **meminta persetujuan** ketika sebuah p
 
 ### Menggabungkan dengan Izin
 
-Untuk kontrol maksimal, pasangkan mode sandbox dengan model izin:
+Untuk kontrol maksimum, pasangkan mode sandbox dengan model izin:
 
 ```json
 {
@@ -213,11 +213,11 @@ Untuk kontrol maksimal, pasangkan mode sandbox dengan model izin:
 }
 ```
 
-> 📖 Detail lengkap: [Dokumentasi Izin](https://www.antigravity.google/docs/permissions)
+> 📖 Detail lengkap: [Dokumentasi izin](https://www.antigravity.google/docs/permissions)
 
 ---
 
-## DevOps 6 — Hook & Aturan <span class="duration-badge">5 min</span>
+## DevOps 6 — Hook & Aturan <span class="duration-badge">5 menit</span>
 
 > **Pola: Pagar Pengaman & Otomatisasi** — menegakkan standar dan memicu tindakan pada titik-titik siklus hidup utama.
 
@@ -234,6 +234,15 @@ Hook memungkinkan Anda menjalankan logika kustom pada 5 peristiwa siklus hidup:
 | `Stop` | Saat sesi berakhir |
 
 Konfigurasikan hook di `hooks.json` (di `.agents/` untuk proyek atau `~/.gemini/config/` untuk global). Skrip hook menerima JSON pada stdin dan mengembalikan JSON pada stdout.
+
+#### Contoh Hook (di `samples/hooks/`)
+
+| Skrip | Peristiwa | Tujuan |
+| :-- | :-- | :-- |
+| `secret-scanner.sh` | `PreToolUse` | Memblokir penulisan yang berisi kredensial yang di-hardcode |
+| `git-context-injector.sh` | `PreToolUse` | Menyuntikkan riwayat git terbaru untuk file target sebelum penulisan |
+| `test-nudge.sh` | `PostToolUse` | Mendorong agen untuk menjalankan pengujian setelah penulisan file |
+| `session-context.sh` | `PreInvocation` | Menyuntikkan cabang, perubahan yang tertunda, dan dependensi pada awal sesi |
 
 > 📖 Detail lengkap: [Dokumentasi Hook](https://www.antigravity.google/docs/hooks)
 
@@ -265,14 +274,14 @@ Contoh `.agents/rules.md`:
 
 ### :material-file-document: Latihan 3: Pipeline --print
 
-**Berkas:** `exercises/ex03_print_mode_pipeline.md`
+**Berkas:** [`ex03_print_mode_pipeline.md`](exercises/ex03_print_mode_pipeline.md)
 **Durasi:** 20 menit
-**Tujuan:** Membangun pipeline shell multi-langkah menggunakan agy --print. Meninjau perubahan yang di-stage, membuat dokumentasi, dan menyambungkan alur kerja GitHub Actions.
+**Tujuan:** Membangun pipeline shell multi-langkah menggunakan agy --print. Meninjau perubahan yang di-stage, menghasilkan dokumentasi, dan menghubungkan alur kerja GitHub Actions.
 
 </div>
 
 ---
 
-## Modul Berikutnya
+## Modul Selanjutnya
 
 → **[Modul 4: Multi-Agen & Lanjutan](multi-agent-advanced.md)** — sub-agen, pengarahan di tengah tugas /btw, penjadwalan.

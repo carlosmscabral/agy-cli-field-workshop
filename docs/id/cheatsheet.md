@@ -1,7 +1,7 @@
 # Lembar Contekan agy-cli
 
 > Referensi cepat untuk semua yang dibahas dalam lokakarya ini.
-> Semua perintah telah diverifikasi terhadap [antigravity.google/docs](https://antigravity.google/docs/cli-overview).
+> Semua perintah telah diverifikasi berdasarkan [antigravity.google/docs](https://antigravity.google/docs/cli-overview).
 
 ---
 
@@ -23,7 +23,7 @@ agy install        # Configure PATH and shell aliases
 | :-- | :-- | :-- |
 | **Interaktif** | `agy` | Bawaan — sesi percakapan penuh |
 | **Interaktif dengan awalan** | `agy -i "<prompt>"` | Mulai dengan arahan, lanjutkan secara percakapan |
-| **Cetak (headless)** | `agy -p "<prompt>"` | Sekali jalan, teruskan ke stdout |
+| **Cetak (mode headless)** | `agy -p "<prompt>"` | Sekali jalan, alirkan ke stdout |
 | **Lanjutkan yang terakhir** | `agy -c` | Lanjutkan sesi paling baru |
 | **Lanjutkan berdasarkan ID** | `agy --conversation <id>` | Lanjutkan sesi masa lalu yang spesifik |
 | **Lanjutkan dalam sesi** | `/resume` atau `/switch` | Beralih percakapan tanpa meninggalkan agy |
@@ -38,13 +38,13 @@ agy install        # Configure PATH and shell aliases
 | :-- | :-- | :-- |
 | `--print "<prompt>"` | `-p` | Prompt tunggal non-interaktif |
 | `--prompt-interactive "<prompt>"` | `-i` | Sesi interaktif dengan seed |
-| `--continue` | `-c` | Lanjutkan percakapan paling baru |
-| `--conversation <id>` | — | Lanjutkan berdasarkan ID percakapan |
-| `--add-dir <path>` | — | Tambahkan direktori ke ruang kerja (dapat diulang) |
-| `--sandbox` | — | Aktifkan pembatasan sandbox terminal |
-| `--dangerously-skip-permissions` | — | Setujui otomatis semua permintaan alat (hanya CI) |
+| `--continue` | `-c` | Melanjutkan percakapan paling baru |
+| `--conversation <id>` | — | Melanjutkan berdasarkan ID percakapan |
+| `--add-dir <path>` | — | Menambahkan direktori ke ruang kerja (dapat diulang) |
+| `--sandbox` | — | Mengaktifkan pembatasan sandbox terminal |
+| `--dangerously-skip-permissions` | — | Menyetujui otomatis semua permintaan alat (hanya CI) |
 | `--print-timeout <duration>` | — | Batas waktu untuk mode cetak (bawaan: 5m) |
-| `--log-file <path>` | — | Timpa jalur keluaran log |
+| `--log-file <path>` | — | Menimpa jalur keluaran log |
 
 > **Catatan:** Pemilihan model dan mode ketat diatur melalui perintah garis miring `/model` dan `/permissions`, bukan flag CLI. Lihat [Dokumentasi fitur](https://antigravity.google/docs/cli-features).
 
@@ -58,20 +58,20 @@ agy install        # Configure PATH and shell aliases
 | :-- | :-- | :-- |
 | `/resume` (`/switch`) | Percakapan | Buka pemilih percakapan untuk melanjutkan atau beralih sesi |
 | `/rewind` (`/undo`) | Percakapan | Kembalikan riwayat percakapan ke checkpoint sebelumnya |
-| `/fork` | Percakapan | Cabangkan percakapan saat ini ke ruang kerja terisolasi paralel — uji coba langkah berisiko tanpa memengaruhi yang asli |
-| `/rename <name>` | Percakapan | Ubah nama utas percakapan aktif |
+| `/fork` | Percakapan | Cabangkan percakapan saat ini ke ruang kerja terisolasi yang paralel — uji coba langkah-langkah berisiko tanpa memengaruhi yang asli |
+| `/rename <name>` | Percakapan | Ganti nama utas percakapan aktif |
 | `/permissions` | Konfigurasi | Atur tingkat otonomi: `request-review`, `always-proceed`, `strict` |
-| `/model` | Konfigurasi | Pilih model penalaran default (bertahan di seluruh sesi) |
+| `/model` | Konfigurasi | Pilih model penalaran bawaan (bertahan di seluruh sesi) |
 | `/config` (`/settings`) | Konfigurasi | Buka overlay pengaturan layar penuh |
 | `/keybindings` | Konfigurasi | Buka editor pintasan keyboard interaktif |
 | `/statusline` | Konfigurasi | Sesuaikan indikator bilah status CLI waktu nyata |
 | `/tasks` | Pemantauan | Pantau, lihat log untuk, atau hentikan tugas latar belakang |
-| `/skills` | Pemantauan | Jelajahi skill agen lokal dan global |
+| `/skills` | Pemantauan | Telusuri skill agen lokal dan global |
 | `/mcp` | Pemantauan | Konfigurasi dan kelola server MCP |
 | `/agents` | Pemantauan | Lihat, kelola, dan setujui tindakan sub-agen |
-| `/open <path>` | Utilitas | Buka berkas di editor eksternal pilihan Anda |
-| `/usage` | Utilitas | Buka panduan bantuan interaktif sebaris |
-| `/logout` | Akun | Keluar dan bersihkan kredensial yang di-cache |
+| `/open <path>` | Utilitas | Buka file di editor eksternal pilihan Anda |
+| `/usage` | Utilitas | Buka manual bantuan interaktif sebaris |
+| `/logout` | Akun | Keluar dan hapus kredensial yang di-cache |
 
 ---
 
@@ -84,7 +84,7 @@ agy install        # Configure PATH and shell aliases
 | `@` | Pelengkapan otomatis jalur file (ketik `@` untuk memicu saran jalur) |
 | `!` | Jalankan perintah terminal langsung dari prompt |
 | `esc esc` | Bersihkan kotak prompt Anda (saat tidak ada streaming yang aktif) |
-| `?` | Dapatkan bantuan dan tampilkan daftar semua perintah garis miring |
+| `?` | Dapatkan bantuan dan tampilkan semua perintah garis miring |
 | `alt+enter` / `shift+enter` | Sisipkan baris baru tanpa mengirimkan |
 | `ctrl+g` | Edit prompt di dalam editor shell default Anda |
 | `ctrl+l` | Bersihkan layar TUI |
@@ -153,7 +153,7 @@ Minimal `sidecar.json` — skrip latar belakang:
 { "command": "python3", "args": ["worker.py"], "restart_policy": "on-failure" }
 ```
 
-Minimal `sidecar.json` — tugas berulang terjadwal:
+Minimal `sidecar.json` — tugas berulang yang dijadwalkan:
 
 ```json
 {
@@ -198,7 +198,7 @@ Brief description of what this project is.
 
 ---
 
-## Pola Berguna
+## Pola yang Berguna
 
 ```bash
 # Review staged changes before commit

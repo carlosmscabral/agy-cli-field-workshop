@@ -2,21 +2,21 @@
 
 <div class="module-header" markdown>
 **时长：** 约 75 分钟  
-**目标：** 使用 Antigravity CLI 原语安全地迁移遗留应用程序——严格的权限控制、代理自我引导、并行子代理分析、作为护栏的钩子，以及作为安全网的 `/rewind`。  
+**目标：** 使用 Antigravity CLI 原语安全地迁移遗留应用程序——严格的权限控制、代理自主引导、并行子代理分析、作为护栏的钩子，以及将 `/rewind` 作为你的安全网。  
 **练习 PRD：** [.NET 现代化](exercises/ex08_dotnet_modernization.md) · [Java 升级](exercises/ex09_java_upgrade.md)
 </div>
 
-> 📖 参考资料：[权限](https://antigravity.google/docs/permissions) · [严格模式](https://antigravity.google/docs/strict-mode) · [子代理](https://antigravity.google/docs/subagents) · [技能](https://antigravity.google/docs/skills) · [钩子](https://antigravity.google/docs/hooks) · [cli-features](https://antigravity.google/docs/cli-features) · [cli-using](https://antigravity.google/docs/cli-using)
+> 📖 来源：[权限](https://antigravity.google/docs/permissions) · [严格模式](https://antigravity.google/docs/strict-mode) · [子代理](https://antigravity.google/docs/subagents) · [技能](https://antigravity.google/docs/skills) · [钩子](https://antigravity.google/docs/hooks) · [CLI 功能](https://antigravity.google/docs/cli-features) · [使用 CLI](https://antigravity.google/docs/cli-using)
 
 ---
 
-## 为什么遗留系统现代化很困难
+## 为什么遗留系统现代化如此困难
 
-大型迁移的风险不在于代码更改，而在于**未知因素**。直到系统崩溃，你才会知道自己破坏了什么。三种失败模式是：
+大型迁移的风险不在于代码更改，而在于**未知因素**。在系统崩溃之前，你根本不知道会破坏什么。三种失败模式是：
 
 1. **范围蔓延** — 代理重构了你没有要求它触碰的内容
-2. **上下文崩溃** — 在长时间的会话后，代理失去了对迁移约束的跟踪
-3. **无法回滚** — 错误的更改在你能够阻止它之前就产生了级联效应
+2. **上下文崩溃** — 在长时间的会话后，代理会丢失你的迁移约束信息
+3. **无法回滚** — 错误的更改在你能够阻止它之前就已经引发了连锁反应
 
 AGY 的原语直接解决了这三个问题。
 
@@ -26,7 +26,7 @@ AGY 的原语直接解决了这三个问题。
 
 AGY 中等同于“计划模式”的功能是**严格权限**——这是一个硬性关卡，在您明确允许之前，它会拒绝所有文件写入和 shell 命令。
 
-### 在探索前锁定权限
+### 在探索之前锁定
 
 ```bash
 /permissions
@@ -47,13 +47,13 @@ AGY 中等同于“计划模式”的功能是**严格权限**——这是一个
 }
 ```
 
-在 `strict` 模式下，代理可以读取文件、搜索网络和进行推理——但**不能写入、删除或执行任何操作**。这是一堵硬墙，而不是软性的提示词。
+在 `strict` 模式下，代理可以读取文件、搜索网络并进行推理——但**不能写入、删除或执行任何操作**。这是一堵硬墙，而不是软性的提示词。
 
 > 📖 来源：[严格模式](https://antigravity.google/docs/strict-mode) · [权限](https://antigravity.google/docs/permissions)
 
 ### 现在自由调查
 
-在写入权限被锁定的情况下，赋予代理不受限制的读取权限：
+在写入被锁定的情况下，赋予代理不受限制的读取权限：
 
 ```text
 Analyze this entire codebase for a migration. Map:
@@ -65,42 +65,42 @@ Analyze this entire codebase for a migration. Map:
 6. Migration risks ordered by severity
 ```
 
-> **原理解析：** 代理会读取它所需的每个文件，追踪导入和调用链，并构建一个心智模型——所有这些都具有零修改风险。这是您的侦察阶段。
+> **发生了什么：** 代理读取它需要的每个文件，追踪导入和调用链，并构建一个心智模型——所有这些都具有零修改风险。这是您的侦察阶段。
 
-### 在编辑器中审查计划
+### 在您的编辑器中审查计划
 
-一旦代理生成了迁移计划，请在您的编辑器中打开以对其进行完善：
+一旦代理生成了迁移计划，请在您的编辑器中打开它以进行完善：
 
 ```text
 ctrl+g
 ```
 
-这会将您带入带有当前代理输出的 `$EDITOR` 中。您可以编辑约束条件、添加团队特定的要求、划掉您不需要的范围。当您保存并退出时，代理会合并您的编辑。
+这会让您进入带有当前代理输出的 `$EDITOR`。编辑约束条件，添加团队特定的要求，划掉您不需要的范围。当您保存并退出时，代理会合并您的编辑。
 
 > 📖 来源：[cli-using — 快捷键](https://antigravity.google/docs/cli-using) — uid 3_276–3_280："在默认的 shell 编辑器中编辑提示词"
 
-### 解锁写入权限——但仅限于您批准的内容
+### 解锁写入——但仅限于您批准的内容
 
-一旦计划获得批准，请有选择地恢复写入权限：
+一旦计划获得批准，有选择地恢复写入访问权限：
 
 ```bash
 /permissions
 # Select: request-review
 ```
 
-在 `request-review` 模式下，代理在每次执行写入或 shell 命令之前都会请求批准。您可以在它执行操作之前确切地看到它想要做什么。
+在 `request-review` 模式下，代理在每次写入或执行 shell 命令之前都会请求批准。在它执行操作之前，您可以确切地看到它想要做什么。
 
-> **工作流：** `strict`（调查）→ 批准计划 → `request-review`（在监督下执行）→ `always-proceed`（仅用于受信任且经过充分测试的最终步骤）。
+> **流程：** `strict`（调查）→ 批准计划 → `request-review`（在监督下执行）→ `always-proceed` 仅用于受信任的、经过充分测试的最终步骤。
 
 ---
 
 ## 2.2 — AGENTS.md：编码迁移标准 <span class="duration-badge">10 min</span>
 
-在长时间的会话中，上下文会发生丢失。AGENTS.md 就是你防止这种情况发生的方法——无论对话持续多久，它都会自动注入到每个会话中。
+在长时间的会话中，上下文会发生崩溃。AGENTS.md 就是你防止这种情况发生的方法——无论对话持续多久，它都会自动注入到每个会话中。
 
-### 代理自我引导
+### 代理自我入职
 
-最强大的模式是让代理根据其在调查过程中发现的内容**编写自己的 AGENTS.md**。它将学到的知识编码为护栏，用于其后续的工作。
+最强大的模式是让代理根据其在调查中发现的内容**编写自己的 AGENTS.md**。它将学到的内容编码为护栏，用于其后续的工作。
 
 ```text
 Based on your codebase analysis, write an AGENTS.md that:
@@ -117,11 +117,11 @@ Based on your codebase analysis, write an AGENTS.md that:
 Write this to AGENTS.md in the project root.
 ```
 
-> **为什么自我引导有效：** 代理正在为自己编写指令。从此时起，它做出的每一个迁移决策都会根据它自己编写的约束条件进行检查。这是一个自我强化的循环——更好的上下文产生更好的更改，从而浮现出更多的模式，进而改善上下文。
+> **为什么自我入职有效：** 代理在为自己编写指令。从这一刻起，它做出的每一个迁移决策都会与它自己编写的约束条件进行核对。这是一个自我强化的循环——更好的上下文产生更好的更改，从而浮现出更多的模式，进而改善上下文。
 
 ### 使用 @file 导入的模块化上下文
 
-对于大型项目，请保持 AGENTS.md 精简，并导入详细的规范：
+对于大型项目，保持 AGENTS.md 精简，并导入详细的规范：
 
 ```markdown
 # AGENTS.md
@@ -133,7 +133,7 @@ Write this to AGENTS.md in the project root.
 
 > 📖 来源：[cli-using](https://antigravity.google/docs/cli-using) — AGENTS.md 导入语法
 
-### 针对硬性约束的规则文件
+### 用于硬约束的规则文件
 
 对于不可协商的需求，请使用 `.agents/rules.md`——这些将作为系统提示词指令注入，而不仅仅是上下文：
 
@@ -152,7 +152,7 @@ Write this to AGENTS.md in the project root.
 
 ## 2.3 — 子代理：并行分析团队 <span class="duration-badge">15 min</span>
 
-大型迁移有多个独立的关注点——安全性、性能、API 契约、测试覆盖率。按顺序运行它们速度很慢，并且会浪费代理的上下文窗口。使用子代理进行并行化。
+大型迁移有多个独立的关注点——安全性、性能、API 契约、测试覆盖率。按顺序运行它们速度很慢，并且会浪费代理的上下文窗口。使用子代理进行并行处理。
 
 ### 启动并行分析团队
 
@@ -184,13 +184,13 @@ Run all three concurrently. I'll review the reports before we start Phase 1.
 ctrl+j
 ```
 
-将您传送到下一个等待您批准的子代理——如果其中一个触及权限边界并需要放行，这将非常有用。
+将您传送到下一个等待您批准的子代理——如果某个子代理触及权限边界并需要继续执行的许可，这将非常有用。
 
 ```text
 ctrl+k
 ```
 
-从主对话中快速批准子代理的权限请求，而无需离开当前上下文。
+在主对话中快速批准子代理的权限请求，而无需离开当前上下文。
 
 > 📖 来源：[cli-features — 子代理](https://antigravity.google/docs/cli-features) — uid 5_278–5_316
 
@@ -224,13 +224,13 @@ Always report: file path, line number, severity (HIGH/MEDIUM/LOW), and remediati
 Never modify any file. Never execute any command.
 ```
 
-> 📖 来源：[子代理](https://antigravity.google/docs/subagents) · [cli-features](https://antigravity.google/docs/cli-features) — uid 5_274：细粒度权限 JSON 格式
+> 📖 来源：[子代理](https://antigravity.google/docs/subagents) · [cli-features](https://antigravity.google/docs/cli-features) — uid 5_274: 细粒度权限 JSON 格式
 
 ---
 
 ## 2.4 — 技能：可重用的迁移专业知识 <span class="duration-badge">10 分钟</span>
 
-技能是代理在相关时读取并激活的指令集。对于可重复的迁移（Java 8→21、.NET Framework→.NET 8、Express→Fastify），只需将该模式编码为一项技能即可。
+技能是代理在相关时读取并激活的指令集。对于可重复的迁移（Java 8→21、.NET Framework→.NET 8、Express→Fastify），请将该模式一次性编码为一项技能。
 
 ### 浏览可用技能
 
@@ -287,11 +287,11 @@ description: >
 
 ---
 
-## 2.5 — 钩子：自动化护栏 <span class="duration-badge">10 分钟</span>
+## 2.5 — 钩子：自动化护栏 <span class="duration-badge">10 min</span>
 
-对于企业级迁移，您需要的是自动化关卡——而不仅仅是人工审查。钩子会在 CLI 事件触发时执行，并可以在工具使用发生之前进行拦截、警告或记录。
+对于企业级迁移，你需要的是自动化关卡——而不仅仅是人工审查。钩子会在 CLI 事件发生时触发，并可以在工具使用发生之前阻止、警告或记录它。
 
-### 工具执行前钩子：阻止迁移范围外的写入操作
+### 工具前置钩子：阻止迁移范围外的写入
 
 创建 `.agents/hooks/scope-guard.sh`：
 
@@ -327,7 +327,7 @@ fi
 }
 ```
 
-### 工具执行后钩子：每次文件写入后自动运行测试
+### 工具后置钩子：在每次文件写入后自动运行测试
 
 ```bash
 #!/bin/bash
@@ -350,41 +350,41 @@ fi
 
 ---
 
-## 2.6 — /rewind 和 /fork：您的安全网 <span class="duration-badge">5 分钟</span>
+## 2.6 — /rewind 和 /fork：你的安全网 <span class="duration-badge">5 分钟</span>
 
 ### /rewind — 回滚对话
 
-如果代理偏离了轨道，您无需从头开始。`/rewind` 可以回滚对话历史记录：
+如果代理偏离了轨道，你不需要重新开始。`/rewind` 可以回滚对话历史记录：
 
 ```bash
 /rewind
 ```
 
-这会打开一个历史记录选择器。选择要恢复到的轮次。代理对代码库的理解将重置到该点 —— 如果它在长时间的会话中积累了错误的假设，这将非常有用。
+这将打开一个历史记录选择器。选择要恢复到的轮次。代理对代码库的理解将重置到该点 —— 如果它在长时间的会话中积累了错误的假设，这将非常有用。
 
 > 📖 来源：[cli-features](https://antigravity.google/docs/cli-features) — uid 5_220–5_226：“`/rewind`（别名 `/undo`）— 回滚对话历史记录”
 
 ### /fork — 无风险探索
 
-在尝试有风险的迁移步骤之前，请复刻对话：
+在尝试有风险的迁移步骤之前，复刻（fork）对话：
 
 ```bash
 /fork
 ```
 
-这会创建一个平行的工作区。您可以在复刻中尝试有风险的方法。如果成功了，那很好。如果失败了，关闭复刻并从主对话继续 —— 主对话从未改变过。
+这将创建一个平行的工作区。你可以在复刻的对话中尝试有风险的方法。如果成功了，那很好。如果不成功，关闭复刻并从主对话继续 —— 主对话从未改变。
 
 > 📖 来源：[cli-using](https://antigravity.google/docs/cli-using) — uid 3_219–3_224：“`/fork` 启动一个独立的工作区”
 
-### /resume — 恢复漫长的迁移
+### /resume — 恢复长时间的迁移
 
-大型迁移会跨越多天。当您返回时：
+大型迁移会跨越好几天。当你返回时：
 
 ```bash
 /resume
 ```
 
-这会打开一个会话选择器，显示您之前的迁移会话以及时间戳和对话名称。选择正确的一个，即可准确地从您离开的地方继续。
+这将打开一个会话选择器，显示你之前的迁移会话以及时间戳和对话名称。选择正确的一个，即可从你离开的地方准确继续。
 
 > 📖 来源：[cli-features](https://antigravity.google/docs/cli-features) — uid 5_213–5_219
 
@@ -398,7 +398,7 @@ fi
 
 ## 2.7 — 打印模式：非交互式迁移流水线 <span class="duration-badge">5 min</span>
 
-对于 CI/CD 门禁或夜间迁移运行，请使用打印模式在无交互的情况下通过管道传输迁移任务：
+对于 CI/CD 门禁或夜间自动运行的迁移任务，请使用打印模式在无交互的情况下通过管道传递迁移任务：
 
 ```bash
 # Dry-run: analyze and report issues — no writes
@@ -416,17 +416,17 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
   a step-by-step migration plan with exact sed commands" > migration-plan.md
 ```
 
-> 📖 来源：[cli-getting-started](https://antigravity.google/docs/cli-getting-started) — `agy --help`："-p: --print 的简写别名"
+> 📖 来源：[cli-getting-started](https://antigravity.google/docs/cli-getting-started) — `agy --help`：“-p: --print 的简写别名”
 
 ---
 
-## 动手练习
+## 动手实验
 
 <div class="exercise-card" markdown>
 
 ### :material-file-document: 练习 8：遗留系统现代化
 
-**文件：** `exercises/ex08_dotnet_modernization.md` · `exercises/ex09_java_upgrade.md`  
+**文件：** [`ex08_dotnet_modernization.md`](exercises/ex08_dotnet_modernization.md) · [`ex09_java_upgrade.md`](exercises/ex09_java_upgrade.md)  
 **时长：** 45 分钟  
 **目标：** 使用本模块中的 AGY 原语完成一次完整的迁移。
 
@@ -434,22 +434,22 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 #### 路线 A：计划优先（严格 → 调查 → 执行）
 
-1. 将 `/permissions` 设置为 `strict` — 锁定所有写入操作
-2. 赋予代理完整的调查权限（第 2.1 节）
+1. 将 `/permissions` 设置为 `strict` — 锁定所有写入
+2. 赋予代理全面的调查权限（第 2.1 节）
 3. 使用 `ctrl+g` 在编辑器中打开计划并添加团队约束
-4. 编写一个包含迁移规则的 AGENTS.md（或让代理来编写）
-5. 添加一个包含不可协商硬性规定的 `.agents/rules.md`
+4. 编写一个 AGENTS.md 来编码迁移规则（或让代理来编写）
+5. 添加一个包含硬性不可协商条款的 `.agents/rules.md`
 6. 切换到 `request-review` — 在监督下开始第一阶段
 7. 如果代理偏离范围，请使用 `/rewind`
 8. 重命名会话：`/rename "迁移 — 第一阶段完成"`
 
 #### 路线 B：子代理优先（并行分析 → 上下文 → 执行）
 
-1. 生成三个并行的子代理：安全扫描、依赖关系图、测试覆盖率
+1. 生成三个并行的子代理：安全扫描、依赖关系映射、测试覆盖率
 2. 通过 `/agents` 进行监控 — 使用 `ctrl+j` 和 `ctrl+k` 进行审批
-3. 将它们的报告汇总到一个 AGENTS.md 中（让代理进行合成）
+3. 将它们的报告汇总到一个 AGENTS.md 中（让代理进行综合）
 4. 安装 `java-migration` 技能（第 2.4 节）
-5. 在风险最高的步骤之前使用 `/fork` — 先在那里尝试
+5. 在风险最高的步骤之前使用 `/fork` — 先在那里进行尝试
 6. 使用打印模式生成阶段后报告
 
 </div>
@@ -458,19 +458,19 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 ## 总结：用于遗留系统现代化的 AGY 原语
 
-| 原语 | 功能说明 | 使用时机 |
+| 原语 | 功能说明 | 适用场景 |
 | :-- | :-- | :-- |
 | `/permissions strict` | 严格的只读限制 —— 禁止写入或执行命令 | 调查阶段 |
-| `/permissions request-review` | 代理在每次写入前都会询问 | 受控执行 |
+| `/permissions request-review` | 代理在每次写入前请求确认 | 受控执行 |
 | `ctrl+g` | 在 `$EDITOR` 中打开计划以进行协作编辑 | 计划完善 |
-| **AGENTS.md** | 跨会话持久化的迁移标准 | 始终使用 —— 编码约束条件 |
+| **AGENTS.md** | 跨会话的持久化迁移标准 | 始终适用 —— 编码约束条件 |
 | `.agents/rules.md` | 严格的系统提示词指令 | 不可协商的护栏 |
 | **子代理** | 并行分析团队 | 多关注点调查 |
-| `/agents` + `ctrl+j` + `ctrl+k` | 监控并批准子代理的工作 | 并行运行期间 |
+| `/agents` + `ctrl+j` + `ctrl+k` | 监控并批准子代理的工作 | 在并行运行期间 |
 | **钩子** (PreToolUse) | 阻止迁移范围之外的写入 | 自动化护栏 |
 | **钩子** (PostToolUse) | 每次更改后自动运行测试 | 测试门禁自动化 |
-| `/rewind` | 如果代理偏离方向，则回滚对话 | 会话中途的路线修正 |
-| `/fork` | 在隔离的分支中尝试有风险的步骤 | 在高风险更改之前 |
+| `/rewind` | 如果代理偏离方向则回滚对话 | 会话中途的路线修正 |
+| `/fork` | 在隔离的分支中尝试高风险步骤 | 在进行高风险更改之前 |
 | `/resume` | 恢复多日迁移任务 | 返回会话时 |
 | `/rename` | 按阶段标记会话 | 会话管理 |
 | `agy -p` | 非交互式迁移流水线 | CI 门禁，夜间运行 |

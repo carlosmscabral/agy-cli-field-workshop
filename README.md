@@ -8,16 +8,17 @@
 
 ## Workshop Overview
 
-This workshop teaches engineers how to use agy-cli as a daily-driver AI coding assistant and automation tool. It covers four modules, from first interactive session to multi-agent orchestration.
+This workshop teaches engineers how to use agy-cli as a daily-driver AI coding assistant and automation tool. It covers five modules, from first interactive session to building and deploying production ADK agents.
 
 | Module | Topic | Duration |
 | :-- | :-- | :-- |
 | **1. SDLC Productivity** | First session, code understanding, refactoring, test generation, review + plugins | 75 min |
 | **2. Legacy Modernization ⭐** | Strict mode, agent self-onboarding, .NET/Java migration, `/rewind` | 90 min |
-| **3. Building AGY Agents** | ADK SDK, Agent/Tool/SequentialAgent, session state, Cloud Run deploy | 90 min |
+| **3. Building AGY Agents** | Antigravity SDK, Agent/Tools/Hooks, session state, Cloud Run deploy | 90 min |
 | **4. Multi-Agent & Advanced** | Subagents, `/btw` mid-task steering, scheduling, session resumption | 60 min |
+| **5. ADK Agents with agents-cli** | Scaffold, build, evaluate, deploy ADK agents via agents-cli | 75 min |
 
-Total: ~5.5 hours (full day) · Half-day: Modules 1–2 · Lightning: Module 1 + M2 highlights
+Total: ~7 hours (extended) · Full day: Modules 1–4 (~5.5 hrs) · Half-day: Modules 1–2 · Lightning: Module 1 + M2 highlights
 
 ---
 
@@ -51,16 +52,23 @@ Open [http://localhost:8000](http://localhost:8000) for the workshop site.
 │   ├── index.md             # Home page
 │   ├── setup.md             # Environment setup
 │   ├── sdlc-productivity.md # Module 1
-│   ├── plugin-ecosystem.md  # Module 2
-│   ├── devops-automation.md # Module 3
+│   ├── legacy-modernization.md # Module 2
+│   ├── agy-sdk.md           # Module 3
 │   ├── multi-agent-advanced.md # Module 4
-│   ├── cheatsheet.md
+│   ├── agents-cli.md        # Module 5
+│   ├── cheatsheet.md        # Reference
+│   ├── plugin-ecosystem.md  # Reference
+│   ├── devops-automation.md # Reference
 │   └── facilitator-guide.md
-├── exercises/               # Hands-on exercises (6 total)
+├── exercises/               # Hands-on exercises (12 total)
 ├── demos/                   # VHS tape scripts for terminal GIFs
 ├── samples/                 # Sample configs and scripts
 ├── scripts/
-│   └── check-env.sh         # Pre-workshop validator
+│   ├── check-env.sh         # Pre-workshop validator
+│   ├── precommit-checks.sh  # Structural integrity checks
+│   └── detect-drift.sh      # Ground truth drift detection
+├── AUDIT.md                 # Ground truth for upstream claims
+├── VERIFICATION.md          # Maintenance playbook
 ├── Makefile
 └── mkdocs.yml
 ```
@@ -72,9 +80,9 @@ Open [http://localhost:8000](http://localhost:8000) for the workshop site.
 | Format | Modules | Duration |
 | :-- | :-- | :-- |
 | ⚡ Lightning | 1 + 2 highlights | 1.5 hrs |
-| 📋 Standard | 1 + 2 + 3 | 2.5 hrs |
-| 📦 Full | All four modules | 3.5 hrs |
-| 🏗️ Extended | All modules + open lab | 5 hrs |
+| 📋 Half-day | 1 + 2 | 2.5 hrs |
+| 📦 Full day | Modules 1–4 | ~5.5 hrs |
+| 🏗️ Extended | All 5 modules + open lab | 7 hrs |
 
 See [Facilitator Guide](docs/facilitator-guide.md) for delivery instructions.
 

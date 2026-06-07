@@ -1,127 +1,137 @@
 # 진행자 가이드
 
-> 워크숍 진행자를 위한 내부 가이드입니다. 참가자와 공유하지 마십시오.
+> 워크샵 진행자를 위한 내부 가이드입니다. 참가자와 공유하지 마십시오.
 
 ---
 
 ## 개요
 
-이것은 Antigravity CLI를 위한 **4개 모듈, 약 5.5시간 분량의 실습 워크숍**입니다. 이 워크숍은 Antigravity CLI를 평가하거나 도입하려는 엔지니어, 기술 리드, 솔루션 아키텍트 등 개발자 청중을 위해 설계되었습니다.
+이것은 Antigravity CLI를 위한 **5개 모듈, 약 7시간 분량의 실습 워크숍**입니다. Antigravity CLI를 평가하거나 도입하려는 개발자 대상(엔지니어, 기술 리드, 솔루션 아키텍트)으로 설계되었습니다.
 
 !!! warning "Gemini CLI 종료: 2026년 6월 18일"
-    Gemini CLI는 **2026년 6월 18일**에 수명이 종료됩니다. 참가자가 마이그레이션에 대해 질문하면 `agy plugin import gemini`를 안내하십시오. 이것이 주요 마이그레이션 경로입니다. 단일 명령으로 모든 Gemini CLI 플러그인이 이관됩니다.
+    Gemini CLI는 **2026년 6월 18일**에 수명이 종료됩니다. 참가자가 마이그레이션에 대해 질문하면 `agy plugin import gemini`를 안내하십시오. 이것이 주요 마이그레이션 경로입니다. 단일 명령으로 모든 Gemini CLI 플러그인이 이전됩니다.
 
 ---
 
-## 제공 형식
+## 진행 형식
 
 | 형식 | 모듈 | 소요 시간 |
 | :-- | :-- | :-- |
-| ⚡ 라이트닝 | 모듈 1 + 모듈 2 주요 내용 | 1.5시간 |
+| ⚡ 라이트닝 | 모듈 1 + 모듈 2 핵심 내용 | 1.5시간 |
 | 📋 반일 | 모듈 1 + 2 | 2.5시간 |
-| 📦 전일 | 4개 모듈 전체 | 약 5.5시간 |
-| 🏗️ 확장 | 전체 모듈 + 오픈 랩 | 7시간 |
+| 📦 전일 | 모듈 1–4 | 약 5.5시간 |
+| 🏗️ 심화 | 전체 5개 모듈 + 오픈 랩 | 7시간 |
 
 ---
 
-## Pre-Workshop Checklist
+## 워크숍 사전 체크리스트
 
-- [ ] Participants have Antigravity CLI installed and authenticated *(see [setup.md](setup.md))*
-- [ ] Auth details distributed (session-specific — confirm with agy-cli team)
-- [ ] Participants have Git and a suitable demo codebase
-- [ ] Facilitator has run through all exercises end-to-end on the current agy-cli version
-- [ ] Screen sharing / projection tested
-- [ ] For Module 2: confirm participants can run `dotnet` or `mvn` (or use the provided container)
-- [ ] For Module 3: confirm `pip install google-adk` and `gcloud auth application-default login` work
+- [ ] 참가자가 Antigravity CLI를 설치하고 인증을 완료함 *([setup.md](setup.md) 참조)*
+- [ ] 인증 세부 정보 배포 완료 (세션별 — agy-cli 팀과 확인)
+- [ ] 참가자가 git 및 적절한 데모 코드베이스를 준비함
+- [ ] 진행자가 현재 agy-cli 버전에서 모든 실습을 처음부터 끝까지 실행해 봄
+- [ ] 화면 공유 / 프로젝션 테스트 완료
+- [ ] 모듈 2의 경우: 참가자가 `dotnet` 또는 `mvn`을 실행할 수 있는지 확인 (또는 제공된 컨테이너 사용)
+- [ ] 모듈 3의 경우: `pip install google-antigravity` 및 `gcloud auth application-default login`이 작동하는지 확인
+- [ ] 모듈 5의 경우: `uv` 및 `agents-cli`가 설치되어 있는지 확인 (`uvx google-agents-cli setup`)
 
-!!! warning "Auth is the #1 failure point"
-    Always run a pre-workshop auth check 30 minutes before the session:
+!!! warning "인증은 가장 큰 실패 요인입니다"
+    세션 시작 30분 전에 항상 워크숍 사전 인증 확인을 실행하세요:
     ```bash
     agy --print "Say READY" --print-timeout 30s
     ```
-    If participants can't get a response, stop and debug before starting.
+    참가자가 응답을 받지 못하면 시작하기 전에 중지하고 디버깅하세요.
 
 ---
 
-## Module-by-Module Delivery Notes
+## 모듈별 전달 참고 사항
 
-### Module 1 — SDLC Productivity (75 min)
+### 모듈 1 — SDLC 생산성 향상 (75분)
 
-**Key message:** agy replaces the mental overhead of navigating an unfamiliar codebase. It's not autocomplete — it's a senior engineer you can ask anything.
+**핵심 메시지:** agy는 익숙하지 않은 코드베이스를 탐색할 때 발생하는 정신적 부담을 대체합니다. 이것은 자동 완성이 아닙니다. 무엇이든 물어볼 수 있는 시니어 엔지니어입니다.
 
-- **Demo first, exercise second.** Live-demo section 1.1 (code understanding) on your own codebase before asking participants to try theirs.
-- **Common friction:** participants try to write perfect prompts. Encourage natural language. "Tell me how the auth works" is better than "Please explain the authentication architecture of this codebase."
-- **The AGENTS.md moment:** section 1.5 is a high-value demo. Create an AGENTS.md live on screen and show how the next session is immediately smarter.
-- **Plugin import demo (section 1.7):** run `agy plugin import gemini` live — the visual output is compelling. Note: **custom themes are silently dropped** during import and cannot be migrated. If a participant asks why their theme didn't carry over, this is expected behavior — there's no error, the component is simply skipped.
+- **데모 먼저, 실습은 나중에.** 참가자들에게 각자의 코드베이스에서 시도해 보라고 요청하기 전에, 본인의 코드베이스에서 섹션 1.1(코드 이해)을 라이브 데모로 보여주세요.
+- **흔한 마찰:** 참가자들은 완벽한 프롬프트를 작성하려고 시도합니다. 자연어를 사용하도록 권장하세요. "이 코드베이스의 인증 아키텍처를 설명해 주세요"보다 "인증이 어떻게 작동하는지 알려줘"가 더 낫습니다.
+- **AGENTS.md 모먼트:** 섹션 1.5는 가치가 높은 데모입니다. 화면에서 실시간으로 AGENTS.md를 생성하고, 다음 세션이 즉시 더 똑똑해지는 모습을 보여주세요.
+- **플러그인 가져오기 데모 (섹션 1.7):** `agy plugin import gemini`를 실시간으로 실행하세요. 시각적 출력이 매우 매력적입니다. 참고: 가져오는 동안 **사용자 지정 테마는 조용히 삭제**되며 마이그레이션할 수 없습니다. 참가자가 테마가 왜 이전되지 않았는지 묻는다면, 이는 예상된 동작입니다. 오류가 발생한 것이 아니라 해당 구성 요소가 단순히 건너뛰어진 것입니다.
 
-### Module 2 — Legacy Codebase Modernization (90 min)
+### 모듈 2 — 레거시 코드베이스 현대화 (90분)
 
-**Key message:** strict mode + self-onboarding turns a week-long migration into a structured afternoon. The agent writes its own context, then executes it.
+**핵심 메시지:** 엄격한 모드 + 셀프 온보딩은 일주일이 걸리는 마이그레이션을 체계적인 오후 작업으로 바꿔줍니다. 에이전트는 자체 컨텍스트를 작성한 다음 이를 실행합니다.
 
-**Live demo script (recommended):**
+**라이브 데모 스크립트 (권장):**
 
-1. Clone the .NET or Java target repo (pre-done for time)
-2. Enter strict mode: `/permissions strict`
-3. Run the investigation prompt — show participants the agent reading the whole codebase
-4. Let the agent generate an AGENTS.md — read it aloud to show it captured real context
-5. `ctrl+g` — open the generated plan in the editor, make one visible edit to show human control
-6. Switch to `request-review`, execute Phase 1 only
-7. Show `/rewind` — revert the phase if anything goes wrong
-8. Total demo: ~15 min, then participants do it themselves
+1. .NET 또는 Java 대상 저장소를 클론합니다 (시간 절약을 위해 미리 완료).
+2. 엄격한 모드로 진입합니다: `/permissions strict`
+3. 조사 프롬프트를 실행합니다 — 에이전트가 전체 코드베이스를 읽는 모습을 참가자들에게 보여줍니다.
+4. 에이전트가 AGENTS.md를 생성하도록 합니다 — 이를 소리 내어 읽어 실제 컨텍스트를 캡처했음을 보여줍니다.
+5. `ctrl+g` — 생성된 계획을 편집기에서 열고, 눈에 띄는 편집을 하나 수행하여 인간의 통제력을 보여줍니다.
+6. `request-review`로 전환하고, 1단계만 실행합니다.
+7. `/rewind`를 보여줍니다 — 문제가 발생하면 해당 단계를 되돌립니다.
+8. 총 데모 시간: 약 15분, 이후 참가자들이 직접 실습합니다.
 
-- **Common question:** "Can it do the whole migration?" — Yes, but the value is in reviewing and steering, not just watching it run. Encourage them to edit the plan.
-- **Facilitator timing note:** Phase 0–1 together take ~20 min per participant. Let them work through Phase 2 while you circulate.
+- **흔한 질문:** "전체 마이그레이션을 할 수 있나요?" — 네, 하지만 가치는 단순히 실행되는 것을 지켜보는 것이 아니라 검토하고 스티어링하는 데 있습니다. 계획을 편집하도록 권장하세요.
+- **진행자 타이밍 참고:** 0~1단계를 함께 진행하는 데 참가자당 약 20분이 소요됩니다. 돌아다니면서 참가자들이 2단계를 진행하도록 하세요.
 
-### Module 3 — Building AGY Agents with the SDK (90 min)
+### 모듈 3 — SDK로 AGY 에이전트 구축 (90분)
 
-**Key message:** the CLI is for individuals. An SDK agent is a specialist service your whole team can call.
+**핵심 메시지:** CLI는 개인을 위한 것입니다. SDK 에이전트는 팀 전체가 호출할 수 있는 전문가 서비스입니다.
 
-- **Setup gate:** ensure everyone has `google-adk` installed and Vertex AI auth working before starting. This is the most common blocker.
-- **The `adk web .` moment:** once participants get their first agent running in the browser UI, the energy changes — they see it responding to their tools.
-- **Model selection table:** emphasize Flash-lite for generation, Pro for orchestration. Cost-consciousness is a feature, not a compromise.
-- **Exercise 11 (pipeline):** the `SequentialAgent` + `BaseAgent` guard pattern is the key architecture insight. Spend 5 min explaining zero-cost guards before they start.
+- **설정 게이트:** 시작하기 전에 모든 사람이 `google-antigravity`를 설치했고 Vertex AI 또는 AI Studio 인증이 작동하는지 확인하세요. 이것이 가장 흔한 방해 요소입니다.
+- **`adk web .` 모먼트:** 참가자들이 브라우저 UI에서 첫 번째 에이전트를 실행하게 되면 분위기가 바뀝니다 — 에이전트가 도구에 반응하는 것을 보게 됩니다.
+- **모델 선택 테이블:** 생성을 위해서는 Flash-lite를, 오케스트레이션을 위해서는 Pro를 강조하세요. 비용 절감은 타협이 아니라 기능입니다.
+- **실습 11 (파이프라인):** `asyncio.gather` + `START_SUBAGENT` 다중 에이전트 패턴이 핵심 아키텍처 인사이트입니다. 시작하기 전에 서브에이전트가 어떻게 구성되는지 설명하는 데 5분을 할애하세요.
 
-### Module 4 — Multi-Agent & Advanced (60 min)
+### 모듈 5 — agents-cli를 사용한 ADK 에이전트 (75분)
 
-**Key message:** subagents + `/btw` is the qualitative leap. This is where agy becomes an orchestrator, not just a chatbot.
+**핵심 메시지:** agents-cli는 코딩 에이전트를 ADK 전문가로 바꿔줍니다. 7단계 수명 주기(스캐폴드 → 빌드 → 평가 → 배포)는 에이전트가 데모에서 프로덕션으로 넘어가는 과정입니다.
 
-- **Subagent demo is the wow moment.** Spawn two agents live, show both running simultaneously.
-- **/btw demo:** start a long-ish task (refactor a file), then use `/btw` mid-task. Show participants the cursor keeps moving while the injected note is incorporated.
-- **Scheduling:** describe the pattern conceptually, don't demo live (latency makes it awkward in a workshop).
+- **설정 게이트:** `uv` 및 `agents-cli`가 설치되어 있는지 확인하세요. `agents-cli info`를 실행하여 확인합니다.
+- **평가 루프가 바로 교육 모먼트입니다.** 4단계(평가)에 시간을 할애하세요 — 이것이 장난감과 프로덕션 에이전트를 구별하는 요소입니다. 참가자들이 점수가 실패하는 것을 보게 한 다음 반복하게 하세요.
+- **google-adk ≠ google-antigravity:** 모듈 3에서는 `google-antigravity`(Antigravity SDK)를 사용합니다. 모듈 5에서는 `google-adk`(ADK)를 사용합니다. 이들은 서로 다른 패키지입니다. `agents-cli scaffold`는 올바른 종속성을 자동으로 관리합니다.
+- **실습 12 페이스 조절:** 1~2부(스캐폴드 + 빌드)는 빠르게 진행됩니다. 3~4부(평가 + 수정 루프)에서 시간이 소요됩니다. 5~10회 반복하는 것이 정상임을 강조하세요.
+
+### 모듈 4 — 다중 에이전트 및 고급 (60분)
+
+**핵심 메시지:** 서브에이전트 + `/btw`는 질적인 도약입니다. 이 지점에서 agy는 단순한 챗봇이 아니라 오케스트레이터가 됩니다.
+
+- **서브에이전트 데모는 감탄을 자아내는 모먼트입니다.** 실시간으로 두 개의 에이전트를 생성하고, 둘 다 동시에 실행되는 모습을 보여주세요.
+- **/btw 데모:** 약간 긴 작업(파일 리팩터링)을 시작한 다음, 작업 중간에 `/btw`를 사용하세요. 주입된 메모가 통합되는 동안 커서가 계속 움직이는 것을 참가자들에게 보여주세요.
+- **일정 예약:** 패턴을 개념적으로 설명하고, 라이브 데모는 하지 마세요 (지연 시간으로 인해 워크샵에서 어색해질 수 있습니다).
 
 ---
 
-## Common Participant Questions
+## 참가자 공통 질문
 
-| Question | Answer |
+| 질문 | 답변 |
 | :-- | :-- |
-| "What model does agy use?" | Use `/model` to see and switch. See [Models docs](https://www.antigravity.google/docs/models). |
-| "How is this different from Gemini CLI?" | agy bridges plugins from Gemini CLI and Claude, has native subagent orchestration, and `/btw` mid-task steering. Gemini CLI reaches EOL June 18, 2026. |
-| "Can I use my own API key?" | agy uses browser-based Google Sign-In. Enterprise users connect a GCP project. See [Enterprise docs](https://www.antigravity.google/docs/enterprise). |
-| "Is the code sent to Google?" | See the [FAQ](https://www.antigravity.google/docs/faq) for data handling details. |
-| "What about hooks?" | agy-cli supports hooks via `hooks.json`. See [Hooks docs](https://www.antigravity.google/docs/hooks). |
-| "Where are conversation logs stored?" | `~/.gemini/antigravity/conversations/` |
-| "My Gemini CLI theme didn't import." | Expected — custom themes are silently dropped during `agy plugin import gemini`. Skills, MCP servers, and agents do carry over. |
-| "Can I deploy SDK agents to Cloud Run?" | Yes — `adk deploy cloud_run`. See Module 3 section 3.6. |
+| "agy는 어떤 모델을 사용하나요?" | `/model`을 사용하여 확인하고 전환하세요. [Models docs](https://www.antigravity.google/docs/models)를 참조하세요. |
+| "Gemini CLI와 어떻게 다른가요?" | agy는 Gemini CLI와 Claude의 플러그인을 연결하고, 네이티브 서브에이전트 오케스트레이션 및 `/btw` 작업 중 스티어링 기능을 갖추고 있습니다. Gemini CLI는 2026년 6월 18일에 지원이 종료(EOL)됩니다. |
+| "내 API 키를 사용할 수 있나요?" | agy는 브라우저 기반 Google 로그인을 사용합니다. 엔터프라이즈 사용자는 GCP 프로젝트를 연결합니다. [Enterprise docs](https://www.antigravity.google/docs/enterprise)를 참조하세요. |
+| "코드가 Google로 전송되나요?" | 데이터 처리 세부 정보는 [FAQ](https://www.antigravity.google/docs/faq)를 참조하세요. |
+| "훅은 어떻게 되나요?" | agy-cli는 `hooks.json`을 통해 훅을 지원합니다. [Hooks docs](https://www.antigravity.google/docs/hooks)를 참조하세요. |
+| "대화 로그는 어디에 저장되나요?" | `~/.gemini/antigravity/conversations/` |
+| "내 Gemini CLI 테마가 가져오기 되지 않았습니다." | 예상된 동작입니다. 사용자 지정 테마는 `agy plugin import gemini` 중에 조용히 삭제됩니다. 스킬, MCP 서버 및 에이전트는 이관됩니다. |
+| "SDK 에이전트를 Cloud Run에 배포할 수 있나요?" | 네, `adk deploy cloud_run`을 사용하세요. 모듈 3의 섹션 3.6을 참조하세요. |
 
 ---
 
-## Troubleshooting During Workshop
+## 워크숍 중 문제 해결
 
-| Symptom | Fix |
+| 증상 | 해결 방법 |
 | :-- | :-- |
-| `agy: command not found` | Check PATH. Run `which agy` or `which agy-cli`. |
-| Auth error / 401 | Session credentials may have expired. Redistribute auth. |
-| `agy plugin list` errors | Check that `~/.gemini/antigravity/` exists |
-| Slow responses | Check network. First run after idle may be slower due to workspace indexing. |
-| Subagent doesn't spawn | Confirm the participant is in interactive mode (not `--print`) |
-| `google-adk` import errors (M3) | Ensure venv is activated: `source .venv/bin/activate` |
-| Vertex AI 403 (M3) | Run `gcloud auth application-default login` and confirm `GOOGLE_CLOUD_PROJECT` is set |
+| `agy: command not found` | PATH를 확인하세요. `which agy` 또는 `which agy-cli`를 실행하세요. |
+| 인증 오류 / 401 | 세션 자격 증명이 만료되었을 수 있습니다. 인증을 다시 배포하세요. |
+| `agy plugin list` 오류 | `~/.gemini/antigravity/`가 존재하는지 확인하세요. |
+| 느린 응답 | 네트워크를 확인하세요. 유휴 상태 이후 첫 실행은 작업 공간 인덱싱으로 인해 더 느릴 수 있습니다. |
+| 서브에이전트가 생성되지 않음 | 참가자가 대화형 모드(`--print`가 아님)인지 확인하세요. |
+| `google-adk` 가져오기 오류 (M3) | venv가 활성화되어 있는지 확인하세요: `source .venv/bin/activate` |
+| Vertex AI 403 (M3) | `gcloud auth application-default login`을 실행하고 `GOOGLE_CLOUD_PROJECT`가 설정되어 있는지 확인하세요. |
 
 ---
 
-## Post-Workshop
+## 워크숍 이후
 
-1. Collect feedback using the standard workshop feedback form
-2. Note any agy-cli bugs or unexpected behaviors observed — report to the agy-cli team
-3. Any exercises that required workarounds should be flagged for doc updates in `CONTRIBUTING.md`
+1. 표준 워크숍 피드백 양식을 사용하여 피드백을 수집합니다.
+2. 관찰된 agy-cli 버그나 예기치 않은 동작을 기록하고 agy-cli 팀에 보고합니다.
+3. 임시 해결책이 필요했던 실습은 문서 업데이트를 위해 `CONTRIBUTING.md`에 표시해야 합니다.

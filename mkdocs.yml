@@ -48,6 +48,7 @@ nav:
       - "2. Legacy Modernization ⭐": legacy-modernization.md
       - "3. Building AGY Agents": agy-sdk.md
       - "4. Multi-Agent & Advanced": multi-agent-advanced.md
+      - "5. ADK Agents with agents-cli": agents-cli.md
   - "🧪 Exercises":
       - "First Session (ex01)": exercises/ex01_first_session.md
       - "Plugin Bridge (ex02)": exercises/ex02_plugin_bridge.md
@@ -61,6 +62,7 @@ nav:
       - "Java Upgrade (ex09)": exercises/ex09_java_upgrade.md
       - "First Agent (ex10)": exercises/ex10_first_agent.md
       - "Multi-Agent Pipeline (ex11)": exercises/ex11_multi_agent_pipeline.md
+      - "ADK Agent Lifecycle (ex12)": exercises/ex12_agents_cli_lifecycle.md
   - "📋 Resources":
       - Cheatsheet: cheatsheet.md
       - Facilitator Guide: facilitator-guide.md

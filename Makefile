@@ -83,7 +83,7 @@ install-deps:  ## Install Python deps for MkDocs
 # ───────────────────────────────────────────────────────────
 
 serve:  ## Start MkDocs dev server
-	@mkdocs serve
+	@.venv/bin/mkdocs serve
 
 # ───────────────────────────────────────────────────────────
 # Pre-workshop environment check
@@ -165,7 +165,7 @@ test-drift-full:  ## Drift check + upstream Antigravity CLI docs (needs network)
 
 test-build:  ## Build site with mkdocs --strict (catches broken nav refs)
 	@echo "🏗️  Building MkDocs site (strict mode)..."
-	@mkdocs build --strict
+	@.venv/bin/mkdocs build --strict
 	@echo "✅ MkDocs build passed"
 
 # ───────────────────────────────────────────────────────────

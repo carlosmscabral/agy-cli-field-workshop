@@ -1,19 +1,19 @@
 # Referensi: Ekosistem Plugin
 
-> **Referensi mendalam untuk sistem plugin agy-cli.** Perintah-perintah penting dibahas dalam [Modul 1 — Bagian 1.7](sdlc-productivity.md#17-extend-with-plugins-15-min). Halaman ini memiliki detail siklus hidup lengkap untuk tim yang membangun dan memelihara plugin kustom.
+> **Referensi mendalam untuk sistem plugin agy-cli.** Perintah-perintah penting dibahas dalam [Modul 1 — Bagian 1.7](sdlc-productivity.md#17-extend-with-plugins-15-min). Halaman ini berisi detail siklus hidup lengkap untuk tim yang membangun dan memelihara plugin kustom.
 
 ---
 
 ## 2.0 — Mengapa Plugin Penting <span class="duration-badge">5 min</span>
 
-Sistem plugin agy-cli melakukan sesuatu yang unik: sistem ini dapat **mengimpor plugin yang telah Anda instal di Gemini CLI atau Claude Code** — tanpa perlu menginstal ulang atau mengonfigurasi ulang. Investasi Anda yang ada pada ekstensi akan terbawa.
+Sistem plugin agy-cli melakukan sesuatu yang unik: ia dapat **mengimpor plugin yang telah Anda instal di Gemini CLI atau Claude Code** — tanpa perlu menginstal ulang atau mengonfigurasi ulang. Investasi Anda yang ada pada ekstensi akan terbawa.
 
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
 ```
 
-Outputnya adalah JSON yang menunjukkan nama, sumber, tanggal impor, dan komponen dari setiap plugin (skill, perintah, mcpServers, agen).
+Outputnya adalah JSON yang menunjukkan nama, sumber, tanggal impor, dan komponen setiap plugin (skill, perintah, mcpServers, agen).
 
 ```bash
 # More readable
@@ -26,7 +26,7 @@ agy plugin list | python3 -m json.tool
 
 ## 2.1 — Mengimpor dari Gemini CLI <span class="duration-badge">10 menit</span>
 
-> **Pola: Cross-Tool Plugin Bridge** — tarik seluruh pengaturan plugin Gemini CLI Anda ke dalam agy.
+> **Pola: Jembatan Plugin Lintas-Alat** — tarik seluruh pengaturan plugin Gemini CLI Anda ke dalam agy.
 
 ### Impor Semua Plugin Gemini CLI
 
@@ -34,7 +34,7 @@ agy plugin list | python3 -m json.tool
 agy plugin import gemini
 ```
 
-agy memindai instalasi Gemini CLI lokal Anda, menemukan semua plugin yang terinstal, dan menempatkan komponennya (skill, perintah, server MCP, agen) ke dalam konfigurasi agy di `~/.gemini/antigravity/`.
+agy memindai instalasi Gemini CLI lokal Anda, menemukan semua plugin yang terinstal, dan menyiapkan komponennya (skill, perintah, server MCP, agen) ke dalam konfigurasi agy di `~/.gemini/antigravity/`.
 
 Outputnya terlihat seperti:
 
@@ -90,13 +90,13 @@ Same mechanic — agy discovers your Claude Code extension installations and bri
 ### Enable / Disable
 
 ```bash
-# Nonaktifkan plugin untuk sesi/proyek ini
+# Menonaktifkan plugin untuk sesi/proyek ini
 agy plugin disable gemini-deep-research
 
-# Aktifkan kembali
+# Mengaktifkannya kembali
 agy plugin enable gemini-deep-research
 
-# Periksa status saat ini
+# Memeriksa status saat ini
 agy plugin list
 ```
 
@@ -112,10 +112,10 @@ Plugins can be installed at two levels:
 ### Install a Specific Plugin
 
 ```bash
-# Instal berdasarkan nama (dari sumber yang dikonfigurasi)
+# Menginstal berdasarkan nama (dari sumber yang dikonfigurasi)
 agy plugin install <plugin-name>
 
-# Instal versi spesifik
+# Menginstal versi spesifik
 agy plugin install <plugin-name>@<version>
 ```
 
@@ -128,10 +128,10 @@ agy plugin install <plugin-name>@<version>
 ### Validate an Existing Plugin Directory
 
 ```bash
-# Validasi direktori plugin
+# Memvalidasi direktori plugin
 agy plugin validate ./path/to/my-plugin
 
-# Atau validasi direktori saat ini
+# Atau memvalidasi direktori saat ini
 agy plugin validate .
 ```
 
@@ -145,12 +145,12 @@ A valid agy plugin needs a `plugin.json` manifest. Here's the official structure
 my-plugin/
 ├── plugin.json          ← manifes (wajib)
 ├── mcp_config.json      ← definisi server MCP (opsional)
-├── hooks.json           ← penangan kejadian hook (opsional)
-├── skills/              ← berkas SKILL.md dengan frontmatter YAML
+├── hooks.json           ← penangan peristiwa hook (opsional)
+├── skills/              ← file SKILL.md dengan frontmatter YAML
 │   └── my-skill/
 │       └── SKILL.md
 ├── agents/              ← definisi sub-agen (opsional)
-└── rules/               ← berkas aturan (opsional)
+└── rules/               ← file aturan (opsional)
     └── my-rules.md
 ```
 
@@ -164,10 +164,10 @@ my-plugin/
 ```
 
 ```bash
-# Validasi
+# Memvalidasinya
 agy plugin validate ./my-plugin
 
-# Jika valid, Anda akan melihat: ✔ Manifes plugin valid
+# Jika valid, Anda akan melihat: ✔ Plugin manifest is valid
 ```
 
 ### Interacting with Plugin Components
@@ -195,7 +195,7 @@ agy plugin validate samples/plugins/workshop-helpers/
 graph LR
     GC["Plugin\nGemini CLI"] --> |agy plugin import gemini| S["Staging Plugin\n~/.gemini/antigravity/plugins/"]
     CC["Ekstensi\nClaude Code"] --> |agy plugin import claude| S
-    S --> |agy plugin enable/disable| A[sesi agy]
+    S --> |agy plugin enable/disable| A[Sesi agy]
     A --> SK[Skill]
     A --> MCP[Server MCP]
     A --> AG[Agen]
@@ -245,7 +245,7 @@ Sidecars are discovered from two locations:
 # Sidecar global (tersedia di semua proyek)
 ~/.gemini/config/sidecars/<sidecar-name>/sidecar.json
 
-# Sidecar dengan cakupan plugin (disertakan dengan plugin)
+# Sidecar dengan cakupan plugin (disertakan bersama plugin)
 ~/.gemini/config/plugins/<plugin-name>/sidecars/<sidecar-name>/sidecar.json
 ```
 
@@ -283,7 +283,7 @@ The directory name becomes the sidecar's ID. Plugin sidecars get the ID `<plugin
 
 ```json
 {
-  "description": "Memantau antrean build dan memberi tahu saat terjadi kegagalan",
+  "description": "Memantau antrean build dan memberi tahu jika ada kegagalan",
   "command": "python3",
   "args": ["watch_builds.py"],
   "restart_policy": "on-failure",
@@ -299,7 +299,7 @@ The `schedule` builtin takes a cron expression as its first arg, then the comman
 
 ```json
 {
-  "description": "Triase PR per jam — merangkum permintaan ulasan yang masuk",
+  "description": "Triase PR setiap jam — merangkum permintaan ulasan yang masuk",
   "builtin": "schedule",
   "args": [
     "0 * * * *",
@@ -313,10 +313,10 @@ The `schedule` builtin takes a cron expression as its first arg, then the comman
 `agentapi` is automatically available to sidecars — it lets them **programmatically create or message conversations**:
 
 ```bash
-# Mulai percakapan baru dari sidecar
+# Memulai percakapan baru dari sidecar
 agentapi new-conversation "<prompt>"
 
-# Kirim pesan ke percakapan yang ada
+# Mengirim pesan ke percakapan yang ada
 agentapi send-message <conversation_id> "<prompt>"
 ```
 
@@ -352,7 +352,7 @@ Sidecar output is stored at:
 
 ### :material-file-document: Latihan 2: Jembatan Plugin
 
-**Berkas:** `exercises/ex02_plugin_bridge.md`
+**Berkas:** [`ex02_plugin_bridge.md`](exercises/ex02_plugin_bridge.md)
 **Durasi:** 20 menit
 **Tujuan:** Mengimpor plugin dari Gemini CLI, mengaktifkan/menonaktifkan secara selektif, memvalidasi plugin kustom.
 
@@ -362,8 +362,10 @@ Sidecar output is stored at:
 
 ### :material-clock-outline: Latihan 2B: Sidecar Pertama Anda
 
+**Berkas:** [`ex02b_first_sidecar.md`](exercises/ex02b_first_sidecar.md)
+
 > **Durasi:** 20 menit
-> **Bangun:** Sebuah **sidecar standup harian** terjadwal yang berjalan pada pukul 9 pagi, membuat percakapan AGY baru, dan memintanya untuk merangkum komit git kemarin di seluruh repositori Anda.
+> **Bangun:** Sebuah **sidecar standup harian** terjadwal yang berjalan pada pukul 9 pagi, membuat percakapan AGY baru, dan memintanya untuk merangkum commit git kemarin di seluruh repositori Anda.
 
 **Apa yang akan Anda lakukan:**
 
@@ -373,7 +375,7 @@ Sidecar output is stored at:
 4. Aktifkan di `~/.gemini/config/config.json`
 5. Verifikasi bahwa itu muncul di log pada `~/.gemini/antigravity/sidecar_data/standup/logs/`
 
-**Tujuan tambahan:** Tambahkan sidecar kedua menggunakan `command: python3` yang mengawasi perubahan pada berkas lokal dan mengirimkan pesan ke percakapan yang ada saat mendeteksi adanya perbedaan (diff).
+**Tujuan tambahan:** Tambahkan sidecar kedua menggunakan `command: python3` yang mengawasi perubahan pada berkas lokal dan mengirimkan pesan ke percakapan yang ada saat mendeteksi adanya diff.
 
 </div>
 
