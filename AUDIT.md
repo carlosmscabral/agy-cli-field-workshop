@@ -220,11 +220,29 @@ Official source: [CLI Features — Subagents](https://antigravity.google/docs/cl
 
 ---
 
+## 9. ADK Agents & agents-cli (`agents-cli.md`)
+
+Official source: [agents-cli Docs](https://google.github.io/agents-cli/) and [agents-cli GitHub](https://github.com/google/agents-cli)
+
+| # | Claim | Official Source |
+|:--|:------|:---|
+| 9.1 | `agents-cli` is a developer toolkit to scaffold, build, evaluate, and deploy ADK agents on Google Cloud. | [agents-cli Docs](https://google.github.io/agents-cli/) |
+| 9.2 | Setup: `uvx google-agents-cli setup` installs the binary, configures auth, and installs 7 skills. | [agents-cli Docs](https://google.github.io/agents-cli/) |
+| 9.3 | Scaffolding: `agents-cli scaffold create <name> --agent adk --prototype` scaffolds a prototype skipping CI/CD/Terraform. | [agents-cli Docs](https://google.github.io/agents-cli/) |
+| 9.4 | Project Structure: creates `app/agent.py`, `app/tools.py`, `tests/eval/`, `agents-cli-manifest.yaml`, `pyproject.toml`, `Makefile`, and `GEMINI.md`. | [agents-cli Docs](https://google.github.io/agents-cli/) |
+| 9.5 | Testing: `agents-cli run "<prompt>"` runs a one-off smoke test. `agents-cli playground` runs the web UI playground. | [agents-cli Docs](https://google.github.io/agents-cli/) |
+| 9.6 | Evaluation: `agents-cli eval run` (or `generate` + `grade`) runs evaluation. | [agents-cli Docs](https://google.github.io/agents-cli/) |
+| 9.7 | Custom Metrics: defined in `eval_config.yaml` using a prompt template. | [agents-cli Docs](https://google.github.io/agents-cli/) |
+| 9.8 | Enhancing: `agents-cli scaffold enhance . --deployment-target <target>` adds deployment support. | [agents-cli Docs](https://google.github.io/agents-cli/) |
+| 9.9 | Deploying: `agents-cli deploy` deploys to the selected target. | [agents-cli Docs](https://google.github.io/agents-cli/) |
+
+---
+
 ## Summary
 
 | Count | Category |
 |:---:|:---|
-| 60 | Claims confirmed against official Antigravity CLI documentation |
+| 98 | Claims confirmed against official Antigravity CLI documentation |
 | 3 | Workshop-original pedagogical patterns (`/btw`, "Propose, Review, Apply", "Pre-Commit Review") |
 
 ---
