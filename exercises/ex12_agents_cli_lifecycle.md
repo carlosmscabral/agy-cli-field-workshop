@@ -81,8 +81,11 @@ echo 'GOOGLE_API_KEY=your-key-here' >> .env
 
 # If using Google Cloud:
 echo 'GOOGLE_CLOUD_PROJECT=your-project-id' >> .env
-echo 'GOOGLE_CLOUD_LOCATION=us-east1' >> .env
+echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 ```
+
+!!! tip "Location Choice"
+    Using `global` for `GOOGLE_CLOUD_LOCATION` is generally recommended on the Agent Platform to ensure compatibility with all model families. If you must use a regional endpoint (e.g., `us-central1` or `us-east5`), ensure the models you are using are available in that region in your GCP project.
 
 ---
 
@@ -250,6 +253,10 @@ metrics_to_run:
 
 custom_metrics:
   - name: meeting_summary_quality
+    # IMPORTANT: The autorater judge model must be specified as a fully-qualified Agent Platform resource path.
+    # Replace <PROJECT_ID> and <LOCATION> with your Google Cloud Project ID and Location.
+    # Example location: global, us-central1
+    judge_model: projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/gemini-3.1-flash-lite
     prompt_template: |
       Evaluate the agent's meeting summary on these criteria (1-5 each):
 
@@ -265,6 +272,11 @@ custom_metrics:
 
       Return JSON: {"score": <1-5 average>, "explanation": "<detailed reasoning>"}
 ```
+
+!!! warning "Agent Platform Judge Model Name Requirements"
+    1. **Default Model Availability**: By default, `agents-cli eval grade` uses `gemini-1.5-pro` as the judge model. In some GCP projects/regions, `gemini-1.5-pro` may not be available or permitted, resulting in `NOT_FOUND` errors.
+    2. **Resource Path Format**: When configuring a custom `judge_model`, the Agent Platform requires a fully qualified path in the format: `projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`. See the [Agent Platform Judge Model Configuration](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model) documentation.
+    3. **No Short Names**: Do not use short names like `gemini-3.1-flash-lite` directly for `judge_model` — doing so will fail with a `400 INVALID_ARGUMENT` (Invalid autorater model resource name) error.
 
 ### Step 3: Run the Eval
 
