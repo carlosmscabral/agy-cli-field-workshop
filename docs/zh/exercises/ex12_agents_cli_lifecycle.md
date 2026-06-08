@@ -6,11 +6,11 @@
 
 ## 目标
 
-使用 `agents-cli` 来搭建、构建、评估和迭代一个 ADK 代理 —— 遵循完整的开发生命周期。你将构建一个**会议纪要总结器**代理，它接收原始会议记录并生成结构化的行动项。
+使用 `agents-cli` 来搭建、构建、评估和迭代 ADK 代理 —— 遵循完整的开发生命周期。你将构建一个**会议记录摘要生成器**代理，该代理接收原始会议转录文本并生成结构化的行动项。
 
 ---
 
-## 先决条件
+## 前提条件
 
 - 已安装 `agents-cli`（`uvx google-agents-cli setup`）
 - 已安装 `uv`（[安装指南](https://docs.astral.sh/uv/getting-started/installation/)）
@@ -33,33 +33,45 @@ agents-cli scaffold create meeting-notes \
 ```
 
 !!! info "为什么使用 `--prototype`？"
-    prototype 标志会跳过 CI/CD 和 Terraform —— 让你先专注于让代理运行起来，稍后再使用 `scaffold enhance` 添加部署。
+    prototype 标志会跳过 CI/CD 和 Terraform — 您可以先专注于让代理运行起来，稍后再使用 `scaffold enhance` 添加部署。
 
-### 第 2 步：探索脚手架结构
+### 第 2 步：探索生成的脚手架结构
 
 ```bash
 cd meeting-notes
-tree -L 2
+# If you don't have tree installed, you can use find:
+find . -maxdepth 3 -not -path '*/.*'
 ```
 
-你应该会看到：
+您应该会看到类似如下的结构：
 
 ```text
 meeting-notes/
 ├── app/
+│   ├── app_utils/
+│   │   ├── telemetry.py
+│   │   └── typing.py
 │   ├── __init__.py
 │   ├── agent.py
+│   ├── fast_api_app.py
 │   └── tools.py
 ├── tests/
-│   └── eval/
-│       ├── datasets/
-│       │   └── basic-dataset.json
-│       └── eval_config.yaml
+│   ├── eval/
+│   │   ├── datasets/
+│   │   │   └── basic-dataset.json
+│   │   └── eval_config.yaml
+│   ├── integration/
+│   │   ├── test_agent.py
+│   │   └── test_server_e2e.py
+│   └── unit/
+│       └── test_dummy.py
 ├── .env
+├── Dockerfile
+├── GEMINI.md
+├── README.md
 ├── agents-cli-manifest.yaml
 ├── pyproject.toml
-├── GEMINI.md
-└── Makefile
+└── uv.lock
 ```
 
 ### 第 3 步：安装依赖
@@ -71,7 +83,7 @@ uv sync
 ```
 
 !!! note "google-adk ≠ google-antigravity"
-    模块 3 使用 `google-antigravity`（用于在 agy 中构建代理的 Antigravity SDK）。模块 5 使用 `google-adk`（用于构建部署到 Google Cloud 的独立 ADK 代理的代理开发套件）。它们是具有不同 API 的不同包。`agents-cli scaffold` 始终会自动设置 `google-adk`。
+    模块 3 使用 `google-antigravity`（用于在 agy 中构建代理的 Antigravity SDK）。模块 5 使用 `google-adk`（代理开发套件，用于构建部署到 Google Cloud 的独立 ADK 代理）。它们是具有不同 API 的不同包。`agents-cli scaffold` 始终会自动设置 `google-adk`。
 
 ### 第 4 步：配置环境
 
@@ -86,7 +98,7 @@ echo 'GOOGLE_CLOUD_LOCATION=us-east1' >> .env
 
 ---
 
-## 第 2 部分：构建代理（15 分钟）
+## 第 2 部分：构建代理 (15 分钟)
 
 ### 第 1 步：定义工具
 
@@ -294,18 +306,18 @@ open artifacts/grade_results/results_*.html
 cat artifacts/grade_results/results_*.json | python -m json.tool | head -50
 ```
 
-### 第 2 步：诊断并修复
+### 第 2 步：诊断与修复
 
 常见修复方法：
 
 | 症状 | 修复方法 |
 | :-- | :-- |
 | 代理跳过 `extract_action_items` | 强化指令：“你必须（MUST）首先调用 extract_action_items” |
-| 缺少负责人 | 在指令中添加：“每个行动项都必须（MUST）有负责人 — 如果不清楚，请使用 'Unassigned'” |
-| 幻觉行动项 | 添加：“绝不（NEVER）添加未在记录中明确说明的行动项” |
-| tool_use_quality 低 | 改进工具文档字符串 — 对参数进行更具体的说明 |
+| 缺少负责人 | 在指令中添加：“每个行动项必须（MUST）有一个负责人——如果不清楚，请使用‘未分配（Unassigned）’” |
+| 产生幻觉的行动项 | 添加：“切勿（NEVER）添加未在记录中明确说明的行动项” |
+| tool_use_quality 低 | 改进工具文档字符串——对参数的说明更具体 |
 
-### 第 3 步：重新评估并比较
+### 第 3 步：重新评估与比较
 
 ```bash
 # Save the previous results
@@ -376,14 +388,14 @@ agents-cli eval dataset synthesize \
 - [ ] 在 `basic-dataset.json` 中编写了三个评估用例
 - [ ] 定义了自定义的 `meeting_summary_quality` 指标
 - [ ] 成功运行 `agents-cli eval generate` + `eval grade`
-- [ ] 至少完成一次评估-修复迭代，且 `eval compare` 显示有改进
+- [ ] 至少完成一次评估-修复迭代，且 `eval compare` 显示有所改进
 
 ---
 
 ## 核心要点
 
-1. **`agents-cli scaffold create`** 会初始化整个项目结构 —— 不要手动进行设置
+1. **`agents-cli scaffold create`** 初始化整个项目结构 —— 不要手动设置
 2. **`agents-cli eval` 是必不可少的** —— 它是演示版本和生产级代理之间的区别
-3. **pytest ≠ eval** —— pytest 测试代码的正确性；eval 测试代理的行为
-4. **eval-fix 循环是迭代式的** —— 预计需要 5–10 轮以上；这是正常现象
-5. **agents-cli 技能** 会让你的编码代理（agy）自动成为 ADK 开发专家
+3. **pytest ≠ eval** —— pytest 测试代码正确性；eval 测试代理行为
+4. **eval-fix 循环是迭代的** —— 预计需要 5-10 轮以上；这很正常
+5. **agents-cli 技能**使你的编码代理 (agy) 自动成为 ADK 开发专家

@@ -39,27 +39,39 @@ agents-cli scaffold create meeting-notes \
 
 ```bash
 cd meeting-notes
-tree -L 2
+# If you don't have tree installed, you can use find:
+find . -maxdepth 3 -not -path '*/.*'
 ```
 
-Anda akan melihat:
+Anda akan melihat struktur seperti ini:
 
 ```text
 meeting-notes/
 ├── app/
+│   ├── app_utils/
+│   │   ├── telemetry.py
+│   │   └── typing.py
 │   ├── __init__.py
 │   ├── agent.py
+│   ├── fast_api_app.py
 │   └── tools.py
 ├── tests/
-│   └── eval/
-│       ├── datasets/
-│       │   └── basic-dataset.json
-│       └── eval_config.yaml
+│   ├── eval/
+│   │   ├── datasets/
+│   │   │   └── basic-dataset.json
+│   │   └── eval_config.yaml
+│   ├── integration/
+│   │   ├── test_agent.py
+│   │   └── test_server_e2e.py
+│   └── unit/
+│       └── test_dummy.py
 ├── .env
+├── Dockerfile
+├── GEMINI.md
+├── README.md
 ├── agents-cli-manifest.yaml
 ├── pyproject.toml
-├── GEMINI.md
-└── Makefile
+└── uv.lock
 ```
 
 ### Langkah 3: Instal Dependensi
@@ -191,9 +203,9 @@ Verifikasi:
 
 ---
 
-## Bagian 3: Tulis Kasus Evaluasi (10 mnt)
+## Bagian 3: Menulis Kasus Eval (10 menit)
 
-### Langkah 1: Buat Dataset Evaluasi
+### Langkah 1: Membuat Dataset Eval
 
 Edit `tests/eval/datasets/basic-dataset.json`:
 
@@ -237,7 +249,7 @@ Edit `tests/eval/datasets/basic-dataset.json`:
 }
 ```
 
-### Langkah 2: Konfigurasi Metrik
+### Langkah 2: Mengonfigurasi Metrik
 
 Edit `tests/eval/eval_config.yaml`:
 
@@ -266,7 +278,7 @@ custom_metrics:
       Return JSON: {"score": <1-5 average>, "explanation": "<detailed reasoning>"}
 ```
 
-### Langkah 3: Jalankan Evaluasi
+### Langkah 3: Menjalankan Eval
 
 ```bash
 # Generate traces (runs agent on each eval case)
@@ -276,11 +288,11 @@ agents-cli eval generate
 agents-cli eval grade
 ```
 
-Tinjau outputnya. Jika ada skor metrik yang berada di bawah ambang batas, lanjutkan ke Bagian 4.
+Tinjau output tersebut. Jika ada skor metrik di bawah ambang batas, lanjutkan ke Bagian 4.
 
 ---
 
-## Bagian 4: Loop Evaluasi-Perbaikan (10 menit)
+## Bagian 4: Loop Evaluasi-Perbaikan (10 mnt)
 
 Di sinilah pekerjaan sebenarnya terjadi. Untuk setiap metrik yang gagal:
 
@@ -301,9 +313,9 @@ Perbaikan umum:
 | Gejala | Perbaikan |
 | :-- | :-- |
 | Agen melewati `extract_action_items` | Perkuat instruksi: "Anda HARUS memanggil extract_action_items terlebih dahulu" |
-| Penerima tugas hilang | Tambahkan ke instruksi: "Setiap item tindakan HARUS memiliki penerima tugas — gunakan 'Unassigned' jika tidak jelas" |
+| Penerima tugas tidak ada | Tambahkan ke instruksi: "Setiap item tindakan HARUS memiliki penerima tugas — gunakan 'Unassigned' jika tidak jelas" |
 | Item tindakan halusinasi | Tambahkan: "JANGAN PERNAH menambahkan item tindakan yang tidak dinyatakan secara eksplisit dalam transkrip" |
-| `tool_use_quality` rendah | Tingkatkan docstring alat — buat lebih spesifik mengenai parameter |
+| `tool_use_quality` rendah | Tingkatkan docstring alat — buat lebih spesifik tentang parameter |
 
 ### Langkah 3: Evaluasi Ulang dan Bandingkan
 
@@ -325,7 +337,7 @@ Ulangi hingga semua metrik lulus.
 
 ---
 
-## Target Tambahan
+## Tujuan Tambahan
 
 ### Tambahkan Deployment
 
@@ -363,7 +375,7 @@ Buka sesi agy dan katakan:
   Analyze the failures and fix them.
 ```
 
-Perhatikan agy memuat skill evaluasi, menjalankan `eval analyze`, mengidentifikasi kluster kegagalan, dan secara iteratif memperbaiki agen.
+Perhatikan agy memuat skill evaluasi, menjalankan `eval analyze`, mengidentifikasi klaster kegagalan, dan secara iteratif memperbaiki agen.
 
 ---
 
@@ -374,16 +386,16 @@ Perhatikan agy memuat skill evaluasi, menjalankan `eval analyze`, mengidentifika
 - [ ] Instruksi agen mencakup alur kerja dan aturan yang jelas
 - [ ] Smoke test berhasil dilewati dengan `agents-cli run`
 - [ ] Tiga kasus evaluasi ditulis dalam `basic-dataset.json`
-- [ ] Metrik kustom `meeting_summary_quality` didefinisikan
-- [ ] `agents-cli eval generate` + `eval grade` berjalan dengan sukses
-- [ ] Setidaknya satu iterasi perbaikan evaluasi diselesaikan dengan `eval compare` yang menunjukkan peningkatan
+- [ ] Metrik `meeting_summary_quality` kustom didefinisikan
+- [ ] `agents-cli eval generate` + `eval grade` berhasil dijalankan
+- [ ] Setidaknya satu iterasi perbaikan evaluasi selesai dengan `eval compare` menunjukkan peningkatan
 
 ---
 
 ## Poin-Poin Penting
 
 1. **`agents-cli scaffold create`** menyiapkan seluruh struktur proyek — jangan mengaturnya secara manual
-2. **`agents-cli eval` bukanlah opsional** — ini adalah perbedaan antara demo dan agen produksi
+2. **`agents-cli eval` tidak opsional** — ini adalah pembeda antara demo dan agen produksi
 3. **pytest ≠ eval** — pytest menguji kebenaran kode; eval menguji perilaku agen
-4. **Loop eval-fix bersifat iteratif** — perkirakan 5–10+ putaran; ini adalah hal yang normal
-5. **agents-cli skills** membuat agen pengkodean Anda (agy) menjadi ahli dalam pengembangan ADK secara otomatis
+4. **Loop eval-fix bersifat iteratif** — perkirakan 5–10+ putaran; ini normal
+5. **agents-cli skills** membuat agen pengodean Anda (agy) menjadi ahli dalam pengembangan ADK secara otomatis

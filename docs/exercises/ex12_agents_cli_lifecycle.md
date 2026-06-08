@@ -39,27 +39,39 @@ agents-cli scaffold create meeting-notes \
 
 ```bash
 cd meeting-notes
-tree -L 2
+# If you don't have tree installed, you can use find:
+find . -maxdepth 3 -not -path '*/.*'
 ```
 
-You should see:
+You should see a structure like this:
 
 ```text
 meeting-notes/
 ├── app/
+│   ├── app_utils/
+│   │   ├── telemetry.py
+│   │   └── typing.py
 │   ├── __init__.py
 │   ├── agent.py
+│   ├── fast_api_app.py
 │   └── tools.py
 ├── tests/
-│   └── eval/
-│       ├── datasets/
-│       │   └── basic-dataset.json
-│       └── eval_config.yaml
+│   ├── eval/
+│   │   ├── datasets/
+│   │   │   └── basic-dataset.json
+│   │   └── eval_config.yaml
+│   ├── integration/
+│   │   ├── test_agent.py
+│   │   └── test_server_e2e.py
+│   └── unit/
+│       └── test_dummy.py
 ├── .env
+├── Dockerfile
+├── GEMINI.md
+├── README.md
 ├── agents-cli-manifest.yaml
 ├── pyproject.toml
-├── GEMINI.md
-└── Makefile
+└── uv.lock
 ```
 
 ### Step 3: Install Dependencies
