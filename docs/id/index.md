@@ -19,7 +19,7 @@ hide:
 
     ---
 
-    Sesi Antigravity CLI pertama Anda. Jelaskan, refactor, uji, tinjau — plus memperluas toolchain Anda dengan plugin dalam satu perintah.
+    Sesi Antigravity CLI pertama Anda. Jelaskan, refaktor, uji, tinjau — plus memperluas toolchain Anda dengan plugin dalam satu perintah.
 
     **75 menit** · Bagian 1.0–1.7
 
@@ -59,7 +59,7 @@ hide:
 
     ---
 
-    Gunakan agents-cli untuk menyusun, membangun, mengevaluasi, dan men-deploy agen ADK produksi — siklus hidup 7 fase penuh dari prototipe hingga Cloud Run.
+    Gunakan agents-cli untuk melakukan scaffold, membangun, mengevaluasi, dan men-deploy agen ADK produksi — siklus hidup 7 fase penuh dari prototipe hingga Cloud Run.
 
     **75 menit** · Latihan: ex12
 
@@ -73,7 +73,7 @@ hide:
 
 | Waktu | Konten | Durasi |
 | :-- | :-- | :-- |
-| `0:00` | Pengaturan + percobaan pertama | 20 menit |
+| `0:00` | Pengaturan + eksekusi pertama | 20 menit |
 | `0:20` | **Modul 1:** Produktivitas SDLC + plugin | 75 menit |
 | `1:35` | :coffee: Istirahat | 10 menit |
 | `1:45` | **Modul 2:** Modernisasi Basis Kode Legacy | 90 menit |
@@ -90,11 +90,11 @@ hide:
 
 ## Sebelum Anda Memulai
 
-!!! warning "Persiapan Diperlukan"
-    Selesaikan [Pengaturan Lingkungan](setup.md) sebelum lokakarya. Anda memerlukan Antigravity CLI yang telah diinstal dan diautentikasi.
+!!! warning "Pra-Pekerjaan Diperlukan"
+    Selesaikan [Pengaturan Lingkungan](setup.md) sebelum lokakarya. Anda harus menginstal dan mengautentikasi Antigravity CLI.
 
 !!! info "Dokumentasi Resmi"
     Referensi lengkap di [antigravity.google/docs](https://www.antigravity.google/docs/cli-overview).
 
 !!! info "Prasyarat"
-    Terbiasa dengan terminal, Git, dan alur kerja pengodean dasar. Tidak diperlukan pengalaman menggunakan asisten pengodean AI sebelumnya.
+    Terbiasa dengan terminal, Git, dan alur kerja pengkodean dasar. Tidak diperlukan pengalaman asisten pengkodean AI sebelumnya.

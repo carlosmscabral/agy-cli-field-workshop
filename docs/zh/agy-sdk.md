@@ -2,30 +2,30 @@
 
 <div class="module-header" markdown>
 **时长：** 约 90 分钟  
-**目标：** 使用 `google-antigravity` Python 库从头开始构建一个生产级别的 AGY 代理——涵盖工具、钩子、策略、会话状态、多代理编排和结构化输出。  
+**目标：** 使用 `google-antigravity` Python 库从头开始构建一个生产就绪的 AGY 代理 —— 包括工具、钩子、策略、会话状态、多代理编排和结构化输出。  
 **练习：** [练习 10：你的第一个代理](exercises/ex10_first_agent.md) · [练习 11：多代理流水线](exercises/ex11_multi_agent_pipeline.md)
 </div>
 
-> 📖 来源：[SDK 概述](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [技能](https://antigravity.google/docs/skills)
+> 📖 参考资料：[SDK 概述](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [技能](https://antigravity.google/docs/skills)
 
 ---
 
 ## 为什么构建代理而不是仅仅使用 CLI？
 
-CLI 是一个**通用助手**。使用 SDK 构建的代理是一个**专家**——它具有特定的工作范围、特定领域的工具、精心设计的系统提示词，并且可以部署为供整个团队调用的服务。
+CLI 是一个**通用助手**。您使用 SDK 构建的代理是一个**专家**——它有明确的工作范围、特定领域的工具、精心设计的系统提示词，并且可以作为服务部署供整个团队调用。
 
 | | Antigravity CLI | AGY SDK 代理 |
 | :-- | :-- | :-- |
 | **使用者** | 个人开发者 | 团队 / API 消费者 |
 | **自定义** | AGENTS.md + 插件 | 完全的代码控制 |
-| **工具** | 内置 CLI 工具 | 你编写的任何 Python 函数 |
+| **工具** | 内置 CLI 工具 | 您编写的任何 Python 函数 |
 | **策略** | 交互式审批提示词 | 编程式 `policy.*` 规则 |
 | **部署** | 本地交互式会话 | Cloud Run 服务，可通过 API 调用 |
 | **多代理** | CLI 会话中的子代理 | `asyncio.gather` + `START_SUBAGENT` |
 
 ---
 
-## 3.1 — SDK 环境设置 <span class="duration-badge">10 min</span>
+## 3.1 — SDK 环境设置 <span class="duration-badge">10 分钟</span>
 
 ### 前置条件
 
@@ -48,17 +48,17 @@ from google.antigravity.hooks import policy
 print("google-antigravity installed ✅")
 ```
 
-> **API 密钥与 Vertex AI：** 对于快速本地开发，请在 `LocalAgentConfig` 中使用 `api_key="AIza..."`。对于 GCP 上的生产环境，请使用 `gcloud auth application-default login` 进行身份验证 — 该库会自动获取 ADC。
+> **API 密钥与 Vertex AI：** 对于快速的本地开发，请在 `LocalAgentConfig` 中使用 `api_key="AIza..."`。对于 GCP 上的生产环境，请使用 `gcloud auth application-default login` 进行身份验证 — 库会自动获取 ADC（应用程序默认凭据）。
 
 ---
 
 ## 3.2 — 核心原语：代理、配置、工具 <span class="duration-badge">20 分钟</span>
 
-`google-antigravity` SDK 有三个构建块：`Agent`、`LocalAgentConfig` 和工具（普通的 Python 函数）。掌握这些，你就能构建任何东西。
+`google-antigravity` SDK 有三个构建块：`Agent`、`LocalAgentConfig` 和工具（纯 Python 函数）。掌握这些，你就可以构建任何东西。
 
 ### 工具
 
-工具是一个**普通的 Python 函数**。没有包装类，没有装饰器。代理根据文档字符串（docstring）决定何时调用它——这就是完整的接口契约。
+工具是一个**纯 Python 函数**。没有包装类，没有装饰器。代理根据文档字符串（docstring）决定何时调用它——这就是完整的接口契约。
 
 ```python
 def get_file_contents(file_path: str) -> str:
@@ -79,9 +79,9 @@ def get_file_contents(file_path: str) -> str:
 
 > **工具的关键规则：**
 >
-> - 使用显式的类型注解——`str`、`int`、`bool`、`list[str]`。不要使用 `typing.Optional`。
+> - 使用显式的类型注解 —— `str`、`int`、`bool`、`list[str]`。不要使用 `typing.Optional`。
 > - 对于可选参数，使用 `None` 作为默认值：`param: str = None`
-> - 文档字符串就是工具的 schema——模型通过读取它来决定何时以及如何调用该工具。它是为模型编写的，而不是为人类编写的。
+> - 文档字符串就是工具的 schema —— 模型通过读取它来决定何时以及如何调用该工具。它是写给模型看的，而不是写给人类看的。
 > - 保持工具的狭窄和专注。每个工具只做一件事。
 
 ### 带有会话状态的工具
@@ -114,7 +114,7 @@ def record_finding(
 
 ### 代理 + 配置
 
-`Agent` 是单一的入口点。所有的配置都放在 `LocalAgentConfig` 中：
+`Agent` 是唯一的入口点。所有的配置都在 `LocalAgentConfig` 中进行：
 
 ```python
 import asyncio
@@ -145,15 +145,15 @@ async def main():
 asyncio.run(main())
 ```
 
-> **`async with Agent(config) as agent:`**——始终使用上下文管理器。它会启动 Go 运行时桥接器（`bin/localharness`），并在退出时干净地将其卸载。
+> **`async with Agent(config) as agent:`** —— 始终使用上下文管理器。它会启动 Go 运行时桥接器（`bin/localharness`）并在退出时干净地将其卸载。
 
 ### 模型选择
 
-将模型与任务相匹配。注重成本的策略：
+根据任务匹配合适的模型。注重成本的策略：
 
 | 角色 | 模型 | 理由 |
 | :-- | :-- | :-- |
-| 一般任务、代码审查 | `gemini-3.5-flash` | SDK 默认——高性价比、速度快 |
+| 常规任务、代码审查 | `gemini-3.5-flash` | SDK 默认 —— 成本效益高、速度快 |
 | 编排、路由、规划 | `gemini-3.1-pro-preview` | 复杂推理、多步决策 |
 | 图像生成任务 | `gemini-3.1-flash-image-preview` | SDK 默认的图像生成模型 |
 | 高风险分析 | 带有 `ThinkingLevel.HIGH` 的 `gemini-3.1-pro-preview` | 用于合规/安全的深度推理 |
@@ -162,7 +162,7 @@ asyncio.run(main())
 
 ### 技能
 
-技能是在运行时加载的 `SKILL.md` 文件，用于注入领域知识。保持你的系统提示词精简——从文件中加载专业知识：
+技能是在运行时加载的 `SKILL.md` 文件，用于注入领域知识。保持你的系统提示词精简 —— 从文件中加载专业知识：
 
 ```python
 from pathlib import Path
@@ -190,13 +190,13 @@ config = LocalAgentConfig(
 )
 ```
 
-技能也可以通过 `LocalAgentConfig(skills_paths=["/path/to/skills/"])` 原生加载——SDK 会自动发现 `SKILL.md` 文件。
+技能也可以通过 `LocalAgentConfig(skills_paths=["/path/to/skills/"])` 原生加载 —— SDK 会自动发现 `SKILL.md` 文件。
 
 ---
 
 ## 3.3 — 策略与安全 <span class="duration-badge">10 分钟</span>
 
-**策略是您首先要配置的内容** —— 它控制代理在未经人类批准的情况下允许执行的操作。每个 `LocalAgentConfig` 都需要一个 `policies=` 列表：
+**策略是您首先要配置的内容** ——它控制代理在未经人类批准的情况下被允许执行的操作。每个 `LocalAgentConfig` 都需要一个 `policies=` 列表：
 
 ```python
 from google.antigravity.hooks import policy
@@ -230,9 +230,9 @@ policy.workspace_only(["/path/to/project"])
 
 ---
 
-## 3.4 — 钩子：可观测性与控制 <span class="duration-badge">10 min</span>
+## 3.4 — 钩子：可观测性与控制 <span class="duration-badge">10 分钟</span>
 
-钩子允许您拦截并响应代理生命周期中的每个事件——用于日志记录、审计、护栏或自定义审批流：
+钩子允许您拦截并响应代理生命周期中的每个事件——用于日志记录、审计、护栏或自定义审批流程：
 
 ```python
 from google.antigravity.hooks import hooks
@@ -281,7 +281,7 @@ config = LocalAgentConfig(
 
 ## 3.5 — 多代理编排 <span class="duration-badge">15 分钟</span>
 
-`google-antigravity` 没有 `SequentialAgent` 或 `ParallelAgent` 类。多代理的实现有两种方式：**模型驱动**（让代理生成子代理）或 **Python 驱动**（由您直接编排 `Agent` 实例）。
+`google-antigravity` 没有 `SequentialAgent` 或 `ParallelAgent` 类。多代理通过两种方式实现：**模型驱动**（让代理生成子代理）或 **Python 驱动**（直接由你编排 `Agent` 实例）。
 
 ### 模式 A — 模型驱动的子代理
 
@@ -305,7 +305,7 @@ Synthesise their outputs into a final summary.""",
 
 ### 模式 B — 顺序流水线（Python 驱动）
 
-将一个代理的输出作为下一个代理的输入传递：
+将一个代理的输出作为下一个代理的输入：
 
 ```python
 async def sequential_review(file_path: str):
@@ -347,11 +347,11 @@ async def parallel_analysis(file_path: str):
     }
 ```
 
-> **何时使用并行：** 任何时候当您有 N 个独立的分析任务时。与顺序运行相比，这可以将实际执行时间缩短 60–80%。
+> **何时使用并行：** 任何时候当你需要进行 N 个独立的分析时。与顺序运行相比，这可以将实际耗时减少 60–80%。
 
 ---
 
-## 3.6 — 流式传输与结构化输出 <span class="duration-badge">5 分钟</span>
+## 3.6 — 流式与结构化输出 <span class="duration-badge">5 min</span>
 
 ### 流式响应
 
@@ -423,7 +423,7 @@ async with Agent(resume_config) as agent:
 
 ---
 
-## 3.8 — 触发器：自主后台代理 <span class="duration-badge">5 min</span>
+## 3.8 — 触发器：自主后台代理 <span class="duration-badge">5 分钟</span>
 
 ```python
 import asyncio
@@ -460,9 +460,9 @@ asyncio.run(main())
 
 ---
 
-## 3.9 — 项目结构约定 <span class="duration-badge">5 分钟</span>
+## 3.9 — 项目结构约定 <span class="duration-badge">5 min</span>
 
-为了保证可维护性，请合理组织您的代理项目结构：
+构建您的代理项目以提高可维护性：
 
 ```text
 my_agent/
@@ -506,11 +506,11 @@ gcloud run deploy my-code-reviewer \
   --allow-unauthenticated
 ```
 
-> **提示：** 在运行之前，请设置 `GOOGLE_CLOUD_PROJECT` 和 `GOOGLE_CLOUD_REGION`（例如 `us-central1`）。
+> **提示：** 在运行之前设置 `GOOGLE_CLOUD_PROJECT` 和 `GOOGLE_CLOUD_REGION`（例如 `us-central1`）。
 
 ---
 
-## 动手实验
+## 动手实践练习
 
 <div class="exercise-card" markdown>
 
@@ -518,7 +518,7 @@ gcloud run deploy my-code-reviewer \
 
 **文件：** [`ex10_first_agent.md`](exercises/ex10_first_agent.md)  
 **时长：** 45 分钟  
-**构建：** 一个**代码审查代理**，它读取文件、识别问题并生成结构化的审查报告。
+**构建：** 一个**代码审查代理**，它能够读取文件、识别问题并生成结构化的审查报告。
 
 **你将实现的内容：**
 
@@ -536,14 +536,14 @@ gcloud run deploy my-code-reviewer \
 
 **文件：** [`ex11_multi_agent_pipeline.md`](exercises/ex11_multi_agent_pipeline.md)  
 **时长：** 45 分钟  
-**构建：** 一个**先写后审流水线** —— 技术作家代理生成文档，然后合规分析师对其进行 GDPR 差距审计。
+**构建：** 一个**先写后审流水线** —— 技术作家代理生成文档，然后合规分析师审查其中的 GDPR 漏洞。
 
 **你将实现的内容：**
 
 1. 构建一个 `technical_writer` 代理，通过 `skills_paths` 加载 GDPR SKILL.md
 2. 构建一个带有 `response_schema=ComplianceReport` 的 `compliance_analyst` 代理
 3. 将它们按顺序连接：作家的输出作为输入传递给分析师
-4. 添加一个使用 `asyncio.gather` 的并行变体，用于同时进行草稿 + 法律检查
+4. 添加一个使用 `asyncio.gather` 的并行变体，用于同时进行草稿编写和法律检查
 5. 添加会话恢复：分析师读取作家的 `conversation_id` 以加载上下文
 6. 使用 `gcloud run deploy` 将其作为 `my-pipeline` 部署到 Cloud Run
 
@@ -553,21 +553,21 @@ gcloud run deploy my-code-reviewer \
 
 ## 总结：SDK 构建块
 
-| 原语 | 功能 | 何时使用 |
+| 原语 | 作用 | 何时使用 |
 | :-- | :-- | :-- |
-| `Agent` | 带有工具、钩子和策略的单个 LLM 代理 | 核心组件 —— 每个代理都从这里开始 |
-| `LocalAgentConfig` | 所有配置集中在一处（模型、工具、策略、钩子） | 始终使用 |
-| `tools=[fn]` | 普通的 Python 可调用对象，docstring 即为模式 (schema) | 任何外部操作 |
+| `Agent` | 带有工具、钩子和策略的单一 LLM 代理 | 核心 — 每个代理都从这里开始 |
+| `LocalAgentConfig` | 所有配置集中在一处（模型、工具、策略、钩子） | 总是 |
+| `tools=[fn]` | 普通的 Python 可调用对象，文档字符串即为模式（schema） | 任何外部操作 |
 | `ToolContext` | 注入到工具中的状态读/写 | 管道中的有状态工具 |
-| `policy.allow_all()` | 自主批准所有工具调用 | 受信任的、沙盒化的代理 |
+| `policy.allow_all()` | 自主批准所有工具调用 | 受信任的沙盒代理 |
 | `policy.deny("run_command")` | 阻止特定的工具类型 | 安全护栏 |
-| `@hooks.pre_tool_call_decide` | 在执行前阻止/批准工具调用 | 安全防护 |
-| `@hooks.post_tool_call` | 观察已完成的工具调用 | 审计日志记录 |
+| `@hooks.pre_tool_call_decide` | 在执行前阻止/批准工具调用 | 安全守卫 |
+| `@hooks.post_tool_call` | 观察已完成的工具调用 | 审计日志 |
 | `response_schema=` | 将输出绑定到 Pydantic 模式 | 结构化数据提取 |
 | `async for delta in response:` | 在文本到达时进行流式传输 | 长文本生成 |
 | `asyncio.gather(...)` | 并行运行代理 | 独立分析 |
-| `every(60, handler)` | 按时间间隔触发代理 | 后台监控器 |
-| `on_file_change(path, fn)` | 在文件系统事件发生时触发代理 | 实时代码监视器 |
+| `every(60, handler)` | 按时间间隔触发代理 | 后台监视器 |
+| `on_file_change(path, fn)` | 在文件系统事件上触发代理 | 实时代码监视器 |
 | `skills_paths=[...]` | 在运行时加载 SKILL.md 文件 | 可移植的领域专业知识 |
 | `conversation_id=` | 恢复之前的会话 | 多会话工作流 |
 
@@ -577,4 +577,4 @@ gcloud run deploy my-code-reviewer \
 
 → 继续前往 **[模块 4：多代理与高级模式](multi-agent-advanced.md)**
 
-→ 参考：**[速查表](cheatsheet.md)** —— 所有命令一览
+→ 参考：**[速查表](cheatsheet.md)** — 所有命令一览

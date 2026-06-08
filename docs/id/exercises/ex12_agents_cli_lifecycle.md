@@ -6,7 +6,7 @@
 
 ## Tujuan
 
-Gunakan `agents-cli` untuk membuat kerangka (scaffold), membangun, mengevaluasi, dan melakukan iterasi pada agen ADK — mengikuti siklus hidup pengembangan secara penuh. Anda akan membangun agen **Peringkas Catatan Rapat** yang mengambil transkrip rapat mentah dan menghasilkan item tindakan terstruktur.
+Gunakan `agents-cli` untuk melakukan scaffold, membangun, mengevaluasi, dan melakukan iterasi pada agen ADK — mengikuti siklus hidup pengembangan secara penuh. Anda akan membangun agen **Peringkas Catatan Rapat** yang mengambil transkrip rapat mentah dan menghasilkan item tindakan terstruktur.
 
 ---
 
@@ -71,7 +71,7 @@ uv sync
 ```
 
 !!! note "google-adk ≠ google-antigravity"
-    Modul 3 menggunakan `google-antigravity` (Antigravity SDK untuk membangun agen di dalam agy). Modul 5 menggunakan `google-adk` (Agent Development Kit untuk membangun agen ADK mandiri yang diterapkan ke Google Cloud). Keduanya adalah paket yang berbeda dengan API yang berbeda. `agents-cli scaffold` selalu melakukan pengaturan `google-adk` secara otomatis.
+    Modul 3 menggunakan `google-antigravity` (Antigravity SDK untuk membangun agen di dalam agy). Modul 5 menggunakan `google-adk` (Agent Development Kit untuk membangun agen ADK mandiri yang diterapkan ke Google Cloud). Keduanya adalah paket yang berbeda dengan API yang berbeda. `agents-cli scaffold` selalu mengatur `google-adk` secara otomatis.
 
 ### Langkah 4: Konfigurasi Lingkungan
 
@@ -191,7 +191,7 @@ Verifikasi:
 
 ---
 
-## Bagian 3: Menulis Kasus Evaluasi (10 menit)
+## Bagian 3: Tulis Kasus Evaluasi (10 mnt)
 
 ### Langkah 1: Buat Dataset Evaluasi
 
@@ -276,7 +276,7 @@ agents-cli eval generate
 agents-cli eval grade
 ```
 
-Tinjau output. Jika ada skor metrik di bawah ambang batas, lanjutkan ke Bagian 4.
+Tinjau outputnya. Jika ada skor metrik yang berada di bawah ambang batas, lanjutkan ke Bagian 4.
 
 ---
 
@@ -301,9 +301,9 @@ Perbaikan umum:
 | Gejala | Perbaikan |
 | :-- | :-- |
 | Agen melewati `extract_action_items` | Perkuat instruksi: "Anda HARUS memanggil extract_action_items terlebih dahulu" |
-| Penerima tugas tidak ada | Tambahkan ke instruksi: "Setiap item tindakan HARUS memiliki penerima tugas — gunakan 'Unassigned' jika tidak jelas" |
-| Item tindakan berhalusinasi | Tambahkan: "JANGAN PERNAH menambahkan item tindakan yang tidak dinyatakan secara eksplisit dalam transkrip" |
-| tool_use_quality rendah | Tingkatkan docstring alat — buat lebih spesifik mengenai parameter |
+| Penerima tugas hilang | Tambahkan ke instruksi: "Setiap item tindakan HARUS memiliki penerima tugas — gunakan 'Unassigned' jika tidak jelas" |
+| Item tindakan halusinasi | Tambahkan: "JANGAN PERNAH menambahkan item tindakan yang tidak dinyatakan secara eksplisit dalam transkrip" |
+| `tool_use_quality` rendah | Tingkatkan docstring alat — buat lebih spesifik mengenai parameter |
 
 ### Langkah 3: Evaluasi Ulang dan Bandingkan
 
@@ -325,7 +325,7 @@ Ulangi hingga semua metrik lulus.
 
 ---
 
-## Tujuan Tambahan
+## Target Tambahan
 
 ### Tambahkan Deployment
 
@@ -363,26 +363,26 @@ Buka sesi agy dan katakan:
   Analyze the failures and fix them.
 ```
 
-Perhatikan agy memuat skill evaluasi, menjalankan `eval analyze`, mengidentifikasi klaster kegagalan, dan secara iteratif memperbaiki agen tersebut.
+Perhatikan agy memuat skill evaluasi, menjalankan `eval analyze`, mengidentifikasi kluster kegagalan, dan secara iteratif memperbaiki agen.
 
 ---
 
 ## Kriteria Penyelesaian
 
-- [ ] Proyek di-scaffold dengan `agents-cli scaffold create`
+- [ ] Kerangka proyek dibuat dengan `agents-cli scaffold create`
 - [ ] Dua alat didefinisikan: `extract_action_items` dan `format_summary`
 - [ ] Instruksi agen mencakup alur kerja dan aturan yang jelas
-- [ ] Smoke test lulus dengan `agents-cli run`
+- [ ] Smoke test berhasil dilewati dengan `agents-cli run`
 - [ ] Tiga kasus evaluasi ditulis dalam `basic-dataset.json`
 - [ ] Metrik kustom `meeting_summary_quality` didefinisikan
 - [ ] `agents-cli eval generate` + `eval grade` berjalan dengan sukses
-- [ ] Setidaknya satu iterasi eval-fix diselesaikan dengan `eval compare` yang menunjukkan peningkatan
+- [ ] Setidaknya satu iterasi perbaikan evaluasi diselesaikan dengan `eval compare` yang menunjukkan peningkatan
 
 ---
 
-## Poin Penting
+## Poin-Poin Penting
 
-1. **`agents-cli scaffold create`** melakukan bootstrap pada seluruh struktur proyek — jangan mengaturnya secara manual
+1. **`agents-cli scaffold create`** menyiapkan seluruh struktur proyek — jangan mengaturnya secara manual
 2. **`agents-cli eval` bukanlah opsional** — ini adalah perbedaan antara demo dan agen produksi
 3. **pytest ≠ eval** — pytest menguji kebenaran kode; eval menguji perilaku agen
 4. **Loop eval-fix bersifat iteratif** — perkirakan 5–10+ putaran; ini adalah hal yang normal

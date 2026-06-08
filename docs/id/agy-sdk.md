@@ -25,12 +25,12 @@ CLI adalah **asisten serbaguna**. Sebuah agen yang Anda bangun dengan SDK adalah
 
 ---
 
-## 3.1 — Pengaturan SDK <span class="duration-badge">10 menit</span>
+## 3.1 — Pengaturan SDK <span class="duration-badge">10 min</span>
 
 ### Prasyarat
 
 - Python 3.11+
-- Kunci API Gemini — ditetapkan sebagai `GEMINI_API_KEY` atau diteruskan melalui `api_key=` dalam konfigurasi
+- Kunci API Gemini — tetapkan sebagai `GEMINI_API_KEY` atau teruskan melalui `api_key=` di konfigurasi
 
 ### Instalasi
 
@@ -54,13 +54,13 @@ print("google-antigravity installed ✅")
 
 ---
 
-## 3.2 — Primitif Inti: Agen, Konfigurasi, Alat <span class="duration-badge">20 menit</span>
+## 3.2 — Primitif Inti: Agen, Konfigurasi, Alat <span class="duration-badge">20 mnt</span>
 
 SDK `google-antigravity` memiliki tiga blok penyusun: `Agent`, `LocalAgentConfig`, dan alat (fungsi Python biasa). Pelajari ini dan Anda dapat membangun apa saja.
 
 ### Alat
 
-Sebuah alat adalah **fungsi Python biasa**. Tidak ada kelas pembungkus, tidak ada dekorator. Agen memutuskan kapan akan memanggilnya berdasarkan docstring — itulah keseluruhan kontrak antarmuka.
+Alat adalah **fungsi Python biasa**. Tanpa kelas pembungkus, tanpa dekorator. Agen memutuskan kapan harus memanggilnya berdasarkan docstring — itulah keseluruhan kontrak antarmuka.
 
 ```python
 def get_file_contents(file_path: str) -> str:
@@ -82,13 +82,13 @@ def get_file_contents(file_path: str) -> str:
 > **Aturan penting untuk alat:**
 >
 > - Gunakan anotasi tipe eksplisit — `str`, `int`, `bool`, `list[str]`. Jangan gunakan `typing.Optional`.
-> - Gunakan nilai bawaan `None` untuk parameter opsional: `param: str = None`
-> - Docstring adalah skema alat — model membacanya untuk memutuskan kapan dan bagaimana memanggil alat tersebut. Tuliskan untuk model, bukan untuk manusia.
+> - Gunakan nilai default `None` untuk parameter opsional: `param: str = None`
+> - Docstring adalah skema alat — model membacanya untuk memutuskan kapan dan bagaimana memanggil alat tersebut. Tulis ini untuk model, bukan untuk manusia.
 > - Jaga agar alat tetap sempit dan fokus. Satu pekerjaan per alat.
 
 ### Alat dengan Status Sesi
 
-Untuk membaca/menulis **status sesi** di dalam sebuah alat, deklarasikan parameter dengan tipe `ToolContext`.
+Untuk membaca/menulis **status sesi** di dalam alat, deklarasikan parameter dengan tipe `ToolContext`.
 SDK mendeteksinya secara otomatis, menyuntikkannya pada saat pemanggilan, dan **menghapusnya dari skema yang ditampilkan ke model**:
 
 ```python
@@ -147,8 +147,7 @@ async def main():
 asyncio.run(main())
 ```
 
-> **`async with Agent(config) as agent:`** — selalu gunakan manajer konteks. Ini memulai
-> jembatan runtime Go (`bin/localharness`) dan menutupnya dengan bersih saat keluar.
+> **`async with Agent(config) as agent:`** — selalu gunakan manajer konteks. Ini memulai jembatan runtime Go (`bin/localharness`) dan menghentikannya dengan bersih saat keluar.
 
 ### Pemilihan Model
 
@@ -156,16 +155,16 @@ Sesuaikan model dengan pekerjaannya. Kebijakan sadar biaya:
 
 | Peran | Model | Alasan |
 | :-- | :-- | :-- |
-| Tugas umum, tinjauan kode | `gemini-3.5-flash` | Bawaan SDK — hemat biaya, cepat |
+| Tugas umum, tinjauan kode | `gemini-3.5-flash` | Default SDK — hemat biaya, cepat |
 | Orkestrasi, perutean, perencanaan | `gemini-3.1-pro-preview` | Penalaran kompleks, keputusan multi-langkah |
-| Tugas pembuatan gambar | `gemini-3.1-flash-image-preview` | Bawaan SDK untuk pembuatan gambar |
+| Tugas pembuatan gambar | `gemini-3.1-flash-image-preview` | Default SDK untuk pembuatan gambar |
 | Analisis berisiko tinggi | `gemini-3.1-pro-preview` dengan `ThinkingLevel.HIGH` | Penalaran mendalam untuk kepatuhan/keamanan |
 
 > **Jangan pernah gunakan** `gemini-1.5-flash`, `gemini-1.5-pro`. Sudah usang.
 
 ### Skill
 
-Skill adalah berkas `SKILL.md` yang dimuat pada saat runtime untuk menyuntikkan pengetahuan domain. Jaga agar prompt sistem Anda tetap ringkas — muat keahlian dari berkas:
+Skill adalah file `SKILL.md` yang dimuat pada saat runtime untuk menyuntikkan pengetahuan domain. Jaga agar prompt sistem Anda tetap ringkas — muat keahlian dari file:
 
 ```python
 from pathlib import Path
@@ -193,11 +192,11 @@ config = LocalAgentConfig(
 )
 ```
 
-Skill juga dapat dimuat secara native melalui `LocalAgentConfig(skills_paths=["/path/to/skills/"])` — SDK menemukan berkas `SKILL.md` secara otomatis.
+Skill juga dapat dimuat secara native melalui `LocalAgentConfig(skills_paths=["/path/to/skills/"])` — SDK menemukan file `SKILL.md` secara otomatis.
 
 ---
 
-## 3.3 — Kebijakan dan Keamanan <span class="duration-badge">10 menit</span>
+## 3.3 — Kebijakan dan Keamanan <span class="duration-badge">10 min</span>
 
 **Kebijakan adalah hal pertama yang Anda konfigurasikan** — ini mengontrol apa yang diizinkan untuk dilakukan oleh agen tanpa persetujuan manusia. Setiap `LocalAgentConfig` membutuhkan daftar `policies=`:
 
@@ -235,7 +234,7 @@ policy.workspace_only(["/path/to/project"])
 
 ## 3.4 — Hook: Observabilitas dan Kontrol <span class="duration-badge">10 min</span>
 
-Hook memungkinkan Anda mencegat dan bereaksi terhadap setiap peristiwa dalam siklus hidup agen — untuk pencatatan (logging), audit, pagar pengaman, atau alur persetujuan kustom:
+Hook memungkinkan Anda mencegat dan bereaksi terhadap setiap peristiwa dalam siklus hidup agen — untuk pencatatan, audit, pagar pengaman, atau alur persetujuan kustom:
 
 ```python
 from google.antigravity.hooks import hooks
@@ -273,22 +272,22 @@ config = LocalAgentConfig(
 
 | Hook | Memblokir eksekusi | Memodifikasi data | Digunakan untuk |
 | :-- | :-- | :-- | :-- |
-| `@hooks.pre_tool_call_decide` | Ya | Tidak | Menyetujui/menolak panggilan alat |
-| `@hooks.post_tool_call` | Tidak | Tidak | Pencatatan (logging), metrik |
-| `@hooks.pre_turn` | Tidak | Tidak | Pencatatan (logging) tingkat giliran |
-| `@hooks.post_turn` | Tidak | Tidak | Pencatatan (logging) respons |
+| `@hooks.pre_tool_call_decide` | Ya | Tidak | Menyetujui/menolak pemanggilan alat |
+| `@hooks.post_tool_call` | Tidak | Tidak | Pencatatan, metrik |
+| `@hooks.pre_turn` | Tidak | Tidak | Pencatatan tingkat giliran |
+| `@hooks.post_turn` | Tidak | Tidak | Pencatatan respons |
 | `@hooks.on_session_start/end` | Tidak | Tidak | Pengaturan/pembongkaran |
 | `@hooks.on_tool_error` | Ya | Ya | Pemulihan kesalahan |
 
 ---
 
-## 3.5 — Orkestrasi Multi-Agen <span class="duration-badge">15 min</span>
+## 3.5 — Orkestrasi Multi-Agen <span class="duration-badge">15 menit</span>
 
-`google-antigravity` tidak memiliki kelas `SequentialAgent` atau `ParallelAgent`. Multi-agen dilakukan dengan dua cara: **didorong oleh model** (biarkan agen memunculkan sub-agen) atau **didorong oleh Python** (Anda mengorkestrasi instans `Agent` secara langsung).
+`google-antigravity` tidak memiliki kelas `SequentialAgent` atau `ParallelAgent`. Multi-agen dilakukan dengan dua cara: **digerakkan oleh model** (biarkan agen memunculkan sub-agen) atau **digerakkan oleh Python** (Anda mengorkestrasi instans `Agent` secara langsung).
 
-### Pola A — Sub-agen yang Didorong oleh Model
+### Pola A — Sub-agen Digerakkan oleh Model
 
-Aktifkan `START_SUBAGENT` dalam kemampuan (capabilities). Model memanggilnya ketika memutuskan untuk mendelegasikan:
+Aktifkan `START_SUBAGENT` dalam kapabilitas. Model memanggilnya ketika memutuskan untuk mendelegasikan:
 
 ```python
 from google.antigravity.types import BuiltinTools, CapabilitiesConfig
@@ -306,7 +305,7 @@ Synthesise their outputs into a final summary.""",
 )
 ```
 
-### Pola B — Pipeline Sekuensial (Didorong oleh Python)
+### Pola B — Pipeline Sekuensial (Digerakkan oleh Python)
 
 Teruskan output dari satu agen sebagai input ke agen berikutnya:
 
@@ -327,7 +326,7 @@ async def sequential_review(file_path: str):
 
 ### Pola C — Analisis Paralel
 
-Jalankan agen-agen independen secara bersamaan dengan `asyncio.gather`:
+Jalankan agen independen secara bersamaan dengan `asyncio.gather`:
 
 ```python
 async def parallel_analysis(file_path: str):
@@ -350,11 +349,11 @@ async def parallel_analysis(file_path: str):
     }
 ```
 
-> **Kapan menggunakan paralel:** Kapan pun Anda memiliki N analisis independen. Ini memangkas waktu nyata (wall-clock) sebesar 60–80% dibandingkan dengan menjalankannya secara sekuensial.
+> **Kapan menggunakan paralel:** Kapan pun Anda memiliki N analisis independen. Ini memangkas waktu nyata sebesar 60–80% dibandingkan dengan menjalankannya secara sekuensial.
 
 ---
 
-## 3.6 — Streaming dan Output Terstruktur <span class="duration-badge">5 menit</span>
+## 3.6 — Streaming dan Output Terstruktur <span class="duration-badge">5 min</span>
 
 ### Respons Streaming
 
@@ -373,7 +372,7 @@ async with Agent(config) as agent:
 
 ### Output Terstruktur
 
-Tautkan output agen ke skema Pydantic:
+Ikat output agen ke skema Pydantic:
 
 ```python
 import asyncio
@@ -463,7 +462,7 @@ asyncio.run(main())
 
 ---
 
-## 3.9 — Konvensi Struktur Proyek <span class="duration-badge">5 menit</span>
+## 3.9 — Konvensi Struktur Proyek <span class="duration-badge">5 min</span>
 
 Strukturkan proyek agen Anda untuk kemudahan pemeliharaan:
 
@@ -509,7 +508,7 @@ gcloud run deploy my-code-reviewer \
   --allow-unauthenticated
 ```
 
-> **Tip:** Atur `GOOGLE_CLOUD_PROJECT` dan `GOOGLE_CLOUD_REGION` (misalnya `us-central1`) sebelum menjalankan.
+> **Tips:** Tetapkan `GOOGLE_CLOUD_PROJECT` dan `GOOGLE_CLOUD_REGION` (misalnya `us-central1`) sebelum menjalankan.
 
 ---
 
@@ -543,9 +542,9 @@ gcloud run deploy my-code-reviewer \
 
 **Apa yang akan Anda implementasikan:**
 
-1. Bangun agen `technical_writer` dengan `SKILL.md` GDPR yang dimuat melalui `skills_paths`
+1. Bangun agen `technical_writer` dengan SKILL.md GDPR yang dimuat melalui `skills_paths`
 2. Bangun agen `compliance_analyst` dengan `response_schema=ComplianceReport`
-3. Rangkai secara berurutan: keluaran dari penulis diteruskan sebagai masukan ke analis
+3. Hubungkan secara berurutan: keluaran dari penulis diteruskan sebagai masukan ke analis
 4. Tambahkan varian paralel menggunakan `asyncio.gather` untuk draf + pemeriksaan hukum secara bersamaan
 5. Tambahkan pelanjutan sesi: analis membaca `conversation_id` penulis untuk memuat konteks
 6. Terapkan ke Cloud Run sebagai `my-pipeline` menggunakan `gcloud run deploy`
@@ -554,24 +553,24 @@ gcloud run deploy my-code-reviewer \
 
 ---
 
-## Ringkasan: Blok Bangunan SDK
+## Ringkasan: Blok Pembangun SDK
 
-| Primitif | Apa Fungsinya | Kapan Digunakan |
+| Primitif | Apa yang Dilakukannya | Kapan Digunakan |
 | :-- | :-- | :-- |
-| `Agent` | Agen LLM tunggal dengan alat, hook, kebijakan | Inti — setiap agen dimulai dari sini |
+| `Agent` | Agen LLM tunggal dengan alat, hook, kebijakan | Inti — setiap agen dimulai di sini |
 | `LocalAgentConfig` | Semua konfigurasi di satu tempat (model, alat, kebijakan, hook) | Selalu |
 | `tools=[fn]` | Callable Python biasa, docstring adalah skemanya | Operasi eksternal apa pun |
-| `ToolContext` | Baca/tulis state yang disuntikkan ke dalam alat | Alat stateful dalam pipeline |
-| `policy.allow_all()` | Menyetujui semua pemanggilan alat secara otonom | Agen tepercaya yang berada di dalam sandbox |
+| `ToolContext` | Baca/tulis status yang disuntikkan ke dalam alat | Alat stateful dalam pipeline |
+| `policy.allow_all()` | Menyetujui semua panggilan alat secara otonom | Agen yang tepercaya dan di-sandbox |
 | `policy.deny("run_command")` | Memblokir jenis alat tertentu | Pagar pengaman keselamatan |
-| `@hooks.pre_tool_call_decide` | Memblokir/menyetujui pemanggilan alat sebelum eksekusi | Penjaga keamanan |
-| `@hooks.post_tool_call` | Mengamati pemanggilan alat yang telah selesai | Pencatatan audit |
+| `@hooks.pre_tool_call_decide` | Memblokir/menyetujui panggilan alat sebelum eksekusi | Penjaga keamanan |
+| `@hooks.post_tool_call` | Mengamati panggilan alat yang selesai | Pencatatan audit |
 | `response_schema=` | Mengikat output ke skema Pydantic | Ekstraksi data terstruktur |
-| `async for delta in response:` | Melakukan streaming teks saat tiba | Pembuatan teks bentuk panjang |
+| `async for delta in response:` | Melakukan streaming teks saat tiba | Pembuatan bentuk panjang |
 | `asyncio.gather(...)` | Menjalankan agen secara paralel | Analisis independen |
-| `every(60, handler)` | Memicu agen pada interval tertentu | Monitor latar belakang |
-| `on_file_change(path, fn)` | Memicu agen pada peristiwa sistem berkas | Pengamat kode langsung |
-| `skills_paths=[...]` | Memuat berkas SKILL.md saat runtime | Keahlian domain portabel |
+| `every(60, handler)` | Memicu agen pada interval | Monitor latar belakang |
+| `on_file_change(path, fn)` | Memicu agen pada peristiwa sistem file | Pengamat kode langsung |
+| `skills_paths=[...]` | Memuat file SKILL.md pada saat runtime | Keahlian domain portabel |
 | `conversation_id=` | Melanjutkan sesi sebelumnya | Alur kerja multi-sesi |
 
 ---

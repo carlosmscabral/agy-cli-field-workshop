@@ -1,6 +1,6 @@
 # 参考：DevOps 与自动化模式
 
-> **无需人工干预的 agy。** 针对非交互式 `--print` 流水线、CI/CD 集成、多仓库工作区和沙盒执行的深度参考。基本命令可通过[速查表](cheatsheet.md)链接获取。
+> **无需人工干预的 agy。** 深入参考，涵盖非交互式 `--print` 流水线、CI/CD 集成、多仓库工作区以及沙盒执行。基本命令已在[速查表](cheatsheet.md)中提供链接。
 
 ---
 
@@ -19,7 +19,7 @@ agy --print "Generate a full test suite for auth.js" --print-timeout 10m
 agy -p "What does this project do?"
 ```
 
-输出会发送到标准输出（stdout）——你可以通过管道传递它、重定向它或存储它。
+输出将发送到标准输出（stdout）——你可以对其进行管道传输、重定向或存储。
 
 ```bash
 # Pipe into a file
@@ -31,9 +31,9 @@ agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
 
 ---
 
-## DevOps 2 — Shell 管道 <span class="duration-badge">10 min</span>
+## DevOps 2 — Shell 管道 <span class="duration-badge">10 分钟</span>
 
-> **模式：将 agy 作为 Unix 命令** — 将其与标准 shell 工具组合使用。
+> **模式：将 agy 作为 Unix 命令** ——将其与标准 Shell 工具组合使用。
 
 ### 模式：将代码通过管道传递给 agy
 
@@ -78,7 +78,7 @@ done
 
 > **模式：跨仓库上下文** — 让 agy 同时具备对多个代码库的可见性。
 
-默认情况下，agy 会索引包含您当前目录的 git 仓库。`--add-dir` 将其扩展到其他目录。
+默认情况下，agy 会索引包含当前目录的 git 仓库。`--add-dir` 将其扩展到其他附加目录。
 
 ```bash
 # Give agy access to both your app and its shared library
@@ -99,7 +99,7 @@ agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
     -p "Map the dependency graph between these three packages and flag any circular dependencies."
 ```
 
-!!! tip "可重复的标志"
+!!! tip "可重复使用的标志"
     `--add-dir` 是可重复的 — 您可以根据需要添加任意数量的目录。agy 会将它们与主 git 仓库一起进行索引。
 
 ---
@@ -149,7 +149,7 @@ jobs:
 ```
 
 !!! warning "CI 中的 --dangerously-skip-permissions"
-    始终在 CI 中使用 `--dangerously-skip-permissions` — 因为没有人工来点击“批准”。将其与沙盒模式结合使用，以限制 agy 可以访问的内容。
+    在 CI 中始终使用 `--dangerously-skip-permissions` — 因为没有人类来点击“批准”。将其与沙盒模式结合使用，以限制 agy 可以访问的内容。
 
 ### Pre-Commit 钩子
 
@@ -167,13 +167,13 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 ---
 
-## DevOps 5 — 沙盒模式 <span class="duration-badge">5 分钟</span>
+## DevOps 5 — 沙盒模式 <span class="duration-badge">5 min</span>
 
-> **模式：受限执行** — 使用操作系统级别的终端隔离运行 agy。
+> **模式：受限执行** — 在操作系统级别的终端隔离下运行 agy。
 
 ### 启用沙盒
 
-沙盒通过 `settings.json` 进行配置（可以是项目级别的 `.agents/settings.json` 或用户级别的 `~/.gemini/antigravity/settings.json`）：
+沙盒通过 `settings.json`（项目级别的 `.agents/settings.json` 或用户级别的 `~/.gemini/antigravity/settings.json`）进行配置：
 
 ```json
 {
@@ -181,7 +181,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 }
 ```
 
-启用后，agy 使用**原生操作系统隔离**来限制终端命令的执行：
+启用后，agy 会使用**原生操作系统隔离**来限制终端命令的执行：
 
 | 操作系统 | 隔离技术 |
 | :-- | :-- |
@@ -191,15 +191,15 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 ### 逐命令绕过
 
-在启用沙盒的情况下，当命令需要突破沙盒时，agy 将**提示请求批准**。您将看到一个逐命令绕过提示 — 允许选择性执行，而无需禁用整个沙盒。
+在启用沙盒的情况下，当命令需要突破沙盒时，agy 会**提示请求批准**。您将看到一个逐命令绕过提示 — 允许选择性执行，而无需禁用整个沙盒。
 
 ### 使用场景
 
 - 在不受信任的代码上运行 agy
-- 在无副作用的情况下审计敏感内容
+- 审计敏感内容而不会产生副作用
 - 任何执行都需要批准的治理敏感环境
 
-### 与权限结合使用
+### 结合权限使用
 
 为了获得最大程度的控制，请将沙盒模式与权限模型结合使用：
 
@@ -231,31 +231,31 @@ git diff --cached | agy --dangerously-skip-permissions \
 | `PostToolUse` | 在工具调用完成之后 |
 | `PreInvocation` | 在 agy 开始处理提示词之前 |
 | `PostInvocation` | 在 agy 完成响应之后 |
-| `Stop` | 当会话结束时 |
+| `Stop` | 在会话结束时 |
 
-在 `hooks.json` 中配置钩子（项目级别在 `.agents/` 中，全局级别在 `~/.gemini/config/` 中）。钩子脚本通过标准输入（stdin）接收 JSON，并通过标准输出（stdout）返回 JSON。
+在 `hooks.json`（项目级别位于 `.agents/` 中，全局级别位于 `~/.gemini/config/` 中）中配置钩子。钩子脚本在标准输入（stdin）接收 JSON，并在标准输出（stdout）返回 JSON。
 
-#### 示例钩子（位于 `samples/hooks/`）
+#### 示例钩子（位于 `samples/hooks/` 中）
 
 | 脚本 | 事件 | 目的 |
 | :-- | :-- | :-- |
 | `secret-scanner.sh` | `PreToolUse` | 阻止包含硬编码凭据的写入操作 |
-| `git-context-injector.sh` | `PreToolUse` | 在写入之前注入目标文件的最近 git 历史记录 |
+| `git-context-injector.sh` | `PreToolUse` | 在写入之前为目标文件注入最近的 git 历史记录 |
 | `test-nudge.sh` | `PostToolUse` | 在文件写入后提示代理运行测试 |
-| `session-context.sh` | `PreInvocation` | 在会话开始时注入分支、待处理的更改和依赖项 |
+| `session-context.sh` | `PreInvocation` | 在会话开始时注入分支、挂起的更改和依赖项 |
 
 > 📖 完整详情：[钩子文档](https://www.antigravity.google/docs/hooks)
 
 ### 规则
 
-规则是作为 `RULE` 块注入到 agy 系统提示词中的 markdown 文件——这是 agy 必须遵循的硬性约束。
+规则是作为 `RULE` 块注入到 agy 系统提示词中的 markdown 文件 —— 这是 agy 必须遵循的硬性约束。
 
 | 作用域 | 位置 |
 | :-- | :-- |
 | **项目** | `.agents/rules.md` 或 `.agents/rules/*.md` |
 | **全局** | `~/.gemini/config/rules.md` 或 `~/.gemini/config/rules/*.md` |
 
-`.agents/rules.md` 示例：
+示例 `.agents/rules.md`：
 
 ```markdown
 - Never delete migration files
@@ -276,7 +276,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 **文件：** [`ex03_print_mode_pipeline.md`](exercises/ex03_print_mode_pipeline.md)
 **时长：** 20 分钟
-**目标：** 使用 agy --print 构建一个多步 shell 管道。审查已暂存的更改，生成文档，并连接 GitHub Actions 工作流。
+**目标：** 使用 agy --print 构建一个多步 shell 管道。审查已暂存的更改，生成文档，并配置 GitHub Actions 工作流。
 
 </div>
 
@@ -284,4 +284,4 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 ## 下一模块
 
-→ **[模块 4：多代理与高级功能](multi-agent-advanced.md)** — 子代理、/btw 任务中途引导、调度。
+→ **[模块 4：多代理与高级功能](multi-agent-advanced.md)** — 子代理、/btw 任务中引导、调度。

@@ -1,19 +1,19 @@
 # 참조: 플러그인 생태계
 
-> **agy-cli의 플러그인 시스템에 대한 심층 참조입니다.** 필수 명령어는 [모듈 1 — 섹션 1.7](sdlc-productivity.md#17-extend-with-plugins-15-min)에서 다룹니다. 이 페이지는 사용자 지정 플러그인을 구축하고 유지 관리하는 팀을 위한 전체 수명 주기 세부 정보를 제공합니다.
+> **agy-cli의 플러그인 시스템에 대한 심층 참조입니다.** 필수 명령어는 [모듈 1 — 섹션 1.7](sdlc-productivity.md#17-extend-with-plugins-15-min)에서 다룹니다. 이 페이지는 커스텀 플러그인을 구축하고 유지 관리하는 팀을 위한 전체 라이프사이클 세부 정보를 제공합니다.
 
 ---
 
-## 2.0 — 플러그인이 중요한 이유 <span class="duration-badge">5분</span>
+## 2.0 — 플러그인이 중요한 이유 <span class="duration-badge">5 min</span>
 
-agy-cli의 플러그인 시스템은 특별한 기능을 수행합니다. 재설치나 재구성 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 이어집니다.
+agy-cli의 플러그인 시스템은 독특한 기능을 수행합니다. 재설치나 재구성 없이 **Gemini CLI 또는 Claude Code에 이미 설치한 플러그인을 가져올 수 있습니다**. 확장 프로그램에 대한 기존 투자가 그대로 이어집니다.
 
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
 ```
 
-출력은 각 플러그인의 이름, 소스, 가져온 날짜 및 구성 요소(스킬, 명령어, MCP 서버, 에이전트)를 보여주는 JSON입니다.
+출력은 JSON 형식이며 각 플러그인의 이름, 소스, 가져오기 날짜 및 구성 요소(스킬, 명령어, mcpServers, 에이전트)를 보여줍니다.
 
 ```bash
 # More readable
@@ -26,7 +26,7 @@ agy plugin list | python3 -m json.tool
 
 ## 2.1 — Gemini CLI에서 가져오기 <span class="duration-badge">10분</span>
 
-> **패턴: 교차 도구 플러그인 브리지(Cross-Tool Plugin Bridge)** — 전체 Gemini CLI 플러그인 설정을 agy로 가져옵니다.
+> **패턴: Cross-Tool Plugin Bridge** — 전체 Gemini CLI 플러그인 설정을 agy로 가져옵니다.
 
 ### 모든 Gemini CLI 플러그인 가져오기
 
@@ -34,7 +34,7 @@ agy plugin list | python3 -m json.tool
 agy plugin import gemini
 ```
 
-agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을 검색하고, 해당 구성 요소(스킬, 명령어, MCP 서버, 에이전트)를 `~/.gemini/antigravity/`에 있는 agy의 구성에 스테이징합니다.
+agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을 검색하고, 해당 구성 요소(스킬, 명령어, MCP 서버, 에이전트)를 `~/.gemini/antigravity/`에 있는 agy의 설정으로 스테이징합니다.
 
 출력은 다음과 같습니다:
 
@@ -50,7 +50,7 @@ agy는 로컬 Gemini CLI 설치를 스캔하여 설치된 모든 플러그인을
 ```
 
 !!! tip "--force를 사용하여 다시 가져오기"
-    이미 가져온 플러그인은 기본적으로 건너뜁니다. 플러그인 업데이트 후 강제로 다시 가져오려면:
+    이미 가져온 플러그인은 기본적으로 건너뜁니다. 플러그인 업데이트 후 강제로 다시 가져오려면 다음을 실행하세요:
     ```bash
     agy plugin import gemini --force
     ```
@@ -112,7 +112,7 @@ Plugins can be installed at two levels:
 ### Install a Specific Plugin
 
 ```bash
-# 이름으로 설치 (구성된 소스에서)
+# 이름으로 설치 (설정된 소스에서)
 agy plugin install <plugin-name>
 
 # 특정 버전 설치
@@ -128,10 +128,10 @@ agy plugin install <plugin-name>@<version>
 ### Validate an Existing Plugin Directory
 
 ```bash
-# 플러그인 디렉토리 유효성 검사
+# 플러그인 디렉터리 유효성 검사
 agy plugin validate ./path/to/my-plugin
 
-# 또는 현재 디렉토리 유효성 검사
+# 또는 현재 디렉터리 유효성 검사
 agy plugin validate .
 ```
 
@@ -146,7 +146,7 @@ my-plugin/
 ├── plugin.json          ← 매니페스트 (필수)
 ├── mcp_config.json      ← MCP 서버 정의 (선택 사항)
 ├── hooks.json           ← 훅 이벤트 핸들러 (선택 사항)
-├── skills/              ← YAML 프런트매터가 포함된 SKILL.md 파일
+├── skills/              ← YAML 프런트매터가 있는 SKILL.md 파일
 │   └── my-skill/
 │       └── SKILL.md
 ├── agents/              ← 서브에이전트 정의 (선택 사항)
@@ -283,7 +283,7 @@ The directory name becomes the sidecar's ID. Plugin sidecars get the ID `<plugin
 
 ```json
 {
-  "description": "빌드 대기열을 모니터링하고 실패 시 알림을 보냅니다",
+  "description": "빌드 대기열을 모니터링하고 실패 시 알림을 보냅니다.",
   "command": "python3",
   "args": ["watch_builds.py"],
   "restart_policy": "on-failure",
@@ -299,13 +299,13 @@ The `schedule` builtin takes a cron expression as its first arg, then the comman
 
 ```json
 {
-  "description": "매시간 PR 분류 — 들어오는 리뷰 요청을 요약합니다",
+  "description": "매시간 PR 분류 — 수신된 리뷰 요청을 요약합니다.",
   "builtin": "schedule",
   "args": [
     "0 * * * *",
     "agentapi",
     "new-conversation",
-    "내 리뷰를 기다리는 열려 있는 모든 PR을 요약해 줘. 긴급도에 따라 그룹화해."
+    "내 리뷰를 기다리는 모든 열린 PR을 요약해 줘. 긴급도에 따라 그룹화해 줘."
   ]
 }
 ```
@@ -330,7 +330,7 @@ Sidecar output is stored at:
 ```text
 ~/.gemini/antigravity/sidecar_data/<sidecarId>/
 ├── data/     ← 영구 스토리지 (ANTIGRAVITY_EXECUTABLE_DATA_DIR 환경 변수)
-├── logs/     ← 타임스탬프가 찍힌 stdout/stderr 로그
+├── logs/     ← 타임스탬프가 기록된 stdout/stderr 로그
 └── events/   ← agentapi 호출의 JSON 레코드
 ```
 
@@ -340,17 +340,17 @@ Sidecar output is stored at:
 ~/.gemini/config/plugins/my-plugin/
 └── sidecars/
     └── pr-triage/
-        ├── sidecar.json   ← 구성 (필수)
-        └── triage.py      ← 헬퍼 스크립트 (선택 사항, 이 디렉토리에서 실행됨)
+        ├── sidecar.json   ← 설정 (필수)
+        └── triage.py      ← 헬퍼 스크립트 (선택 사항, 이 디렉터리에서 실행됨)
 ```
 
 ---
 
-## 모듈 2 실습
+## 모듈 2 연습 문제
 
 <div class="exercise-card" markdown>
 
-### :material-file-document: 실습 2: 플러그인 브릿지
+### :material-file-document: 연습 문제 2: 플러그인 브리지
 
 **파일:** [`ex02_plugin_bridge.md`](exercises/ex02_plugin_bridge.md)
 **소요 시간:** 20분
@@ -360,22 +360,22 @@ Sidecar output is stored at:
 
 <div class="exercise-card" markdown>
 
-### :material-clock-outline: 실습 2B: 첫 번째 사이드카
+### :material-clock-outline: 연습 문제 2B: 첫 번째 사이드카
 
 **파일:** [`ex02b_first_sidecar.md`](exercises/ex02b_first_sidecar.md)
 
 > **소요 시간:** 20분
-> **빌드:** 오전 9시에 실행되어 새로운 AGY 대화를 생성하고, 여러 저장소에 걸쳐 어제 수행한 git 커밋을 요약하도록 요청하는 예약된 **일일 스탠드업 사이드카**를 만듭니다.
+> **빌드:** 오전 9시에 실행되어 새로운 AGY 대화를 생성하고, 리포지토리 전체에서 어제 발생한 git 커밋을 요약하도록 요청하는 예약된 **일일 스탠드업 사이드카**를 구축합니다.
 
 **수행할 작업:**
 
 1. `schedule` 내장 기능을 사용하여 `~/.gemini/config/sidecars/standup/sidecar.json`을 생성합니다.
-2. cron을 `0 9 * * 1-5`(월요일~금요일 오전 9시)로 설정합니다.
+2. cron을 `0 9 * * 1-5`(월~금 오전 9시)로 설정합니다.
 3. `agentapi new-conversation`을 사용하여 스탠드업 프롬프트로 대화를 엽니다.
 4. `~/.gemini/config/config.json`에서 이를 활성화합니다.
 5. `~/.gemini/antigravity/sidecar_data/standup/logs/`의 로그에 나타나는지 확인합니다.
 
-**추가 목표:** `command: python3`을 사용하여 로컬 파일의 변경 사항을 감시하고, 차이를 감지하면 기존 대화에 메시지를 보내는 두 번째 사이드카를 추가합니다.
+**추가 목표:** `command: python3`을 사용하여 로컬 파일의 변경 사항을 감시하고, 차이점을 감지하면 기존 대화에 메시지를 보내는 두 번째 사이드카를 추가합니다.
 
 </div>
 
@@ -383,6 +383,6 @@ Sidecar output is stored at:
 
 ## 워크숍으로 돌아가기
 
-→ **[모듈 1: SDLC 생산성 향상](sdlc-productivity.md)** — 섹션 1.7에서 플러그인이 소개됩니다
+→ **[모듈 1: SDLC 생산성 향상](sdlc-productivity.md)** — 플러그인은 섹션 1.7에서 소개됩니다
 
-→ **[치트시트](cheatsheet.md)** — 모든 플러그인 및 사이드카 명령어를 한곳에 모았습니다
+→ **[치트시트](cheatsheet.md)** — 모든 플러그인 및 사이드카 명령어를 한곳에 모아두었습니다

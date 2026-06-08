@@ -1,6 +1,6 @@
 # Referensi: Pola DevOps & Otomatisasi
 
-> **agy tanpa campur tangan manusia.** Referensi mendalam untuk pipeline `--print` non-interaktif, integrasi CI/CD, ruang kerja multi-repositori, dan eksekusi sandbox. Perintah-perintah penting ditautkan dari [Lembar Contekan](cheatsheet.md).
+> **agy tanpa keterlibatan manusia.** Referensi mendalam untuk pipeline `--print` non-interaktif, integrasi CI/CD, ruang kerja multi-repositori, dan eksekusi sandbox. Perintah-perintah penting ditautkan dari [Lembar Contekan](cheatsheet.md).
 
 ---
 
@@ -19,7 +19,7 @@ agy --print "Generate a full test suite for auth.js" --print-timeout 10m
 agy -p "What does this project do?"
 ```
 
-Output masuk ke stdout — lakukan pipe, alihkan, simpan.
+Output dikirim ke stdout — lakukan pipe, alihkan, simpan.
 
 ```bash
 # Pipe into a file
@@ -31,7 +31,7 @@ agy -p "List all TODO comments in this codebase as JSON" | jq '.[] | .file'
 
 ---
 
-## DevOps 2 — Pipeline Shell <span class="duration-badge">10 min</span>
+## DevOps 2 — Pipeline Shell <span class="duration-badge">10 menit</span>
 
 > **Pola: agy sebagai perintah Unix** — gabungkan dengan alat shell standar.
 
@@ -76,9 +76,9 @@ done
 
 ## DevOps 3 — Ruang Kerja Multi-Direktori dengan --add-dir <span class="duration-badge">10 min</span>
 
-> **Pola: Konteks Lintas-Repo** — berikan agy visibilitas ke dalam beberapa basis kode secara bersamaan.
+> **Pola: Konteks Lintas-Repo** — memberikan agy visibilitas ke beberapa basis kode secara bersamaan.
 
-Secara default, agy mengindeks repo git yang berisi direktori Anda saat ini. `--add-dir` memperluas hal tersebut ke direktori tambahan.
+Secara default, agy mengindeks repo git yang berisi direktori Anda saat ini. `--add-dir` memperluasnya ke direktori tambahan.
 
 ```bash
 # Give agy access to both your app and its shared library
@@ -100,7 +100,7 @@ agy --add-dir packages/core --add-dir packages/api --add-dir packages/ui \
 ```
 
 !!! tip "Flag yang dapat diulang"
-    `--add-dir` dapat diulang — tambahkan sebanyak mungkin direktori yang Anda butuhkan. agy mengindeks semuanya bersama dengan repo git utama.
+    `--add-dir` dapat diulang — tambahkan sebanyak mungkin direktori yang Anda butuhkan. agy mengindeks semuanya bersama repo git utama.
 
 ---
 
@@ -173,7 +173,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 ### Mengaktifkan Sandbox
 
-Sandbox dikonfigurasi melalui `settings.json` (baik `.agents/settings.json` proyek atau `~/.gemini/antigravity/settings.json` pengguna):
+Sandbox dikonfigurasi melalui `settings.json` (baik proyek `.agents/settings.json` atau pengguna `~/.gemini/antigravity/settings.json`):
 
 ```json
 {
@@ -191,7 +191,7 @@ Saat diaktifkan, agy menggunakan **isolasi OS native** untuk membatasi eksekusi 
 
 ### Bypass Per-Perintah
 
-Dengan sandbox yang diaktifkan, agy akan **meminta persetujuan** ketika sebuah perintah perlu keluar dari sandbox. Anda akan melihat prompt bypass per-perintah — yang memungkinkan eksekusi selektif tanpa menonaktifkan seluruh sandbox.
+Dengan sandbox diaktifkan, agy akan **meminta persetujuan** ketika sebuah perintah perlu keluar dari sandbox. Anda akan melihat prompt bypass per-perintah — yang memungkinkan eksekusi selektif tanpa menonaktifkan seluruh sandbox.
 
 ### Kasus Penggunaan
 
@@ -213,11 +213,11 @@ Untuk kontrol maksimum, pasangkan mode sandbox dengan model izin:
 }
 ```
 
-> 📖 Detail lengkap: [Dokumentasi izin](https://www.antigravity.google/docs/permissions)
+> 📖 Detail lengkap: [Dokumentasi Izin](https://www.antigravity.google/docs/permissions)
 
 ---
 
-## DevOps 6 — Hook & Aturan <span class="duration-badge">5 menit</span>
+## DevOps 6 — Hook & Aturan <span class="duration-badge">5 min</span>
 
 > **Pola: Pagar Pengaman & Otomatisasi** — menegakkan standar dan memicu tindakan pada titik-titik siklus hidup utama.
 
@@ -225,7 +225,7 @@ Untuk kontrol maksimum, pasangkan mode sandbox dengan model izin:
 
 Hook memungkinkan Anda menjalankan logika kustom pada 5 peristiwa siklus hidup:
 
-| Peristiwa | Kapan dipicu |
+| Peristiwa | Kapan ini terpicu |
 | :-- | :-- |
 | `PreToolUse` | Sebelum agy memanggil alat apa pun (membaca file, menjalankan perintah, dll.) |
 | `PostToolUse` | Setelah pemanggilan alat selesai |
@@ -276,7 +276,7 @@ Contoh `.agents/rules.md`:
 
 **Berkas:** [`ex03_print_mode_pipeline.md`](exercises/ex03_print_mode_pipeline.md)
 **Durasi:** 20 menit
-**Tujuan:** Membangun pipeline shell multi-langkah menggunakan agy --print. Meninjau perubahan yang di-stage, menghasilkan dokumentasi, dan menghubungkan alur kerja GitHub Actions.
+**Tujuan:** Membangun pipeline shell multi-langkah menggunakan agy --print. Meninjau perubahan yang di-stage, menghasilkan dokumentasi, dan mengonfigurasi alur kerja GitHub Actions.
 
 </div>
 

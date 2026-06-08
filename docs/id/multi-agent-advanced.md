@@ -1,20 +1,20 @@
-# Modul 4: Multi-Agen & Lanjutan <span class="duration-badge">45 menit</span>
+# Modul 4: Multi-Agen & Lanjutan <span class="duration-badge">45 min</span>
 
-> **Di mana agy melampaui asisten obrolan.** Modul ini mencakup fitur-fitur yang membedakan agy-cli dari setiap alat pengkodean AI lainnya: sub-agen paralel, pengarahan di tengah tugas dengan `/btw`, penjadwalan latar belakang, dan kelanjutan sesi.
+> **Di mana agy melampaui sekadar asisten obrolan.** Modul ini mencakup fitur-fitur yang membedakan agy-cli dari setiap alat pengkodean AI lainnya: sub-agen paralel, pengarahan di tengah tugas dengan `/btw`, penjadwalan latar belakang, dan kelanjutan sesi.
 
 ---
 
-## 4.0 — Model Agen agy <span class="duration-badge">5 min</span>
+## 4.0 — Model Agen agy <span class="duration-badge">5 menit</span>
 
-agy-cli dapat memunculkan **sub-agen** — penjalan tugas terisolasi yang beroperasi secara paralel, masing-masing dengan konteks ruang kerja mereka sendiri. Tidak seperti menjalankan beberapa tab terminal dengan sesi agy yang terpisah, sub-agen dikoordinasikan: mereka dapat berbagi ruang kerja, bekerja pada cabang yang terisolasi, atau beroperasi pada salinan hasil kloning.
+agy-cli dapat memunculkan **sub-agen** — pelaksana tugas terisolasi yang beroperasi secara paralel, masing-masing dengan konteks ruang kerja mereka sendiri. Tidak seperti menjalankan beberapa tab terminal dengan sesi agy yang terpisah, sub-agen dikoordinasikan: mereka dapat berbagi ruang kerja, bekerja pada cabang yang terisolasi, atau beroperasi pada salinan hasil kloning.
 
 Tiga mode ruang kerja:
 
-| Mode | Apa artinya | Gunakan ketika |
+| Mode | Arti | Kapan digunakan |
 | :-- | :-- | :-- |
 | `inherit` | Sub-agen berbagi ruang kerja yang sama | Tugas tambahan — tidak ada konflik yang diharapkan |
 | `branch` | Sub-agen mendapatkan klon yang terisolasi | Perubahan paralel pada file yang sama |
-| `share` | Git worktree — cabang terisolasi, repo bersama | Pengembangan paralel yang sebenarnya |
+| `share` | worktree git — cabang terisolasi, repo bersama | Pengembangan paralel yang sesungguhnya |
 
 ### Beralih Model
 
@@ -33,7 +33,7 @@ Ini akan membuka pemilih model yang menunjukkan opsi yang tersedia (Gemini 3.5 F
 ## 4.1 — Memunculkan Sub-agen <span class="duration-badge">15 min</span>
 
 > **Pola: Eksekusi Paralel** — mengirimkan beberapa agen untuk bekerja secara bersamaan.
-> 📖 Referensi lengkap: [Dokumentasi Sub-agen](https://www.antigravity.google/docs/subagents)
+> 📖 Referensi lengkap: [Dokumentasi sub-agen](https://www.antigravity.google/docs/subagents)
 
 ### Dari Sesi Interaktif
 
@@ -41,7 +41,7 @@ Ini akan membuka pemilih model yang menunjukkan opsi yang tersedia (Gemini 3.5 F
 > Spawn a subagent to write unit tests for the auth module while I work on the API refactor.
 ```
 
-agy akan memunculkan sub-agen, melaporkan ID-nya, dan melanjutkan sesi utama Anda. Sub-agen tersebut bekerja secara independen.
+agy akan memunculkan sub-agen, melaporkan ID-nya, dan melanjutkan sesi utama Anda. Sub-agen bekerja secara independen.
 
 ```text
 > What's the status of the test-writing subagent?
@@ -63,14 +63,14 @@ Pintasan utama dari percakapan utama:
 
 | Pintasan | Aksi |
 | :-- | :-- |
-| `Ctrl+J` | Berpindah ke sub-agen yang menunggu persetujuan — melompat langsung untuk meninjau permintaannya |
-| `Ctrl+K` | Persetujuan cepat dari percakapan utama — menyetujui aksi sub-agen yang tertunda tanpa beralih |
+| `Ctrl+J` | Teleportasi ke sub-agen yang menunggu persetujuan — lompat langsung untuk meninjau permintaannya |
+| `Ctrl+K` | Persetujuan cepat dari percakapan utama — menyetujui tindakan sub-agen yang tertunda tanpa berpindah |
 
-Siklus hidup sub-agen: **Berjalan → Menganggur → Dihentikan**
+Siklus hidup sub-agen: **Berjalan → Menganggur → Dimatikan**
 
 ### Batasan dan Tipe Bawaan
 
-- **Kedalaman maksimum:** 10 (sub-agen dapat memunculkan sub-agen mereka sendiri, hingga 10 level)
+- **Kedalaman maksimum:** 10 (sub-agen dapat memunculkan sub-agen mereka sendiri, hingga 10 tingkat)
 - **Tipe bawaan:** `research` (riset web), `browser` (otomatisasi peramban), `self` (tujuan umum)
 
 ### Pola Audit Paralel
@@ -97,7 +97,7 @@ Saksikan tiga analisis independen berjalan secara bersamaan. Saat mereka selesai
 > It should challenge every assumption and look for edge cases the implementer missed.
 ```
 
-Pola peninjau adversarial sangat kuat untuk perubahan yang sensitif terhadap keamanan, modifikasi infrastruktur, atau PR apa pun di mana "terlihat bagus bagi saya" tidaklah cukup.
+Pola peninjau adversarial sangat kuat untuk perubahan yang sensitif terhadap keamanan, modifikasi infrastruktur, atau PR apa pun di mana "terlihat bagus bagi saya" saja tidak cukup.
 
 ---
 
@@ -135,18 +135,18 @@ agy menggabungkan catatan Anda ke dalam tugas yang sedang berlangsung tanpa berh
 /btw Skip the frontend changes for now, just focus on the backend API.
 ```
 
-!!! info "Perbandingan dengan menginterupsi"
+!!! info "Kontras dengan menginterupsi"
     Tanpa `/btw`, mengarahkan tugas yang berjalan lama berarti membatalkannya, menyesuaikan prompt Anda, dan memulai ulang — kehilangan semua kemajuan. `/btw` memungkinkan Anda mengoreksi arah tanpa biaya tersebut.
 
 ---
 
 ## 4.3 — Eksekusi Latar Belakang & Penjadwalan <span class="duration-badge">10 min</span>
 
-> **Pola: Async Agy** — mulai tugas yang berjalan lama dan dapatkan pemberitahuan saat tugas tersebut selesai.
+> **Pola: Async Agy** — memulai tugas yang berjalan lama dan dapatkan pemberitahuan saat tugas tersebut selesai.
 
 ### Tugas Latar Belakang
 
-agy mendukung eksekusi asinkronus — Anda dapat memulai sebuah tugas dan terus bekerja. agy memberi tahu Anda saat tugas tersebut selesai.
+agy mendukung eksekusi asinkronus — Anda dapat memulai suatu tugas dan terus bekerja. agy memberi tahu Anda saat tugas tersebut selesai.
 
 ```text
 > In the background, do a comprehensive security audit of this entire codebase. Take as long as you need. Notify me when done.
@@ -180,12 +180,12 @@ Ekspresi cron (hingga 5 bidang) didukung:
 
 ---
 
-## 4.4 — Melanjutkan Sesi <span class="duration-badge">5 min</span>
+## 4.4 — Melanjutkan Sesi <span class="duration-badge">5 menit</span>
 
-> **Pola: Pekerjaan Berjalan Lama** — lanjutkan tepat di mana Anda tinggalkan.
+> **Pola: Pekerjaan Berjalan Lama** — lanjutkan tepat di tempat Anda berhenti.
 > 📖 Referensi lengkap: [Menggunakan Antigravity CLI](https://www.antigravity.google/docs/cli-using)
 
-### Melanjutkan Sesi Paling Baru
+### Melanjutkan Sesi Terbaru
 
 Dari dalam agy, gunakan perintah garis miring `/resume`:
 
@@ -195,7 +195,7 @@ Dari dalam agy, gunakan perintah garis miring `/resume`:
 
 Ini akan membuka pemilih sesi yang menampilkan percakapan terbaru Anda. Pilih salah satu untuk dilanjutkan.
 
-### Menelusuri dan Beralih Sesi
+### Menjelajahi dan Beralih Sesi
 
 ```bash
 /switch
@@ -203,7 +203,7 @@ Ini akan membuka pemilih sesi yang menampilkan percakapan terbaru Anda. Pilih sa
 
 Sama seperti `/resume` — kedua perintah membuka pemilih sesi.
 
-### Melanjutkan Otomatis saat Keluar
+### Lanjutkan Otomatis saat Keluar
 
 Saat Anda keluar dari sesi agy, agy mencetak perintah yang tepat untuk melanjutkannya:
 
@@ -236,9 +236,9 @@ agy akan memiliki konteks lengkap, termasuk kode yang ditulis, keputusan yang di
 
 ## 4.5 — Lanjutan: Menggabungkan Pola <span class="duration-badge">Opsional</span>
 
-> **Tumpukan kekuatan penuh:** sub-agen + /btw + latar belakang + penjadwalan + kelanjutan percakapan.
+> **Kekuatan penuh stack:** sub-agen + /btw + latar belakang + penjadwalan + kelanjutan percakapan.
 
-### Respons Insiden Enterprise
+### Respons Insiden enterprise
 
 ```text
 > I'm starting an incident response for a production issue. Spawn:

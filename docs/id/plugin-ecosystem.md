@@ -4,16 +4,16 @@
 
 ---
 
-## 2.0 — Mengapa Plugin Penting <span class="duration-badge">5 min</span>
+## 2.0 — Mengapa Plugin Penting <span class="duration-badge">5 menit</span>
 
-Sistem plugin agy-cli melakukan sesuatu yang unik: ia dapat **mengimpor plugin yang telah Anda instal di Gemini CLI atau Claude Code** — tanpa perlu menginstal ulang atau mengonfigurasi ulang. Investasi Anda yang ada pada ekstensi akan terbawa.
+Sistem plugin agy-cli melakukan sesuatu yang unik: sistem ini dapat **mengimpor plugin yang telah Anda instal di Gemini CLI atau Claude Code** — tanpa perlu menginstal ulang atau mengonfigurasi ulang. Investasi Anda yang sudah ada pada ekstensi akan terbawa.
 
 ```bash
 # See what plugins are currently active in agy
 agy plugin list
 ```
 
-Outputnya adalah JSON yang menunjukkan nama, sumber, tanggal impor, dan komponen setiap plugin (skill, perintah, mcpServers, agen).
+Outputnya adalah JSON yang menunjukkan nama, sumber, tanggal impor, dan komponen dari setiap plugin (skill, perintah, mcpServers, agen).
 
 ```bash
 # More readable
@@ -26,7 +26,7 @@ agy plugin list | python3 -m json.tool
 
 ## 2.1 — Mengimpor dari Gemini CLI <span class="duration-badge">10 menit</span>
 
-> **Pola: Jembatan Plugin Lintas-Alat** — tarik seluruh pengaturan plugin Gemini CLI Anda ke dalam agy.
+> **Pola: Cross-Tool Plugin Bridge** — tarik seluruh pengaturan plugin Gemini CLI Anda ke dalam agy.
 
 ### Impor Semua Plugin Gemini CLI
 
@@ -34,7 +34,7 @@ agy plugin list | python3 -m json.tool
 agy plugin import gemini
 ```
 
-agy memindai instalasi Gemini CLI lokal Anda, menemukan semua plugin yang terinstal, dan menyiapkan komponennya (skill, perintah, server MCP, agen) ke dalam konfigurasi agy di `~/.gemini/antigravity/`.
+agy memindai instalasi Gemini CLI lokal Anda, menemukan semua plugin yang terinstal, dan menempatkan komponennya (skill, perintah, server MCP, agen) ke dalam konfigurasi agy di `~/.gemini/antigravity/`.
 
 Outputnya terlihat seperti:
 
@@ -90,13 +90,13 @@ Same mechanic — agy discovers your Claude Code extension installations and bri
 ### Enable / Disable
 
 ```bash
-# Menonaktifkan plugin untuk sesi/proyek ini
+# Disable a plugin for this session/project
 agy plugin disable gemini-deep-research
 
-# Mengaktifkannya kembali
+# Re-enable it
 agy plugin enable gemini-deep-research
 
-# Memeriksa status saat ini
+# Check current state
 agy plugin list
 ```
 
@@ -112,10 +112,10 @@ Plugins can be installed at two levels:
 ### Install a Specific Plugin
 
 ```bash
-# Menginstal berdasarkan nama (dari sumber yang dikonfigurasi)
+# Install by name (from configured source)
 agy plugin install <plugin-name>
 
-# Menginstal versi spesifik
+# Install a specific version
 agy plugin install <plugin-name>@<version>
 ```
 
@@ -128,10 +128,10 @@ agy plugin install <plugin-name>@<version>
 ### Validate an Existing Plugin Directory
 
 ```bash
-# Memvalidasi direktori plugin
+# Validate a plugin directory
 agy plugin validate ./path/to/my-plugin
 
-# Atau memvalidasi direktori saat ini
+# Or validate the current directory
 agy plugin validate .
 ```
 
@@ -143,14 +143,14 @@ A valid agy plugin needs a `plugin.json` manifest. Here's the official structure
 
 ```text
 my-plugin/
-├── plugin.json          ← manifes (wajib)
-├── mcp_config.json      ← definisi server MCP (opsional)
-├── hooks.json           ← penangan peristiwa hook (opsional)
-├── skills/              ← file SKILL.md dengan frontmatter YAML
+├── plugin.json          ← manifest (required)
+├── mcp_config.json      ← MCP server definitions (optional)
+├── hooks.json           ← hook event handlers (optional)
+├── skills/              ← SKILL.md files with YAML frontmatter
 │   └── my-skill/
 │       └── SKILL.md
-├── agents/              ← definisi sub-agen (opsional)
-└── rules/               ← file aturan (opsional)
+├── agents/              ← subagent definitions (optional)
+└── rules/               ← rules files (optional)
     └── my-rules.md
 ```
 
@@ -158,16 +158,16 @@ my-plugin/
 {
   "name": "my-plugin",
   "version": "1.0.0",
-  "description": "Plugin agy kustom saya",
+  "description": "My custom agy plugin",
   "components": ["skills"]
 }
 ```
 
 ```bash
-# Memvalidasinya
+# Validate it
 agy plugin validate ./my-plugin
 
-# Jika valid, Anda akan melihat: ✔ Plugin manifest is valid
+# If valid, you'll see: ✔ Plugin manifest is valid
 ```
 
 ### Interacting with Plugin Components
@@ -193,15 +193,15 @@ agy plugin validate samples/plugins/workshop-helpers/
 
 ```mermaid
 graph LR
-    GC["Plugin\nGemini CLI"] --> |agy plugin import gemini| S["Staging Plugin\n~/.gemini/antigravity/plugins/"]
-    CC["Ekstensi\nClaude Code"] --> |agy plugin import claude| S
-    S --> |agy plugin enable/disable| A[Sesi agy]
-    A --> SK[Skill]
-    A --> MCP[Server MCP]
-    A --> AG[Agen]
-    A --> RU[Aturan]
-    A --> HK[Hook]
-    A --> SD[Sidecar]
+    GC["Gemini CLI\nPlugins"] --> |agy plugin import gemini| S["Plugin Staging\n~/.gemini/antigravity/plugins/"]
+    CC["Claude Code\nExtensions"] --> |agy plugin import claude| S
+    S --> |agy plugin enable/disable| A[agy session]
+    A --> SK[Skills]
+    A --> MCP[MCP Servers]
+    A --> AG[Agents]
+    A --> RU[Rules]
+    A --> HK[Hooks]
+    A --> SD[Sidecars]
 ```
 
 Plugin staging directory structure:
@@ -214,7 +214,7 @@ Plugin staging directory structure:
 ├── skills/
 ├── agents/
 ├── rules/
-└── sidecars/          ← proses latar belakang dengan cakupan plugin
+└── sidecars/          ← plugin-scoped background processes
 ```
 
 ---
@@ -242,10 +242,10 @@ A sidecar is a background process that AGY manages for you: it launches automati
 Sidecars are discovered from two locations:
 
 ```bash
-# Sidecar global (tersedia di semua proyek)
+# Global sidecars (available in all projects)
 ~/.gemini/config/sidecars/<sidecar-name>/sidecar.json
 
-# Sidecar dengan cakupan plugin (disertakan bersama plugin)
+# Plugin-scoped sidecars (shipped with a plugin)
 ~/.gemini/config/plugins/<plugin-name>/sidecars/<sidecar-name>/sidecar.json
 ```
 
@@ -283,7 +283,7 @@ The directory name becomes the sidecar's ID. Plugin sidecars get the ID `<plugin
 
 ```json
 {
-  "description": "Memantau antrean build dan memberi tahu jika ada kegagalan",
+  "description": "Watches the build queue and notifies on failures",
   "command": "python3",
   "args": ["watch_builds.py"],
   "restart_policy": "on-failure",
@@ -299,13 +299,13 @@ The `schedule` builtin takes a cron expression as its first arg, then the comman
 
 ```json
 {
-  "description": "Triase PR setiap jam — merangkum permintaan ulasan yang masuk",
+  "description": "Hourly PR triage — summarises incoming review requests",
   "builtin": "schedule",
   "args": [
     "0 * * * *",
     "agentapi",
     "new-conversation",
-    "Rangkum semua PR terbuka yang menunggu ulasan saya. Kelompokkan berdasarkan urgensi."
+    "Summarise all open PRs waiting for my review. Group by urgency."
   ]
 }
 ```
@@ -313,10 +313,10 @@ The `schedule` builtin takes a cron expression as its first arg, then the comman
 `agentapi` is automatically available to sidecars — it lets them **programmatically create or message conversations**:
 
 ```bash
-# Memulai percakapan baru dari sidecar
+# Start a new conversation from a sidecar
 agentapi new-conversation "<prompt>"
 
-# Mengirim pesan ke percakapan yang ada
+# Send a message to an existing conversation
 agentapi send-message <conversation_id> "<prompt>"
 ```
 
@@ -329,9 +329,9 @@ Sidecar output is stored at:
 
 ```text
 ~/.gemini/antigravity/sidecar_data/<sidecarId>/
-├── data/     ← penyimpanan persisten (variabel lingkungan ANTIGRAVITY_EXECUTABLE_DATA_DIR)
-├── logs/     ← log stdout/stderr dengan stempel waktu
-└── events/   ← catatan JSON dari panggilan agentapi
+├── data/     ← persistent storage (ANTIGRAVITY_EXECUTABLE_DATA_DIR env var)
+├── logs/     ← timestamped stdout/stderr logs
+└── events/   ← JSON records of agentapi calls
 ```
 
 ### Directory Structure for a Plugin Sidecar
@@ -340,8 +340,8 @@ Sidecar output is stored at:
 ~/.gemini/config/plugins/my-plugin/
 └── sidecars/
     └── pr-triage/
-        ├── sidecar.json   ← konfigurasi (wajib)
-        └── triage.py      ← skrip pembantu (opsional, berjalan di direktori ini)
+        ├── sidecar.json   ← config (required)
+        └── triage.py      ← helper script (optional, runs in this dir)
 ```
 
 ---
@@ -375,7 +375,7 @@ Sidecar output is stored at:
 4. Aktifkan di `~/.gemini/config/config.json`
 5. Verifikasi bahwa itu muncul di log pada `~/.gemini/antigravity/sidecar_data/standup/logs/`
 
-**Tujuan tambahan:** Tambahkan sidecar kedua menggunakan `command: python3` yang mengawasi perubahan pada berkas lokal dan mengirimkan pesan ke percakapan yang ada saat mendeteksi adanya diff.
+**Tujuan tambahan:** Tambahkan sidecar kedua menggunakan `command: python3` yang memantau perubahan pada berkas lokal dan mengirimkan pesan ke percakapan yang ada ketika mendeteksi adanya diff.
 
 </div>
 

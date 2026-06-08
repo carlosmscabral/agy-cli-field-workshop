@@ -6,7 +6,7 @@ hide:
 ---
 
 <div class="hero-banner" markdown>
-  <img src="assets/banner.png" alt="Antigravity CLI 实战工作坊">
+  <img src="assets/banner.png" alt="Antigravity CLI 现场工作坊">
 </div>
 
 ---
@@ -19,7 +19,7 @@ hide:
 
     ---
 
-    你的首次 Antigravity CLI 会话。解释、重构、测试、审查——外加通过一条命令使用插件扩展你的工具链。
+    您的第一次 Antigravity CLI 会话。解释、重构、测试、审查 — 加上通过一条命令使用插件扩展您的工具链。
 
     **75 分钟** · 第 1.0–1.7 节
 
@@ -29,7 +29,7 @@ hide:
 
     ---
 
-    旗舰模块。使用严格模式、代理自我引导和子代理计划，迁移真实的遗留代码库（.NET 或 Java）。
+    旗舰模块。使用严格模式、代理自我引导和子代理规划来迁移真实的遗留代码库（.NET 或 Java）。
 
     **90 分钟** · 练习：ex08, ex09
 
@@ -45,11 +45,11 @@ hide:
 
     [:octicons-arrow-right-24: 开始模块 3](agy-sdk.md)
 
-- :material-sitemap:{ .lg .middle } **模块 4 — 多代理与高级模式**
+- :material-sitemap:{ .lg .middle } **模块 4 — 多代理与高级功能**
 
     ---
 
-    生成隔离的子代理，使用 `/btw` 在运行中途引导任务，调度定期作业，并通过 ID 恢复长时间运行的会话。
+    生成隔离的子代理，使用 `/btw` 在运行中途引导任务，调度周期性作业，并通过 ID 恢复长时间运行的会话。
 
     **60 分钟** · 练习：ex04–ex06
 
@@ -59,7 +59,7 @@ hide:
 
     ---
 
-    使用 agents-cli 搭建、构建、评估和部署生产级 ADK 代理——从原型到 Cloud Run 的完整 7 阶段生命周期。
+    使用 agents-cli 来搭建、构建、评估和部署生产级 ADK 代理 — 从原型到 Cloud Run 的完整 7 阶段生命周期。
 
     **75 分钟** · 练习：ex12
 
@@ -84,17 +84,17 @@ hide:
 | `6:05` | **模块 5：** 使用 agents-cli 的 ADK 代理 | 75 分钟 |
 | `7:20` | 总结与问答 | 15 分钟 |
 
-> **全天：** 模块 1–4（约 5.5 小时）。 **扩展：** 全部 5 个模块（7 小时）。 **半天：** 模块 1 + 2（2.5 小时）。 **闪电：** 模块 1 + 模块 2 亮点（1.5 小时）。
+> **全天：** 模块 1–4（约 5.5 小时）。**扩展：** 全部 5 个模块（7 小时）。**半天：** 模块 1 + 2（2.5 小时）。**闪电：** 模块 1 + 模块 2 亮点（1.5 小时）。
 
 ---
 
 ## 开始之前
 
 !!! warning "课前准备"
-    请在工作坊开始前完成[环境设置](setup.md)。您需要安装并完成 Antigravity CLI 的身份认证。
+    请在研讨会开始前完成[环境设置](setup.md)。您需要安装并验证 Antigravity CLI。
 
 !!! info "官方文档"
     完整参考请访问 [antigravity.google/docs](https://www.antigravity.google/docs/cli-overview)。
 
 !!! info "先决条件"
-    熟悉终端、Git 和基本的编码工作流。无需具备 AI 编码助手的使用经验。
+    熟悉终端、Git 以及基本的编码工作流。无需具备 AI 编码助手的相关经验。

@@ -1,7 +1,7 @@
 # agy-cli 速查表
 
 > 本工作坊涵盖的所有内容的快速参考。
-> 所有命令均已根据 [antigravity.google/docs](https://antigravity.google/docs/cli-overview) 进行验证。
+> 所有命令均已根据 [antigravity.google/docs](https://antigravity.google/docs/cli-overview) 验证。
 
 ---
 
@@ -21,10 +21,10 @@ agy install        # Configure PATH and shell aliases
 
 | 模式 | 命令 | 何时使用 |
 | :-- | :-- | :-- |
-| **交互式** | `agy` | 默认 — 完整的对话会话 |
-| **预设交互式** | `agy -i "<提示词>"` | 以指令开始，然后继续对话 |
+| **交互模式** | `agy` | 默认 — 完整的对话会话 |
+| **预设交互模式** | `agy -i "<提示词>"` | 以特定方向开始，然后继续对话 |
 | **打印（无头模式）** | `agy -p "<提示词>"` | 单次执行，通过管道输出到标准输出 |
-| **继续上一次** | `agy -c` | 恢复最近一次的会话 |
+| **继续上一次** | `agy -c` | 恢复最近的会话 |
 | **按 ID 恢复** | `agy --conversation <id>` | 恢复特定的历史会话 |
 | **会话内恢复** | `/resume` 或 `/switch` | 在不离开 agy 的情况下切换会话 |
 
@@ -37,9 +37,9 @@ agy install        # Configure PATH and shell aliases
 | 标志 | 简写 | 描述 |
 | :-- | :-- | :-- |
 | `--print "<prompt>"` | `-p` | 非交互式单次提示词 |
-| `--prompt-interactive "<prompt>"` | `-i` | 带预设提示词的交互式会话 |
-| `--continue` | `-c` | 恢复最近的会话 |
-| `--conversation <id>` | — | 通过会话 ID 恢复 |
+| `--prompt-interactive "<prompt>"` | `-i` | 带有初始提示词的交互式会话 |
+| `--continue` | `-c` | 恢复最近的对话 |
+| `--conversation <id>` | — | 通过对话 ID 恢复 |
 | `--add-dir <path>` | — | 将目录添加到工作区（可重复） |
 | `--sandbox` | — | 启用终端沙盒限制 |
 | `--dangerously-skip-permissions` | — | 自动批准所有工具请求（仅限 CI） |
@@ -56,12 +56,12 @@ agy install        # Configure PATH and shell aliases
 
 | 命令 | 类别 | 用途 |
 | :-- | :-- | :-- |
-| `/resume` (`/switch`) | 对话 | 打开对话选择器以恢复或切换会话 |
-| `/rewind` (`/undo`) | 对话 | 将对话历史记录回滚到上一个检查点 |
-| `/fork` | 对话 | 将当前对话分支到一个平行的隔离工作区中 — 尝试有风险的步骤而不影响原始内容 |
-| `/rename <name>` | 对话 | 重命名活动的对话线程 |
+| `/resume` (`/switch`) | 会话 | 打开会话选择器以恢复或切换会话 |
+| `/rewind` (`/undo`) | 会话 | 将会话历史记录回滚到之前的检查点 |
+| `/fork` | 会话 | 将当前会话分支到一个平行的隔离工作区 — 尝试有风险的步骤而不影响原始内容 |
+| `/rename <name>` | 会话 | 重命名活动会话线程 |
 | `/permissions` | 配置 | 设置自治级别：`request-review`、`always-proceed`、`strict` |
-| `/model` | 配置 | 选择默认推理模型（跨会话持久保存） |
+| `/model` | 配置 | 选择默认推理模型（跨会话持久化） |
 | `/config` (`/settings`) | 配置 | 打开全屏设置覆盖层 |
 | `/keybindings` | 配置 | 打开交互式键盘快捷键编辑器 |
 | `/statusline` | 配置 | 自定义实时 CLI 状态栏指示器 |
@@ -71,26 +71,26 @@ agy install        # Configure PATH and shell aliases
 | `/agents` | 监控 | 查看、管理和批准子代理操作 |
 | `/open <path>` | 实用工具 | 在您首选的外部编辑器中打开文件 |
 | `/usage` | 实用工具 | 打开内联交互式帮助手册 |
-| `/logout` | 账户 | 注销并清除缓存的凭据 |
+| `/logout` | 账户 | 登出并清除缓存的凭据 |
 
 ---
 
 ## 快速提示
 
-> 来源：[使用 Antigravity CLI — 快速提示与快捷键](https://antigravity.google/docs/cli-using)
+> 来源：[使用 Antigravity CLI — 快速提示与快捷键绑定](https://antigravity.google/docs/cli-using)
 
 | 快捷键 / 提示 | 操作 |
 | :-- | :-- |
 | `@` | 文件路径自动补全（输入 `@` 触发路径建议） |
 | `!` | 直接从提示词运行终端命令 |
-| `esc esc` | 清空提示词框（当没有活动的流式传输时） |
+| `esc esc` | 清空提示词输入框（当没有活动的流式传输时） |
 | `?` | 获取帮助并列出所有斜杠命令 |
 | `alt+enter` / `shift+enter` | 插入换行符而不提交 |
 | `ctrl+g` | 在默认的 shell 编辑器中编辑提示词 |
 | `ctrl+l` | 清除 TUI 屏幕 |
 | `ctrl+d` | 退出 CLI 会话 |
 | `ctrl+z` | 将 CLI 挂起到终端后台 |
-| `ctrl+j`（在 `/agents` 中） | 传送到下一个待处理的子代理审批 |
+| `ctrl+j`（在 `/agents` 中） | 跳转到下一个待处理的子代理审批 |
 | `ctrl+k` | 从主对话中快速批准待处理的子代理权限 |
 
 ---
@@ -127,7 +127,7 @@ agy plugin link <marketplace> <target>
 
 ---
 
-## 边车
+## 边车 (Sidecars)
 
 > AGY 为您管理的后台进程 —— 启动、重启并独立于任何对话运行。来源：[antigravity.google/docs/sidecars](https://antigravity.google/docs/sidecars)
 
@@ -147,13 +147,13 @@ agentapi new-conversation "<prompt>"
 agentapi send-message <conversation_id> "<prompt>"
 ```
 
-最小化 `sidecar.json` —— 后台脚本：
+极简 `sidecar.json` —— 后台脚本：
 
 ```json
 { "command": "python3", "args": ["worker.py"], "restart_policy": "on-failure" }
 ```
 
-最小化 `sidecar.json` —— 定时循环任务：
+极简 `sidecar.json` —— 定时循环任务：
 
 ```json
 {
@@ -243,7 +243,7 @@ agy --sandbox --dangerously-skip-permissions \
 
 ---
 
-## 打印模式流水线示例
+## 打印模式管道示例
 
 ```bash
 # Step 1: plan
@@ -269,7 +269,7 @@ done
 | CLI 概述 | [antigravity.google/docs/cli-overview](https://antigravity.google/docs/cli-overview) |
 | 入门指南 | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
 | 使用 Antigravity CLI（设置、技巧、快捷键） | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
-| 功能特性（插件、沙盒、斜杠命令、子代理） | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
+| 功能（插件、沙盒、斜杠命令、子代理） | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
 | 从 Gemini CLI 迁移 | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
 | 权限 | [antigravity.google/docs/permissions](https://antigravity.google/docs/permissions) |
 | 严格模式 | [antigravity.google/docs/strict-mode](https://antigravity.google/docs/strict-mode) |
@@ -278,6 +278,6 @@ done
 | 技能 | [antigravity.google/docs/skills](https://antigravity.google/docs/skills) |
 | 规则 | [antigravity.google/docs/rules-workflows](https://antigravity.google/docs/rules-workflows) |
 | 钩子 | [antigravity.google/docs/hooks](https://antigravity.google/docs/hooks) |
-| 边车 | [antigravity.google/docs/sidecars](https://antigravity.google/docs/sidecars) |
+| 边车 (Sidecars) | [antigravity.google/docs/sidecars](https://antigravity.google/docs/sidecars) |
 | 子代理 | [antigravity.google/docs/subagents](https://antigravity.google/docs/subagents) |
 | 企业级 | [antigravity.google/docs/enterprise](https://antigravity.google/docs/enterprise) |

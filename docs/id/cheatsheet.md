@@ -23,9 +23,9 @@ agy install        # Configure PATH and shell aliases
 | :-- | :-- | :-- |
 | **Interaktif** | `agy` | Bawaan — sesi percakapan penuh |
 | **Interaktif dengan awalan** | `agy -i "<prompt>"` | Mulai dengan arahan, lanjutkan secara percakapan |
-| **Cetak (mode headless)** | `agy -p "<prompt>"` | Sekali jalan, alirkan ke stdout |
-| **Lanjutkan yang terakhir** | `agy -c` | Lanjutkan sesi paling baru |
-| **Lanjutkan berdasarkan ID** | `agy --conversation <id>` | Lanjutkan sesi masa lalu yang spesifik |
+| **Cetak (headless)** | `agy -p "<prompt>"` | Satu kali eksekusi, teruskan ke stdout |
+| **Lanjutkan terakhir** | `agy -c` | Lanjutkan sesi paling baru |
+| **Lanjutkan berdasarkan ID** | `agy --conversation <id>` | Lanjutkan sesi masa lalu tertentu |
 | **Lanjutkan dalam sesi** | `/resume` atau `/switch` | Beralih percakapan tanpa meninggalkan agy |
 
 ---
@@ -34,11 +34,11 @@ agy install        # Configure PATH and shell aliases
 
 > Sumber: [`agy --help`](https://antigravity.google/docs/cli-getting-started) · [cli-using](https://antigravity.google/docs/cli-using)
 
-| Flag | Singkat | Deskripsi |
+| Flag | Singkatan | Deskripsi |
 | :-- | :-- | :-- |
 | `--print "<prompt>"` | `-p` | Prompt tunggal non-interaktif |
 | `--prompt-interactive "<prompt>"` | `-i` | Sesi interaktif dengan seed |
-| `--continue` | `-c` | Melanjutkan percakapan paling baru |
+| `--continue` | `-c` | Melanjutkan percakapan terbaru |
 | `--conversation <id>` | — | Melanjutkan berdasarkan ID percakapan |
 | `--add-dir <path>` | — | Menambahkan direktori ke ruang kerja (dapat diulang) |
 | `--sandbox` | — | Mengaktifkan pembatasan sandbox terminal |
@@ -58,10 +58,10 @@ agy install        # Configure PATH and shell aliases
 | :-- | :-- | :-- |
 | `/resume` (`/switch`) | Percakapan | Buka pemilih percakapan untuk melanjutkan atau beralih sesi |
 | `/rewind` (`/undo`) | Percakapan | Kembalikan riwayat percakapan ke checkpoint sebelumnya |
-| `/fork` | Percakapan | Cabangkan percakapan saat ini ke ruang kerja terisolasi yang paralel — uji coba langkah-langkah berisiko tanpa memengaruhi yang asli |
+| `/fork` | Percakapan | Cabangkan percakapan saat ini ke ruang kerja terisolasi paralel — uji coba langkah berisiko tanpa memengaruhi yang asli |
 | `/rename <name>` | Percakapan | Ganti nama utas percakapan aktif |
 | `/permissions` | Konfigurasi | Atur tingkat otonomi: `request-review`, `always-proceed`, `strict` |
-| `/model` | Konfigurasi | Pilih model penalaran bawaan (bertahan di seluruh sesi) |
+| `/model` | Konfigurasi | Pilih model penalaran default (bertahan di seluruh sesi) |
 | `/config` (`/settings`) | Konfigurasi | Buka overlay pengaturan layar penuh |
 | `/keybindings` | Konfigurasi | Buka editor pintasan keyboard interaktif |
 | `/statusline` | Konfigurasi | Sesuaikan indikator bilah status CLI waktu nyata |
@@ -71,7 +71,7 @@ agy install        # Configure PATH and shell aliases
 | `/agents` | Pemantauan | Lihat, kelola, dan setujui tindakan sub-agen |
 | `/open <path>` | Utilitas | Buka file di editor eksternal pilihan Anda |
 | `/usage` | Utilitas | Buka manual bantuan interaktif sebaris |
-| `/logout` | Akun | Keluar dan hapus kredensial yang di-cache |
+| `/logout` | Akun | Keluar dan bersihkan kredensial dalam cache |
 
 ---
 
@@ -129,7 +129,7 @@ agy plugin link <marketplace> <target>
 
 ## Sidecars
 
-> Proses latar belakang yang dikelola AGY untuk Anda — diluncurkan, dimulai ulang, dan berjalan secara independen dari percakapan apa pun. Sumber: [antigravity.google/docs/sidecars](https://antigravity.google/docs/sidecars)
+> Proses latar belakang yang dikelola AGY untuk Anda — meluncurkan, memulai ulang, dan berjalan secara independen dari percakapan apa pun. Sumber: [antigravity.google/docs/sidecars](https://antigravity.google/docs/sidecars)
 
 ```bash
 # Config locations:
@@ -153,7 +153,7 @@ Minimal `sidecar.json` — skrip latar belakang:
 { "command": "python3", "args": ["worker.py"], "restart_policy": "on-failure" }
 ```
 
-Minimal `sidecar.json` — tugas berulang yang dijadwalkan:
+Minimal `sidecar.json` — tugas berulang terjadwal:
 
 ```json
 {
@@ -198,7 +198,7 @@ Brief description of what this project is.
 
 ---
 
-## Pola yang Berguna
+## Pola Berguna
 
 ```bash
 # Review staged changes before commit

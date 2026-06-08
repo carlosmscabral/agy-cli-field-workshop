@@ -1,6 +1,6 @@
 # 环境设置
 
-> 请在开始任何模块之前完成此操作。大约需要 15 分钟。
+> 在开始任何模块之前请完成此操作。大约需要 15 分钟。
 
 ---
 
@@ -49,10 +49,10 @@ agy --version
 
 ## 第 2 步：身份验证
 
-agy 使用**基于浏览器的 Google 登录**。在首次运行时，它将：
+agy 使用 **基于浏览器的 Google 登录**。在首次运行时，它将：
 
-- **本地计算机：** 自动打开您的默认浏览器进行登录。
-- **SSH / 远程会话：** 打印一个 URL，您可以将其粘贴到任何浏览器中，然后将授权码粘贴回终端。
+- **本地机器：** 自动打开您的默认浏览器进行登录。
+- **SSH / 远程会话：** 打印一个 URL 供您粘贴到任何浏览器中，然后将验证码粘贴回终端。
 
 ```bash
 # Start agy — auth will trigger automatically on first run
@@ -66,9 +66,9 @@ agy
 /logout
 ```
 
-> 📖 有关通过 GCP 项目进行企业级身份验证的信息，请参阅 [企业级文档](https://www.antigravity.google/docs/enterprise)。
+> 📖 有关通过 GCP 项目进行的企业级身份验证，请参阅 [企业级文档](https://www.antigravity.google/docs/enterprise)。
 
-配置好身份验证后，运行一个快速冒烟测试：
+配置好身份验证后，运行一个快速的冒烟测试：
 
 ```bash
 agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
@@ -80,7 +80,7 @@ agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
 
 ## 第 3 步：初始化您的项目工作区
 
-agy 通过从当前目录向上查找来自动发现项目配置，寻找 `.agents/` 文件夹。为本次研讨会创建一个：
+agy 通过从当前目录向上遍历来自动发现项目配置，查找 `.agents/` 文件夹。为本次研讨会创建一个：
 
 ```bash
 # Clone the workshop exercises repo
@@ -91,10 +91,10 @@ cd agy-cli-field-workshop
 agy --print "List the files in the current directory."
 ```
 
-您会看到创建了一个包含项目配置文件（settings.json、mcp.json 等）的 `.agents/` 文件夹。
+您会看到创建了一个包含项目配置文件的 `.agents/` 文件夹（settings.json、mcp.json 等）。
 
 !!! info ".gemini/ 兼容性"
-    agy 也会读取 `.gemini/` 目录——如果您已经有了 Gemini CLI 项目环境设置，这将非常有用。这两个配置位置都会被识别。
+    agy 也会读取 `.gemini/` 目录 —— 如果您已经有 Gemini CLI 项目环境设置，这将非常有用。这两个配置位置都会被识别。
 
 ---
 
@@ -128,7 +128,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 | :-- | :-- |
 | `agy: command not found` | 检查该二进制文件是否在您的 PATH 中。运行 `echo $PATH` 并确保包含安装目录。如果需要，请重新运行安装脚本 |
 | 身份验证错误 / 浏览器未打开 | 对于 SSH 会话，请手动复制打印的 URL。对于本地环境，请检查默认浏览器设置。运行 `/logout` 并重试 |
-| `agy plugin list` 返回空 `{}` | 这是全新安装的预期结果。您将在模块 2 中填充插件 |
+| `agy plugin list` 返回空 `{}` | 全新安装时的预期行为。您将在模块 2 中填充插件 |
 | 首次响应缓慢 | 首次运行可能会比较慢，因为 agy 正在索引您的工作区 |
 | 配置未加载 | 检查 `~/.gemini/antigravity/settings.json`（用户设置）和 `.agents/`（项目设置） |
 
