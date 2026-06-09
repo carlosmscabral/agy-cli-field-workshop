@@ -1,21 +1,21 @@
 # Latihan 12: Siklus Hidup Agen ADK dengan agents-cli
 
-> **Durasi:** 45 menit | **Modul:** 5 — Membangun Agen ADK dengan agents-cli
+> **Durasi:** 45 mnt | **Modul:** 5 — Membangun Agen ADK dengan agents-cli
 
 ---
 
 ## Tujuan
 
-Gunakan `agents-cli` untuk melakukan scaffold, membangun, mengevaluasi, dan melakukan iterasi pada agen ADK — mengikuti siklus hidup pengembangan secara penuh. Anda akan membangun agen **Peringkas Catatan Rapat** yang mengambil transkrip rapat mentah dan menghasilkan item tindakan terstruktur.
+Gunakan `agents-cli` untuk membuat kerangka (scaffold), membangun, mengevaluasi, dan mengiterasi agen ADK — mengikuti siklus hidup pengembangan secara penuh. Anda akan membangun sebuah agen **Meeting Notes Summarizer** yang mengambil transkrip rapat mentah dan menghasilkan item tindakan terstruktur.
 
 ---
 
 ## Prasyarat
 
-- `agents-cli` terinstal (`uvx google-agents-cli setup`)
-- `uv` terinstal ([panduan instalasi](https://docs.astral.sh/uv/getting-started/installation/))
+- `agents-cli` telah diinstal (`uvx google-agents-cli setup`)
+- `uv` telah diinstal ([panduan instalasi](https://docs.astral.sh/uv/getting-started/installation/))
 - Proyek Google Cloud atau [kunci API AI Studio](https://aistudio.google.com/apikey)
-- Antigravity CLI (agy) terinstal dan berfungsi
+- Antigravity CLI (agy) telah diinstal dan berfungsi
 
 ---
 
@@ -23,7 +23,7 @@ Gunakan `agents-cli` untuk melakukan scaffold, membangun, mengevaluasi, dan mela
 
 ### Langkah 1: Buat Proyek
 
-Buka sesi Antigravity CLI dan lakukan scaffold:
+Buka sesi Antigravity CLI dan scaffold:
 
 ```bash
 agents-cli scaffold create meeting-notes \
@@ -203,9 +203,9 @@ Verifikasi:
 
 ---
 
-## Bagian 3: Menulis Kasus Eval (10 menit)
+## Bagian 3: Menulis Kasus Evaluasi (10 menit)
 
-### Langkah 1: Membuat Dataset Eval
+### Langkah 1: Membuat Dataset Evaluasi
 
 Edit `tests/eval/datasets/basic-dataset.json`:
 
@@ -278,7 +278,7 @@ custom_metrics:
       Return JSON: {"score": <1-5 average>, "explanation": "<detailed reasoning>"}
 ```
 
-### Langkah 3: Menjalankan Eval
+### Langkah 3: Menjalankan Evaluasi
 
 ```bash
 # Generate traces (runs agent on each eval case)
@@ -288,11 +288,11 @@ agents-cli eval generate
 agents-cli eval grade
 ```
 
-Tinjau output tersebut. Jika ada skor metrik di bawah ambang batas, lanjutkan ke Bagian 4.
+Tinjau output-nya. Jika ada skor metrik yang berada di bawah ambang batas, lanjutkan ke Bagian 4.
 
 ---
 
-## Bagian 4: Loop Evaluasi-Perbaikan (10 mnt)
+## Bagian 4: Loop Evaluasi-Perbaikan (10 menit)
 
 Di sinilah pekerjaan sebenarnya terjadi. Untuk setiap metrik yang gagal:
 
@@ -313,9 +313,9 @@ Perbaikan umum:
 | Gejala | Perbaikan |
 | :-- | :-- |
 | Agen melewati `extract_action_items` | Perkuat instruksi: "Anda HARUS memanggil extract_action_items terlebih dahulu" |
-| Penerima tugas tidak ada | Tambahkan ke instruksi: "Setiap item tindakan HARUS memiliki penerima tugas — gunakan 'Unassigned' jika tidak jelas" |
-| Item tindakan halusinasi | Tambahkan: "JANGAN PERNAH menambahkan item tindakan yang tidak dinyatakan secara eksplisit dalam transkrip" |
-| `tool_use_quality` rendah | Tingkatkan docstring alat — buat lebih spesifik tentang parameter |
+| Penerima tugas hilang | Tambahkan ke instruksi: "Setiap item tindakan HARUS memiliki penerima tugas — gunakan 'Unassigned' jika tidak jelas" |
+| Item tindakan terhalusinasi | Tambahkan: "JANGAN PERNAH menambahkan item tindakan yang tidak dinyatakan secara eksplisit dalam transkrip" |
+| tool_use_quality rendah | Tingkatkan docstring alat — buat lebih spesifik mengenai parameter |
 
 ### Langkah 3: Evaluasi Ulang dan Bandingkan
 
@@ -337,7 +337,7 @@ Ulangi hingga semua metrik lulus.
 
 ---
 
-## Tujuan Tambahan
+## Target Tambahan
 
 ### Tambahkan Deployment
 
@@ -375,27 +375,27 @@ Buka sesi agy dan katakan:
   Analyze the failures and fix them.
 ```
 
-Perhatikan agy memuat skill evaluasi, menjalankan `eval analyze`, mengidentifikasi klaster kegagalan, dan secara iteratif memperbaiki agen.
+Perhatikan agy memuat skill eval, menjalankan `eval analyze`, mengidentifikasi klaster kegagalan, dan secara iteratif memperbaiki agen tersebut.
 
 ---
 
 ## Kriteria Penyelesaian
 
-- [ ] Kerangka proyek dibuat dengan `agents-cli scaffold create`
+- [ ] Proyek di-scaffold dengan `agents-cli scaffold create`
 - [ ] Dua alat didefinisikan: `extract_action_items` dan `format_summary`
 - [ ] Instruksi agen mencakup alur kerja dan aturan yang jelas
 - [ ] Smoke test berhasil dilewati dengan `agents-cli run`
 - [ ] Tiga kasus evaluasi ditulis dalam `basic-dataset.json`
-- [ ] Metrik `meeting_summary_quality` kustom didefinisikan
-- [ ] `agents-cli eval generate` + `eval grade` berhasil dijalankan
-- [ ] Setidaknya satu iterasi perbaikan evaluasi selesai dengan `eval compare` menunjukkan peningkatan
+- [ ] Metrik kustom `meeting_summary_quality` didefinisikan
+- [ ] `agents-cli eval generate` + `eval grade` berjalan dengan sukses
+- [ ] Setidaknya satu iterasi perbaikan evaluasi diselesaikan dengan `eval compare` yang menunjukkan peningkatan
 
 ---
 
 ## Poin-Poin Penting
 
 1. **`agents-cli scaffold create`** menyiapkan seluruh struktur proyek — jangan mengaturnya secara manual
-2. **`agents-cli eval` tidak opsional** — ini adalah pembeda antara demo dan agen produksi
+2. **`agents-cli eval` bukanlah opsional** — ini adalah perbedaan antara demo dan agen produksi
 3. **pytest ≠ eval** — pytest menguji kebenaran kode; eval menguji perilaku agen
-4. **Loop eval-fix bersifat iteratif** — perkirakan 5–10+ putaran; ini normal
-5. **agents-cli skills** membuat agen pengodean Anda (agy) menjadi ahli dalam pengembangan ADK secara otomatis
+4. **Loop eval-fix bersifat iteratif** — perkirakan 5–10+ putaran; ini adalah hal yang normal
+5. **skill agents-cli** membuat agen pengkodean Anda (agy) menjadi ahli dalam pengembangan ADK secara otomatis

@@ -4,6 +4,19 @@ Content-specific changes to workshop materials — CLI breakages, deprecated com
 
 ---
 
+## 2026-06-09
+
+### ✅ Exercise 12 — Eval Judge Model & Standalone Lab Guide
+
+**Affects:** ex12, translations (ko, zh, id)
+
+- Renamed "Vertex AI Eval Service" → "GenAI Evaluation Service" (Agent Platform branding)
+- Clarified judge model config: built-in metrics use server-side autorater; custom metrics require fully-qualified resource paths
+- Added standalone 90 min lab guide (`exercises/ex12_lab_guide_gdoc.md`, gitignored)
+- Re-synced ko, zh, id translations
+
+---
+
 ## 2026-06-07
 
 ### ✅ Module 5 Added — ADK Agents with agents-cli

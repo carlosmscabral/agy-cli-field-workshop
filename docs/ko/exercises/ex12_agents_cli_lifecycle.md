@@ -1,12 +1,12 @@
 # 실습 12: agents-cli를 사용한 ADK 에이전트 수명 주기
 
-> **소요 시간:** 45분 | **모듈:** 5 — agents-cli를 사용하여 ADK 에이전트 구축하기
+> **소요 시간:** 45분 | **모듈:** 5 — agents-cli로 ADK 에이전트 구축하기
 
 ---
 
 ## 목표
 
-전체 개발 수명 주기에 따라 `agents-cli`를 사용하여 ADK 에이전트를 스캐폴딩, 빌드, 평가 및 반복합니다. 원시 회의 기록을 받아 구조화된 실행 항목을 생성하는 **회의록 요약기** 에이전트를 구축하게 됩니다.
+전체 개발 수명 주기에 따라 `agents-cli`를 사용하여 ADK 에이전트를 스캐폴딩, 빌드, 평가 및 반복합니다. 원본 회의 스크립트를 입력받아 구조화된 실행 항목을 생성하는 **회의록 요약(Meeting Notes Summarizer)** 에이전트를 구축하게 됩니다.
 
 ---
 
@@ -15,7 +15,7 @@
 - `agents-cli` 설치됨 (`uvx google-agents-cli setup`)
 - `uv` 설치됨 ([설치 가이드](https://docs.astral.sh/uv/getting-started/installation/))
 - Google Cloud 프로젝트 또는 [AI Studio API 키](https://aistudio.google.com/apikey)
-- Antigravity CLI (agy) 설치 및 작동 확인
+- Antigravity CLI (agy) 설치 및 정상 작동
 
 ---
 
@@ -23,7 +23,7 @@
 
 ### 1단계: 프로젝트 생성
 
-Antigravity CLI 세션을 열고 스캐폴딩합니다:
+Antigravity CLI 세션을 열고 스캐폴딩을 진행합니다:
 
 ```bash
 agents-cli scaffold create meeting-notes \
@@ -33,7 +33,7 @@ agents-cli scaffold create meeting-notes \
 ```
 
 !!! info "왜 `--prototype`을 사용하나요?"
-    prototype 플래그는 CI/CD 및 Terraform을 건너뜁니다. 먼저 에이전트를 작동시키는 데 집중한 다음, 나중에 `scaffold enhance`를 사용하여 배포를 추가할 수 있습니다.
+    prototype 플래그는 CI/CD 및 Terraform을 건너뜁니다. 먼저 에이전트가 작동하도록 하는 데 집중한 다음, 나중에 `scaffold enhance`를 사용하여 배포를 추가합니다.
 
 ### 2단계: 스캐폴딩된 구조 탐색
 
@@ -83,7 +83,7 @@ uv sync
 ```
 
 !!! note "google-adk ≠ google-antigravity"
-    모듈 3은 `google-antigravity`(agy 내에서 에이전트를 구축하기 위한 Antigravity SDK)를 사용합니다. 모듈 5는 `google-adk`(Google Cloud에 배포되는 독립 실행형 ADK 에이전트를 구축하기 위한 Agent Development Kit)를 사용합니다. 이들은 서로 다른 API를 가진 다른 패키지입니다. `agents-cli scaffold`는 항상 자동으로 `google-adk`를 설정합니다.
+    모듈 3은 `google-antigravity`(agy 내에서 에이전트를 빌드하기 위한 Antigravity SDK)를 사용합니다. 모듈 5는 `google-adk`(Google Cloud에 배포되는 독립형 ADK 에이전트를 빌드하기 위한 Agent Development Kit)를 사용합니다. 이들은 서로 다른 API를 가진 다른 패키지입니다. `agents-cli scaffold`는 항상 `google-adk`를 자동으로 설정합니다.
 
 ### 4단계: 환경 설정
 
@@ -194,20 +194,20 @@ next Monday. They decided to use Cloud Run for deployment and skip the staging \
 environment for the MVP."
 ```
 
-확인:
+확인 사항:
 
-- [ ] 에이전트가 `extract_action_items`를 호출합니다.
-- [ ] 에이전트가 구조화된 데이터로 `format_summary`를 호출합니다.
-- [ ] 출력에 담당자와 기한이 지정된 실행 항목이 포함되어 있습니다.
-- [ ] 주요 결정 사항이 나열되어 있습니다.
+- [ ] 에이전트가 `extract_action_items`를 호출하는지 확인
+- [ ] 에이전트가 구조화된 데이터와 함께 `format_summary`를 호출하는지 확인
+- [ ] 출력 결과에 담당자와 기한이 포함된 실행 항목이 있는지 확인
+- [ ] 주요 결정 사항이 나열되어 있는지 확인
 
 ---
 
-## 파트 3: 평가 케이스 작성 (10분)
+## 파트 3: Eval 케이스 작성 (10분)
 
-### 1단계: 평가 데이터셋 생성
+### 1단계: Eval 데이터셋 생성
 
-`tests/eval/datasets/basic-dataset.json` 파일을 편집합니다:
+`tests/eval/datasets/basic-dataset.json` 파일 편집:
 
 ```json
 {
@@ -249,9 +249,9 @@ environment for the MVP."
 }
 ```
 
-### 2단계: 지표 구성
+### 2단계: 메트릭 구성
 
-`tests/eval/eval_config.yaml` 파일을 편집합니다:
+`tests/eval/eval_config.yaml` 파일 편집:
 
 ```yaml
 metrics_to_run:
@@ -278,7 +278,7 @@ custom_metrics:
       Return JSON: {"score": <1-5 average>, "explanation": "<detailed reasoning>"}
 ```
 
-### 3단계: 평가 실행
+### 3단계: Eval 실행
 
 ```bash
 # Generate traces (runs agent on each eval case)
@@ -288,13 +288,13 @@ agents-cli eval generate
 agents-cli eval grade
 ```
 
-출력을 검토합니다. 임계값 미만인 지표 점수가 있다면 파트 4로 진행합니다.
+출력을 검토합니다. 임계값 미만인 메트릭 점수가 있다면 파트 4로 진행합니다.
 
 ---
 
 ## 파트 4: 평가-수정 루프 (10분)
 
-여기서부터 본격적인 작업이 시작됩니다. 실패한 각 지표에 대해 다음을 수행합니다:
+여기서 실제 작업이 이루어집니다. 실패한 각 지표에 대해 다음을 수행합니다:
 
 ### 1단계: 결과 확인
 
@@ -310,10 +310,10 @@ cat artifacts/grade_results/results_*.json | python -m json.tool | head -50
 
 일반적인 수정 사항:
 
-| 증상 | 수정 사항 |
+| 증상 | 수정 방법 |
 | :-- | :-- |
 | 에이전트가 `extract_action_items`를 건너뜀 | 지침 강화: "반드시 extract_action_items를 먼저 호출해야 합니다" |
-| 담당자 누락 | 지침에 추가: "모든 실행 항목에는 담당자가 있어야 합니다 — 불분명한 경우 'Unassigned'를 사용하세요" |
+| 담당자 누락 | 지침에 추가: "모든 실행 항목에는 담당자가 있어야 합니다. 불분명한 경우 '할당되지 않음(Unassigned)'을 사용하세요" |
 | 환각(Hallucinated) 실행 항목 | 추가: "대화록에 명시적으로 언급되지 않은 실행 항목은 절대 추가하지 마세요" |
 | 낮은 tool_use_quality | 도구 독스트링(docstring) 개선 — 매개변수에 대해 더 구체적으로 작성 |
 
@@ -333,11 +333,11 @@ agents-cli eval compare \
   artifacts/grade_results/results_*.json
 ```
 
-모든 지표를 통과할 때까지 반복합니다.
+모든 지표가 통과할 때까지 반복합니다.
 
 ---
 
-## 추가 목표
+## 도전 과제
 
 ### 배포 추가
 
@@ -375,27 +375,27 @@ agy 세션을 열고 다음과 같이 말합니다:
   Analyze the failures and fix them.
 ```
 
-agy가 평가 스킬을 로드하고, `eval analyze`를 실행하며, 실패 클러스터를 식별하고, 반복적으로 에이전트를 수정하는 과정을 지켜보세요.
+agy가 평가 스킬을 로드하고, `eval analyze`를 실행하여 실패 클러스터를 식별한 다음, 반복적으로 에이전트를 수정하는 과정을 지켜보세요.
 
 ---
 
 ## 완료 기준
 
-- [ ] `agents-cli scaffold create`로 프로젝트 스캐폴딩 완료
+- [ ] `agents-cli scaffold create`를 사용하여 프로젝트 스캐폴딩 완료
 - [ ] 두 개의 도구 정의됨: `extract_action_items` 및 `format_summary`
-- [ ] 에이전트 지침에 명확한 워크플로와 규칙이 포함됨
+- [ ] 에이전트 지침에 명확한 워크플로우와 규칙이 포함됨
 - [ ] `agents-cli run`으로 스모크 테스트 통과
-- [ ] `basic-dataset.json`에 3개의 평가 케이스 작성됨
-- [ ] 사용자 정의 `meeting_summary_quality` 지표 정의됨
+- [ ] `basic-dataset.json`에 세 개의 평가 케이스 작성됨
+- [ ] 사용자 지정 `meeting_summary_quality` 지표 정의됨
 - [ ] `agents-cli eval generate` + `eval grade`가 성공적으로 실행됨
-- [ ] `eval compare`에서 개선 사항을 보여주는 평가-수정 반복이 최소 1회 완료됨
+- [ ] `eval compare`에서 개선 사항을 보여주는 평가-수정 반복이 최소 한 번 이상 완료됨
 
 ---
 
 ## 핵심 요약
 
 1. **`agents-cli scaffold create`**는 전체 프로젝트 구조를 부트스트랩합니다 — 수동으로 설정하지 마세요.
-2. **`agents-cli eval`은 선택 사항이 아닙니다** — 이것이 데모와 프로덕션 에이전트의 차이를 만듭니다.
+2. **`agents-cli eval`은 선택 사항이 아닙니다** — 데모와 프로덕션 에이전트의 차이를 만듭니다.
 3. **pytest ≠ eval** — pytest는 코드의 정확성을 테스트하고, eval은 에이전트의 동작을 테스트합니다.
-4. **eval-fix 루프는 반복적입니다** — 5~10회 이상의 반복을 예상하세요. 이는 정상적인 과정입니다.
-5. **agents-cli 스킬**은 코딩 에이전트(agy)를 ADK 개발 전문가로 자동으로 만들어 줍니다.
+4. **eval-fix 루프는 반복적입니다** — 5~10회 이상의 반복을 예상하세요. 이는 정상입니다.
+5. **agents-cli skills**는 코딩 에이전트(agy)를 ADK 개발 전문가로 자동으로 만들어 줍니다.

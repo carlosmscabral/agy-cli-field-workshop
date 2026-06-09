@@ -268,9 +268,8 @@ metrics_to_run:
 
 custom_metrics:
   - name: meeting_summary_quality
-    # IMPORTANT: The autorater judge model must be specified as a fully-qualified Agent Platform resource path.
-    # Replace <PROJECT_ID> and <LOCATION> with your Google Cloud Project ID and Location.
-    # Example location: global, us-central1
+    # Optional: override the judge model for this custom metric.
+    # Must be a fully-qualified resource path. Omit to use the service default autorater.
     judge_model: projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/gemini-3.1-flash-lite
     prompt_template: |
       Evaluate the agent's meeting summary on these criteria (1-5 each):
@@ -288,11 +287,11 @@ custom_metrics:
       Return JSON: {"score": <1-5 average>, "explanation": "<detailed reasoning>"}
 ```
 
-> **Agent Platform Judge Model Name Requirements**
+> **Agent Platform Judge Model Configuration**
 >
-> 1. **Default Model Availability**: By default, `agents-cli eval grade` uses `gemini-1.5-pro` as the judge model. In some GCP projects/regions, `gemini-1.5-pro` may not be available or permitted, resulting in `NOT_FOUND` errors.
-> 2. **Resource Path Format**: When configuring a custom `judge_model`, the Agent Platform requires a fully qualified path in the format: `projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`. See the [Agent Platform Judge Model Configuration](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model) documentation.
-> 3. **No Short Names**: Do not use short names like `gemini-3.1-flash-lite` directly for `judge_model` — doing so will fail with a `400 INVALID_ARGUMENT` (Invalid autorater model resource name) error.
+> 1. **Default autorater**: Built-in metrics (e.g. `multi_turn_task_success`, `final_response_quality`) use the GenAI Evaluation Service's server-side autorater — you cannot override the judge model for these. For custom `LLMMetric` entries, omitting `judge_model` also uses the service default.
+> 2. **Resource path format**: Custom `LLMMetric` entries accept an optional `judge_model` field. It **must** be a fully-qualified path: `projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`. Short names like `gemini-3.1-flash-lite` alone will fail with `400 INVALID_ARGUMENT`. See the [Agent Platform Judge Model Configuration](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model) documentation.
+> 3. **Model choice**: Use `gemini-3.1-flash-lite` for cost-efficient judging or `gemini-3.1-pro-preview` for higher-quality rubric evaluation. Do not use deprecated models (`gemini-1.5-flash`, `gemini-1.5-pro`).
 
 ### Step 3: Run the Eval
 
