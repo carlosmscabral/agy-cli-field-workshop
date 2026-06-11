@@ -70,27 +70,9 @@ echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 
 ### Step 1: Define the Tool
 
-Edit `app/tools.py` to add a transcript extraction tool:
+Edit `app/tools.py` to add a summary formatting tool:
 
 ```python
-def extract_action_items(transcript: str) -> dict:
-    """Parse a meeting transcript and extract structured action items.
-
-    Args:
-        transcript: The raw meeting transcript text.
-
-    Returns:
-        A dict containing the parsed action items with assignees and deadlines.
-    """
-    # In a real agent, this might call a document API or parse structured formats.
-    # For now, return the transcript for the LLM to process.
-    return {
-        "transcript_length": len(transcript),
-        "raw_text": transcript[:5000],  # Cap at 5K chars for context window
-        "status": "ready_for_analysis",
-    }
-
-
 def format_summary(
     title: str,
     attendees: list[str],
@@ -123,13 +105,17 @@ def format_summary(
     return "\n".join(lines)
 ```
 
+> **Why only one tool?**
+>
+> The LLM already has the transcript in its context window — it doesn't need a tool to "extract" text it can already read. The `format_summary` tool handles the part the LLM *shouldn't* do: deterministic formatting. Tools should do things the model can't (or shouldn't) do itself.
+
 ### Step 2: Configure the Agent
 
 Edit `app/agent.py`:
 
 ```python
 from google.adk import Agent
-from app.tools import extract_action_items, format_summary
+from app.tools import format_summary
 
 root_agent = Agent(
     name="meeting_notes",
@@ -138,7 +124,7 @@ root_agent = Agent(
 meeting transcripts and produce structured, actionable summaries.
 
 Workflow:
-1. Use `extract_action_items` to process the raw transcript
+1. Read the transcript carefully
 2. Identify: attendees, action items (with assignees + deadlines), key decisions
 3. Use `format_summary` to produce the final structured output
 
@@ -149,7 +135,7 @@ Rules:
 - Key decisions must be concrete, not vague summaries
 - Never fabricate attendees or actions not in the transcript
 """,
-    tools=[extract_action_items, format_summary],
+    tools=[format_summary],
 )
 ```
 
@@ -164,7 +150,6 @@ environment for the MVP."
 
 Verify:
 
-- [ ] Agent calls `extract_action_items`
 - [ ] Agent calls `format_summary` with structured data
 - [ ] Output has action items with assignees and deadlines
 - [ ] Key decisions are listed
@@ -289,7 +274,8 @@ Common fixes:
 
 | Symptom | Fix |
 | :-- | :-- |
-| Agent skips `extract_action_items` | Strengthen the instruction: "You MUST call extract_action_items first" |
+| Agent skips `format_summary` | Strengthen the instruction: "You MUST call format_summary to produce output" |
+| Agent passes wrong keys to `format_summary` | Ensure instruction specifies: "action_items must be a list of dicts with 'task', 'assignee', and 'deadline' keys" |
 | Missing assignees | Add to instruction: "Every action item MUST have an assignee — use 'Unassigned' if unclear" |
 | Hallucinated action items | Add: "NEVER add action items not explicitly stated in the transcript" |
 | Low tool_use_quality | Improve tool docstrings — be more specific about parameters |
@@ -359,7 +345,7 @@ Watch agy load the eval skill, run `eval analyze`, identify failure clusters, an
 ## Completion Criteria
 
 - [ ] Project scaffolded with `agents-cli scaffold create`
-- [ ] Two tools defined: `extract_action_items` and `format_summary`
+- [ ] `format_summary` tool defined in `app/tools.py`
 - [ ] Agent instruction includes clear workflow and rules
 - [ ] Smoke test passes with `agents-cli run`
 - [ ] Three eval cases written in `basic-dataset.json`

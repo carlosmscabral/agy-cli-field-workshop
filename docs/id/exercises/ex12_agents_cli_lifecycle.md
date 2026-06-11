@@ -6,7 +6,7 @@
 
 ## Tujuan
 
-Gunakan `agents-cli` untuk membuat kerangka dasar, membangun, mengevaluasi, dan mengiterasi agen ADK — mengikuti siklus hidup pengembangan secara penuh. Anda akan membangun agen **Peringkas Catatan Rapat** yang mengambil transkrip rapat mentah dan menghasilkan item tindakan terstruktur.
+Gunakan `agents-cli` untuk melakukan scaffold, membangun, mengevaluasi, dan melakukan iterasi pada agen ADK — mengikuti siklus hidup pengembangan secara penuh. Anda akan membangun agen **Meeting Notes Summarizer** yang mengambil transkrip rapat mentah dan menghasilkan item tindakan terstruktur.
 
 ---
 
@@ -38,7 +38,7 @@ agents-cli scaffold create meeting-notes \
 
 ### Langkah 2: Instal Dependensi
 
-Scaffold membuat `pyproject.toml` dengan dependensi ADK yang benar. Pindah ke direktori proyek dan instal:
+Scaffold membuat sebuah `pyproject.toml` dengan dependensi ADK yang benar. Pindah ke direktori proyek dan instal:
 
 ```bash
 cd meeting-notes
@@ -62,7 +62,7 @@ echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 
 > **Pilihan Lokasi**
 >
-> Menggunakan `global` untuk `GOOGLE_CLOUD_LOCATION` umumnya direkomendasikan pada Platform Agen untuk memastikan kompatibilitas dengan semua keluarga model. Jika Anda harus menggunakan endpoint regional (misalnya, `us-central1` atau `us-east5`), pastikan model yang Anda gunakan tersedia di region tersebut dalam proyek GCP Anda.
+> Menggunakan `global` untuk `GOOGLE_CLOUD_LOCATION` umumnya direkomendasikan pada Platform Agen untuk memastikan kompatibilitas dengan semua keluarga model. Jika Anda harus menggunakan endpoint regional (misalnya, `us-central1` atau `us-east5`), pastikan model yang Anda gunakan tersedia di region tersebut pada proyek GCP Anda.
 
 ---
 
@@ -70,27 +70,9 @@ echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 
 ### Langkah 1: Mendefinisikan Alat
 
-Edit `app/tools.py` untuk menambahkan alat ekstraksi transkrip:
+Edit `app/tools.py` untuk menambahkan alat pemformatan ringkasan:
 
 ```python
-def extract_action_items(transcript: str) -> dict:
-    """Parse a meeting transcript and extract structured action items.
-
-    Args:
-        transcript: The raw meeting transcript text.
-
-    Returns:
-        A dict containing the parsed action items with assignees and deadlines.
-    """
-    # In a real agent, this might call a document API or parse structured formats.
-    # For now, return the transcript for the LLM to process.
-    return {
-        "transcript_length": len(transcript),
-        "raw_text": transcript[:5000],  # Cap at 5K chars for context window
-        "status": "ready_for_analysis",
-    }
-
-
 def format_summary(
     title: str,
     attendees: list[str],
@@ -123,13 +105,17 @@ def format_summary(
     return "\n".join(lines)
 ```
 
+> **Mengapa hanya satu alat?**
+>
+> LLM sudah memiliki transkrip di dalam jendela konteks-nya — ia tidak memerlukan alat untuk "mengekstrak" teks yang sudah bisa dibacanya. Alat `format_summary` menangani bagian yang *tidak seharusnya* dilakukan oleh LLM: pemformatan deterministik. Alat harus melakukan hal-hal yang tidak bisa (atau tidak seharusnya) dilakukan oleh model itu sendiri.
+
 ### Langkah 2: Mengonfigurasi Agen
 
 Edit `app/agent.py`:
 
 ```python
 from google.adk import Agent
-from app.tools import extract_action_items, format_summary
+from app.tools import format_summary
 
 root_agent = Agent(
     name="meeting_notes",
@@ -138,7 +124,7 @@ root_agent = Agent(
 meeting transcripts and produce structured, actionable summaries.
 
 Workflow:
-1. Use `extract_action_items` to process the raw transcript
+1. Read the transcript carefully
 2. Identify: attendees, action items (with assignees + deadlines), key decisions
 3. Use `format_summary` to produce the final structured output
 
@@ -149,7 +135,7 @@ Rules:
 - Key decisions must be concrete, not vague summaries
 - Never fabricate attendees or actions not in the transcript
 """,
-    tools=[extract_action_items, format_summary],
+    tools=[format_summary],
 )
 ```
 
@@ -164,16 +150,15 @@ environment for the MVP."
 
 Verifikasi:
 
-- [ ] Agen memanggil `extract_action_items`
 - [ ] Agen memanggil `format_summary` dengan data terstruktur
 - [ ] Output memiliki item tindakan dengan penerima tugas dan batas waktu
 - [ ] Keputusan utama dicantumkan
 
 ---
 
-## Bagian 3: Menulis Kasus Evaluasi (10 menit)
+## Bagian 3: Tulis Kasus Evaluasi (10 menit)
 
-### Langkah 1: Membuat Dataset Evaluasi
+### Langkah 1: Buat Dataset Evaluasi
 
 Edit `tests/eval/datasets/basic-dataset.json`:
 
@@ -217,7 +202,7 @@ Edit `tests/eval/datasets/basic-dataset.json`:
 }
 ```
 
-### Langkah 2: Mengonfigurasi Metrik
+### Langkah 2: Konfigurasi Metrik
 
 Edit `tests/eval/eval_config.yaml`:
 
@@ -251,11 +236,11 @@ custom_metrics:
 
 > **Konfigurasi Model Juri Platform Agen**
 >
-> 1. **Autorater bawaan**: Metrik bawaan (misalnya `multi_turn_task_success`, `final_response_quality`) menggunakan autorater sisi server dari Layanan Evaluasi GenAI — Anda tidak dapat menimpa model juri untuk metrik ini. Untuk entri `LLMMetric` kustom, menghilangkan `judge_model` juga akan menggunakan default layanan.
-> 2. **Format jalur sumber daya**: Entri `LLMMetric` kustom menerima bidang `judge_model` opsional. Ini **harus** berupa jalur yang memenuhi syarat sepenuhnya: `projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`. Nama pendek seperti `gemini-3.1-flash-lite` saja akan gagal dengan `400 INVALID_ARGUMENT`. Lihat dokumentasi [Konfigurasi Model Juri Platform Agen](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model).
+> 1. **Autorater bawaan**: Metrik bawaan (misalnya `multi_turn_task_success`, `final_response_quality`) menggunakan autorater sisi server dari GenAI Evaluation Service — Anda tidak dapat menimpa model juri untuk metrik ini. Untuk entri `LLMMetric` kustom, menghilangkan `judge_model` juga akan menggunakan bawaan layanan.
+> 2. **Format jalur sumber daya**: Entri `LLMMetric` kustom menerima bidang `judge_model` opsional. Bidang ini **harus** berupa jalur yang memenuhi syarat sepenuhnya: `projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`. Nama pendek seperti `gemini-3.1-flash-lite` saja akan gagal dengan `400 INVALID_ARGUMENT`. Lihat dokumentasi [Konfigurasi Model Juri Platform Agen](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model).
 > 3. **Pilihan model**: Gunakan `gemini-3.1-flash-lite` untuk penjurian yang hemat biaya atau `gemini-3.1-pro-preview` untuk evaluasi rubrik dengan kualitas lebih tinggi. Jangan gunakan model yang sudah usang (`gemini-1.5-flash`, `gemini-1.5-pro`).
 
-### Langkah 3: Menjalankan Evaluasi
+### Langkah 3: Jalankan Evaluasi
 
 ```bash
 # Generate traces (runs agent on each eval case)
@@ -265,11 +250,11 @@ agents-cli eval generate
 agents-cli eval grade
 ```
 
-Tinjau outputnya. Jika ada skor metrik yang berada di bawah ambang batas, lanjutkan ke Bagian 4.
+Tinjau outputnya. Jika ada skor metrik di bawah ambang batas, lanjutkan ke Bagian 4.
 
 ---
 
-## Bagian 4: Loop Evaluasi-Perbaikan (10 mnt)
+## Bagian 4: Loop Evaluasi-Perbaikan (10 menit)
 
 Di sinilah pekerjaan sebenarnya terjadi. Untuk setiap metrik yang gagal:
 
@@ -289,10 +274,11 @@ Perbaikan umum:
 
 | Gejala | Perbaikan |
 | :-- | :-- |
-| Agen melewatkan `extract_action_items` | Perkuat instruksi: "Anda HARUS memanggil extract_action_items terlebih dahulu" |
-| Penerima tugas tidak ada | Tambahkan ke instruksi: "Setiap item tindakan HARUS memiliki penerima tugas — gunakan 'Unassigned' jika tidak jelas" |
+| Agen melewati `format_summary` | Perkuat instruksi: "Anda HARUS memanggil format_summary untuk menghasilkan output" |
+| Agen memberikan kunci yang salah ke `format_summary` | Pastikan instruksi menyebutkan: "action_items harus berupa daftar dict dengan kunci 'task', 'assignee', dan 'deadline'" |
+| Penerima tugas hilang | Tambahkan ke instruksi: "Setiap item tindakan HARUS memiliki penerima tugas — gunakan 'Unassigned' jika tidak jelas" |
 | Item tindakan halusinasi | Tambahkan: "JANGAN PERNAH menambahkan item tindakan yang tidak dinyatakan secara eksplisit dalam transkrip" |
-| tool_use_quality rendah | Tingkatkan docstring alat — buat lebih spesifik tentang parameter |
+| tool_use_quality rendah | Tingkatkan docstring alat — buat lebih spesifik mengenai parameter |
 
 ### Langkah 3: Evaluasi Ulang dan Bandingkan
 
@@ -314,7 +300,7 @@ Ulangi hingga semua metrik lulus.
 
 ---
 
-## Target Tambahan
+## Tujuan Tambahan
 
 ### Tambahkan Deployment
 
@@ -332,7 +318,7 @@ agents-cli deploy
 agents-cli scaffold enhance . --cicd-runner github_actions
 ```
 
-### Sintesis Lebih Banyak Kasus Evaluasi
+### Sintesiskan Lebih Banyak Kasus Evaluasi
 
 ```bash
 # Auto-generate multi-turn eval scenarios
@@ -352,27 +338,27 @@ Buka sesi agy dan katakan:
   Analyze the failures and fix them.
 ```
 
-Perhatikan agy memuat skill eval, menjalankan `eval analyze`, mengidentifikasi kluster kegagalan, dan secara iteratif memperbaiki agen.
+Perhatikan agy memuat skill evaluasi, menjalankan `eval analyze`, mengidentifikasi klaster kegagalan, dan secara iteratif memperbaiki agen tersebut.
 
 ---
 
 ## Kriteria Penyelesaian
 
 - [ ] Proyek di-scaffold dengan `agents-cli scaffold create`
-- [ ] Dua alat didefinisikan: `extract_action_items` dan `format_summary`
+- [ ] Alat `format_summary` didefinisikan di `app/tools.py`
 - [ ] Instruksi agen mencakup alur kerja dan aturan yang jelas
 - [ ] Smoke test berhasil dilewati dengan `agents-cli run`
 - [ ] Tiga kasus evaluasi ditulis dalam `basic-dataset.json`
 - [ ] Metrik kustom `meeting_summary_quality` didefinisikan
 - [ ] `agents-cli eval generate` + `eval grade` berjalan dengan sukses
-- [ ] Setidaknya satu iterasi perbaikan evaluasi selesai dengan `eval compare` yang menunjukkan peningkatan
+- [ ] Setidaknya satu iterasi evaluasi-perbaikan diselesaikan dengan `eval compare` yang menunjukkan peningkatan
 
 ---
 
-## Poin-Poin Penting
+## Poin Penting
 
-1. **`agents-cli scaffold create`** menyiapkan seluruh struktur proyek — jangan mengaturnya secara manual
-2. **`agents-cli eval` bukanlah opsional** — ini adalah perbedaan antara demo dan agen produksi
+1. **`agents-cli scaffold create`** membangun seluruh struktur proyek — jangan mengaturnya secara manual
+2. **`agents-cli eval` tidak bersifat opsional** — ini adalah perbedaan antara demo dan agen produksi
 3. **pytest ≠ eval** — pytest menguji kebenaran kode; eval menguji perilaku agen
 4. **Loop eval-fix bersifat iteratif** — perkirakan 5–10+ putaran; ini adalah hal yang normal
-5. **agents-cli skills** membuat agen pengkodean Anda (agy) menjadi ahli dalam pengembangan ADK secara otomatis
+5. **skill agents-cli** membuat agen pengodean Anda (agy) menjadi ahli dalam pengembangan ADK secara otomatis

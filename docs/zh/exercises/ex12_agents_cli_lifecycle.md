@@ -6,16 +6,16 @@
 
 ## 目标
 
-使用 `agents-cli` 来搭建、构建、评估和迭代 ADK 代理 —— 遵循完整的开发生命周期。你将构建一个 **会议纪要总结器** 代理，它接收原始会议记录并生成结构化的待办事项。
+使用 `agents-cli` 生成脚手架、构建、评估和迭代 ADK 代理 —— 遵循完整的开发生命周期。你将构建一个**会议纪要摘要生成器**代理，它接收原始会议记录并生成结构化的待办事项。
 
 ---
 
-## 先决条件
+## 前提条件
 
 - 已安装 `agents-cli`（`uvx google-agents-cli setup`）
 - 已安装 `uv`（[安装指南](https://docs.astral.sh/uv/getting-started/installation/)）
 - 一个 Google Cloud 项目或 [AI Studio API 密钥](https://aistudio.google.com/apikey)
-- 已安装并正常运行 Antigravity CLI (agy)
+- 已安装并正常运行的 Antigravity CLI (agy)
 
 ---
 
@@ -34,11 +34,11 @@ agents-cli scaffold create meeting-notes \
 
 > **为什么使用 `--prototype`？**
 >
-> prototype 标志会跳过 CI/CD 和 Terraform —— 你可以先专注于让代理运行起来，稍后再使用 `scaffold enhance` 添加部署。
+> prototype 标志会跳过 CI/CD 和 Terraform — 您可以先专注于让代理运行起来，稍后再使用 `scaffold enhance` 添加部署。
 
-### 第 2 步：安装依赖
+### 第 2 步：安装依赖项
 
-脚手架会创建一个包含正确 ADK 依赖的 `pyproject.toml`。进入项目目录并安装：
+脚手架会创建一个包含正确 ADK 依赖项的 `pyproject.toml`。切换到项目目录并安装：
 
 ```bash
 cd meeting-notes
@@ -62,7 +62,7 @@ echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 
 > **位置选择**
 >
-> 在 Agent 平台上，通常建议将 `GOOGLE_CLOUD_LOCATION` 设置为 `global`，以确保与所有模型系列的兼容性。如果你必须使用区域端点（例如 `us-central1` 或 `us-east5`），请确保你使用的模型在你的 GCP 项目的该区域中可用。
+> 通常建议在代理平台上将 `GOOGLE_CLOUD_LOCATION` 设置为 `global`，以确保与所有模型系列的兼容性。如果您必须使用区域端点（例如 `us-central1` 或 `us-east5`），请确保您使用的模型在您的 GCP 项目的该区域中可用。
 
 ---
 
@@ -70,27 +70,9 @@ echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 
 ### 第 1 步：定义工具
 
-编辑 `app/tools.py` 以添加一个会议记录提取工具：
+编辑 `app/tools.py` 以添加摘要格式化工具：
 
 ```python
-def extract_action_items(transcript: str) -> dict:
-    """Parse a meeting transcript and extract structured action items.
-
-    Args:
-        transcript: The raw meeting transcript text.
-
-    Returns:
-        A dict containing the parsed action items with assignees and deadlines.
-    """
-    # In a real agent, this might call a document API or parse structured formats.
-    # For now, return the transcript for the LLM to process.
-    return {
-        "transcript_length": len(transcript),
-        "raw_text": transcript[:5000],  # Cap at 5K chars for context window
-        "status": "ready_for_analysis",
-    }
-
-
 def format_summary(
     title: str,
     attendees: list[str],
@@ -123,13 +105,17 @@ def format_summary(
     return "\n".join(lines)
 ```
 
+> **为什么只有一个工具？**
+>
+> LLM 的上下文窗口中已经包含了转录内容——它不需要工具来“提取”它已经能读取的文本。`format_summary` 工具处理的是 LLM *不应该*做的事情：确定性格式化。工具应该做模型不能（或不应该）自己做的事情。
+
 ### 第 2 步：配置代理
 
 编辑 `app/agent.py`：
 
 ```python
 from google.adk import Agent
-from app.tools import extract_action_items, format_summary
+from app.tools import format_summary
 
 root_agent = Agent(
     name="meeting_notes",
@@ -138,7 +124,7 @@ root_agent = Agent(
 meeting transcripts and produce structured, actionable summaries.
 
 Workflow:
-1. Use `extract_action_items` to process the raw transcript
+1. Read the transcript carefully
 2. Identify: attendees, action items (with assignees + deadlines), key decisions
 3. Use `format_summary` to produce the final structured output
 
@@ -149,7 +135,7 @@ Rules:
 - Key decisions must be concrete, not vague summaries
 - Never fabricate attendees or actions not in the transcript
 """,
-    tools=[extract_action_items, format_summary],
+    tools=[format_summary],
 )
 ```
 
@@ -164,9 +150,8 @@ environment for the MVP."
 
 验证：
 
-- [ ] 代理调用 `extract_action_items`
 - [ ] 代理使用结构化数据调用 `format_summary`
-- [ ] 输出包含带有负责人和截止日期的待办事项
+- [ ] 输出包含带有负责人和截止日期的行动项
 - [ ] 列出了关键决策
 
 ---
@@ -251,9 +236,9 @@ custom_metrics:
 
 > **代理平台裁判模型配置**
 >
-> 1. **默认自动评分器 (autorater)**：内置指标（例如 `multi_turn_task_success`、`final_response_quality`）使用 GenAI Evaluation Service 的服务器端自动评分器 —— 您无法为这些指标覆盖裁判模型。对于自定义的 `LLMMetric` 条目，省略 `judge_model` 也会使用服务默认设置。
-> 2. **资源路径格式**：自定义 `LLMMetric` 条目接受一个可选的 `judge_model` 字段。它**必须**是一个完全限定的路径：`projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`。仅使用像 `gemini-3.1-flash-lite` 这样的短名称会导致 `400 INVALID_ARGUMENT` 错误。请参阅 [代理平台裁判模型配置](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model) 文档。
-> 3. **模型选择**：使用 `gemini-3.1-flash-lite` 进行经济高效的评判，或使用 `gemini-3.1-pro-preview` 进行更高质量的量规评估。请勿使用已弃用的模型（`gemini-1.5-flash`、`gemini-1.5-pro`）。
+> 1. **默认自动评分器**：内置指标（例如 `multi_turn_task_success`、`final_response_quality`）使用 GenAI 评估服务的服务器端自动评分器——您无法覆盖这些指标的裁判模型。对于自定义的 `LLMMetric` 条目，省略 `judge_model` 也会使用服务默认值。
+> 2. **资源路径格式**：自定义的 `LLMMetric` 条目接受一个可选的 `judge_model` 字段。它**必须**是一个完全限定的路径：`projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`。仅使用像 `gemini-3.1-flash-lite` 这样的短名称会导致 `400 INVALID_ARGUMENT` 错误。请参阅 [代理平台裁判模型配置](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model) 文档。
+> 3. **模型选择**：使用 `gemini-3.1-flash-lite` 进行具有成本效益的评判，或使用 `gemini-3.1-pro-preview` 进行更高质量的量规评估。不要使用已弃用的模型（`gemini-1.5-flash`、`gemini-1.5-pro`）。
 
 ### 第 3 步：运行评估
 
@@ -265,13 +250,13 @@ agents-cli eval generate
 agents-cli eval grade
 ```
 
-查看输出。如果任何指标得分低于阈值，请继续执行第 4 部分。
+查看输出结果。如果有任何指标得分低于阈值，请继续执行第 4 部分。
 
 ---
 
-## 第 4 部分：评估-修复循环 (10 分钟)
+## 第 4 部分：评估-修复循环（10 分钟）
 
-这是真正发挥作用的地方。对于每个未通过的指标：
+这里是真正开展工作的地方。对于每个未通过的指标：
 
 ### 第 1 步：读取结果
 
@@ -289,10 +274,11 @@ cat artifacts/grade_results/results_*.json | python -m json.tool | head -50
 
 | 症状 | 修复方法 |
 | :-- | :-- |
-| 代理跳过 `extract_action_items` | 强化指令：“你必须首先调用 extract_action_items” |
-| 缺少负责人 | 在指令中添加：“每个行动项必须有一个负责人——如果不清楚，请使用‘未分配’” |
-| 产生幻觉的行动项 | 添加：“绝不添加记录中未明确说明的行动项” |
-| tool_use_quality 较低 | 改进工具的文档字符串——对参数的描述更具体一些 |
+| 代理跳过 `format_summary` | 强化指令：“你必须调用 format_summary 来生成输出” |
+| 代理向 `format_summary` 传递了错误的键 | 确保指令明确指出：“action_items 必须是一个包含 'task'、'assignee' 和 'deadline' 键的字典列表” |
+| 缺少负责人 | 在指令中添加：“每个行动项都必须有负责人——如果不清楚，请使用 'Unassigned'” |
+| 幻觉生成的行动项 | 添加：“切勿添加未在记录中明确说明的行动项” |
+| tool_use_quality 较低 | 改进工具的文档字符串（docstrings）——对参数的描述要更具体 |
 
 ### 第 3 步：重新评估并比较
 
@@ -310,7 +296,7 @@ agents-cli eval compare \
   artifacts/grade_results/results_*.json
 ```
 
-重复此过程，直到所有指标都通过。
+重复此过程，直到所有指标均通过。
 
 ---
 
@@ -352,27 +338,27 @@ agents-cli eval dataset synthesize \
   Analyze the failures and fix them.
 ```
 
-观察 agy 加载评估技能，运行 `eval analyze`，识别失败集群，并迭代修复代理。
+观察 agy 加载 eval 技能，运行 `eval analyze`，识别失败集群，并迭代修复代理。
 
 ---
 
 ## 完成标准
 
 - [ ] 使用 `agents-cli scaffold create` 搭建项目脚手架
-- [ ] 定义了两个工具：`extract_action_items` 和 `format_summary`
+- [ ] 在 `app/tools.py` 中定义了 `format_summary` 工具
 - [ ] 代理指令包含清晰的工作流和规则
 - [ ] 使用 `agents-cli run` 通过冒烟测试
 - [ ] 在 `basic-dataset.json` 中编写了三个评估用例
 - [ ] 定义了自定义的 `meeting_summary_quality` 指标
-- [ ] `agents-cli eval generate` + `eval grade` 成功运行
-- [ ] 至少完成了一次评估-修复迭代，且 `eval compare` 显示有改进
+- [ ] 成功运行 `agents-cli eval generate` + `eval grade`
+- [ ] 至少完成一次评估-修复迭代，且 `eval compare` 显示有改进
 
 ---
 
 ## 核心要点
 
-1. **`agents-cli scaffold create`** 会生成整个项目结构 —— 不要手动设置
+1. **`agents-cli scaffold create`** 初始化整个项目结构 —— 不要手动设置它
 2. **`agents-cli eval` 是必不可少的** —— 它是演示版本和生产级代理之间的区别
 3. **pytest ≠ eval** —— pytest 测试代码正确性；eval 测试代理行为
-4. **eval-fix 循环是迭代的** —— 预计需要 5-10 轮以上；这是正常的
-5. **agents-cli 技能** 会自动让你的编码代理 (agy) 成为 ADK 开发专家
+4. **eval-fix 循环是迭代的** —— 预计需要 5–10 轮以上；这是正常的
+5. **agents-cli skills** 自动使你的编码代理 (agy) 成为 ADK 开发专家

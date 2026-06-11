@@ -6,7 +6,7 @@
 
 ## 목표
 
-`agents-cli`를 사용하여 전체 개발 수명 주기에 따라 ADK 에이전트를 스캐폴딩, 빌드, 평가 및 반복합니다. 원시 회의록을 입력받아 구조화된 실행 항목을 생성하는 **회의록 요약기** 에이전트를 빌드하게 됩니다.
+전체 개발 수명 주기에 따라 `agents-cli`를 사용하여 ADK 에이전트를 스캐폴딩, 빌드, 평가 및 반복합니다. 원시 회의 대본을 입력받아 구조화된 실행 항목을 생성하는 **회의록 요약기(Meeting Notes Summarizer)** 에이전트를 빌드하게 됩니다.
 
 ---
 
@@ -15,7 +15,7 @@
 - `agents-cli` 설치됨 (`uvx google-agents-cli setup`)
 - `uv` 설치됨 ([설치 가이드](https://docs.astral.sh/uv/getting-started/installation/))
 - Google Cloud 프로젝트 또는 [AI Studio API 키](https://aistudio.google.com/apikey)
-- Antigravity CLI (agy) 설치 및 작동 확인
+- Antigravity CLI (agy) 설치 및 정상 작동
 
 ---
 
@@ -34,7 +34,7 @@ agents-cli scaffold create meeting-notes \
 
 > **`--prototype`을 사용하는 이유**
 >
-> prototype 플래그는 CI/CD 및 Terraform을 건너뜁니다. 먼저 에이전트가 작동하도록 하는 데 집중한 다음, 나중에 `scaffold enhance`를 사용하여 배포를 추가합니다.
+> 프로토타입 플래그는 CI/CD 및 Terraform을 건너뜁니다. 먼저 에이전트가 작동하도록 하는 데 집중한 다음, 나중에 `scaffold enhance`를 사용하여 배포를 추가할 수 있습니다.
 
 ### 2단계: 종속성 설치
 
@@ -47,7 +47,7 @@ uv sync
 
 > **google-adk ≠ google-antigravity**
 >
-> 모듈 3은 `google-antigravity`(agy 내에서 에이전트를 빌드하기 위한 Antigravity SDK)를 사용합니다. 모듈 5는 `google-adk`(Google Cloud에 배포되는 독립 실행형 ADK 에이전트를 빌드하기 위한 Agent Development Kit)를 사용합니다. 이들은 서로 다른 API를 가진 다른 패키지입니다. `agents-cli scaffold`는 항상 자동으로 `google-adk`를 설정합니다.
+> 모듈 3은 `google-antigravity`(agy 내에서 에이전트를 빌드하기 위한 Antigravity SDK)를 사용합니다. 모듈 5는 `google-adk`(Google Cloud에 배포되는 독립형 ADK 에이전트를 빌드하기 위한 에이전트 개발 키트)를 사용합니다. 이들은 서로 다른 API를 가진 다른 패키지입니다. `agents-cli scaffold`는 항상 `google-adk`를 자동으로 설정합니다.
 
 ### 3단계: 환경 설정
 
@@ -62,7 +62,7 @@ echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 
 > **위치 선택**
 >
-> 모든 모델 제품군과의 호환성을 보장하기 위해 에이전트 플랫폼에서는 `GOOGLE_CLOUD_LOCATION`에 `global`을 사용하는 것이 일반적으로 권장됩니다. 리전 엔드포인트(예: `us-central1` 또는 `us-east5`)를 사용해야 하는 경우, 사용 중인 모델이 GCP 프로젝트의 해당 리전에서 사용 가능한지 확인하세요.
+> 모든 모델 제품군과의 호환성을 보장하기 위해 에이전트 플랫폼에서는 `GOOGLE_CLOUD_LOCATION`에 `global`을 사용하는 것이 일반적으로 권장됩니다. 리전 엔드포인트(예: `us-central1` 또는 `us-east5`)를 사용해야 하는 경우, GCP 프로젝트의 해당 리전에서 사용 중인 모델을 사용할 수 있는지 확인하세요.
 
 ---
 
@@ -70,27 +70,9 @@ echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 
 ### 1단계: 도구 정의
 
-`app/tools.py`를 편집하여 트랜스크립트 추출 도구를 추가합니다:
+요약 포맷팅 도구를 추가하려면 `app/tools.py`를 편집하세요:
 
 ```python
-def extract_action_items(transcript: str) -> dict:
-    """Parse a meeting transcript and extract structured action items.
-
-    Args:
-        transcript: The raw meeting transcript text.
-
-    Returns:
-        A dict containing the parsed action items with assignees and deadlines.
-    """
-    # In a real agent, this might call a document API or parse structured formats.
-    # For now, return the transcript for the LLM to process.
-    return {
-        "transcript_length": len(transcript),
-        "raw_text": transcript[:5000],  # Cap at 5K chars for context window
-        "status": "ready_for_analysis",
-    }
-
-
 def format_summary(
     title: str,
     attendees: list[str],
@@ -123,13 +105,17 @@ def format_summary(
     return "\n".join(lines)
 ```
 
-### 2단계: 에이전트 설정
+> **왜 도구가 하나뿐인가요?**
+>
+> LLM은 이미 컨텍스트 윈도우에 트랜스크립트를 가지고 있습니다. 즉, 이미 읽을 수 있는 텍스트를 "추출"하기 위한 도구가 필요하지 않습니다. `format_summary` 도구는 LLM이 *하지 말아야 할* 부분인 결정론적 포맷팅을 처리합니다. 도구는 모델이 스스로 할 수 없는(또는 해서는 안 되는) 작업을 수행해야 합니다.
 
-`app/agent.py`를 편집합니다:
+### 2단계: 에이전트 구성
+
+`app/agent.py`를 편집하세요:
 
 ```python
 from google.adk import Agent
-from app.tools import extract_action_items, format_summary
+from app.tools import format_summary
 
 root_agent = Agent(
     name="meeting_notes",
@@ -138,7 +124,7 @@ root_agent = Agent(
 meeting transcripts and produce structured, actionable summaries.
 
 Workflow:
-1. Use `extract_action_items` to process the raw transcript
+1. Read the transcript carefully
 2. Identify: attendees, action items (with assignees + deadlines), key decisions
 3. Use `format_summary` to produce the final structured output
 
@@ -149,7 +135,7 @@ Rules:
 - Key decisions must be concrete, not vague summaries
 - Never fabricate attendees or actions not in the transcript
 """,
-    tools=[extract_action_items, format_summary],
+    tools=[format_summary],
 )
 ```
 
@@ -164,9 +150,8 @@ environment for the MVP."
 
 확인:
 
-- [ ] 에이전트가 `extract_action_items`를 호출합니다.
-- [ ] 에이전트가 구조화된 데이터와 함께 `format_summary`를 호출합니다.
-- [ ] 출력에 담당자 및 기한이 포함된 실행 항목이 있습니다.
+- [ ] 에이전트가 구조화된 데이터로 `format_summary`를 호출합니다.
+- [ ] 출력에 담당자와 기한이 포함된 실행 항목이 있습니다.
 - [ ] 주요 결정 사항이 나열되어 있습니다.
 
 ---
@@ -251,9 +236,9 @@ custom_metrics:
 
 > **에이전트 플랫폼 심사 모델 구성**
 >
-> 1. **기본 자동 평가기(autorater)**: 내장 메트릭(예: `multi_turn_task_success`, `final_response_quality`)은 GenAI Evaluation Service의 서버 측 자동 평가기를 사용합니다. 이러한 메트릭에 대해서는 심사 모델을 재정의할 수 없습니다. 사용자 지정 `LLMMetric` 항목의 경우, `judge_model`을 생략하면 서비스 기본값도 사용됩니다.
+> 1. **기본 자동 평가기(autorater)**: 내장 메트릭(예: `multi_turn_task_success`, `final_response_quality`)은 GenAI Evaluation Service의 서버 측 자동 평가기를 사용합니다. 이러한 메트릭에 대해서는 심사 모델을 재정의할 수 없습니다. 사용자 지정 `LLMMetric` 항목의 경우 `judge_model`을 생략하면 서비스 기본값도 사용됩니다.
 > 2. **리소스 경로 형식**: 사용자 지정 `LLMMetric` 항목은 선택적 `judge_model` 필드를 허용합니다. 이 필드는 **반드시** 정규화된 경로(fully-qualified path)여야 합니다: `projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`. `gemini-3.1-flash-lite`와 같은 짧은 이름만 사용하면 `400 INVALID_ARGUMENT` 오류와 함께 실패합니다. [에이전트 플랫폼 심사 모델 구성](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model) 문서를 참조하세요.
-> 3. **모델 선택**: 비용 효율적인 심사를 위해서는 `gemini-3.1-flash-lite`를 사용하고, 고품질 루브릭 평가를 위해서는 `gemini-3.1-pro-preview`를 사용하세요. 더 이상 사용되지 않는 모델(`gemini-1.5-flash`, `gemini-1.5-pro`)은 사용하지 마세요.
+> 3. **모델 선택**: 비용 효율적인 심사를 위해서는 `gemini-3.1-flash-lite`를 사용하고, 더 높은 품질의 루브릭 평가를 위해서는 `gemini-3.1-pro-preview`를 사용하세요. 더 이상 사용되지 않는 모델(`gemini-1.5-flash`, `gemini-1.5-pro`)은 사용하지 마세요.
 
 ### 3단계: 평가 실행
 
@@ -265,13 +250,13 @@ agents-cli eval generate
 agents-cli eval grade
 ```
 
-출력을 검토합니다. 임계값 미만의 점수를 받은 메트릭이 있다면 파트 4로 진행하세요.
+출력을 검토합니다. 임계값 미만인 메트릭 점수가 있다면 파트 4로 진행하세요.
 
 ---
 
 ## 파트 4: 평가-수정 루프 (10분)
 
-여기서부터 실제 작업이 이루어집니다. 실패한 각 지표에 대해 다음을 수행합니다:
+여기서 실제 작업이 이루어집니다. 실패한 각 지표에 대해 다음을 수행합니다:
 
 ### 1단계: 결과 확인
 
@@ -285,14 +270,15 @@ cat artifacts/grade_results/results_*.json | python -m json.tool | head -50
 
 ### 2단계: 진단 및 수정
 
-일반적인 수정 방법:
+일반적인 수정 사항:
 
-| 증상 | 수정 방법 |
+| 증상 | 해결 방법 |
 | :-- | :-- |
-| 에이전트가 `extract_action_items`를 건너뜀 | 지시문 강화: "반드시 extract_action_items를 먼저 호출해야 합니다" |
-| 담당자 누락 | 지시문에 추가: "모든 실행 항목에는 담당자가 있어야 합니다 — 불분명한 경우 'Unassigned'를 사용하세요" |
-| 환각(Hallucinated) 실행 항목 | 추가: "대화 기록에 명시적으로 언급되지 않은 실행 항목은 절대 추가하지 마세요" |
-| 낮은 tool_use_quality | 도구 독스트링(docstring) 개선 — 매개변수에 대해 더 구체적으로 작성 |
+| 에이전트가 `format_summary`를 건너뜀 | 지침 강화: "출력을 생성하려면 format_summary를 반드시 호출해야 합니다" |
+| 에이전트가 `format_summary`에 잘못된 키를 전달함 | 지침에 다음을 명시: "action_items는 'task', 'assignee', 'deadline' 키를 포함하는 딕셔너리의 목록이어야 합니다" |
+| 담당자 누락 | 지침에 추가: "모든 실행 항목에는 담당자가 있어야 합니다. 불분명한 경우 'Unassigned'를 사용하세요" |
+| 환각(Hallucinated) 실행 항목 | 추가: "대화록에 명시적으로 언급되지 않은 실행 항목은 절대 추가하지 마세요" |
+| 낮은 tool_use_quality | 도구 독스트링(docstrings) 개선 — 매개변수에 대해 더 구체적으로 작성 |
 
 ### 3단계: 재평가 및 비교
 
@@ -344,7 +330,7 @@ agents-cli eval dataset synthesize \
 
 ### agy가 전체 흐름을 주도하도록 하기
 
-agy 세션을 열고 다음과 같이 말하세요:
+agy 세션을 열고 다음과 같이 말합니다:
 
 ```text
 > Use agents-cli to improve my meeting-notes agent.
@@ -352,27 +338,27 @@ agy 세션을 열고 다음과 같이 말하세요:
   Analyze the failures and fix them.
 ```
 
-agy가 평가 스킬을 로드하고, `eval analyze`를 실행하며, 실패 클러스터를 식별하고, 에이전트를 반복적으로 수정하는 과정을 지켜보세요.
+agy가 평가 스킬을 로드하고, `eval analyze`를 실행하여 실패 클러스터를 식별한 후, 반복적으로 에이전트를 수정하는 과정을 지켜보세요.
 
 ---
 
 ## 완료 기준
 
-- [ ] `agents-cli scaffold create`로 프로젝트 스캐폴딩 완료
-- [ ] 두 가지 도구 정의 완료: `extract_action_items` 및 `format_summary`
-- [ ] 에이전트 지침에 명확한 워크플로우와 규칙 포함
-- [ ] `agents-cli run`으로 스모크 테스트 통과
+- [ ] `agents-cli scaffold create`를 사용하여 프로젝트 스캐폴딩 완료
+- [ ] `app/tools.py`에 `format_summary` 도구 정의 완료
+- [ ] 에이전트 지침에 명확한 워크플로우 및 규칙 포함 완료
+- [ ] `agents-cli run`을 사용한 스모크 테스트 통과
 - [ ] `basic-dataset.json`에 3개의 평가 케이스 작성 완료
-- [ ] 사용자 정의 `meeting_summary_quality` 지표 정의 완료
-- [ ] `agents-cli eval generate` + `eval grade` 성공적으로 실행
-- [ ] `eval compare`에서 개선을 보여주는 평가-수정 반복 최소 1회 완료
+- [ ] 사용자 지정 `meeting_summary_quality` 지표 정의 완료
+- [ ] `agents-cli eval generate` + `eval grade` 성공적으로 실행 완료
+- [ ] `eval compare`로 개선을 확인하며 최소 한 번의 평가-수정(eval-fix) 반복 완료
 
 ---
 
-## 주요 요점
+## 핵심 요약
 
 1. **`agents-cli scaffold create`**는 전체 프로젝트 구조를 부트스트랩합니다 — 수동으로 설정하지 마세요.
-2. **`agents-cli eval`은 선택 사항이 아닙니다** — 데모와 프로덕션 에이전트의 차이를 만듭니다.
+2. **`agents-cli eval`은 선택 사항이 아닙니다** — 이는 데모와 프로덕션 에이전트의 차이를 만듭니다.
 3. **pytest ≠ eval** — pytest는 코드의 정확성을 테스트하고, eval은 에이전트의 동작을 테스트합니다.
 4. **eval-fix 루프는 반복적입니다** — 5~10회 이상의 반복을 예상하세요. 이는 정상적인 과정입니다.
 5. **agents-cli 스킬**은 코딩 에이전트(agy)를 자동으로 ADK 개발 전문가로 만들어 줍니다.
