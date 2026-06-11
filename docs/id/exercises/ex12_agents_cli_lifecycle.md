@@ -1,12 +1,12 @@
 # Latihan 12: Siklus Hidup Agen ADK dengan agents-cli
 
-> **Durasi:** 45 mnt | **Modul:** 5 — Membangun Agen ADK dengan agents-cli
+> **Durasi:** 45 menit | **Modul:** 5 — Membangun Agen ADK dengan agents-cli
 
 ---
 
 ## Tujuan
 
-Gunakan `agents-cli` untuk membuat kerangka (scaffold), membangun, mengevaluasi, dan mengiterasi agen ADK — mengikuti siklus hidup pengembangan secara penuh. Anda akan membangun sebuah agen **Meeting Notes Summarizer** yang mengambil transkrip rapat mentah dan menghasilkan item tindakan terstruktur.
+Gunakan `agents-cli` untuk melakukan perancah (scaffold), membangun, mengevaluasi, dan melakukan iterasi pada agen ADK — mengikuti siklus hidup pengembangan penuh. Anda akan membangun agen **Peringkas Catatan Rapat** yang mengambil transkrip rapat mentah dan menghasilkan item tindakan terstruktur.
 
 ---
 
@@ -23,7 +23,7 @@ Gunakan `agents-cli` untuk membuat kerangka (scaffold), membangun, mengevaluasi,
 
 ### Langkah 1: Buat Proyek
 
-Buka sesi Antigravity CLI dan scaffold:
+Buka sesi Antigravity CLI dan lakukan scaffold:
 
 ```bash
 agents-cli scaffold create meeting-notes \
@@ -33,7 +33,7 @@ agents-cli scaffold create meeting-notes \
 ```
 
 !!! info "Mengapa `--prototype`?"
-    Flag prototype melewati CI/CD dan Terraform — Anda fokus untuk membuat agen berfungsi terlebih dahulu, lalu menambahkan penerapan nanti dengan `scaffold enhance`.
+    Flag prototype melewati CI/CD dan Terraform — Anda berfokus untuk membuat agen berfungsi terlebih dahulu, lalu menambahkan penerapan nanti dengan `scaffold enhance`.
 
 ### Langkah 2: Jelajahi Struktur yang Di-scaffold
 
@@ -83,7 +83,7 @@ uv sync
 ```
 
 !!! note "google-adk ≠ google-antigravity"
-    Modul 3 menggunakan `google-antigravity` (Antigravity SDK untuk membangun agen di dalam agy). Modul 5 menggunakan `google-adk` (Agent Development Kit untuk membangun agen ADK mandiri yang diterapkan ke Google Cloud). Keduanya adalah paket yang berbeda dengan API yang berbeda. `agents-cli scaffold` selalu mengatur `google-adk` secara otomatis.
+    Modul 3 menggunakan `google-antigravity` (Antigravity SDK untuk membangun agen di dalam agy). Modul 5 menggunakan `google-adk` (Agent Development Kit untuk membangun agen ADK mandiri yang diterapkan ke Google Cloud). Keduanya adalah paket yang berbeda dengan API yang berbeda. `agents-cli scaffold` selalu melakukan pengaturan `google-adk` secara otomatis.
 
 ### Langkah 4: Konfigurasi Lingkungan
 
@@ -292,7 +292,7 @@ Tinjau output-nya. Jika ada skor metrik yang berada di bawah ambang batas, lanju
 
 ---
 
-## Bagian 4: Loop Evaluasi-Perbaikan (10 menit)
+## Bagian 4: Loop Eval-Fix (10 mnt)
 
 Di sinilah pekerjaan sebenarnya terjadi. Untuk setiap metrik yang gagal:
 
@@ -313,9 +313,9 @@ Perbaikan umum:
 | Gejala | Perbaikan |
 | :-- | :-- |
 | Agen melewati `extract_action_items` | Perkuat instruksi: "Anda HARUS memanggil extract_action_items terlebih dahulu" |
-| Penerima tugas hilang | Tambahkan ke instruksi: "Setiap item tindakan HARUS memiliki penerima tugas — gunakan 'Unassigned' jika tidak jelas" |
+| Penerima tugas tidak ada | Tambahkan ke instruksi: "Setiap item tindakan HARUS memiliki penerima tugas — gunakan 'Unassigned' jika tidak jelas" |
 | Item tindakan terhalusinasi | Tambahkan: "JANGAN PERNAH menambahkan item tindakan yang tidak dinyatakan secara eksplisit dalam transkrip" |
-| tool_use_quality rendah | Tingkatkan docstring alat — buat lebih spesifik mengenai parameter |
+| `tool_use_quality` rendah | Tingkatkan docstring alat — buat lebih spesifik tentang parameter |
 
 ### Langkah 3: Evaluasi Ulang dan Bandingkan
 
@@ -355,7 +355,7 @@ agents-cli deploy
 agents-cli scaffold enhance . --cicd-runner github_actions
 ```
 
-### Sintesis Lebih Banyak Kasus Evaluasi
+### Sintesiskan Lebih Banyak Kasus Evaluasi
 
 ```bash
 # Auto-generate multi-turn eval scenarios
@@ -375,27 +375,27 @@ Buka sesi agy dan katakan:
   Analyze the failures and fix them.
 ```
 
-Perhatikan agy memuat skill eval, menjalankan `eval analyze`, mengidentifikasi klaster kegagalan, dan secara iteratif memperbaiki agen tersebut.
+Perhatikan agy memuat skill evaluasi, menjalankan `eval analyze`, mengidentifikasi klaster kegagalan, dan secara iteratif memperbaiki agen tersebut.
 
 ---
 
 ## Kriteria Penyelesaian
 
 - [ ] Proyek di-scaffold dengan `agents-cli scaffold create`
-- [ ] Dua alat didefinisikan: `extract_action_items` dan `format_summary`
+- [ ] Dua alat ditentukan: `extract_action_items` dan `format_summary`
 - [ ] Instruksi agen mencakup alur kerja dan aturan yang jelas
-- [ ] Smoke test berhasil dilewati dengan `agents-cli run`
+- [ ] Smoke test berhasil dengan `agents-cli run`
 - [ ] Tiga kasus evaluasi ditulis dalam `basic-dataset.json`
-- [ ] Metrik kustom `meeting_summary_quality` didefinisikan
+- [ ] Metrik kustom `meeting_summary_quality` ditentukan
 - [ ] `agents-cli eval generate` + `eval grade` berjalan dengan sukses
-- [ ] Setidaknya satu iterasi perbaikan evaluasi diselesaikan dengan `eval compare` yang menunjukkan peningkatan
+- [ ] Setidaknya satu iterasi perbaikan-evaluasi selesai dengan `eval compare` yang menunjukkan peningkatan
 
 ---
 
-## Poin-Poin Penting
+## Poin Penting
 
-1. **`agents-cli scaffold create`** menyiapkan seluruh struktur proyek — jangan mengaturnya secara manual
+1. **`agents-cli scaffold create`** melakukan bootstrap seluruh struktur proyek — jangan mengaturnya secara manual
 2. **`agents-cli eval` bukanlah opsional** — ini adalah perbedaan antara demo dan agen produksi
 3. **pytest ≠ eval** — pytest menguji kebenaran kode; eval menguji perilaku agen
-4. **Loop eval-fix bersifat iteratif** — perkirakan 5–10+ putaran; ini adalah hal yang normal
-5. **skill agents-cli** membuat agen pengkodean Anda (agy) menjadi ahli dalam pengembangan ADK secara otomatis
+4. **Loop eval-fix bersifat iteratif** — perkirakan 5–10+ putaran; ini normal
+5. **agents-cli skills** membuat agen pengodean Anda (agy) menjadi ahli dalam pengembangan ADK secara otomatis

@@ -6,11 +6,11 @@
 
 ## 目标
 
-使用 `agents-cli` 生成脚手架、构建、评估并迭代一个 ADK 代理 —— 遵循完整的开发生命周期。你将构建一个**会议纪要总结器**代理，该代理接收原始会议转录内容并生成结构化的行动项。
+使用 `agents-cli` 来搭建、构建、评估和迭代 ADK 代理 —— 遵循完整的开发生命周期。您将构建一个**会议纪要总结器**代理，该代理接收原始会议记录并生成结构化的行动项。
 
 ---
 
-## 前置条件
+## 前提条件
 
 - 已安装 `agents-cli`（`uvx google-agents-cli setup`）
 - 已安装 `uv`（[安装指南](https://docs.astral.sh/uv/getting-started/installation/)）
@@ -33,7 +33,7 @@ agents-cli scaffold create meeting-notes \
 ```
 
 !!! info "为什么使用 `--prototype`？"
-    prototype 标志会跳过 CI/CD 和 Terraform —— 你可以先专注于让代理运行起来，稍后再使用 `scaffold enhance` 添加部署。
+    prototype 标志会跳过 CI/CD 和 Terraform — 让你先专注于让代理运行起来，稍后再使用 `scaffold enhance` 添加部署。
 
 ### 第 2 步：探索生成的脚手架结构
 
@@ -43,7 +43,7 @@ cd meeting-notes
 find . -maxdepth 3 -not -path '*/.*'
 ```
 
-你应该会看到类似这样的结构：
+你应该会看到类似如下的结构：
 
 ```text
 meeting-notes/
@@ -83,7 +83,7 @@ uv sync
 ```
 
 !!! note "google-adk ≠ google-antigravity"
-    模块 3 使用 `google-antigravity`（用于在 agy 中构建代理的 Antigravity SDK）。模块 5 使用 `google-adk`（用于构建部署到 Google Cloud 的独立 ADK 代理的 Agent Development Kit）。它们是具有不同 API 的不同包。`agents-cli scaffold` 总是会自动设置 `google-adk`。
+    模块 3 使用 `google-antigravity`（用于在 agy 内构建代理的 Antigravity SDK）。模块 5 使用 `google-adk`（用于构建部署到 Google Cloud 的独立 ADK 代理的 Agent Development Kit）。它们是具有不同 API 的不同包。`agents-cli scaffold` 始终会自动设置 `google-adk`。
 
 ### 第 4 步：配置环境
 
@@ -98,7 +98,7 @@ echo 'GOOGLE_CLOUD_LOCATION=us-east1' >> .env
 
 ---
 
-## 第 2 部分：构建代理（15 分钟）
+## 第 2 部分：构建代理 (15 分钟)
 
 ### 第 1 步：定义工具
 
@@ -288,13 +288,13 @@ agents-cli eval generate
 agents-cli eval grade
 ```
 
-查看输出结果。如果有任何指标得分低于阈值，请继续执行第 4 部分。
+查看输出结果。如果任何指标得分低于阈值，请继续执行第 4 部分。
 
 ---
 
-## 第 4 部分：评估-修复循环（10 分钟）
+## 第 4 部分：评估-修复循环 (10 分钟)
 
-这是真正开始工作的地方。对于每个未通过的指标：
+这是真正发挥作用的地方。对于每个未通过的指标：
 
 ### 第 1 步：读取结果
 
@@ -306,18 +306,18 @@ open artifacts/grade_results/results_*.html
 cat artifacts/grade_results/results_*.json | python -m json.tool | head -50
 ```
 
-### 第 2 步：诊断并修复
+### 第 2 步：诊断与修复
 
 常见修复方法：
 
 | 症状 | 修复方法 |
 | :-- | :-- |
 | 代理跳过 `extract_action_items` | 强化指令：“你必须首先调用 extract_action_items” |
-| 缺少负责人 | 添加到指令中：“每个行动项必须有一个负责人——如果不清楚，请使用‘未分配’” |
-| 产生幻觉的行动项 | 添加：“切勿添加未在记录中明确说明的行动项” |
+| 缺少负责人 | 在指令中添加：“每个行动项都必须有负责人——如果不清楚，请使用‘未分配’” |
+| 产生幻觉的行动项 | 添加：“绝不要添加记录中未明确说明的行动项” |
 | tool_use_quality 较低 | 改进工具文档字符串——对参数进行更具体的说明 |
 
-### 第 3 步：重新评估并比较
+### 第 3 步：重新评估与比较
 
 ```bash
 # Save the previous results
@@ -367,7 +367,7 @@ agents-cli eval dataset synthesize \
 
 ### 让 agy 驱动整个流程
 
-打开一个 agy 会话并输入：
+打开一个 agy 会话并说：
 
 ```text
 > Use agents-cli to improve my meeting-notes agent.
@@ -375,7 +375,7 @@ agents-cli eval dataset synthesize \
   Analyze the failures and fix them.
 ```
 
-观察 agy 加载 eval 技能，运行 `eval analyze`，识别失败集群，并迭代修复代理。
+观察 agy 加载评估技能，运行 `eval analyze`，识别失败集群，并迭代修复代理。
 
 ---
 
@@ -383,19 +383,19 @@ agents-cli eval dataset synthesize \
 
 - [ ] 使用 `agents-cli scaffold create` 搭建项目脚手架
 - [ ] 定义了两个工具：`extract_action_items` 和 `format_summary`
-- [ ] 代理指令包含清晰的工作流和规则
+- [ ] 代理指令包含清晰的工作流程和规则
 - [ ] 使用 `agents-cli run` 通过冒烟测试
 - [ ] 在 `basic-dataset.json` 中编写了三个评估用例
 - [ ] 定义了自定义的 `meeting_summary_quality` 指标
 - [ ] `agents-cli eval generate` + `eval grade` 成功运行
-- [ ] 至少完成了一次评估-修复迭代，且 `eval compare` 显示出改进
+- [ ] 至少完成了一次评估-修复迭代，且 `eval compare` 显示有所改进
 
 ---
 
 ## 核心要点
 
-1. **`agents-cli scaffold create`** 初始化整个项目结构 —— 不要手动设置
-2. **`agents-cli eval` 是必不可少的** —— 这是演示版本和生产级代理之间的区别
-3. **pytest ≠ eval** —— pytest 测试代码正确性；eval 测试代理行为
-4. **评估-修复循环是迭代的** —— 预计需要 5–10 轮以上；这很正常
-5. **agents-cli 技能** 会自动使你的编码代理 (agy) 成为 ADK 开发专家
+1. **`agents-cli scaffold create`** 初始化整个项目结构 —— 不要手动进行设置
+2. **`agents-cli eval` 不是可选的** —— 它是演示版本和生产级代理之间的区别
+3. **pytest ≠ eval** —— pytest 测试代码的正确性；eval 测试代理的行为
+4. **eval-fix 循环是迭代的** —— 预计需要 5–10 轮以上；这是正常现象
+5. **agents-cli 技能**自动让你的编码代理 (agy) 成为 ADK 开发专家

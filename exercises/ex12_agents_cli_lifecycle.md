@@ -36,50 +36,12 @@ agents-cli scaffold create meeting-notes \
 >
 > The prototype flag skips CI/CD and Terraform — you focus on getting the agent working first, then add deployment later with `scaffold enhance`.
 
-### Step 2: Explore the Scaffolded Structure
+### Step 2: Install Dependencies
+
+The scaffold creates a `pyproject.toml` with the correct ADK dependency. Change into the project directory and install:
 
 ```bash
 cd meeting-notes
-# If you don't have tree installed, you can use find:
-find . -maxdepth 3 -not -path '*/.*'
-```
-
-You should see a structure like this:
-
-```text
-meeting-notes/
-├── app/
-│   ├── app_utils/
-│   │   ├── telemetry.py
-│   │   └── typing.py
-│   ├── __init__.py
-│   ├── agent.py
-│   ├── fast_api_app.py
-│   └── tools.py
-├── tests/
-│   ├── eval/
-│   │   ├── datasets/
-│   │   │   └── basic-dataset.json
-│   │   └── eval_config.yaml
-│   ├── integration/
-│   │   ├── test_agent.py
-│   │   └── test_server_e2e.py
-│   └── unit/
-│       └── test_dummy.py
-├── .env
-├── Dockerfile
-├── GEMINI.md
-├── README.md
-├── agents-cli-manifest.yaml
-├── pyproject.toml
-└── uv.lock
-```
-
-### Step 3: Install Dependencies
-
-The scaffold creates a `pyproject.toml` with the correct ADK dependency. Install it:
-
-```bash
 uv sync
 ```
 
@@ -87,7 +49,7 @@ uv sync
 >
 > Module 3 uses `google-antigravity` (the Antigravity SDK for building agents within agy). Module 5 uses `google-adk` (the Agent Development Kit for building standalone ADK agents deployed to Google Cloud). They are different packages with different APIs. `agents-cli scaffold` always sets up `google-adk` automatically.
 
-### Step 4: Configure Environment
+### Step 3: Configure Environment
 
 ```bash
 # If using AI Studio:
