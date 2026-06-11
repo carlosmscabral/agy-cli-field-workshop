@@ -6,16 +6,16 @@
 
 ## Tujuan
 
-Gunakan `agents-cli` untuk melakukan perancah (scaffold), membangun, mengevaluasi, dan melakukan iterasi pada agen ADK — mengikuti siklus hidup pengembangan penuh. Anda akan membangun agen **Peringkas Catatan Rapat** yang mengambil transkrip rapat mentah dan menghasilkan item tindakan terstruktur.
+Gunakan `agents-cli` untuk membuat kerangka dasar, membangun, mengevaluasi, dan mengiterasi agen ADK — mengikuti siklus hidup pengembangan secara penuh. Anda akan membangun agen **Peringkas Catatan Rapat** yang mengambil transkrip rapat mentah dan menghasilkan item tindakan terstruktur.
 
 ---
 
 ## Prasyarat
 
-- `agents-cli` telah diinstal (`uvx google-agents-cli setup`)
-- `uv` telah diinstal ([panduan instalasi](https://docs.astral.sh/uv/getting-started/installation/))
+- `agents-cli` terinstal (`uvx google-agents-cli setup`)
+- `uv` terinstal ([panduan instalasi](https://docs.astral.sh/uv/getting-started/installation/))
 - Proyek Google Cloud atau [kunci API AI Studio](https://aistudio.google.com/apikey)
-- Antigravity CLI (agy) telah diinstal dan berfungsi
+- Antigravity CLI (agy) terinstal dan berfungsi
 
 ---
 
@@ -32,60 +32,24 @@ agents-cli scaffold create meeting-notes \
   --agent-guidance-filename GEMINI.md
 ```
 
-!!! info "Mengapa `--prototype`?"
-    Flag prototype melewati CI/CD dan Terraform — Anda berfokus untuk membuat agen berfungsi terlebih dahulu, lalu menambahkan penerapan nanti dengan `scaffold enhance`.
+> **Mengapa `--prototype`?**
+>
+> Flag prototype melewati CI/CD dan Terraform — Anda fokus untuk membuat agen berfungsi terlebih dahulu, lalu menambahkan penerapan nanti dengan `scaffold enhance`.
 
-### Langkah 2: Jelajahi Struktur yang Di-scaffold
+### Langkah 2: Instal Dependensi
+
+Scaffold membuat `pyproject.toml` dengan dependensi ADK yang benar. Pindah ke direktori proyek dan instal:
 
 ```bash
 cd meeting-notes
-# If you don't have tree installed, you can use find:
-find . -maxdepth 3 -not -path '*/.*'
-```
-
-Anda akan melihat struktur seperti ini:
-
-```text
-meeting-notes/
-├── app/
-│   ├── app_utils/
-│   │   ├── telemetry.py
-│   │   └── typing.py
-│   ├── __init__.py
-│   ├── agent.py
-│   ├── fast_api_app.py
-│   └── tools.py
-├── tests/
-│   ├── eval/
-│   │   ├── datasets/
-│   │   │   └── basic-dataset.json
-│   │   └── eval_config.yaml
-│   ├── integration/
-│   │   ├── test_agent.py
-│   │   └── test_server_e2e.py
-│   └── unit/
-│       └── test_dummy.py
-├── .env
-├── Dockerfile
-├── GEMINI.md
-├── README.md
-├── agents-cli-manifest.yaml
-├── pyproject.toml
-└── uv.lock
-```
-
-### Langkah 3: Instal Dependensi
-
-Scaffold membuat `pyproject.toml` dengan dependensi ADK yang benar. Instal dependensi tersebut:
-
-```bash
 uv sync
 ```
 
-!!! note "google-adk ≠ google-antigravity"
-    Modul 3 menggunakan `google-antigravity` (Antigravity SDK untuk membangun agen di dalam agy). Modul 5 menggunakan `google-adk` (Agent Development Kit untuk membangun agen ADK mandiri yang diterapkan ke Google Cloud). Keduanya adalah paket yang berbeda dengan API yang berbeda. `agents-cli scaffold` selalu melakukan pengaturan `google-adk` secara otomatis.
+> **google-adk ≠ google-antigravity**
+>
+> Modul 3 menggunakan `google-antigravity` (Antigravity SDK untuk membangun agen di dalam agy). Modul 5 menggunakan `google-adk` (Agent Development Kit untuk membangun agen ADK mandiri yang diterapkan ke Google Cloud). Keduanya adalah paket yang berbeda dengan API yang berbeda. `agents-cli scaffold` selalu melakukan pengaturan `google-adk` secara otomatis.
 
-### Langkah 4: Konfigurasi Lingkungan
+### Langkah 3: Konfigurasi Lingkungan
 
 ```bash
 # If using AI Studio:
@@ -93,8 +57,12 @@ echo 'GOOGLE_API_KEY=your-key-here' >> .env
 
 # If using Google Cloud:
 echo 'GOOGLE_CLOUD_PROJECT=your-project-id' >> .env
-echo 'GOOGLE_CLOUD_LOCATION=us-east1' >> .env
+echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 ```
+
+> **Pilihan Lokasi**
+>
+> Menggunakan `global` untuk `GOOGLE_CLOUD_LOCATION` umumnya direkomendasikan pada Platform Agen untuk memastikan kompatibilitas dengan semua keluarga model. Jika Anda harus menggunakan endpoint regional (misalnya, `us-central1` atau `us-east5`), pastikan model yang Anda gunakan tersedia di region tersebut dalam proyek GCP Anda.
 
 ---
 
@@ -262,6 +230,9 @@ metrics_to_run:
 
 custom_metrics:
   - name: meeting_summary_quality
+    # Optional: override the judge model for this custom metric.
+    # Must be a fully-qualified resource path. Omit to use the service default autorater.
+    judge_model: projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/gemini-3.1-flash-lite
     prompt_template: |
       Evaluate the agent's meeting summary on these criteria (1-5 each):
 
@@ -278,6 +249,12 @@ custom_metrics:
       Return JSON: {"score": <1-5 average>, "explanation": "<detailed reasoning>"}
 ```
 
+> **Konfigurasi Model Juri Platform Agen**
+>
+> 1. **Autorater bawaan**: Metrik bawaan (misalnya `multi_turn_task_success`, `final_response_quality`) menggunakan autorater sisi server dari Layanan Evaluasi GenAI — Anda tidak dapat menimpa model juri untuk metrik ini. Untuk entri `LLMMetric` kustom, menghilangkan `judge_model` juga akan menggunakan default layanan.
+> 2. **Format jalur sumber daya**: Entri `LLMMetric` kustom menerima bidang `judge_model` opsional. Ini **harus** berupa jalur yang memenuhi syarat sepenuhnya: `projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`. Nama pendek seperti `gemini-3.1-flash-lite` saja akan gagal dengan `400 INVALID_ARGUMENT`. Lihat dokumentasi [Konfigurasi Model Juri Platform Agen](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model).
+> 3. **Pilihan model**: Gunakan `gemini-3.1-flash-lite` untuk penjurian yang hemat biaya atau `gemini-3.1-pro-preview` untuk evaluasi rubrik dengan kualitas lebih tinggi. Jangan gunakan model yang sudah usang (`gemini-1.5-flash`, `gemini-1.5-pro`).
+
 ### Langkah 3: Menjalankan Evaluasi
 
 ```bash
@@ -288,11 +265,11 @@ agents-cli eval generate
 agents-cli eval grade
 ```
 
-Tinjau output-nya. Jika ada skor metrik yang berada di bawah ambang batas, lanjutkan ke Bagian 4.
+Tinjau outputnya. Jika ada skor metrik yang berada di bawah ambang batas, lanjutkan ke Bagian 4.
 
 ---
 
-## Bagian 4: Loop Eval-Fix (10 mnt)
+## Bagian 4: Loop Evaluasi-Perbaikan (10 mnt)
 
 Di sinilah pekerjaan sebenarnya terjadi. Untuk setiap metrik yang gagal:
 
@@ -312,10 +289,10 @@ Perbaikan umum:
 
 | Gejala | Perbaikan |
 | :-- | :-- |
-| Agen melewati `extract_action_items` | Perkuat instruksi: "Anda HARUS memanggil extract_action_items terlebih dahulu" |
+| Agen melewatkan `extract_action_items` | Perkuat instruksi: "Anda HARUS memanggil extract_action_items terlebih dahulu" |
 | Penerima tugas tidak ada | Tambahkan ke instruksi: "Setiap item tindakan HARUS memiliki penerima tugas — gunakan 'Unassigned' jika tidak jelas" |
-| Item tindakan terhalusinasi | Tambahkan: "JANGAN PERNAH menambahkan item tindakan yang tidak dinyatakan secara eksplisit dalam transkrip" |
-| `tool_use_quality` rendah | Tingkatkan docstring alat — buat lebih spesifik tentang parameter |
+| Item tindakan halusinasi | Tambahkan: "JANGAN PERNAH menambahkan item tindakan yang tidak dinyatakan secara eksplisit dalam transkrip" |
+| tool_use_quality rendah | Tingkatkan docstring alat — buat lebih spesifik tentang parameter |
 
 ### Langkah 3: Evaluasi Ulang dan Bandingkan
 
@@ -355,7 +332,7 @@ agents-cli deploy
 agents-cli scaffold enhance . --cicd-runner github_actions
 ```
 
-### Sintesiskan Lebih Banyak Kasus Evaluasi
+### Sintesis Lebih Banyak Kasus Evaluasi
 
 ```bash
 # Auto-generate multi-turn eval scenarios
@@ -375,27 +352,27 @@ Buka sesi agy dan katakan:
   Analyze the failures and fix them.
 ```
 
-Perhatikan agy memuat skill evaluasi, menjalankan `eval analyze`, mengidentifikasi klaster kegagalan, dan secara iteratif memperbaiki agen tersebut.
+Perhatikan agy memuat skill eval, menjalankan `eval analyze`, mengidentifikasi kluster kegagalan, dan secara iteratif memperbaiki agen.
 
 ---
 
 ## Kriteria Penyelesaian
 
 - [ ] Proyek di-scaffold dengan `agents-cli scaffold create`
-- [ ] Dua alat ditentukan: `extract_action_items` dan `format_summary`
+- [ ] Dua alat didefinisikan: `extract_action_items` dan `format_summary`
 - [ ] Instruksi agen mencakup alur kerja dan aturan yang jelas
-- [ ] Smoke test berhasil dengan `agents-cli run`
+- [ ] Smoke test berhasil dilewati dengan `agents-cli run`
 - [ ] Tiga kasus evaluasi ditulis dalam `basic-dataset.json`
-- [ ] Metrik kustom `meeting_summary_quality` ditentukan
+- [ ] Metrik kustom `meeting_summary_quality` didefinisikan
 - [ ] `agents-cli eval generate` + `eval grade` berjalan dengan sukses
-- [ ] Setidaknya satu iterasi perbaikan-evaluasi selesai dengan `eval compare` yang menunjukkan peningkatan
+- [ ] Setidaknya satu iterasi perbaikan evaluasi selesai dengan `eval compare` yang menunjukkan peningkatan
 
 ---
 
-## Poin Penting
+## Poin-Poin Penting
 
-1. **`agents-cli scaffold create`** melakukan bootstrap seluruh struktur proyek — jangan mengaturnya secara manual
+1. **`agents-cli scaffold create`** menyiapkan seluruh struktur proyek — jangan mengaturnya secara manual
 2. **`agents-cli eval` bukanlah opsional** — ini adalah perbedaan antara demo dan agen produksi
 3. **pytest ≠ eval** — pytest menguji kebenaran kode; eval menguji perilaku agen
-4. **Loop eval-fix bersifat iteratif** — perkirakan 5–10+ putaran; ini normal
-5. **agents-cli skills** membuat agen pengodean Anda (agy) menjadi ahli dalam pengembangan ADK secara otomatis
+4. **Loop eval-fix bersifat iteratif** — perkirakan 5–10+ putaran; ini adalah hal yang normal
+5. **agents-cli skills** membuat agen pengkodean Anda (agy) menjadi ahli dalam pengembangan ADK secara otomatis

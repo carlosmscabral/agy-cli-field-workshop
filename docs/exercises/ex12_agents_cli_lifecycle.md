@@ -32,60 +32,24 @@ agents-cli scaffold create meeting-notes \
   --agent-guidance-filename GEMINI.md
 ```
 
-!!! info "Why `--prototype`?"
-    The prototype flag skips CI/CD and Terraform — you focus on getting the agent working first, then add deployment later with `scaffold enhance`.
+> **Why `--prototype`?**
+>
+> The prototype flag skips CI/CD and Terraform — you focus on getting the agent working first, then add deployment later with `scaffold enhance`.
 
-### Step 2: Explore the Scaffolded Structure
+### Step 2: Install Dependencies
+
+The scaffold creates a `pyproject.toml` with the correct ADK dependency. Change into the project directory and install:
 
 ```bash
 cd meeting-notes
-# If you don't have tree installed, you can use find:
-find . -maxdepth 3 -not -path '*/.*'
-```
-
-You should see a structure like this:
-
-```text
-meeting-notes/
-├── app/
-│   ├── app_utils/
-│   │   ├── telemetry.py
-│   │   └── typing.py
-│   ├── __init__.py
-│   ├── agent.py
-│   ├── fast_api_app.py
-│   └── tools.py
-├── tests/
-│   ├── eval/
-│   │   ├── datasets/
-│   │   │   └── basic-dataset.json
-│   │   └── eval_config.yaml
-│   ├── integration/
-│   │   ├── test_agent.py
-│   │   └── test_server_e2e.py
-│   └── unit/
-│       └── test_dummy.py
-├── .env
-├── Dockerfile
-├── GEMINI.md
-├── README.md
-├── agents-cli-manifest.yaml
-├── pyproject.toml
-└── uv.lock
-```
-
-### Step 3: Install Dependencies
-
-The scaffold creates a `pyproject.toml` with the correct ADK dependency. Install it:
-
-```bash
 uv sync
 ```
 
-!!! note "google-adk ≠ google-antigravity"
-    Module 3 uses `google-antigravity` (the Antigravity SDK for building agents within agy). Module 5 uses `google-adk` (the Agent Development Kit for building standalone ADK agents deployed to Google Cloud). They are different packages with different APIs. `agents-cli scaffold` always sets up `google-adk` automatically.
+> **google-adk ≠ google-antigravity**
+>
+> Module 3 uses `google-antigravity` (the Antigravity SDK for building agents within agy). Module 5 uses `google-adk` (the Agent Development Kit for building standalone ADK agents deployed to Google Cloud). They are different packages with different APIs. `agents-cli scaffold` always sets up `google-adk` automatically.
 
-### Step 4: Configure Environment
+### Step 3: Configure Environment
 
 ```bash
 # If using AI Studio:
@@ -93,8 +57,12 @@ echo 'GOOGLE_API_KEY=your-key-here' >> .env
 
 # If using Google Cloud:
 echo 'GOOGLE_CLOUD_PROJECT=your-project-id' >> .env
-echo 'GOOGLE_CLOUD_LOCATION=us-east1' >> .env
+echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 ```
+
+> **Location Choice**
+>
+> Using `global` for `GOOGLE_CLOUD_LOCATION` is generally recommended on the Agent Platform to ensure compatibility with all model families. If you must use a regional endpoint (e.g., `us-central1` or `us-east5`), ensure the models you are using are available in that region in your GCP project.
 
 ---
 
@@ -262,6 +230,9 @@ metrics_to_run:
 
 custom_metrics:
   - name: meeting_summary_quality
+    # Optional: override the judge model for this custom metric.
+    # Must be a fully-qualified resource path. Omit to use the service default autorater.
+    judge_model: projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/gemini-3.1-flash-lite
     prompt_template: |
       Evaluate the agent's meeting summary on these criteria (1-5 each):
 
@@ -277,6 +248,12 @@ custom_metrics:
 
       Return JSON: {"score": <1-5 average>, "explanation": "<detailed reasoning>"}
 ```
+
+> **Agent Platform Judge Model Configuration**
+>
+> 1. **Default autorater**: Built-in metrics (e.g. `multi_turn_task_success`, `final_response_quality`) use the GenAI Evaluation Service's server-side autorater — you cannot override the judge model for these. For custom `LLMMetric` entries, omitting `judge_model` also uses the service default.
+> 2. **Resource path format**: Custom `LLMMetric` entries accept an optional `judge_model` field. It **must** be a fully-qualified path: `projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`. Short names like `gemini-3.1-flash-lite` alone will fail with `400 INVALID_ARGUMENT`. See the [Agent Platform Judge Model Configuration](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model) documentation.
+> 3. **Model choice**: Use `gemini-3.1-flash-lite` for cost-efficient judging or `gemini-3.1-pro-preview` for higher-quality rubric evaluation. Do not use deprecated models (`gemini-1.5-flash`, `gemini-1.5-pro`).
 
 ### Step 3: Run the Eval
 

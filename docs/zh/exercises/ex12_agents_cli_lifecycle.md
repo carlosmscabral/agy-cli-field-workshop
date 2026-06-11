@@ -6,11 +6,11 @@
 
 ## 目标
 
-使用 `agents-cli` 来搭建、构建、评估和迭代 ADK 代理 —— 遵循完整的开发生命周期。您将构建一个**会议纪要总结器**代理，该代理接收原始会议记录并生成结构化的行动项。
+使用 `agents-cli` 来搭建、构建、评估和迭代 ADK 代理 —— 遵循完整的开发生命周期。你将构建一个 **会议纪要总结器** 代理，它接收原始会议记录并生成结构化的待办事项。
 
 ---
 
-## 前提条件
+## 先决条件
 
 - 已安装 `agents-cli`（`uvx google-agents-cli setup`）
 - 已安装 `uv`（[安装指南](https://docs.astral.sh/uv/getting-started/installation/)）
@@ -32,60 +32,24 @@ agents-cli scaffold create meeting-notes \
   --agent-guidance-filename GEMINI.md
 ```
 
-!!! info "为什么使用 `--prototype`？"
-    prototype 标志会跳过 CI/CD 和 Terraform — 让你先专注于让代理运行起来，稍后再使用 `scaffold enhance` 添加部署。
+> **为什么使用 `--prototype`？**
+>
+> prototype 标志会跳过 CI/CD 和 Terraform —— 你可以先专注于让代理运行起来，稍后再使用 `scaffold enhance` 添加部署。
 
-### 第 2 步：探索生成的脚手架结构
+### 第 2 步：安装依赖
+
+脚手架会创建一个包含正确 ADK 依赖的 `pyproject.toml`。进入项目目录并安装：
 
 ```bash
 cd meeting-notes
-# If you don't have tree installed, you can use find:
-find . -maxdepth 3 -not -path '*/.*'
-```
-
-你应该会看到类似如下的结构：
-
-```text
-meeting-notes/
-├── app/
-│   ├── app_utils/
-│   │   ├── telemetry.py
-│   │   └── typing.py
-│   ├── __init__.py
-│   ├── agent.py
-│   ├── fast_api_app.py
-│   └── tools.py
-├── tests/
-│   ├── eval/
-│   │   ├── datasets/
-│   │   │   └── basic-dataset.json
-│   │   └── eval_config.yaml
-│   ├── integration/
-│   │   ├── test_agent.py
-│   │   └── test_server_e2e.py
-│   └── unit/
-│       └── test_dummy.py
-├── .env
-├── Dockerfile
-├── GEMINI.md
-├── README.md
-├── agents-cli-manifest.yaml
-├── pyproject.toml
-└── uv.lock
-```
-
-### 第 3 步：安装依赖
-
-脚手架会创建一个包含正确 ADK 依赖的 `pyproject.toml`。安装它：
-
-```bash
 uv sync
 ```
 
-!!! note "google-adk ≠ google-antigravity"
-    模块 3 使用 `google-antigravity`（用于在 agy 内构建代理的 Antigravity SDK）。模块 5 使用 `google-adk`（用于构建部署到 Google Cloud 的独立 ADK 代理的 Agent Development Kit）。它们是具有不同 API 的不同包。`agents-cli scaffold` 始终会自动设置 `google-adk`。
+> **google-adk ≠ google-antigravity**
+>
+> 模块 3 使用 `google-antigravity`（用于在 agy 中构建代理的 Antigravity SDK）。模块 5 使用 `google-adk`（用于构建部署到 Google Cloud 的独立 ADK 代理的 Agent Development Kit）。它们是具有不同 API 的不同包。`agents-cli scaffold` 始终会自动设置 `google-adk`。
 
-### 第 4 步：配置环境
+### 第 3 步：配置环境
 
 ```bash
 # If using AI Studio:
@@ -93,16 +57,20 @@ echo 'GOOGLE_API_KEY=your-key-here' >> .env
 
 # If using Google Cloud:
 echo 'GOOGLE_CLOUD_PROJECT=your-project-id' >> .env
-echo 'GOOGLE_CLOUD_LOCATION=us-east1' >> .env
+echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
 ```
+
+> **位置选择**
+>
+> 在 Agent 平台上，通常建议将 `GOOGLE_CLOUD_LOCATION` 设置为 `global`，以确保与所有模型系列的兼容性。如果你必须使用区域端点（例如 `us-central1` 或 `us-east5`），请确保你使用的模型在你的 GCP 项目的该区域中可用。
 
 ---
 
-## 第 2 部分：构建代理 (15 分钟)
+## 第 2 部分：构建代理（15 分钟）
 
 ### 第 1 步：定义工具
 
-编辑 `app/tools.py` 以添加一个转录提取工具：
+编辑 `app/tools.py` 以添加一个会议记录提取工具：
 
 ```python
 def extract_action_items(transcript: str) -> dict:
@@ -198,7 +166,7 @@ environment for the MVP."
 
 - [ ] 代理调用 `extract_action_items`
 - [ ] 代理使用结构化数据调用 `format_summary`
-- [ ] 输出包含带有负责人和截止日期的行动项
+- [ ] 输出包含带有负责人和截止日期的待办事项
 - [ ] 列出了关键决策
 
 ---
@@ -262,6 +230,9 @@ metrics_to_run:
 
 custom_metrics:
   - name: meeting_summary_quality
+    # Optional: override the judge model for this custom metric.
+    # Must be a fully-qualified resource path. Omit to use the service default autorater.
+    judge_model: projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/gemini-3.1-flash-lite
     prompt_template: |
       Evaluate the agent's meeting summary on these criteria (1-5 each):
 
@@ -278,6 +249,12 @@ custom_metrics:
       Return JSON: {"score": <1-5 average>, "explanation": "<detailed reasoning>"}
 ```
 
+> **代理平台裁判模型配置**
+>
+> 1. **默认自动评分器 (autorater)**：内置指标（例如 `multi_turn_task_success`、`final_response_quality`）使用 GenAI Evaluation Service 的服务器端自动评分器 —— 您无法为这些指标覆盖裁判模型。对于自定义的 `LLMMetric` 条目，省略 `judge_model` 也会使用服务默认设置。
+> 2. **资源路径格式**：自定义 `LLMMetric` 条目接受一个可选的 `judge_model` 字段。它**必须**是一个完全限定的路径：`projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`。仅使用像 `gemini-3.1-flash-lite` 这样的短名称会导致 `400 INVALID_ARGUMENT` 错误。请参阅 [代理平台裁判模型配置](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model) 文档。
+> 3. **模型选择**：使用 `gemini-3.1-flash-lite` 进行经济高效的评判，或使用 `gemini-3.1-pro-preview` 进行更高质量的量规评估。请勿使用已弃用的模型（`gemini-1.5-flash`、`gemini-1.5-pro`）。
+
 ### 第 3 步：运行评估
 
 ```bash
@@ -288,7 +265,7 @@ agents-cli eval generate
 agents-cli eval grade
 ```
 
-查看输出结果。如果任何指标得分低于阈值，请继续执行第 4 部分。
+查看输出。如果任何指标得分低于阈值，请继续执行第 4 部分。
 
 ---
 
@@ -313,11 +290,11 @@ cat artifacts/grade_results/results_*.json | python -m json.tool | head -50
 | 症状 | 修复方法 |
 | :-- | :-- |
 | 代理跳过 `extract_action_items` | 强化指令：“你必须首先调用 extract_action_items” |
-| 缺少负责人 | 在指令中添加：“每个行动项都必须有负责人——如果不清楚，请使用‘未分配’” |
-| 产生幻觉的行动项 | 添加：“绝不要添加记录中未明确说明的行动项” |
-| tool_use_quality 较低 | 改进工具文档字符串——对参数进行更具体的说明 |
+| 缺少负责人 | 在指令中添加：“每个行动项必须有一个负责人——如果不清楚，请使用‘未分配’” |
+| 产生幻觉的行动项 | 添加：“绝不添加记录中未明确说明的行动项” |
+| tool_use_quality 较低 | 改进工具的文档字符串——对参数的描述更具体一些 |
 
-### 第 3 步：重新评估与比较
+### 第 3 步：重新评估并比较
 
 ```bash
 # Save the previous results
@@ -367,7 +344,7 @@ agents-cli eval dataset synthesize \
 
 ### 让 agy 驱动整个流程
 
-打开一个 agy 会话并说：
+打开一个 agy 会话并输入：
 
 ```text
 > Use agents-cli to improve my meeting-notes agent.
@@ -383,19 +360,19 @@ agents-cli eval dataset synthesize \
 
 - [ ] 使用 `agents-cli scaffold create` 搭建项目脚手架
 - [ ] 定义了两个工具：`extract_action_items` 和 `format_summary`
-- [ ] 代理指令包含清晰的工作流程和规则
+- [ ] 代理指令包含清晰的工作流和规则
 - [ ] 使用 `agents-cli run` 通过冒烟测试
 - [ ] 在 `basic-dataset.json` 中编写了三个评估用例
 - [ ] 定义了自定义的 `meeting_summary_quality` 指标
 - [ ] `agents-cli eval generate` + `eval grade` 成功运行
-- [ ] 至少完成了一次评估-修复迭代，且 `eval compare` 显示有所改进
+- [ ] 至少完成了一次评估-修复迭代，且 `eval compare` 显示有改进
 
 ---
 
 ## 核心要点
 
-1. **`agents-cli scaffold create`** 初始化整个项目结构 —— 不要手动进行设置
-2. **`agents-cli eval` 不是可选的** —— 它是演示版本和生产级代理之间的区别
-3. **pytest ≠ eval** —— pytest 测试代码的正确性；eval 测试代理的行为
-4. **eval-fix 循环是迭代的** —— 预计需要 5–10 轮以上；这是正常现象
-5. **agents-cli 技能**自动让你的编码代理 (agy) 成为 ADK 开发专家
+1. **`agents-cli scaffold create`** 会生成整个项目结构 —— 不要手动设置
+2. **`agents-cli eval` 是必不可少的** —— 它是演示版本和生产级代理之间的区别
+3. **pytest ≠ eval** —— pytest 测试代码正确性；eval 测试代理行为
+4. **eval-fix 循环是迭代的** —— 预计需要 5-10 轮以上；这是正常的
+5. **agents-cli 技能** 会自动让你的编码代理 (agy) 成为 ADK 开发专家

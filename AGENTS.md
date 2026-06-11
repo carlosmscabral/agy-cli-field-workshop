@@ -17,6 +17,11 @@ contract for this repository. **Follow every rule here before committing.**
   `LlmAgent`, `SequentialAgent`, `FunctionTool`, or `adk web/run/deploy`.
 - **Grounding:** `research/sdk-grounding.md` is the authoritative SDK reference.
   Verify every SDK code sample against it before committing.
+- **⚠️ Exercises dual-copy:** `exercises/*.md` (repo root) and `docs/exercises/*.md`
+  are **separate files, not symlinks**. MkDocs and the translation pipeline both
+  read from `docs/exercises/`. Always edit `docs/exercises/` first, then copy back
+  to `exercises/` if you want the standalone version in sync. Editing only
+  `exercises/` will **not** update the site or translations.
 
 ---
 
