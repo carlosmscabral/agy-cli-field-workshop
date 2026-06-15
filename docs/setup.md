@@ -107,8 +107,8 @@ agy --help
 # List installed plugins (output is JSON)
 agy plugin list
 
-# Pretty-print the plugin list
-agy plugin list | python3 -m json.tool
+# Pretty-print the plugin list (works once plugins are installed in Module 2)
+# agy plugin list | python3 -m json.tool
 
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
@@ -117,7 +117,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 Checklist before the workshop starts:
 
 - [ ] `agy --help` shows flags and subcommands
-- [ ] `agy plugin list` returns JSON without errors
+- [ ] `agy plugin list` returns successfully
 - [ ] `agy --print "..."` returns a response
 
 ---
@@ -128,7 +128,7 @@ Checklist before the workshop starts:
 | :-- | :-- |
 | `agy: command not found` | Check that the binary is in your PATH. Run `echo $PATH` and ensure the install dir is included. Re-run the install script if needed |
 | Auth errors / browser doesn't open | For SSH sessions, copy the printed URL manually. For local, check default browser settings. Run `/logout` and retry |
-| `agy plugin list` returns empty `{}` | Expected on a fresh install. You'll populate plugins in Module 2 |
+| `agy plugin list` returns `No imported plugins.` | Expected on a fresh install (not JSON). You'll populate plugins in Module 2 |
 | Slow first response | First run may be slower as agy indexes your workspace |
 | Config not loading | Check `~/.gemini/antigravity/settings.json` (user settings) and `.agents/` (project settings) |
 

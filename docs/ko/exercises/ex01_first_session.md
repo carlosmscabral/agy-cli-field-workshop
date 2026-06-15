@@ -15,8 +15,8 @@ agy-cli를 실행하고 코드베이스를 탐색하며, 향후 모든 세션을
 작업할 Git 저장소가 필요합니다. 이 저장소의 샘플 앱을 사용하거나 본인의 저장소를 가져오세요:
 
 ```bash
-# Option A: Use the workshop sample (minimal Node.js app)
-cd samples/demo-app
+# Option A: Use this workshop repository (you're already here)
+# No need to cd — just start agy from the repo root
 
 # Option B: Use any of your own Git repos
 cd /path/to/your/project

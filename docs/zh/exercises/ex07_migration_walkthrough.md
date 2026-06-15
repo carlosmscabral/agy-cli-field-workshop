@@ -97,6 +97,7 @@ EOF
 mkdir -p .agents/hooks
 # AGY reads .agents/ instead of .gemini/ for project config
 cp .gemini/GEMINI.md .agents/AGENTS.md
+cp .gemini/settings.json .agents/settings.json
 ```
 
 ### 第 2 步：分离 MCP 配置

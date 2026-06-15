@@ -194,8 +194,16 @@ if $CHECK_UPSTREAM; then
     log_section "  Checking AUDIT.md freshness..."
     audit_date=$(grep -oE 'Audit date:.*[0-9]{4}-[0-9]{2}-[0-9]{2}' "$AUDIT_FILE" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
     if [ -n "$audit_date" ]; then
-      days_old=$(( ( $(date +%s) - $(date -j -f "%Y-%m-%d" "$audit_date" +%s 2>/dev/null || echo 0) ) / 86400 ))
-      if [ "$days_old" -lt 30 ]; then
+      audit_ts=0
+      if date -d "$audit_date" +%s &>/dev/null; then
+        audit_ts=$(date -d "$audit_date" +%s)
+      elif date -j -f "%Y-%m-%d" "$audit_date" +%s &>/dev/null; then
+        audit_ts=$(date -j -f "%Y-%m-%d" "$audit_date" +%s)
+      fi
+      days_old=$(( ( $(date +%s) - audit_ts ) / 86400 ))
+      if [ "$audit_ts" -eq 0 ]; then
+        log_warn "Could not convert audit date '$audit_date' to epoch timestamp"
+      elif [ "$days_old" -lt 30 ]; then
         log_ok "AUDIT.md is ${days_old} days old (fresh)"
       elif [ "$days_old" -lt 90 ]; then
         log_warn "AUDIT.md is ${days_old} days old — consider refreshing (see VERIFICATION.md)"

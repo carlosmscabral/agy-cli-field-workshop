@@ -107,8 +107,8 @@ agy --help
 # List installed plugins (output is JSON)
 agy plugin list
 
-# Pretty-print the plugin list
-agy plugin list | python3 -m json.tool
+# Pretty-print the plugin list (works once plugins are installed in Module 2)
+# agy plugin list | python3 -m json.tool
 
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
@@ -117,7 +117,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 워크숍 시작 전 체크리스트:
 
 - [ ] `agy --help` 실행 시 플래그와 하위 명령어가 표시됨
-- [ ] `agy plugin list` 실행 시 오류 없이 JSON을 반환함
+- [ ] `agy plugin list` 가 정상적으로 실행됨
 - [ ] `agy --print "..."` 실행 시 응답을 반환함
 
 ---
@@ -128,7 +128,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 | :-- | :-- |
 | `agy: command not found` | 바이너리가 PATH에 있는지 확인하세요. `echo $PATH`를 실행하여 설치 디렉터리가 포함되어 있는지 확인합니다. 필요한 경우 설치 스크립트를 다시 실행하세요. |
 | 인증 오류 / 브라우저가 열리지 않음 | SSH 세션의 경우 출력된 URL을 수동으로 복사하세요. 로컬의 경우 기본 브라우저 설정을 확인하세요. `/logout`을 실행하고 다시 시도하세요. |
-| `agy plugin list`가 빈 `{}`를 반환함 | 새로 설치한 경우 정상적인 동작입니다. 모듈 2에서 플러그인을 추가하게 됩니다. |
+| `agy plugin list`가 `No imported plugins.`를 반환함 | 새로 설치한 경우 정상적인 동작입니다(JSON 아님). 모듈 2에서 플러그인을 추가하게 됩니다. |
 | 첫 응답이 느림 | agy가 작업 공간을 인덱싱하므로 첫 실행은 더 느릴 수 있습니다. |
 | 설정이 로드되지 않음 | `~/.gemini/antigravity/settings.json`(사용자 설정) 및 `.agents/`(프로젝트 설정)를 확인하세요. |
 

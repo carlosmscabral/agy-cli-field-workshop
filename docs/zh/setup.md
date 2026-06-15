@@ -107,8 +107,8 @@ agy --help
 # List installed plugins (output is JSON)
 agy plugin list
 
-# Pretty-print the plugin list
-agy plugin list | python3 -m json.tool
+# Pretty-print the plugin list (works once plugins are installed in Module 2)
+# agy plugin list | python3 -m json.tool
 
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
@@ -117,7 +117,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 工作坊开始前的检查清单：
 
 - [ ] `agy --help` 显示标志和子命令
-- [ ] `agy plugin list` 返回 JSON 且无错误
+- [ ] `agy plugin list` 成功返回
 - [ ] `agy --print "..."` 返回响应
 
 ---
@@ -128,7 +128,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 | :-- | :-- |
 | `agy: command not found` | 检查该二进制文件是否在您的 PATH 中。运行 `echo $PATH` 并确保包含安装目录。如果需要，请重新运行安装脚本 |
 | 身份验证错误 / 浏览器未打开 | 对于 SSH 会话，请手动复制打印的 URL。对于本地环境，请检查默认浏览器设置。运行 `/logout` 并重试 |
-| `agy plugin list` 返回空 `{}` | 全新安装时的预期行为。您将在模块 2 中填充插件 |
+| `agy plugin list` 返回 `No imported plugins.` | 全新安装时的预期行为（非 JSON）。您将在模块 2 中填充插件 |
 | 首次响应缓慢 | 首次运行可能会比较慢，因为 agy 正在索引您的工作区 |
 | 配置未加载 | 检查 `~/.gemini/antigravity/settings.json`（用户设置）和 `.agents/`（项目设置） |
 

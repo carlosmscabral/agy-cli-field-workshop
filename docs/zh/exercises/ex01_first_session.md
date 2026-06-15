@@ -15,8 +15,8 @@
 您需要一个 Git 仓库来进行操作。请使用此仓库中的示例应用程序，或者使用您自己的：
 
 ```bash
-# Option A: Use the workshop sample (minimal Node.js app)
-cd samples/demo-app
+# Option A: Use this workshop repository (you're already here)
+# No need to cd — just start agy from the repo root
 
 # Option B: Use any of your own Git repos
 cd /path/to/your/project

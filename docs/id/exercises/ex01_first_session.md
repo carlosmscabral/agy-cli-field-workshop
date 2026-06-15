@@ -15,8 +15,8 @@ Luncurkan agy-cli, jelajahi basis kode, dan buat AGENTS.md yang membuat setiap s
 Anda memerlukan repositori Git untuk bekerja. Gunakan aplikasi sampel di repositori ini atau gunakan milik Anda sendiri:
 
 ```bash
-# Option A: Use the workshop sample (minimal Node.js app)
-cd samples/demo-app
+# Option A: Use this workshop repository (you're already here)
+# No need to cd — just start agy from the repo root
 
 # Option B: Use any of your own Git repos
 cd /path/to/your/project

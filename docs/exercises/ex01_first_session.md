@@ -15,8 +15,8 @@ Launch agy-cli, explore a codebase, and create an AGENTS.md that makes every fut
 You need a Git repository to work with. Use the sample app in this repo or bring your own:
 
 ```bash
-# Option A: Use the workshop sample (minimal Node.js app)
-cd samples/demo-app
+# Option A: Use this workshop repository (you're already here)
+# No need to cd — just start agy from the repo root
 
 # Option B: Use any of your own Git repos
 cd /path/to/your/project

@@ -97,6 +97,7 @@ Migrate the project yourself:
 mkdir -p .agents/hooks
 # AGY reads .agents/ instead of .gemini/ for project config
 cp .gemini/GEMINI.md .agents/AGENTS.md
+cp .gemini/settings.json .agents/settings.json
 ```
 
 ### Step 2: Separate MCP config

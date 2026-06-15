@@ -107,8 +107,8 @@ agy --help
 # List installed plugins (output is JSON)
 agy plugin list
 
-# Pretty-print the plugin list
-agy plugin list | python3 -m json.tool
+# Pretty-print the plugin list (works once plugins are installed in Module 2)
+# agy plugin list | python3 -m json.tool
 
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
@@ -117,7 +117,7 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 Daftar periksa sebelum lokakarya dimulai:
 
 - [ ] `agy --help` menampilkan flag dan subperintah
-- [ ] `agy plugin list` mengembalikan JSON tanpa kesalahan
+- [ ] `agy plugin list` berhasil dijalankan
 - [ ] `agy --print "..."` mengembalikan respons
 
 ---
@@ -128,7 +128,7 @@ Daftar periksa sebelum lokakarya dimulai:
 | :-- | :-- |
 | `agy: command not found` | Periksa apakah berkas biner ada di PATH Anda. Jalankan `echo $PATH` dan pastikan direktori instalasi disertakan. Jalankan ulang skrip instalasi jika diperlukan |
 | Kesalahan autentikasi / browser tidak terbuka | Untuk sesi SSH, salin URL yang dicetak secara manual. Untuk lokal, periksa pengaturan browser bawaan. Jalankan `/logout` dan coba lagi |
-| `agy plugin list` mengembalikan `{}` kosong | Diharapkan pada instalasi baru. Anda akan mengisi plugin pada Modul 2 |
+| `agy plugin list` mengembalikan `No imported plugins.` | Diharapkan pada instalasi baru (bukan JSON). Anda akan mengisi plugin pada Modul 2 |
 | Respons pertama lambat | Proses pertama mungkin lebih lambat karena agy mengindeks ruang kerja Anda |
 | Konfigurasi tidak dimuat | Periksa `~/.gemini/antigravity/settings.json` (pengaturan pengguna) dan `.agents/` (pengaturan proyek) |
 
