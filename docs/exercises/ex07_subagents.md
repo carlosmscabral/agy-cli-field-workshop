@@ -1,4 +1,4 @@
-# Exercise 4: Subagents
+# Exercise 7: Subagents
 
 > **Duration:** 20 min | **Module:** 4 — Multi-Agent & Advanced
 

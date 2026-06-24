@@ -272,9 +272,9 @@ Example `.agents/rules.md`:
 
 <div class="exercise-card" markdown>
 
-### :material-file-document: Exercise 3: --print Pipeline
+### :material-file-document: Exercise 12: --print Pipeline
 
-**File:** [`ex03_print_mode_pipeline.md`](exercises/ex03_print_mode_pipeline.md)
+**File:** [`ex12_print_mode_pipeline.md`](exercises/ex12_print_mode_pipeline.md)
 **Duration:** 20 min
 **Objective:** Build a multi-step shell pipeline using agy --print. Review staged changes, generate docs, and wire up a GitHub Actions workflow.
 

@@ -3,7 +3,7 @@
 <div class="module-header" markdown>
 **Duration:** ~75 minutes  
 **Goal:** Migrate a legacy application safely using Antigravity CLI primitives — strict permissions gating, agent self-onboarding, parallel subagent analysis, hooks as guardrails, and `/rewind` as your safety net.  
-**Exercise PRDs:** [.NET Modernization](exercises/ex08_dotnet_modernization.md) · [Java Upgrade](exercises/ex09_java_upgrade.md)
+**Exercise PRDs:** [.NET Modernization](exercises/ex03_dotnet_modernization.md) · [Java Upgrade](exercises/ex04_java_upgrade.md)
 </div>
 
 > 📖 Sources: [Permissions](https://antigravity.google/docs/permissions) · [Strict Mode](https://antigravity.google/docs/strict-mode) · [Subagents](https://antigravity.google/docs/subagents) · [Skills](https://antigravity.google/docs/skills) · [Hooks](https://antigravity.google/docs/hooks) · [cli-features](https://antigravity.google/docs/cli-features) · [cli-using](https://antigravity.google/docs/cli-using)
@@ -424,9 +424,9 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 <div class="exercise-card" markdown>
 
-### :material-file-document: Exercise 8: Legacy Modernization
+### :material-file-document: Exercises 3 & 4: Legacy Modernization
 
-**Files:** [`ex08_dotnet_modernization.md`](exercises/ex08_dotnet_modernization.md) · [`ex09_java_upgrade.md`](exercises/ex09_java_upgrade.md)  
+**Files:** [`ex03_dotnet_modernization.md`](exercises/ex03_dotnet_modernization.md) · [`ex04_java_upgrade.md`](exercises/ex04_java_upgrade.md)  
 **Duration:** 45 min  
 **Objective:** Walk through a full migration using the AGY primitives from this module.
 

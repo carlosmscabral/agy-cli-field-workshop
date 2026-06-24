@@ -1,4 +1,4 @@
-# Exercise 12: ADK Agent Lifecycle with agents-cli
+# Exercise 10: ADK Agent Lifecycle with agents-cli
 
 > **Duration:** 45 min | **Module:** 5 — Building ADK Agents with agents-cli
 

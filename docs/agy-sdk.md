@@ -3,7 +3,7 @@
 <div class="module-header" markdown>
 **Duration:** ~90 minutes  
 **Goal:** Build a production-ready AGY agent from scratch using the `google-antigravity` Python library — tools, hooks, policy, session state, multi-agent orchestration, and structured output.  
-**Exercises:** [Exercise 10: Your First Agent](exercises/ex10_first_agent.md) · [Exercise 11: Multi-Agent Pipeline](exercises/ex11_multi_agent_pipeline.md)
+**Exercises:** [Exercise 5: Your First Agent](exercises/ex05_first_agent.md) · [Exercise 6: Multi-Agent Pipeline](exercises/ex06_multi_agent_pipeline.md)
 </div>
 
 > 📖 Sources: [SDK Overview](https://antigravity.google/docs/sdk-overview) · [google-antigravity PyPI](https://pypi.org/project/google-antigravity/) · [Skills](https://antigravity.google/docs/skills)
@@ -518,9 +518,9 @@ gcloud run deploy my-code-reviewer \
 
 <div class="exercise-card" markdown>
 
-### :material-code-braces: Exercise 10: Your First AGY Agent
+### :material-code-braces: Exercise 5: Your First AGY Agent
 
-**File:** [`ex10_first_agent.md`](exercises/ex10_first_agent.md)  
+**File:** [`ex05_first_agent.md`](exercises/ex05_first_agent.md)  
 **Duration:** 45 min  
 **Build:** A **Code Review Agent** that reads files, identifies issues, and produces a structured review report.
 
@@ -536,9 +536,9 @@ gcloud run deploy my-code-reviewer \
 
 <div class="exercise-card" markdown>
 
-### :material-graph: Exercise 11: Multi-Agent Pipeline
+### :material-graph: Exercise 6: Multi-Agent Pipeline
 
-**File:** [`ex11_multi_agent_pipeline.md`](exercises/ex11_multi_agent_pipeline.md)  
+**File:** [`ex06_multi_agent_pipeline.md`](exercises/ex06_multi_agent_pipeline.md)  
 **Duration:** 45 min  
 **Build:** A **Write-then-Audit Pipeline** — a Technical Writer agent produces a document, then a Compliance Analyst audits it for GDPR gaps.
 

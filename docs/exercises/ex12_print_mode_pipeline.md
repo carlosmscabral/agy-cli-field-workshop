@@ -1,6 +1,6 @@
-# Exercise 3: --print Mode Pipeline
+# Exercise 12: --print Mode Pipeline
 
-> **Duration:** 20 min | **Module:** 3 — DevOps & Automation
+> **Duration:** 20 min | **Module:** Appendix — Optional Advanced Topics
 
 ---
 

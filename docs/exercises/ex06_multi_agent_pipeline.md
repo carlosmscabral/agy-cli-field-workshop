@@ -1,4 +1,4 @@
-# Exercise 11: Multi-Agent Pipeline
+# Exercise 6: Multi-Agent Pipeline
 
 > **Duration:** 45 min | **Module:** 3 — Building AGY Agents
 

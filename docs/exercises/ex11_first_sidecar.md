@@ -1,6 +1,6 @@
-# Exercise 2B: Your First Sidecar
+# Exercise 11: Your First Sidecar
 
-> **Duration:** 20 min | **Module:** 2 — Plugin Ecosystem
+> **Duration:** 20 min | **Module:** Appendix — Optional Advanced Topics
 
 ---
 

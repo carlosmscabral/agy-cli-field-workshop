@@ -2,147 +2,81 @@
 
 > Complete this before starting any module. Takes ~15 minutes.
 
+Welcome to the **Antigravity CLI Field Workshop**! To participate in the hands-on coding modules and exercises, you must first set up your development environment.
+
+We provide two distinct onboarding pathways depending on where you are running the workshop. Please select the track below that matches your setup.
+
 ---
 
-## System Requirements
+## Select Your Onboarding Track
+
+Choose the onboarding guide that corresponds to your workshop environment:
+
+<div class="grid cards" markdown>
+
+- :material-cloud:{ .lg .middle } **Track A — Cloud Shell & Qwiklabs**
+
+    ---
+
+    **Recommended for sandboxed environments.** Run the workshop inside a Google-provided, browser-based Cloud Shell.
+
+  - APIs are enabled directly by you (as project Owner).
+  - Google Cloud SDK and Python are pre-installed.
+  - Docker & Docker Compose are pre-installed.
+
+    [:octicons-arrow-right-24: Follow Track A Guide](setup-cloud-shell.md)
+
+- :material-laptop:{ .lg .middle } **Track B — Corporate Workstation**
+
+    ---
+
+    **For local developer laptops.** Develop and run the workshop on your physical machine (macOS, Windows, or Linux).
+
+  - Workspace uses project resources provisioned by your IT Administrator.
+  - Requires local installation of gcloud, Python, and Docker.
+  - Includes proxy, SSL certificate, and private registry support.
+
+    [:octicons-arrow-right-24: Follow Track B Guide](setup-corporate.md)
+
+</div>
+
+---
+
+## 🛠️ Are you the IT Administrator?
+
+If you are the Cloud/IT Administrator responsible for setting up the GCP sandbox project, provisioning IAM permissions, and whitelisting firewalls for your team's local machines **before** the workshop starts, please follow the admin guide:
+
+👉 **[Enterprise IT Admin & Provisioning Guide](setup-enterprise-admin.md)**
+
+---
+
+## General System Requirements
+
+If you are running on your local workstation, verify your system meets these baseline requirements. (If you are running on Cloud Shell, these are already pre-configured for you).
 
 | Component | Minimum | Notes |
 | :-- | :-- | :-- |
-| **agy** | Latest | Install instructions below |
-| **Git** | v2.30+ | For exercise repos |
-| **Terminal** | Any | iTerm2, macOS Terminal, or VS Code integrated |
-| **jq** | Optional | Useful for parsing `--print` JSON output |
+| **Antigravity CLI (agy)** | Latest | Installed during the onboarding guides. |
+| **Google Cloud SDK** | v410.0+ | Required for workstation-based ADC authentication. |
+| **Python** | v3.10 to v3.12 | Required for virtual environments and SDK exercises. |
+| **Docker** | v24.0+ | Required for building containerized applications locally. |
+| **Docker Compose** | v2.20+ | Required for running multi-container target services. |
+| **Git** | v2.30+ | Required for cloning the workshop and sample repos. |
+| **Terminal** | Any | bash, zsh, VS Code terminal, or PowerShell. |
 
 ---
 
-## Step 1: Install agy
+## Why Two Repositories?
 
-> 📖 Full instructions: [Getting Started docs](https://www.antigravity.google/docs/cli-getting-started)
+Regardless of which track you choose, you will work with **two separate repositories** during this workshop to maintain clean configurations and prevent self-referencing issues:
 
-### macOS / Linux
+1. **Workshop Repository (`agy-cli-field-workshop`)**: Contains the curriculum, guidebooks, verifiers, and step-by-step exercise instructions. This is the repository you are reading now.
+2. **Sample Application Sandbox (`agy-sample-app`)**: A separate target codebase (a premium FastAPI application) where you will run `agy` sessions, let agents run commands, and write SDK-based tools or test files.
 
-```bash
-curl -fsSL https://antigravity.google/cli/install.sh | bash
-```
-
-### Windows
-
-```powershell
-# PowerShell
-irm https://antigravity.google/cli/install.ps1 | iex
-
-# Or via WSL (recommended)
-curl -fsSL https://antigravity.google/cli/install.sh | bash
-```
-
-After install, verify the binary is available:
-
-```bash
-# Verify the binary is in your PATH
-which agy
-
-# Confirm the version
-agy --version
-```
+Both onboarding guides will walk you through cloning these repositories into adjacent directories.
 
 ---
 
-## Step 2: Authentication
+## Troubleshooting Support
 
-`agy` uses **browser-based Google Sign-In**. On first run, it will:
-
-- **Local machine:** Automatically open your default browser for sign-in.
-- **SSH / remote session:** Print a URL to paste into any browser, then paste the auth code back into the terminal.
-
-```bash
-# Start agy — auth will trigger automatically on first run
-agy
-```
-
-To sign out:
-
-```text
-# Run this inside an agy interactive session (not in your terminal):
-/logout
-```
-
-> 📖 For enterprise authentication via GCP project, see the [Enterprise docs](https://www.antigravity.google/docs/enterprise).
-
-Once auth is configured, run a quick smoke test:
-
-```bash
-agy --print "Say 'Workshop ready!' in exactly two words." --print-timeout 30s
-```
-
-Expected output: `Workshop ready!`
-
----
-
-## Step 3: Initialize Your Project Workspace
-
-During the workshop, we use two separate repositories to keep your configuration clean and avoid self-referencing issues:
-
-1. **Workshop Repository**: Contains all documentation, curriculum, and exercises.
-2. **Sample Application Sandbox**: The target project workspace (`agy-sample-app`) where you will run `agy`, make modifications, refactor code, and write unit tests.
-
-### Clone the Workshop Repository
-
-```bash
-git clone https://github.com/carlosmscabral/agy-cli-field-workshop.git
-cd agy-cli-field-workshop
-```
-
-### Clone the Target Sandbox Application
-
-```bash
-# Clone the sandbox into the parent directory
-git clone https://github.com/carlosmscabral/agy-sample-app.git ../agy-sample-app
-```
-
-### Understanding .agents/ Folder Creation
-
-`agy` auto-discovers workspace settings by looking for a `.agents/` folder. It does **not** auto-create this folder on a standard run to avoid cluttering fresh projects.
-
-If you want to use local, project-scoped customizations (such as custom skills, rules, or local MCP configurations), you **must create it manually**:
-
-```bash
-# Change into your sandbox app
-cd ../agy-sample-app
-
-# Create the agents directory
-mkdir -p .agents
-```
-
----
-
-## Step 4: Verify Everything
-
-```bash
-# Check agy is accessible
-agy --help
-
-# Quick print-mode smoke test
-agy --print "What is 2 + 2?" --print-timeout 30s
-```
-
-Checklist before the workshop starts:
-
-- [ ] `agy --help` shows flags and subcommands
-- [ ] `agy --print "..."` returns a response
-
----
-
-## Troubleshooting
-
-| Issue | Solution |
-| :-- | :-- |
-| `agy: command not found` | Check that the binary is in your PATH. Run `echo $PATH` and ensure the install dir is included. Re-run the install script if needed |
-| Auth errors / browser doesn't open | For SSH sessions, copy the printed URL manually. For local, check default browser settings. Run `/logout` and retry |
-| Slow first response | First run may be slower as agy indexes your workspace |
-| Config not loading | Check `~/.gemini/antigravity-cli/settings.json` (user settings) and `.agents/` (project settings) |
-
----
-
-## Next Step
-
-→ Start with **[Module 1: SDLC Productivity](sdlc-productivity.md)**
+If you encounter any workspace setup blocks, consult the troubleshooting section at the bottom of your chosen track's guide page, or ask your workshop facilitator for assistance.

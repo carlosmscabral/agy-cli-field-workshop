@@ -42,8 +42,10 @@ theme:
 nav:
   - Home: index.md
   - "📦 Pre-Work":
-      - Environment Setup: setup.md
-      - Enterprise Admin Guide: setup-enterprise-admin.md
+      - Introduction & Tracks: setup.md
+      - Track A - Cloud Shell Setup: setup-cloud-shell.md
+      - Track B - Corporate Developer Setup: setup-corporate.md
+      - IT Admin Provisioning Guide: setup-enterprise-admin.md
   - "🛠️ Workshop":
       - "1. SDLC Productivity": sdlc-productivity.md
       - "2. Legacy Modernization ⭐": legacy-modernization.md
@@ -51,19 +53,19 @@ nav:
       - "4. Multi-Agent & Advanced": multi-agent-advanced.md
       - "5. ADK Agents with agents-cli": agents-cli.md
   - "🧪 Exercises":
-      - "First Session (ex01)": exercises/ex01_first_session.md
-      - "Custom Skills (ex02)": exercises/ex02_custom_skills.md
-      - "First Sidecar (ex02b)": exercises/ex02b_first_sidecar.md
-      - "--print Pipeline (ex03)": exercises/ex03_print_mode_pipeline.md
-      - "Subagents (ex04)": exercises/ex04_subagents.md
-      - "/btw & Scheduling (ex05)": exercises/ex05_btw_scheduling.md
-      - "Sandbox Governance (ex06)": exercises/ex06_sandbox_governance.md
-      - "Migration Walkthrough (ex07)": exercises/ex07_migration_walkthrough.md
-      - ".NET Modernization (ex08)": exercises/ex08_dotnet_modernization.md
-      - "Java Upgrade (ex09)": exercises/ex09_java_upgrade.md
-      - "First Agent (ex10)": exercises/ex10_first_agent.md
-      - "Multi-Agent Pipeline (ex11)": exercises/ex11_multi_agent_pipeline.md
-      - "ADK Agent Lifecycle (ex12)": exercises/ex12_agents_cli_lifecycle.md
+      - "1. First Session (ex01)": exercises/ex01_first_session.md
+      - "2. Custom Skills (ex02)": exercises/ex02_custom_skills.md
+      - "3. .NET Modernization (ex03)": exercises/ex03_dotnet_modernization.md
+      - "4. Java Upgrade (ex04)": exercises/ex04_java_upgrade.md
+      - "5. Your First Agent (ex05)": exercises/ex05_first_agent.md
+      - "6. Multi-Agent Pipeline (ex06)": exercises/ex06_multi_agent_pipeline.md
+      - "7. Subagents (ex07)": exercises/ex07_subagents.md
+      - "8. /btw & Scheduling (ex08)": exercises/ex08_btw_scheduling.md
+      - "9. Sandbox Governance (ex09)": exercises/ex09_sandbox_governance.md
+      - "10. ADK Agent Lifecycle (ex10)": exercises/ex10_agents_cli_lifecycle.md
+      - "Appendix: First Sidecar (ex11)": exercises/ex11_first_sidecar.md
+      - "Appendix: --print Pipeline (ex12)": exercises/ex12_print_mode_pipeline.md
+      - "Appendix: Migration Walkthrough (ex13)": exercises/ex13_migration_walkthrough.md
   - "📋 Resources":
       - Cheatsheet: cheatsheet.md
       - Facilitator Guide: facilitator-guide.md

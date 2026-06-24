@@ -192,10 +192,11 @@ if ($gcloudCmd) {
 Write-Host ""
 
 # -----------------------------------------------------------------------------
-# 4. Antigravity CLI (agy) Setup Check
+# 4. Antigravity CLI (agy) & Docker Environment Checks
 # -----------------------------------------------------------------------------
-Write-HostColor "[4/5] Checking Antigravity CLI (agy) Installation" $blue
+Write-HostColor "[4/5] Checking Antigravity CLI (agy) & Docker Environment" $blue
 
+# Check agy installation
 $agyCmd = Get-Command agy -ErrorAction SilentlyContinue
 if ($agyCmd) {
     try {
@@ -206,6 +207,55 @@ if ($agyCmd) {
     }
 } else {
     Assert-Result "FAIL" "agy CLI is not installed or not in your system PATH" "Follow the instructions in setup.md to install agy"
+}
+
+# Check Docker Client installation
+$dockerCmd = Get-Command docker -ErrorAction SilentlyContinue
+if ($dockerCmd) {
+    try {
+        $dockerVer = (docker --version) -join ""
+        Assert-Result "PASS" "Docker client is installed ($dockerVer)"
+    } catch {
+        Assert-Result "PASS" "Docker client is installed"
+    }
+} else {
+    Assert-Result "FAIL" "Docker client is not installed" "Please install Docker Desktop (or Rancher Desktop) on your workstation"
+}
+
+# Check Docker Compose (v2 preferred)
+try {
+    $composeProc = Start-Process -FilePath "docker" -ArgumentList "compose", "version" -NoNewWindow -PassThru -Wait
+    if ($composeProc.ExitCode -eq 0) {
+        Assert-Result "PASS" "Docker Compose is installed (v2)"
+    } else {
+        throw "Failed to run docker compose"
+    }
+} catch {
+    $dockerComposeCmd = Get-Command docker-compose -ErrorAction SilentlyContinue
+    if ($dockerComposeCmd) {
+        try {
+            $composeVer = (docker-compose --version) -join ""
+            Assert-Result "PASS" "Docker Compose is installed (version $composeVer)"
+        } catch {
+            Assert-Result "PASS" "Docker Compose is installed"
+        }
+    } else {
+        Assert-Result "FAIL" "Docker Compose is not installed" "Verify Docker Desktop is installed or configure docker-compose"
+    }
+}
+
+# Check Docker Daemon running state
+if ($dockerCmd) {
+    try {
+        $infoProc = Start-Process -FilePath "docker" -ArgumentList "info" -NoNewWindow -PassThru -Wait
+        if ($infoProc.ExitCode -eq 0) {
+            Assert-Result "PASS" "Docker Daemon is active & running"
+        } else {
+            Assert-Result "FAIL" "Docker Daemon is not running" "Start Docker Desktop or Rancher Desktop to activate the local container runtime"
+        }
+    } catch {
+        Assert-Result "FAIL" "Docker Daemon is not running" "Start Docker Desktop or Rancher Desktop to activate the local container runtime"
+    }
 }
 
 Write-Host ""

@@ -1,4 +1,4 @@
-# Exercise 6: Sandbox & Governance
+# Exercise 9: Sandbox & Governance
 
 > **Duration:** 15 min | **Module:** 4 — Multi-Agent & Advanced
 

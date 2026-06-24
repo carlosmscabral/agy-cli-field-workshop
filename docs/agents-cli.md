@@ -5,7 +5,7 @@
 <div class="module-header" markdown>
 **Duration:** ~75 minutes  
 **Goal:** Use `agents-cli` to scaffold, build, evaluate, and deploy a production-grade ADK agent — entirely from within your Antigravity CLI session.  
-**Exercise:** [Exercise 12: ADK Agent — Scaffold, Eval, Deploy](exercises/ex12_agents_cli_lifecycle.md)
+**Exercise:** [Exercise 10: ADK Agent — Scaffold, Eval, Deploy](exercises/ex10_agents_cli_lifecycle.md)
 </div>
 
 > 📖 Sources: [agents-cli GitHub](https://github.com/google/agents-cli) · [agents-cli Docs](https://google.github.io/agents-cli/) · [ADK](https://adk.dev) · [PyPI](https://pypi.org/project/google-agents-cli/)
@@ -368,9 +368,9 @@ The 7 skills installed by `agents-cli setup`:
 
 <div class="exercise-card" markdown>
 
-### :material-file-document: Exercise 12: ADK Agent Lifecycle
+### :material-file-document: Exercise 10: ADK Agent Lifecycle
 
-**File:** [`ex12_agents_cli_lifecycle.md`](exercises/ex12_agents_cli_lifecycle.md)
+**File:** [`ex10_agents_cli_lifecycle.md`](exercises/ex10_agents_cli_lifecycle.md)
 **Duration:** 45 min
 **Objective:** Scaffold, build, evaluate, and iterate on an ADK agent using the agents-cli workflow — from `scaffold create` through passing evals.
 

@@ -1,4 +1,4 @@
-# Exercise 7 — Migration Walkthrough
+# Exercise 13 — Migration Walkthrough
 
 > **Module:** Appendix — Migration Guide
 > **Time:** 20 min

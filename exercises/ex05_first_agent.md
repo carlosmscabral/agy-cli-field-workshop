@@ -1,4 +1,4 @@
-# Exercise 10: Your First AGY Agent
+# Exercise 5: Your First AGY Agent
 
 > **Duration:** 45 min | **Module:** 3 — Building AGY Agents
 

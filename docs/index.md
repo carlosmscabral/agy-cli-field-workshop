@@ -31,7 +31,7 @@ hide:
 
     The flagship module. Migrate a real legacy codebase (.NET or Java) using strict mode, agent self-onboarding, and subagent planning.
 
-    **90 min** · Exercises: ex08, ex09
+    **90 min** · Exercises: ex03, ex04
 
     [:octicons-arrow-right-24: Start Module 2](legacy-modernization.md)
 
@@ -41,7 +41,7 @@ hide:
 
     Build production agents with the Antigravity SDK. Tools, session state, multi-agent orchestration, and deploy to Cloud Run.
 
-    **90 min** · Exercises: ex10, ex11
+    **90 min** · Exercises: ex05, ex06
 
     [:octicons-arrow-right-24: Start Module 3](agy-sdk.md)
 
@@ -51,7 +51,7 @@ hide:
 
     Spawn isolated subagents, steer tasks mid-flight with `/btw`, schedule recurring jobs, and resume long-running sessions by ID.
 
-    **60 min** · Exercises: ex04–ex06
+    **60 min** · Exercises: ex07–ex09
 
     [:octicons-arrow-right-24: Start Module 4](multi-agent-advanced.md)
 
@@ -61,7 +61,7 @@ hide:
 
     Use agents-cli to scaffold, build, evaluate, and deploy production ADK agents — the full 7-phase lifecycle from prototype to Cloud Run.
 
-    **75 min** · Exercise: ex12
+    **75 min** · Exercise: ex10
 
     [:octicons-arrow-right-24: Start Module 5](agents-cli.md)
 

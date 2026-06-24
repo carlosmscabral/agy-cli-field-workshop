@@ -1,4 +1,4 @@
-# Exercise 5: /btw & Scheduling
+# Exercise 8: /btw & Scheduling
 
 > **Duration:** 20 min | **Module:** 4 — Multi-Agent & Advanced
 

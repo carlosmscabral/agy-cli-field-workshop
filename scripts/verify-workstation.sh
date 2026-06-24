@@ -166,15 +166,44 @@ fi
 echo ""
 
 # -----------------------------------------------------------------------------
-# 4. Antigravity CLI (agy) Setup Check
+# 4. Antigravity CLI (agy) & Docker Environment Checks
 # -----------------------------------------------------------------------------
-echo -e "${BLUE}[4/5] Checking Antigravity CLI (agy) Installation${NC}"
+echo -e "${BLUE}[4/5] Checking Antigravity CLI (agy) & Docker Environment${NC}"
 
+# Check agy installation
 if command -v agy &>/dev/null; then
   AGY_VERSION=$(agy --version 2>/dev/null || echo "Unknown")
   check_result "PASS" "agy CLI is installed and in user PATH (version $AGY_VERSION)"
 else
   check_result "FAIL" "agy CLI is not installed or not in your system PATH" "Follow the instructions in setup.md to install agy"
+fi
+
+# Check Docker Client installation
+if command -v docker &>/dev/null; then
+  DOCKER_VER=$(docker --version | awk '{print $3}' | tr -d ',')
+  check_result "PASS" "Docker client is installed (version $DOCKER_VER)"
+else
+  check_result "FAIL" "Docker client is not installed" "Please install Docker Desktop (or Rancher Desktop) on your workstation"
+fi
+
+# Check Docker Compose (v2 preferred)
+if docker compose version &>/dev/null; then
+  COMPOSE_VER=$(docker compose version | awk '{print $4}')
+  check_result "PASS" "Docker Compose is installed ($COMPOSE_VER)"
+elif command -v docker-compose &>/dev/null; then
+  COMPOSE_VER=$(docker-compose --version | awk '{print $3}')
+  check_result "PASS" "Docker Compose is installed (version $COMPOSE_VER)"
+else
+  check_result "FAIL" "Docker Compose is not installed" "Verify Docker Desktop is installed or install the docker-compose-plugin"
+fi
+
+# Check Docker Daemon running state
+if command -v docker &>/dev/null; then
+  if docker info &>/dev/null; then
+    check_result "PASS" "Docker Daemon is active & running"
+  else
+    check_result "FAIL" "Docker Daemon is not running" "Start Docker Desktop or Rancher Desktop to activate the local container runtime"
+  fi
 fi
 
 echo ""
