@@ -290,6 +290,16 @@ This is multi-agent incident triage — two parallel investigations, steerable m
 
 </div>
 
+<div class="exercise-card" markdown>
+
+### :material-file-document: Exercise 14: Dataplex Metadata Curation (Optional)
+
+**File:** [`exercises/ex14_dataplex_metadata_steward.md`](exercises/ex14_dataplex_metadata_steward.md)  
+**Duration:** 20 min  
+**Objective:** Ground the agent on official docs via the Developer Knowledge MCP, discover untagged data lake entries, and curate BigQuery tables inside the `agy` CLI using Google's native managed remote MCP servers.
+
+</div>
+
 ---
 
 ## You're Done 🎉
