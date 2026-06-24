@@ -29,7 +29,7 @@ Total: ~7 hours (extended) · Full day: Modules 1–4 (~5.5 hrs) · Half-day: Mo
 curl -fsSL https://antigravity.google/cli/install.sh | bash
 
 # Clone the workshop repo
-git clone https://github.com/pauldatta/agy-cli-field-workshop.git
+git clone https://github.com/carlosmscabral/agy-cli-field-workshop.git
 cd agy-cli-field-workshop
 
 # Validate your environment

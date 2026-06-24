@@ -84,7 +84,7 @@ agy 通过从当前目录向上遍历来自动发现项目配置，查找 `.agen
 
 ```bash
 # Clone the workshop exercises repo
-git clone https://github.com/pauldatta/agy-cli-field-workshop.git
+git clone https://github.com/carlosmscabral/agy-cli-field-workshop.git
 cd agy-cli-field-workshop
 
 # agy will create .agents/ on first run

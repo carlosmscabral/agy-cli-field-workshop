@@ -194,7 +194,7 @@ Use the migration-validator agent to check this project directory for any remain
 
 向迁移后的项目添加一个 `PreToolUse` 钩子，以阻止代理在未经确认的情况下调用 `git push`。使用钩子的 `decision: deny` 模式。
 
-参考 [`samples/hooks/secret-scanner.sh`](https://github.com/pauldatta/agy-cli-field-workshop/blob/main/samples/hooks/secret-scanner.sh) 作为决策模式的模板。
+参考 [`samples/hooks/secret-scanner.sh`](https://github.com/carlosmscabral/agy-cli-field-workshop/blob/main/samples/hooks/secret-scanner.sh) 作为决策模式的模板。
 
 ---
 

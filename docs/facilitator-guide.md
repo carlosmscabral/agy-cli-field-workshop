@@ -8,9 +8,6 @@
 
 This is a **5-module, ~7-hour hands-on workshop** for Antigravity CLI. It is designed for developer audiences: engineers, tech leads, and solution architects evaluating or adopting Antigravity CLI.
 
-!!! warning "Gemini CLI Sunset: June 18, 2026"
-    Gemini CLI reaches end-of-life on **June 18, 2026**. When participants ask about migration, direct them to `agy plugin import gemini` — this is the primary migration path. All Gemini CLI plugins carry over in one command.
-
 ---
 
 ## Delivery Formats
@@ -53,7 +50,7 @@ This is a **5-module, ~7-hour hands-on workshop** for Antigravity CLI. It is des
 - **Demo first, exercise second.** Live-demo section 1.1 (code understanding) on your own codebase before asking participants to try theirs.
 - **Common friction:** participants try to write perfect prompts. Encourage natural language. "Tell me how the auth works" is better than "Please explain the authentication architecture of this codebase."
 - **The AGENTS.md moment:** section 1.5 is a high-value demo. Create an AGENTS.md live on screen and show how the next session is immediately smarter.
-- **Plugin import demo (section 1.7):** run `agy plugin import gemini` live — the visual output is compelling. Note: **custom themes are silently dropped** during import and cannot be migrated. If a participant asks why their theme didn't carry over, this is expected behavior — there's no error, the component is simply skipped.
+- **Custom Skills live-demo (section 1.7):** create a simple custom skill in `.agents/skills/code-reviewer/SKILL.md` live. Run `agy` and type `/skills` to show it loaded the skill. This demonstrates how teams can codify custom styles and expert knowledge without modifying source code.
 
 ### Module 2 — Legacy Codebase Modernization (90 min)
 
@@ -78,7 +75,7 @@ This is a **5-module, ~7-hour hands-on workshop** for Antigravity CLI. It is des
 **Key message:** the CLI is for individuals. An SDK agent is a specialist service your whole team can call.
 
 - **Setup gate:** ensure everyone has `google-antigravity` installed and Vertex AI or AI Studio auth working before starting. This is the most common blocker.
-- **The `adk web .` moment:** once participants get their first agent running in the browser UI, the energy changes — they see it responding to their tools.
+- **Local run experience:** once participants get their first agent executing locally using `asyncio.run(main())` and printing tool call steps in the terminal, they see how `google-antigravity` connects plain Python functions as tools.
 - **Model selection table:** emphasize Flash-lite for generation, Pro for orchestration. Cost-consciousness is a feature, not a compromise.
 - **Exercise 11 (pipeline):** the `asyncio.gather` + `START_SUBAGENT` multi-agent pattern is the key architecture insight. Spend 5 min explaining how subagents compose before they start.
 
@@ -106,13 +103,12 @@ This is a **5-module, ~7-hour hands-on workshop** for Antigravity CLI. It is des
 | Question | Answer |
 | :-- | :-- |
 | "What model does agy use?" | Use `/model` to see and switch. See [Models docs](https://www.antigravity.google/docs/models). |
-| "How is this different from Gemini CLI?" | agy bridges plugins from Gemini CLI and Claude, has native subagent orchestration, and `/btw` mid-task steering. Gemini CLI reaches EOL June 18, 2026. |
-| "Can I use my own API key?" | agy uses browser-based Google Sign-In. Enterprise users connect a GCP project. See [Enterprise docs](https://www.antigravity.google/docs/enterprise). |
+| "How is this different from older assistants?" | `agy` provides workspace-level isolation, customizable Skills (`.agents/skills/`), native subagent orchestration, and `/btw` mid-task steering. |
+| "Can I use my own API key?" | `agy` uses browser-based Google Sign-In. Enterprise users connect a GCP project. See [Enterprise docs](https://www.antigravity.google/docs/enterprise). |
 | "Is the code sent to Google?" | See the [FAQ](https://www.antigravity.google/docs/faq) for data handling details. |
-| "What about hooks?" | agy-cli supports hooks via `hooks.json`. See [Hooks docs](https://www.antigravity.google/docs/hooks). |
+| "What about hooks?" | `agy-cli` supports hooks via `hooks.json`. See [Hooks docs](https://www.antigravity.google/docs/hooks). |
 | "Where are conversation logs stored?" | `~/.gemini/antigravity/conversations/` |
-| "My Gemini CLI theme didn't import." | Expected — custom themes are silently dropped during `agy plugin import gemini`. Skills, MCP servers, and agents do carry over. |
-| "Can I deploy SDK agents to Cloud Run?" | Yes — `adk deploy cloud_run`. See Module 3 section 3.6. |
+| "Can I deploy SDK agents to Cloud Run?" | Yes — since Antigravity SDK agents are standard Python applications, you can containerize them and deploy using standard `gcloud run deploy`. See Module 3 section 3.6. |
 
 ---
 
@@ -125,7 +121,7 @@ This is a **5-module, ~7-hour hands-on workshop** for Antigravity CLI. It is des
 | `agy plugin list` errors | Check that `~/.gemini/antigravity/` exists |
 | Slow responses | Check network. First run after idle may be slower due to workspace indexing. |
 | Subagent doesn't spawn | Confirm the participant is in interactive mode (not `--print`) |
-| `google-adk` import errors (M3) | Ensure venv is activated: `source .venv/bin/activate` |
+| `google-antigravity` import errors (M3) | Ensure venv is activated: `source .venv/bin/activate` |
 | Vertex AI 403 (M3) | Run `gcloud auth application-default login` and confirm `GOOGLE_CLOUD_PROJECT` is set |
 
 ---

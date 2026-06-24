@@ -38,7 +38,7 @@ or locally via `make precommit`. Run the full suite with `make precommit`.
 
 > **Audit date:** 2026-05-25 (v5 — confirmed current state only)
 > **Auditor:** Antigravity Agent (Chrome DevTools MCP + live binary)
-> **Workshop:** [Antigravity CLI Field Workshop](https://github.com/pauldatta/agy-cli-field-workshop)
+> **Workshop:** [Antigravity CLI Field Workshop](https://github.com/carlosmscabral/agy-cli-field-workshop)
 
 ---
 

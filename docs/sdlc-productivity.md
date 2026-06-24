@@ -1,15 +1,15 @@
 # Module 1: SDLC Productivity <span class="duration-badge">75 min</span>
 
-> **Your first real Antigravity CLI session.** This module covers the core daily-driver workflows — understanding code, refactoring, generating tests, and reviewing changes — plus how to extend the CLI with plugins for your team's toolchain.
+> **Your first real Antigravity CLI session.** This module covers the core daily-driver workflows — understanding code, refactoring, generating tests, and reviewing changes — plus how to extend the CLI with your own Custom Skills and Rules.
 
 ---
 
 ## 1.0 — First Interactive Session <span class="duration-badge">5 min</span>
 
-Launch Antigravity CLI in your workshop project directory:
+Launch Antigravity CLI in your target sandbox directory (`agy-sample-app`):
 
 ```bash
-cd agy-cli-field-workshop
+cd ../agy-sample-app
 agy
 ```
 
@@ -19,25 +19,32 @@ You'll land in the interactive prompt. Try:
 > What files are in this project and what does each one do?
 ```
 
-Observe how agy reads your workspace — it indexes the git repo, reads file contents, and responds with context. This is **automatic**: no config, no prompts to write first.
-
-!!! tip "The .agents/ folder"
-    After your first session, check `.agents/` — agy created project config files tracking your workspace. This is how it knows what to index on future runs.
+Observe how `agy` reads your workspace — it indexes the git repo, reads file contents, and responds with context. This is **automatic**: no configuration or complex prompt engineering required.
 
 ---
 
-## 1.1 — Code Understanding <span class="duration-badge">10 min</span>
+## 1.1 — Continuous Sessions & Shell Escapes <span class="duration-badge">10 min</span>
 
-> **Pattern: Explain Before You Touch** — understand the code before changing it.
+> 💡 **Core Pattern: Continuous Context** — Stay inside the `agy` session instead of repeatedly entering and exiting. This preserves the agent's short-term memory and prevents context-reloading latency.
+
+### The Shell Escape Prefix (`!`)
+
+If you need to run a shell command, check Git status, or run a test suite, you **do not** need to exit `agy`. Simply prefix your command with `!` to run it directly from within the TUI:
+
+```text
+> !git status
+> !python3 -m unittest
+```
 
 ### Exercise: Map an Unfamiliar Codebase
 
-```bash
-# -i seeds the session with an initial prompt and stays interactive
-agy -i "Give me a high-level architecture overview of this project. What are the main components and how do they connect?"
+Without exiting your active session, ask `agy` to guide you through the sandbox:
+
+```text
+> Give me a high-level architecture overview of this project. What are the main components and how do they connect?
 ```
 
-Then follow up interactively:
+Then steer the session interactively with follow-ups:
 
 ```text
 > Which file handles the entry point?
@@ -45,44 +52,39 @@ Then follow up interactively:
 > Are there any obvious code smells or tech debt?
 ```
 
-!!! tip "Use -i for seeded sessions"
-    `agy -i "<task>"` (short for `--prompt-interactive`) starts with a prompt but stays interactive. Great for oriented exploration — you set the direction, then steer with follow-ups.
-
 ---
 
 ## 1.2 — Refactoring <span class="duration-badge">10 min</span>
 
-> **Pattern: Propose, Review, Apply** — never apply changes you haven't read.
+> **Pattern: Propose, Review, Apply** — Always review proposed changes before applying them.
 
 ### Exercise: Targeted Refactor
 
-```bash
-agy
-```
+Still inside the same `agy` session, request a target refactoring:
 
 ```text
-> I want to refactor the error handling in this project. First, show me all the places where errors are currently caught or returned — don't change anything yet.
+> I want to refactor the error handling in the main module. First, show me all the places where errors are currently caught or returned — don't change anything yet.
 ```
 
-Review the findings. Then:
+Review the findings. Then, steer the agent to propose a change:
 
 ```text
-> Now propose a refactored version of [specific function] using a consistent error handling pattern. Show me the diff before applying.
+> Now propose a refactored version using a consistent error handling pattern. Show me the diff before applying.
 ```
 
-Only apply after you've read the proposed change.
+Only approve the write tool when you are satisfied with the proposed code.
 
 ### Permissions Model
 
-agy has a **3-level permissions model** that controls how it handles tool approvals:
+`agy` has a **3-level permissions model** that controls how it handles tool approvals:
 
 | Level | Behavior |
 | :-- | :-- |
-| `request-review` | **Default.** agy asks for approval before writing files or running commands |
+| `request-review` | **Default.** `agy` asks for approval before writing files or running commands |
 | `always-proceed` | Auto-approve all tool calls — useful for trusted scripts and CI |
 | `strict` | Deny all tool use unless explicitly allowed — maximum control |
 
-Use the `/permissions` slash command to view or change the current level. You can also set fine-grained rules in `settings.json`:
+Use the `/permissions` slash command to view or change the active level. You can also configure fine-grained settings in your `settings.json`:
 
 ```json
 {
@@ -93,126 +95,98 @@ Use the `/permissions` slash command to view or change the current level. You ca
 }
 ```
 
-> 📖 Full details: [Permissions docs](https://www.antigravity.google/docs/permissions) · [Strict Mode docs](https://www.antigravity.google/docs/strict-mode)
-
 ---
 
 ## 1.3 — Test Generation <span class="duration-badge">10 min</span>
 
-> **Pattern: Test What Exists** — generate tests for real code, not hypotheticals.
+> **Pattern: Test What Exists** — Generate tests for real codebase paths, not hypotheticals.
 
 ### Exercise: Generate Unit Tests
 
-```bash
-agy
-```
+Use `agy` to write unit tests for the sandbox code. Ask:
 
 ```text
-> Look at [specific function or file]. Generate a comprehensive unit test suite for it. Include happy path, edge cases, and error conditions. Use the testing framework already in this project.
+> Look at the main module. Generate a comprehensive unit test suite for it. Include happy path, edge cases, and error conditions. Use the testing framework already in this project.
 ```
 
-Then:
+Once the files are written, use the TUI shell escape to execute them live without exiting:
 
 ```text
-> Run the tests and fix any that fail.
+> !python3 -m unittest discover tests/
 ```
 
-!!! tip "Let agy run the tests"
-    agy can execute shell commands. It will run your test suite and iterate on failures without you having to copy-paste error messages. Watch it self-correct.
-
----
-
-## 1.4 — Code Review <span class="duration-badge">10 min</span>
-
-> **Pattern: Pre-Commit Review** — use agy as a senior reviewer before every push.
-
-### Exercise: Review Your Changes
-
-```bash
-# Stage some changes (or use an existing branch)
-git add -p
-
-# Start agy and review what's staged
-agy
-```
+If any tests fail, feed the output back to the agent:
 
 ```text
-> Review my staged changes for: (1) correctness, (2) security issues, (3) missing test coverage, (4) anything that would block a PR. Be direct — don't soften findings.
-```
-
-### Headless Variant (for scripting)
-
-```bash
-# Review changes non-interactively — useful in pre-commit hooks or CI
-git diff --cached | agy --print "Review these changes. Flag any bugs, security issues, or missing tests. Output as markdown."
+> The test suite returned errors. Analyze the failures and correct the code to pass.
 ```
 
 ---
 
-## 1.5 — Project Context with AGENTS.md <span class="duration-badge">5 min</span>
+## 1.4 — Code Review & Diff Navigation <span class="duration-badge">10 min</span>
 
-> **Pattern: Persistent Context** — tell agy once, it remembers every session.
+> **Pattern: Pre-Commit Review** — Use `agy` as a senior reviewer before every git push.
 
-agy reads context files at session start. Create one at the project root:
+### Exercise: Review and Diff
+
+Before staging your changes, inspect the modifications you have made during the session. Use the `/diff` slash command:
+
+```text
+> /diff
+```
+
+This opens the built-in TUI diff viewer. Once you are done reviewing, run a comprehensive code review query:
+
+```text
+> Review my unsaved changes for correctness, security gaps, and styling consistency. Be direct and list any potential bugs.
+```
+
+To stage changes from inside the session, run:
+
+```text
+> !git add -p
+```
+
+---
+
+## 1.5 — Project Context with AGENTS.md <span class="duration-badge">10 min</span>
+
+> **Pattern: Persistent Context** — Tell `agy` once, and it remembers it across every future session.
+
+`agy` reads context files at session start. By default, it does **not** auto-create directories like `.agents/` to prevent project clutter. We initialize the workspace directory manually:
+
+```bash
+# Run this in your terminal (outside agy) to set up local workspace customization
+mkdir -p .agents
+```
+
+Next, create an `AGENTS.md` file at your project root to codify your conventions:
 
 ```bash
 cat > AGENTS.md << 'EOF'
 # Project Context
 
-This is a Node.js REST API built with Express and TypeScript.
+This is a Python REST API built with FastAPI.
 
 ## Key Conventions
-- Language: TypeScript (strict mode, no `any`)
-- Testing: Jest with 80% coverage minimum; run `npm test` to validate
-- Style: ESLint + Prettier; run `npm run lint` before committing
-- DO NOT modify `src/db/migrations/` — those are append-only
-- DO NOT use `console.log` in production code; use the `logger` utility
-
-## Architecture
-Three-layer: `routes/` → `services/` → `repositories/`. All DB access goes through the repository layer. External HTTP calls go through `src/clients/`.
-
-## Common Commands
-- `npm run dev` — start local dev server on :3000
-- `npm test` — run full test suite
-- `npm run db:migrate` — apply pending DB migrations
+- Style: PEP 8 compliant, type hints required on all function signatures
+- Testing: Unittest with 80% coverage minimum; run `python3 -m unittest` to validate
+- DO NOT use generic `except Exception` blocks; always catch specific errors
+- All database operations must utilize transaction handlers
 EOF
 ```
 
-Now start a new session:
+Start a new session and verify `agy` loads your context:
 
 ```bash
-agy --print "What do you know about this project?"
+agy --print "What do you know about this project's conventions?" --print-timeout 30s
 ```
 
-agy will incorporate your AGENTS.md into every subsequent session automatically.
-
-!!! info "Context hierarchy"
-    agy reads AGENTS.md from: current directory → parent directories → home directory. More specific context overrides broader context.
-
-### Additional Context Sources
-
-Beyond AGENTS.md, agy also loads:
-
-- **`.agents/rules.md`** (or `.agents/rules/*.md`) — project-level rules injected as system prompt directives. Use these for hard requirements like "never delete migration files" or "always use TypeScript strict mode."
-- **`.gemini/`** — for Gemini CLI compatibility, agy reads `.gemini/` directories alongside `.agents/`.
-- **`~/.gemini/config/rules.md`** — global rules applied to all sessions.
-
-> 📖 Full details: [Rules & Workflows docs](https://www.antigravity.google/docs/rules-workflows)
-
-### Sample Agent Definitions (in `samples/agents/`)
-
-| Agent | Model | Purpose |
-| :-- | :-- | :-- |
-| `doc-writer.md` | `gemini-3.5-flash` | Generates API docs, README sections, and inline comments from source |
-| `pr-reviewer.md` | `gemini-3.5-flash` | Reviews code changes for quality, bugs, and style violations |
-| `migration-validator.md` | `gemini-3.5-flash` | Validates Gemini CLI → Antigravity CLI migration completeness |
+`agy` will incorporate your `AGENTS.md` into every subsequent session automatically.
 
 ---
 
-## 1.6 — Interactive Navigation <span class="duration-badge">5 min</span>
-
-> **Pattern: Terminal Fluency** — know the shortcuts that make agy sessions fast.
-> 📖 Full reference: [Using Antigravity CLI](https://www.antigravity.google/docs/cli-using)
+## 1.6 — Interactive TUI Navigation <span class="duration-badge">5 min</span>
 
 ### Key Slash Commands
 
@@ -225,137 +199,65 @@ Beyond AGENTS.md, agy also loads:
 | `/permissions` | Set agent autonomy level (`request-review`, `always-proceed`, `strict`) |
 | `/model` | Select reasoning model (persists across sessions) |
 | `/tasks` | Monitor, view logs for, or terminate background tasks |
-| `/agents` | View, manage, and approve subagent actions |
-| `/open <path>` | Open a file in your preferred external editor |
-| `/usage` | Open the inline interactive help manual |
 | `/skills` | Browse local and global agent skills |
 | `/mcp` | Configure and manage MCP servers |
-
-> 📖 Full slash command reference: [CLI Features](https://antigravity.google/docs/cli-features)
+| `/open <path>` | Open a file in your preferred external editor |
+| `/usage` | Open the inline interactive help manual |
 
 ### Quick Tips
 
 | Shortcut | What it does |
 | :-- | :-- |
 | `@` | File path autocomplete — type `@` to trigger path suggestions |
-| `!` | Run terminal commands directly without leaving agy |
+| `!` | Run terminal commands directly without leaving `agy` |
 | `esc esc` | Clear the current prompt input (when no streaming is active) |
-| `?` | Get help and list all slash commands |
-| `alt+enter` / `ctrl+j` / `shift+enter` | Insert a newline in your prompt (multi-line input) |
-| `ctrl+g` | Edit prompt inside your default shell editor |
 | `ctrl+l` | Clear TUI screen |
 | `ctrl+d` | Exit the CLI |
 
-> 📖 Full keybindings reference: [Using Antigravity CLI](https://antigravity.google/docs/cli-using)
-
 ---
 
-## 1.7 — Extend with Plugins <span class="duration-badge">15 min</span>
+## 1.7 — Extend with Custom Skills <span class="duration-badge">15 min</span>
 
-> **Pattern: Bring Your Toolchain** — plugins add skills, MCP servers, agents, and rules to agy. Install once, available in every session.
+> **Pattern: Core Customization** — Extend `agy` by creating reusable **Skills** and **Rules** for your team's custom patterns, internal libraries, and code quality guardrails.
 
-Antigravity CLI's plugin system does something unique: it can **import plugins you've already installed in Gemini CLI** — without reinstalling or reconfiguring. Your existing investment carries over.
+A **Skill** is a portable directory containing a `SKILL.md` instruction file with YAML frontmatter. `agy` auto-discovers and loads skills from:
 
-### See What's Active
+* **Workspace-level**: `.agents/skills/<skill_name>/`
+* **Global-level**: `~/.gemini/config/skills/<skill_name>/`
 
-```bash
-agy plugin list
-```
-
-Shows each plugin's name, source, import date, and components (skills, commands, mcpServers, agents).
-
-### Import from Gemini CLI
-
-```bash
-agy plugin import gemini
-```
-
-agy scans your local Gemini CLI installation, discovers all installed plugins, and stages their components into `~/.gemini/antigravity/`. Output:
+### Skill Structure
 
 ```text
-  [ok]    code-review
-          ✔ skills      : 3 processed
-          ✔ commands    : 2 processed
-          - mcpServers  : skipped (not found)
-  [ok]    gemini-deep-research
-          ✔ commands    : 1 processed
-          ✔ mcpServers  : 1 processed
-  [skip]  superpowers (already imported)
+.agents/skills/my-rest-skill/
+├── SKILL.md                 # ← required instructions & metadata
+├── examples/                # ← optional reference implementations
+└── scripts/                 # ← optional utility scripts
 ```
 
-!!! warning "Custom themes are silently dropped"
-    Custom theme components cannot be migrated 1:1 to agy's model and are skipped without error during import. Check your active plugins after import if themes are important to your workflow.
+### The SKILL.md Format
 
-!!! tip "Re-import after plugin updates"
-    Already-imported plugins are skipped by default. Force a re-import:
-    ```bash
-    agy plugin import gemini --force
-    ```
+The `SKILL.md` must have a YAML frontmatter block with a `name` and `description` (which `agy` uses for semantic trigger matching):
 
-### What Gets Imported
+```markdown
+---
+name: fastapi-security-standards
+description: Enforces FastAPI OAuth2 and CORS security configurations. Triggers on security, CORS, or user authentication queries.
+---
 
-| Component | What it means |
-| :-- | :-- |
-| `skills` | SKILL.md files — injected as domain expertise into agy sessions |
-| `commands` | Slash commands available inside agy sessions |
-| `mcpServers` | MCP tool servers (GitHub, gcloud, Workspace, etc.) |
-| `agents` | Custom subagent definitions |
-| `rules` | Rules files injected as system prompt directives |
-| `hooks` | Staged but not auto-executed — agy handles lifecycle differently |
+# FastAPI Security Standards
 
-### Enable / Disable Per-Project
+Always apply the following patterns when writing or reviewing FastAPI endpoints:
 
-Not every plugin is appropriate for every codebase:
-
-```bash
-# Disable for this project
-agy plugin disable gemini-deep-research
-
-# Re-enable
-agy plugin enable gemini-deep-research
+1. Always set `allow_credentials=True` on CORS middleware but restrict `allow_origins` to trusted domains.
+2. Utilize `SecurityScopes` to check granular permissions on endpoints.
+3. Password hashing must use Argon2id via `passlib`.
 ```
 
-### Plugin Locations
+### Registering and Testing Skills
 
-| Scope | Path |
-| :-- | :-- |
-| **Global** | `~/.gemini/antigravity/plugins/` |
-| **Project** | `.agents/plugins/` |
+When `agy` starts, it automatically registers your skills. Run `/skills` inside your interactive TUI session to browse active skills and verify your custom skill is loaded.
 
-### Building a Custom Plugin
-
-A valid agy plugin needs a `plugin.json` manifest:
-
-```text
-my-plugin/
-├── plugin.json          ← required
-├── mcp_config.json      ← MCP server definitions (optional)
-├── hooks.json           ← hook event handlers (optional)
-├── skills/              ← SKILL.md files (optional)
-│   └── my-skill/
-│       └── SKILL.md
-├── agents/              ← subagent definitions (optional)
-└── rules/               ← rules files (optional)
-    └── my-rules.md
-```
-
-```json
-{
-  "name": "my-plugin",
-  "version": "1.0.0",
-  "description": "My custom agy plugin",
-  "components": ["skills"]
-}
-```
-
-Validate it before shipping:
-
-```bash
-agy plugin validate ./my-plugin
-# ✔ Plugin manifest is valid
-```
-
-> 📖 Full reference: [Plugins](https://www.antigravity.google/docs/plugins) · [Migration guide](https://www.antigravity.google/docs/gcli-migration)
+You can also write custom directives in `.agents/rules.md` (or `.agents/rules/*.md`) which are unconditionally injected into the agent's system prompt instructions.
 
 ---
 
@@ -367,17 +269,17 @@ agy plugin validate ./my-plugin
 
 **File:** [`ex01_first_session.md`](exercises/ex01_first_session.md)  
 **Duration:** 15 min  
-**Objective:** Launch agy, explore a codebase, generate an AGENTS.md.
+**Objective:** Launch `agy` inside the sandbox application, explore the code, and author your first project-scoped `AGENTS.md`.
 
 </div>
 
 <div class="exercise-card" markdown>
 
-### :material-puzzle: Exercise 2: Plugin Bridge
+### :material-puzzle: Exercise 2: Custom Skills and Workspace Customization
 
-**File:** [`ex02_plugin_bridge.md`](exercises/ex02_plugin_bridge.md)  
+**File:** [`ex02_custom_skills.md`](exercises/ex02_custom_skills.md)  
 **Duration:** 20 min  
-**Objective:** Import plugins from Gemini CLI, enable/disable selectively, validate a custom plugin.
+**Objective:** Design and write a local Custom Skill, register a project-scoped rule, and run validation checks.
 
 </div>
 

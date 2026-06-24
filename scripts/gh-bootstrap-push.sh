@@ -3,8 +3,8 @@
 # For empty repos: use PUT /repos/{owner}/{repo}/contents/{path} for each file
 set -euo pipefail
 
-REPO="pauldatta/agy-cli-field-workshop"
-REPO_DIR="/Users/pauldatta/Code/workshop/gemini-cli-workshop/engagements/agy-cli-field-workshop"
+REPO="carlosmscabral/agy-cli-field-workshop"
+REPO_DIR="/Users/carlosmscabral/Code/workshop/gemini-cli-workshop/engagements/agy-cli-field-workshop"
 
 echo "📦 Bootstrapping $REPO via GitHub Contents API..."
 echo ""

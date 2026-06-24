@@ -49,7 +49,7 @@ agy --version
 
 ## Step 2: Authentication
 
-agy uses **browser-based Google Sign-In**. On first run, it will:
+`agy` uses **browser-based Google Sign-In**. On first run, it will:
 
 - **Local machine:** Automatically open your default browser for sign-in.
 - **SSH / remote session:** Print a URL to paste into any browser, then paste the auth code back into the terminal.
@@ -80,21 +80,38 @@ Expected output: `Workshop ready!`
 
 ## Step 3: Initialize Your Project Workspace
 
-agy auto-discovers project config by walking up from your current directory, looking for a `.agents/` folder. Create one for the workshop:
+During the workshop, we use two separate repositories to keep your configuration clean and avoid self-referencing issues:
+
+1. **Workshop Repository**: Contains all documentation, curriculum, and exercises.
+2. **Sample Application Sandbox**: The target project workspace (`agy-sample-app`) where you will run `agy`, make modifications, refactor code, and write unit tests.
+
+### Clone the Workshop Repository
 
 ```bash
-# Clone the workshop exercises repo
-git clone https://github.com/pauldatta/agy-cli-field-workshop.git
+git clone https://github.com/carlosmscabral/agy-cli-field-workshop.git
 cd agy-cli-field-workshop
-
-# agy will create .agents/ on first run
-agy --print "List the files in the current directory."
 ```
 
-You'll see a `.agents/` folder created with project config files (settings.json, mcp.json, etc.).
+### Clone the Target Sandbox Application
 
-!!! info ".gemini/ compatibility"
-    agy also reads `.gemini/` directories — useful if you already have a Gemini CLI project setup. Both config locations are respected.
+```bash
+# Clone the sandbox into the parent directory
+git clone https://github.com/carlosmscabral/agy-sample-app.git ../agy-sample-app
+```
+
+### Understanding .agents/ Folder Creation
+
+`agy` auto-discovers workspace settings by looking for a `.agents/` folder. It does **not** auto-create this folder on a standard run to avoid cluttering fresh projects.
+
+If you want to use local, project-scoped customizations (such as custom skills, rules, or local MCP configurations), you **must create it manually**:
+
+```bash
+# Change into your sandbox app
+cd ../agy-sample-app
+
+# Create the agents directory
+mkdir -p .agents
+```
 
 ---
 
@@ -104,12 +121,6 @@ You'll see a `.agents/` folder created with project config files (settings.json,
 # Check agy is accessible
 agy --help
 
-# List installed plugins (output is JSON)
-agy plugin list
-
-# Pretty-print the plugin list (works once plugins are installed in Module 2)
-# agy plugin list | python3 -m json.tool
-
 # Quick print-mode smoke test
 agy --print "What is 2 + 2?" --print-timeout 30s
 ```
@@ -117,7 +128,6 @@ agy --print "What is 2 + 2?" --print-timeout 30s
 Checklist before the workshop starts:
 
 - [ ] `agy --help` shows flags and subcommands
-- [ ] `agy plugin list` returns successfully
 - [ ] `agy --print "..."` returns a response
 
 ---
@@ -128,9 +138,8 @@ Checklist before the workshop starts:
 | :-- | :-- |
 | `agy: command not found` | Check that the binary is in your PATH. Run `echo $PATH` and ensure the install dir is included. Re-run the install script if needed |
 | Auth errors / browser doesn't open | For SSH sessions, copy the printed URL manually. For local, check default browser settings. Run `/logout` and retry |
-| `agy plugin list` returns `No imported plugins.` | Expected on a fresh install (not JSON). You'll populate plugins in Module 2 |
 | Slow first response | First run may be slower as agy indexes your workspace |
-| Config not loading | Check `~/.gemini/antigravity/settings.json` (user settings) and `.agents/` (project settings) |
+| Config not loading | Check `~/.gemini/antigravity-cli/settings.json` (user settings) and `.agents/` (project settings) |
 
 ---
 

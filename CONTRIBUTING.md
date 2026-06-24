@@ -8,7 +8,7 @@ This repo is built to be navigated with `agy` itself. Before contributing, let A
 
 ```bash
 # Clone and enter the repo
-git clone https://github.com/pauldatta/agy-cli-field-workshop.git
+git clone https://github.com/carlosmscabral/agy-cli-field-workshop.git
 cd agy-cli-field-workshop
 
 # Start AGY CLI — it auto-reads AGENTS.md for project context
@@ -46,7 +46,7 @@ agy "Run the migration-validator agent against the migration guide examples"
 
 ### Report Issues or Share Feedback
 
-Use [GitHub Issues](https://github.com/pauldatta/agy-cli-field-workshop/issues/new/choose) to:
+Use [GitHub Issues](https://github.com/carlosmscabral/agy-cli-field-workshop/issues/new/choose) to:
 
 | Template | When to use |
 | :-- | :-- |

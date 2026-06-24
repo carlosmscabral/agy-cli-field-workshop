@@ -3,7 +3,7 @@
 # Usage: ./scripts/gh-api-push.sh
 set -euo pipefail
 
-REPO="pauldatta/agy-cli-field-workshop"
+REPO="carlosmscabral/agy-cli-field-workshop"
 BRANCH="main"
 COMMIT_MSG="feat: initial agy-cli field workshop scaffold
 
@@ -13,7 +13,7 @@ COMMIT_MSG="feat: initial agy-cli field workshop scaffold
 - 5 VHS demo tape stubs
 - Makefile, check-env.sh, sample plugin"
 
-REPO_DIR="/Users/pauldatta/Code/workshop/gemini-cli-workshop/engagements/agy-cli-field-workshop"
+REPO_DIR="/Users/carlosmscabral/Code/workshop/gemini-cli-workshop/engagements/agy-cli-field-workshop"
 
 echo "📦 Pushing $REPO_DIR → github.com/$REPO via API..."
 echo ""

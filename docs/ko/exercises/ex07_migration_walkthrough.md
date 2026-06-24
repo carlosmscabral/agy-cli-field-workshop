@@ -194,7 +194,7 @@ Use the migration-validator agent to check this project directory for any remain
 
 마이그레이션된 프로젝트에 에이전트가 확인 없이 `git push`를 호출하는 것을 차단하는 `PreToolUse` 훅을 추가하세요. 훅의 `decision: deny` 패턴을 사용하세요.
 
-결정(decision) 패턴의 템플릿으로 [`samples/hooks/secret-scanner.sh`](https://github.com/pauldatta/agy-cli-field-workshop/blob/main/samples/hooks/secret-scanner.sh)를 참조하세요.
+결정(decision) 패턴의 템플릿으로 [`samples/hooks/secret-scanner.sh`](https://github.com/carlosmscabral/agy-cli-field-workshop/blob/main/samples/hooks/secret-scanner.sh)를 참조하세요.
 
 ---
 

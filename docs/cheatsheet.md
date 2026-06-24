@@ -95,35 +95,36 @@ agy install        # Configure PATH and shell aliases
 
 ---
 
-## Plugin Commands
+## Custom Skills & Rules
 
-```bash
-# List all active plugins (JSON)
-agy plugin list
+### Configuration Locations
 
-# Import from Gemini CLI
-agy plugin import gemini
+| Scope | Rules / Workspace Context | Custom Skills (SKILL.md) |
+| :-- | :-- | :-- |
+| **Workspace** | `.agents/AGENTS.md` | `.agents/skills/<skill_name>/SKILL.md` |
+| **Global** | `~/.gemini/config/AGENTS.md` | `~/.gemini/config/skills/<skill_name>/SKILL.md` |
 
-# Import from Claude Code
-agy plugin import claude
+### Custom Skill Structure (`SKILL.md`)
 
-# Force re-import (after plugin updates)
-agy plugin import gemini --force
+```markdown
+---
+name: code-reviewer
+description: Triggered when analyzing code syntax, styling, or structural debt.
+---
 
-# Install a plugin
-agy plugin install <name>
-agy plugin install <name>@<version>
+# Code Reviewer Skill
 
-# Enable / disable
-agy plugin enable <name>
-agy plugin disable <name>
-
-# Validate a plugin directory
-agy plugin validate ./my-plugin
-
-# Generate marketplace link
-agy plugin link <marketplace> <target>
+Provide feedback focusing on:
+1. Performance and algorithmic complexity
+2. Strict compliance with standard naming conventions
 ```
+
+### Key Skill Slash Commands (Interactive Mode)
+
+| Command | Purpose |
+| :-- | :-- |
+| `/skills` | Browse, inspect, and toggle local and global agent skills |
+| `/config` | Access setting menus to manage global skills and rules |
 
 ---
 
@@ -270,7 +271,6 @@ done
 | Getting Started | [antigravity.google/docs/cli-getting-started](https://antigravity.google/docs/cli-getting-started) |
 | Using Antigravity CLI (settings, tips, keybindings) | [antigravity.google/docs/cli-using](https://antigravity.google/docs/cli-using) |
 | Features (plugins, sandbox, slash commands, subagents) | [antigravity.google/docs/cli-features](https://antigravity.google/docs/cli-features) |
-| Migration from Gemini CLI | [antigravity.google/docs/gcli-migration](https://antigravity.google/docs/gcli-migration) |
 | Permissions | [antigravity.google/docs/permissions](https://antigravity.google/docs/permissions) |
 | Strict Mode | [antigravity.google/docs/strict-mode](https://antigravity.google/docs/strict-mode) |
 | Plugins | [antigravity.google/docs/plugins](https://antigravity.google/docs/plugins) |

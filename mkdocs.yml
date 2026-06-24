@@ -1,8 +1,8 @@
 site_name: "Antigravity CLI Field Workshop"
 site_description: "Hands-on field workshop for Antigravity CLI — from daily SDLC productivity to building production AGY agents with the SDK"
-site_url: "https://pauldatta.github.io/agy-cli-field-workshop"
-repo_url: "https://github.com/pauldatta/agy-cli-field-workshop"
-repo_name: "pauldatta/agy-cli-field-workshop"
+site_url: "https://carlosmscabral.github.io/agy-cli-field-workshop"
+repo_url: "https://github.com/carlosmscabral/agy-cli-field-workshop"
+repo_name: "carlosmscabral/agy-cli-field-workshop"
 
 theme:
   name: material
@@ -43,6 +43,7 @@ nav:
   - Home: index.md
   - "📦 Pre-Work":
       - Environment Setup: setup.md
+      - Enterprise Admin Guide: setup-enterprise-admin.md
   - "🛠️ Workshop":
       - "1. SDLC Productivity": sdlc-productivity.md
       - "2. Legacy Modernization ⭐": legacy-modernization.md
@@ -51,7 +52,7 @@ nav:
       - "5. ADK Agents with agents-cli": agents-cli.md
   - "🧪 Exercises":
       - "First Session (ex01)": exercises/ex01_first_session.md
-      - "Plugin Bridge (ex02)": exercises/ex02_plugin_bridge.md
+      - "Custom Skills (ex02)": exercises/ex02_custom_skills.md
       - "First Sidecar (ex02b)": exercises/ex02b_first_sidecar.md
       - "--print Pipeline (ex03)": exercises/ex03_print_mode_pipeline.md
       - "Subagents (ex04)": exercises/ex04_subagents.md
@@ -120,7 +121,7 @@ plugins:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/pauldatta/agy-cli-field-workshop
+      link: https://github.com/carlosmscabral/agy-cli-field-workshop
   generator: false
 
 extra_css:

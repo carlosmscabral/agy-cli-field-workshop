@@ -6,31 +6,27 @@
 
 ## Objective
 
-Launch agy-cli, explore a codebase, and create an AGENTS.md that makes every future session smarter.
+Launch `agy` CLI, explore a sandbox codebase, and create an `AGENTS.md` file that makes every future session smarter.
 
 ---
 
 ## Setup
 
-You need a Git repository to work with. Use the sample app in this repo or bring your own:
+For this exercise, we will operate within the dedicated sandbox workspace `agy-sample-app` prepared by the enterprise bootstrap script.
 
 ```bash
-# Option A: Use this workshop repository (you're already here)
-# No need to cd — just start agy from the repo root
+# Navigate to the sandbox project directory
+cd ../agy-sample-app
 
-# Option B: Use any of your own Git repos
-cd /path/to/your/project
+# Launch your Antigravity CLI interactive shell
+agy
 ```
 
 ---
 
 ## Part 1: First Interactive Session (5 min)
 
-```bash
-agy
-```
-
-At the prompt, ask:
+At the `agy` prompt, ask:
 
 ```text
 > What does this project do? Give me a one-paragraph summary.
@@ -46,39 +42,40 @@ Then follow up:
 > Are there any obvious code quality issues or tech debt?
 ```
 
-**Notice:** agy read your files without you having to specify them. It indexed the git repo automatically.
+> [!NOTE]
+> `agy` read and indexed your codebase files automatically behind the scenes using standard Git repository scanning, without you having to explicitly upload or copy-paste files.
 
 ---
 
 ## Part 2: Deep Dive (5 min)
 
-Pick one file from agy's suggestions and go deeper:
+Pick one file from `agy`'s suggestions and go deeper:
 
 ```text
 > Explain [filename] in detail. Walk me through what each function does and how they connect.
 ```
 
 ```text
-> If I wanted to add [a simple feature], where would I start?
+> If I wanted to add a simple feature like a health check endpoint, where would I start?
 ```
 
 ---
 
 ## Part 3: Create AGENTS.md (5 min)
 
-Now codify what you've learned so every future session starts with context:
+Now codify what you've learned so every future session starts with full context:
 
 ```text
 > Based on our conversation, generate an AGENTS.md file for this project. Include: project purpose, tech stack, key conventions, and anything I should tell an AI assistant before asking it to modify this code.
 ```
 
-Review what agy generates. Edit it if anything is wrong. Then write it:
+Review what `agy` generates. Edit it if anything is wrong. Then ask `agy` to write it:
 
 ```text
 > Write that AGENTS.md to the project root.
 ```
 
-Start a new session and verify it works:
+Start a new session and verify it loads the rules:
 
 ```bash
 agy --print "What do you know about this project?" --print-timeout 30s
@@ -88,7 +85,7 @@ agy --print "What do you know about this project?" --print-timeout 30s
 
 ## Completion Criteria
 
-- [ ] agy launched and responded in interactive mode
+- [ ] `agy` launched and responded in interactive mode
 - [ ] Explored at least 3 follow-up questions
-- [ ] AGENTS.md exists at the project root
+- [ ] `AGENTS.md` exists at the project root of `agy-sample-app`
 - [ ] `agy --print "What do you know about this project?"` returns accurate info

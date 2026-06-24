@@ -194,7 +194,7 @@ Sub-agen `migration-validator` akan memeriksa:
 
 Tambahkan sebuah hook `PreToolUse` ke proyek yang dimigrasikan yang memblokir agen agar tidak memanggil `git push` tanpa konfirmasi. Gunakan pola hook `decision: deny`.
 
-Lihat [`samples/hooks/secret-scanner.sh`](https://github.com/pauldatta/agy-cli-field-workshop/blob/main/samples/hooks/secret-scanner.sh) sebagai templat untuk pola keputusan tersebut.
+Lihat [`samples/hooks/secret-scanner.sh`](https://github.com/carlosmscabral/agy-cli-field-workshop/blob/main/samples/hooks/secret-scanner.sh) sebagai templat untuk pola keputusan tersebut.
 
 ---
 
