@@ -87,9 +87,9 @@ fi
 # ─────────────────────────────────────────────────────────────
 echo "📋 Checking for stale hook event names..."
 for stale in SessionStart BeforeTool AfterTool; do
-  if grep -rq --exclude="ex07_migration_walkthrough.md" "\"${stale}\"" docs/ samples/ 2>/dev/null; then
+  if grep -rq --exclude="ex07_migration_walkthrough.md" --exclude="ex13_migration_walkthrough.md" "\"${stale}\"" docs/ samples/ 2>/dev/null; then
     fail "Stale hook event '${stale}' found — use PreInvocation/PreToolUse/PostToolUse"
-    grep -rn --exclude="ex07_migration_walkthrough.md" "\"${stale}\"" docs/ samples/ | head -5
+    grep -rn --exclude="ex07_migration_walkthrough.md" --exclude="ex13_migration_walkthrough.md" "\"${stale}\"" docs/ samples/ | head -5
     errors=$((errors + 1))
   fi
 done
