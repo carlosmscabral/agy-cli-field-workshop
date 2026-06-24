@@ -2,6 +2,7 @@
 
 > **Hands-on field workshop for Antigravity CLI.**
 
+🚀 **Live Workshop Site (GitHub Pages):** [carlosmscabral.github.io/agy-cli-field-workshop](https://carlosmscabral.github.io/agy-cli-field-workshop/)
 📚 **Official Docs:** [antigravity.google/docs](https://www.antigravity.google/docs/cli-overview)
 
 ---
