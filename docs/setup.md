@@ -18,35 +18,27 @@ Choose the onboarding guide that corresponds to your workshop environment:
 
     ---
 
-    **Recommended for sandboxed environments.** Run the workshop inside a Google-provided, browser-based Cloud Shell.
+    **Recommended for sandboxed training environments.** Run the workshop inside a Google-provided, browser-based Cloud Shell with zero local installations.
 
+  - All dependencies and tools are pre-configured.
   - APIs are enabled directly by you (as project Owner).
-  - Google Cloud SDK and Python are pre-installed.
   - Docker & Docker Compose are pre-installed.
 
     [:octicons-arrow-right-24: Follow Track A Guide](setup-cloud-shell.md)
 
-- :material-laptop:{ .lg .middle } **Track B — Corporate Workstation**
+- :material-laptop:{ .lg .middle } **Track B — Corporate Dev Track**
 
     ---
 
-    **For local developer laptops.** Develop and run the workshop on your physical machine (macOS, Windows, or Linux).
+    **For company-managed local physical machines.** Develop on your local laptop (macOS, Windows, or Linux) using your company's cloud project.
 
-  - Workspace uses project resources provisioned by your IT Administrator.
-  - Requires local installation of gcloud, Python, and Docker.
-  - Includes proxy, SSL certificate, and private registry support.
+    This track has **two distinct roles**:
+    1. **IT Admin Role**: Provisions the GCP project, enables APIs, and sets IAM permissions (*once* for the group).
+    2. **Developer Role**: Sets up their local workstation, handles proxies, and validates their environment.
 
     [:octicons-arrow-right-24: Follow Track B Guide](setup-corporate.md)
 
 </div>
-
----
-
-## 🛠️ Are you the IT Administrator?
-
-If you are the Cloud/IT Administrator responsible for setting up the GCP sandbox project, provisioning IAM permissions, and whitelisting firewalls for your team's local machines **before** the workshop starts, please follow the admin guide:
-
-👉 **[Enterprise IT Admin & Provisioning Guide](setup-enterprise-admin.md)**
 
 ---
 

@@ -1,8 +1,25 @@
-# Pre-Work: Corporate Workstation Onboarding
+# Track B — Corporate Dev Track Setup
 
-This onboarding track is designed for attendees running the workshop on **customer-managed corporate physical machines** (such as company laptops running macOS, Windows, or Linux).
+This track is designed for teams running the workshop on **customer-managed corporate physical machines** (such as company laptops running macOS, Windows, or Linux).
 
-Before starting this guide, ensure that your company's **GCP IT Administrator** has completed **[Phase 1: Project Provisioning](setup-enterprise-admin.md)** and has assigned your user account or Google Group the required IAM roles. Ask them for the exact **GCP Project ID** assigned for the workshop.
+It consists of **two roles**:
+
+1. 🛠️ **IT Admin**: Configures the GCP project, enables Vertex AI APIs, whitelists domains, and provisions bulk IAM permissions *once* for the group.
+2. 💻 **Developer**: Configures their local laptop virtual environment, corporate proxies, Google authentication, and runs the workstation verifier.
+
+---
+
+## 🛠️ Role 1: IT Administrator Provisioning (One-Time)
+
+If you are the cloud or infrastructure administrator setting up the Google Cloud project, IAM roles, and network parameters for your team **before** the workshop begins, please complete this step once per team:
+
+👉 **[Go to the IT Admin Provisioning Guide](setup-enterprise-admin.md)**
+
+---
+
+## 💻 Role 2: Developer Workstation Setup (Each Attendee)
+
+As a developer/attendee, once your IT Administrator has provided you with the **GCP Project ID** and verified your IAM roles, complete the workstation setup steps below.
 
 ---
 

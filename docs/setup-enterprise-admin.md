@@ -1,8 +1,8 @@
-# Enterprise IT Admin & Provisioning Guide
+# Track B — Role 1: IT Admin Provisioning
 
 This guide is designed for **enterprise cloud administrators**, **IT infrastructure managers**, and **workshop facilitators**. It explains how to provision Google Cloud Platform (GCP) resources and configure network parameters for the **Antigravity CLI Field Workshop** running on local corporate developer workstations.
 
-For developer-specific workstation onboarding (Python, virtualenvs, local Docker config, and credentials login), refer developers to **[Pre-Work: Corporate Workstation Onboarding](setup-corporate.md)**.
+This is **Role 1 (one-time IT Admin configuration)** under the unified **Track B: Corporate Dev Track**. For the developer-specific workstation onboarding (Python, virtualenvs, local Docker config, and credentials login), refer developers to **[Role 2: Developer Workstation Setup](setup-corporate.md)**.
 
 ---
 
