@@ -67,6 +67,7 @@ nav:
       - "Appendix: First Sidecar (ex11)": exercises/ex11_first_sidecar.md
       - "Appendix: --print Pipeline (ex12)": exercises/ex12_print_mode_pipeline.md
       - "Appendix: Migration Walkthrough (ex13)": exercises/ex13_migration_walkthrough.md
+      - "Appendix: Dataplex Metadata Curation (ex14)": exercises/ex14_dataplex_metadata_steward.md
   - "📋 Resources":
       - Cheatsheet: cheatsheet.md
       - Facilitator Guide: facilitator-guide.md
