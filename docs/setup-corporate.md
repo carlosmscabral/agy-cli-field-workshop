@@ -2,6 +2,13 @@
 
 This track is designed for teams running the workshop on **customer-managed corporate physical machines** (such as company laptops running macOS, Windows, or Linux).
 
+> [!IMPORTANT]
+> **IT Admin Setup Must Be Completed First!**
+> Before any developer can configure their workstation, your company's **IT Administrator** must complete the project provisioning, API activation, and IAM permissions.
+>
+> - **IT Admins**: Go to [Role 1: IT Admin Provisioning](setup-enterprise-admin.md) first.
+> - **Developers**: Obtain the assigned **GCP Project ID** from your admin before starting Role 2.
+
 It consists of **two roles**:
 
 1. 🛠️ **IT Admin**: Configures the GCP project, enables Vertex AI APIs, whitelists domains, and provisions bulk IAM permissions *once* for the group.

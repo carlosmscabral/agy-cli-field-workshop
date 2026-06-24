@@ -45,8 +45,8 @@ nav:
       - Introduction & Tracks: setup.md
       - Track A - Cloud Shell Setup: setup-cloud-shell.md
       - Track B - Corporate Dev Setup:
-          - Workstation Setup (Dev): setup-corporate.md
           - IT Admin Provisioning (Admin): setup-enterprise-admin.md
+          - Workstation Setup (Dev): setup-corporate.md
   - "🛠️ Workshop":
       - "1. SDLC Productivity": sdlc-productivity.md
       - "2. Legacy Modernization ⭐": legacy-modernization.md
