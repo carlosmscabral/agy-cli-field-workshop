@@ -182,11 +182,16 @@ The `gcloud auth application-default login` command stores keyless Application D
 
 ---
 
-## Phase 4: Pre-Work Local Verification Script
+## Phase 4: Pre-Work Local Verification Scripts
 
 To guarantee zero setup blockers on day-one of the workshop, have each attendee run the pre-work validation script on their customer machine.
 
-This repository includes a highly robust verification script located at `scripts/verify-workstation.sh`. It automatically:
+This repository includes two highly robust verification scripts depending on the host workstation OS:
+
+- **macOS, Linux, or Windows WSL2**: `scripts/verify-workstation.sh` (Bash)
+- **Native Windows**: `scripts/verify-workstation.ps1` (PowerShell)
+
+Both scripts perform the following automated checks:
 
 1. Verifies core binaries (`git`, `python3`, `gcloud`, `agy`).
 2. Tests Python 3.10+ compliance.
@@ -197,7 +202,9 @@ This repository includes a highly robust verification script located at `scripts
 
 ### Running the Verification Script
 
-Ensure the user is authenticated and has selected their project first:
+Ensure the user is authenticated and has selected their project first.
+
+#### macOS / Linux / Windows WSL2 (Bash)
 
 ```bash
 # 1. Log in to GCP Application Default Credentials
@@ -208,6 +215,19 @@ gcloud config set project "agy-workshop-sandbox-99"
 
 # 3. Run the workstation verifier
 ./scripts/verify-workstation.sh
+```
+
+#### Native Windows (PowerShell)
+
+```powershell
+# 1. Log in to GCP Application Default Credentials
+gcloud auth application-default login
+
+# 2. Configure the workshop project ID
+gcloud config set project "agy-workshop-sandbox-99"
+
+# 3. Run the workstation verifier
+.\scripts\verify-workstation.ps1
 ```
 
 ### Expected Output (Success)
