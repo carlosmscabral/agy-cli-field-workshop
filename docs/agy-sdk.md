@@ -30,7 +30,11 @@ The CLI is a **general-purpose assistant**. An agent you build with the SDK is a
 ### Prerequisites
 
 - Python 3.11+
-- A Gemini API key — set as `GEMINI_API_KEY` or pass via `api_key=` in config
+- **Vertex AI / GEAP (enterprise — the primary path in this workshop):**
+  - `gcloud auth application-default login` (Application Default Credentials — no API key)
+  - The `roles/aiplatform.user` IAM role on your account
+  - `GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_LOCATION` set in the environment (location `global` works; a region like `us-central1` also works)
+- **Gemini API key (AI Studio — alternative for quick local dev):** a key set as `GEMINI_API_KEY` or passed via `api_key=` in config
 
 ### Install
 
@@ -48,9 +52,14 @@ from google.antigravity.hooks import policy
 print("google-antigravity installed ✅")
 ```
 
-> **API key vs Vertex AI:** For quick local development, use `api_key="AIza..."` in
-> `LocalAgentConfig`. For production on GCP, authenticate with
-> `gcloud auth application-default login` — the library picks up ADC automatically.
+> **Vertex AI vs API key:** For enterprise use on GCP — the primary path in this
+> workshop — pass `LocalAgentConfig(vertex=True, project=..., location=...)`. The SDK
+> then builds a `VertexEndpoint` and authenticates via Application Default Credentials
+> from `gcloud auth application-default login` (no API key). There is **no** env-var
+> auto-detection: `vertex=True` plus `project` and `location` must be set explicitly on
+> **every** config — unlike the CLI/ADK, `GOOGLE_GENAI_USE_VERTEXAI` alone does **not**
+> switch the SDK to Vertex. For quick local development against AI Studio instead, drop
+> the Vertex fields and pass `api_key="AIza..."` (or set the `GEMINI_API_KEY` env var).
 
 ---
 
@@ -120,11 +129,23 @@ def record_finding(
 
 ```python
 import asyncio
+import os
 from google.antigravity import Agent, LocalAgentConfig
 from google.antigravity.hooks import policy
 
+# Enterprise (Vertex AI / GEAP) backend — the primary path in this workshop.
+# Authenticates via Application Default Credentials (`gcloud auth application-default
+# login`); no API key. The SDK has NO env-var auto-detection, so these fields must be
+# passed on EVERY LocalAgentConfig. Define them once and spread with **VERTEX_BACKEND.
+VERTEX_BACKEND = dict(
+    vertex=True,
+    project=os.environ["GOOGLE_CLOUD_PROJECT"],
+    location=os.environ.get("GOOGLE_CLOUD_LOCATION", "global"),
+)
+
 config = LocalAgentConfig(
     model="gemini-3.5-flash",
+    **VERTEX_BACKEND,                        # enterprise Vertex AI backend (see above)
     system_instructions="""You are a code reviewer specialising in Python.
 When given a file path, read the file and provide a structured review covering:
 - Correctness and edge cases
@@ -149,6 +170,11 @@ asyncio.run(main())
 
 > **`async with Agent(config) as agent:`** — always use the context manager. It starts
 > the Go runtime bridge (`bin/localharness`) and tears it down cleanly on exit.
+
+> **Every `LocalAgentConfig` needs the backend fields.** The remaining examples in this
+> module omit them for brevity, but each one runs against Vertex AI by spreading
+> `**VERTEX_BACKEND` (defined above) — e.g. `LocalAgentConfig(model=..., **VERTEX_BACKEND, ...)`.
+> Swap in `api_key="AIza..."` instead only if you are using the AI Studio path.
 
 ### Model Selection
 

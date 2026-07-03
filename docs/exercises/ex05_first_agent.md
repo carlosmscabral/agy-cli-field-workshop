@@ -23,11 +23,15 @@ source .venv/bin/activate
 pip install google-antigravity pydantic
 ```
 
-Set your API key:
+Authenticate with the enterprise **Vertex AI / GEAP** path (the primary option in this workshop). This uses Application Default Credentials — no API key. You need the `roles/aiplatform.user` IAM role on your account.
 
 ```bash
-export GEMINI_API_KEY="your-api-key-here"
+gcloud auth application-default login
+export GOOGLE_CLOUD_PROJECT="your-project-id"
+export GOOGLE_CLOUD_LOCATION="global"   # a region like us-central1 also works
 ```
+
+> **AI Studio alternative:** For quick local dev without GCP, skip the Vertex fields in the config and set a Gemini API key instead: `export GEMINI_API_KEY="your-api-key-here"`.
 
 ---
 
@@ -167,6 +171,7 @@ When reviewing Python code, evaluate against these criteria:
 Create `config.py`:
 
 ```python
+import os
 from pathlib import Path
 import re
 
@@ -176,6 +181,15 @@ from google.antigravity.types import CapabilitiesConfig
 
 from tools.file_tools import read_file, list_directory
 from tools.state_tools import record_finding
+
+# Enterprise (Vertex AI / GEAP) backend — authenticates via Application Default
+# Credentials, no API key. The SDK has no env-var auto-detection, so vertex/project/
+# location must be passed on EVERY LocalAgentConfig. Define once, spread everywhere.
+VERTEX_BACKEND = dict(
+    vertex=True,
+    project=os.environ["GOOGLE_CLOUD_PROJECT"],
+    location=os.environ.get("GOOGLE_CLOUD_LOCATION", "global"),
+)
 
 
 def load_skill(skill_name: str) -> str:
@@ -191,6 +205,7 @@ review_rubric = load_skill("python-review")
 
 agent_config = LocalAgentConfig(
     model="gemini-3.5-flash",
+    **VERTEX_BACKEND,                        # enterprise Vertex AI backend (see above)
     system_instructions=f"""You are a senior Python code reviewer.
 
 Your job:
@@ -212,6 +227,11 @@ Never guess at code contents. If you can't read a file, say so.
     policies=[policy.allow_all()],
 )
 ```
+
+> **Backend note:** The other configs in this exercise derive from `agent_config` via
+> `.model_copy(...)` (in `main.py`), so they inherit `**VERTEX_BACKEND` automatically. If
+> you build any `LocalAgentConfig` from scratch, add `**VERTEX_BACKEND` to it too — the
+> SDK will not pick up Vertex from the environment on its own.
 
 ---
 
