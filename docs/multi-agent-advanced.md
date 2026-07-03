@@ -99,6 +99,17 @@ Watch three independent analyses run simultaneously. When they finish, agy synth
 
 The adversarial reviewer pattern is particularly powerful for security-sensitive changes, infrastructure modifications, or any PR where "looks good to me" isn't sufficient.
 
+### Ready-Made Sample Subagents
+
+This repo ships four ready-to-use subagent definitions under [`samples/agents/`](https://github.com/carlosmscabral/agy-cli-field-workshop/tree/main/samples/agents) — copy one into `.agents/agents/<name>.md` to use it. All are read-only (no `write_file`/`run_command`), so they analyze without touching your code:
+
+| Sample agent | Purpose |
+| :-- | :-- |
+| `pr-reviewer` | Review code changes for quality, bugs, and style before a merge |
+| `security-scanner` | Scan code for security vulnerabilities (PR / pre-deployment) |
+| `doc-writer` | Generate API docs, README sections, and inline comments from source |
+| `migration-validator` | Verify a Gemini CLI project is fully migrated to Antigravity CLI |
+
 ---
 
 ## 2.10 — /btw: Mid-Task Steering <span class="duration-badge">10 min</span>
