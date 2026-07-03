@@ -41,9 +41,21 @@ This is a **4-module, ≈7-hour hands-on workshop** for Antigravity CLI. It is d
 
 ---
 
+## Delivery Flow (every module)
+
+Each module runs in **three beats**:
+
+1. **① Facilitator presents** — walk through the module's numbered concept sections and run the live demos on the projector (your own codebase or the sample app). ≈10–20 min.
+2. **② Participants work solo** — attendees do the module's **Core** exercises on their own; you circulate and unblock. **Optional** exercises are stretch goals for anyone who finishes early.
+3. **③ Facilitator wraps up** — walk through each exercise's solution (live, or a pre-done result) and answer questions before moving on.
+
+Exercises are tagged **Core** (everyone does) or **Optional** (stretch) in each module doc's "Exercises" section. Pre-run every exercise beforehand so you have a finished result to show in the wrap-up.
+
+---
+
 ## Module-by-Module Delivery Notes
 
-### Module 1 — Antigravity CLI Fundamentals (75 min)
+### Module 1 — Antigravity CLI Fundamentals (90 min)
 
 **Key message:** agy replaces the mental overhead of navigating an unfamiliar codebase. It's not autocomplete — it's a senior engineer you can ask anything.
 
@@ -51,7 +63,9 @@ This is a **4-module, ≈7-hour hands-on workshop** for Antigravity CLI. It is d
 - **Common friction:** participants try to write perfect prompts. Encourage natural language. "Tell me how the auth works" is better than "Please explain the authentication architecture of this codebase."
 - **The AGENTS.md moment:** section 1.5 is a high-value demo. Create an AGENTS.md live on screen and show how the next session is immediately smarter.
 - **Custom Skills live-demo (section 1.7):** create a simple custom skill in `.agents/skills/code-reviewer/SKILL.md` live. Run `agy` and type `/skills` to show it loaded the skill. This demonstrates how teams can codify custom styles and expert knowledge without modifying source code.
-- **Artifacts workflow (section 1.4a):** demo the plan → task list → walkthrough loop and the Artifact Review panel (`ctrl+r`). This is the co-steering story — reviewing milestones, not tool calls. Pair it with Exercise 15. If time allows, show grounding the agent on live documentation through a remote MCP server (Exercise 16 / `/mcp`).
+- **Artifacts workflow (section 1.4a):** demo the plan → task list → walkthrough loop and the Artifact Review panel (`ctrl+r`). This is the co-steering story — reviewing milestones, not tool calls. Core exercise (ex15).
+- **MCP (section 1.8):** demo registering a filesystem MCP server in `.agents/mcp_config.json` and `/mcp` to show the agent gaining tools. Core exercise (ex16).
+- **Core exercises:** First Session (ex01), Artifacts (ex15), Custom Skills (ex02), MCP (ex16). **Sandbox & Governance (ex09) is Optional** — a stretch lab; demo `agy --sandbox` briefly if time allows.
 
 ### Module 2 — Legacy Modernization & Advanced CLI (90 min)
 

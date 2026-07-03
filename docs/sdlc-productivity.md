@@ -290,11 +290,42 @@ You can also write custom directives in `.agents/rules.md` (or `.agents/rules/*.
 
 ---
 
+## 1.8 — Connect Tools & Data with MCP <span class="duration-badge">10 min</span>
+
+Skills and rules customize how `agy` *thinks*; **MCP (Model Context Protocol)** servers extend what it can *do* — giving the agent tools and data beyond your local files (a filesystem server, GitHub, a database, or your own internal service).
+
+MCP servers are declared in a JSON config, not via an `agy` subcommand:
+
+* **Workspace scope:** `.agents/mcp_config.json` (this project only)
+* **Global scope:** `~/.gemini/antigravity-cli/mcp_config.json` (all projects)
+
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
+    }
+  }
+}
+```
+
+Remote servers use `serverUrl` (with `type` `sse` or `streamable-http`) instead of a local `command`. Once configured, run `/mcp` inside the TUI to confirm the server is connected and see the tools it exposes — the agent can then call them during a session.
+
+> **Try it:** [Exercise: Connect agy to Tools with MCP](exercises/ex16_mcp_basics.md) registers a filesystem server and has the agent use it.
+
+---
+
 ## Module 1 Exercises
+
+> **How the module runs:** ① the facilitator presents the concepts and demos above → ② you work the exercises below **on your own** → ③ the facilitator wraps up by walking through each exercise's solution (live or pre-done) and answering questions. Do the **Core** exercises in order; **Optional** ones are stretch goals if you finish early.
+
+### Core
 
 <div class="exercise-card" markdown>
 
-### :material-file-document: Exercise 1: First Session
+### :material-file-document: First Session &nbsp;·&nbsp; `Core`
 
 **File:** [`ex01_first_session.md`](exercises/ex01_first_session.md)  
 **Duration:** 15 min  
@@ -304,11 +335,43 @@ You can also write custom directives in `.agents/rules.md` (or `.agents/rules/*.
 
 <div class="exercise-card" markdown>
 
-### :material-puzzle: Exercise 2: Custom Skills and Workspace Customization
+### :material-lightbulb-on: Artifacts — Plan, Review & Verify &nbsp;·&nbsp; `Core`
+
+**File:** [`ex15_artifacts.md`](exercises/ex15_artifacts.md)  
+**Duration:** 20 min  
+**Objective:** Use the Artifacts workflow (`/planning` → review the plan → co-steer with `ctrl+r` → Task List → Walkthrough) to implement the `GET /health` endpoint you scoped in the First Session exercise.
+
+</div>
+
+<div class="exercise-card" markdown>
+
+### :material-puzzle: Custom Skills & Workspace Customization &nbsp;·&nbsp; `Core`
 
 **File:** [`ex02_custom_skills.md`](exercises/ex02_custom_skills.md)  
 **Duration:** 20 min  
 **Objective:** Design and write a local Custom Skill, register a project-scoped rule, and run validation checks.
+
+</div>
+
+<div class="exercise-card" markdown>
+
+### :material-transit-connection-variant: Connect Tools with MCP &nbsp;·&nbsp; `Core`
+
+**File:** [`ex16_mcp_basics.md`](exercises/ex16_mcp_basics.md)  
+**Duration:** 20 min  
+**Objective:** Register an MCP server in `.agents/mcp_config.json`, confirm it with `/mcp`, and let the agent use its tools.
+
+</div>
+
+### Optional
+
+<div class="exercise-card" markdown>
+
+### :material-shield-lock: Sandbox & Governance &nbsp;·&nbsp; `Optional`
+
+**File:** [`ex09_sandbox_governance.md`](exercises/ex09_sandbox_governance.md)  
+**Duration:** 15 min  
+**Objective:** Run `agy --sandbox` for safe, read-only automated reviews and model a two-phase governance workflow. A stretch lab — do it if you finish the core exercises early.
 
 </div>
 
