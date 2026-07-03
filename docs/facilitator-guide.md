@@ -64,7 +64,7 @@ Exercises are tagged **Core** (everyone does) or **Optional** (stretch) in each 
 - **The AGENTS.md moment:** section 1.5 is a high-value demo. Create an AGENTS.md live on screen and show how the next session is immediately smarter.
 - **Custom Skills live-demo (section 1.7):** create a simple custom skill in `.agents/skills/code-reviewer/SKILL.md` live. Run `agy` and type `/skills` to show it loaded the skill. This demonstrates how teams can codify custom styles and expert knowledge without modifying source code.
 - **Artifacts workflow (section 1.4a):** demo the plan → task list → walkthrough loop and the Artifact Review panel (`ctrl+r`). This is the co-steering story — reviewing milestones, not tool calls. Core exercise (ex15).
-- **MCP (section 1.8):** demo registering a filesystem MCP server in `.agents/mcp_config.json` and `/mcp` to show the agent gaining tools. Core exercise (ex16).
+- **MCP (section 1.8):** frame MCP as *governed access*, not raw capability (the agent can already shell/`curl`). Demo the SQLite billing-db server, then `/permissions strict` so shell is denied and the agent must use the MCP query tool — the enterprise "grant a scoped capability, not shell + secrets" story. Core exercise (ex16).
 - **Core exercises:** First Session (ex01), Artifacts (ex15), Custom Skills (ex02), MCP (ex16). **Sandbox & Governance (ex09) is Optional** — a stretch lab; demo `agy --sandbox` briefly if time allows.
 
 ### Module 2 — Legacy Modernization & Advanced CLI (90 min)

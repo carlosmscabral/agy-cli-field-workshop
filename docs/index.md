@@ -19,7 +19,7 @@ hide:
 
     ---
 
-    Your first Antigravity CLI session, the **Artifacts** plan-review-verify workflow, custom skills & rules, connecting tools via **MCP**, and safe sandbox governance.
+    Your first Antigravity CLI session, the **Artifacts** plan-review-verify workflow, custom skills & rules, governed access via **MCP**, and safe sandbox governance.
 
     **90 min** · Exercises: ex01, ex15, ex02, ex16, ex09
 
