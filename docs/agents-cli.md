@@ -363,15 +363,31 @@ The 7 skills installed by `agents-cli setup`:
 
 ---
 
-## Exercises
+## Module 3 Exercises
+
+> **How the module runs:** ① the facilitator presents the concepts and demos above → ② you work the exercises below **on your own** → ③ the facilitator wraps up by walking through each exercise's solution (live or pre-done) and answering questions. Do the **Core** exercises in order; **Optional** ones are stretch goals if you finish early.
+
+### Core
 
 <div class="exercise-card" markdown>
 
-### :material-file-document: Exercise 10: ADK Agent Lifecycle
+### :material-recycle: ADK Agent Lifecycle &nbsp;·&nbsp; `Core`
 
-**File:** [`ex10_agents_cli_lifecycle.md`](exercises/ex10_agents_cli_lifecycle.md)
-**Duration:** 45 min
-**Objective:** Scaffold, build, evaluate, and iterate on an ADK agent using the agents-cli workflow — from `scaffold create` through passing evals.
+**File:** [`ex10_agents_cli_lifecycle.md`](exercises/ex10_agents_cli_lifecycle.md)  
+**Duration:** 45 min  
+**Objective:** Scaffold, build, and evaluate an ADK agent with agents-cli.
+
+</div>
+
+### Optional
+
+<div class="exercise-card" markdown>
+
+### :material-database-cog: Dataplex Metadata Curation &nbsp;·&nbsp; `Optional`
+
+**File:** [`ex14_dataplex_metadata_steward.md`](exercises/ex14_dataplex_metadata_steward.md)  
+**Duration:** 20 min  
+**Objective:** Connect agy to BigQuery/Dataplex via managed MCP for a metadata-curation task (GCP Data Cloud).
 
 </div>
 

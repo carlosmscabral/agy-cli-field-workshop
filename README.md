@@ -24,27 +24,25 @@ There are **16 hands-on exercises** (`ex01`–`ex16`) mapped across the four mod
 
 ---
 
-## Quick Start
+## Quick Start (participants)
 
 ```bash
-# Install agy (if not already installed)
+# 1. Install agy (if not already installed)
 curl -fsSL https://antigravity.google/cli/install.sh | bash
 
-# Clone the workshop repo
+# 2. Clone the workshop repo
 git clone https://github.com/carlosmscabral/agy-cli-field-workshop.git
 cd agy-cli-field-workshop
 
-# Validate your environment
+# 3. Validate your environment
 make check-env
-
-# Serve the docs locally (creates a local .venv)
-make install-deps
-make serve
 ```
 
-Open [http://localhost:8000](http://localhost:8000) for the workshop site.
+Then complete your setup track in **[docs/setup.md](docs/setup.md)** and follow the modules on the **[live workshop site](https://carlosmscabral.github.io/agy-cli-field-workshop/)**.
 
 > **Pre-work:** attendees pick a setup track — **Track A: Enterprise / Corporate (GCP + Vertex AI)** (the primary path) or **Track B: Cloud Shell Sandbox**. Both are documented under [`docs/setup.md`](docs/setup.md). The hands-on labs use a separate sample app, [`carlosmscabral/agy-sample-app`](https://github.com/carlosmscabral/agy-sample-app), cloned alongside this repo.
+>
+> **Previewing the docs locally is optional** (for maintainers / offline use — participants just use the live site). To render this MkDocs site on your machine: `make install-deps && make serve`, then open <http://localhost:8000>.
 
 ---
 

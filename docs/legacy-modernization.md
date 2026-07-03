@@ -420,15 +420,21 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 ---
 
-## Hands-On Exercise
+## Module 2 Exercises — Modernization
+
+> **How the module runs:** ① the facilitator presents the concepts and demos above → ② you work the exercises below **on your own** → ③ the facilitator wraps up by walking through each exercise's solution (live or pre-done) and answering questions. Do the **Core** exercises in order; **Optional** ones are stretch goals if you finish early.
+
+### Core
 
 <div class="exercise-card" markdown>
 
-### :material-file-document: Legacy Modernization Exercise
+### :material-language-java: Java 8 → 21 & Spring Boot 3 Migration &nbsp;·&nbsp; `Core`
 
-**Primary:** [`ex04_java_upgrade.md`](exercises/ex04_java_upgrade.md) (Maven — no Docker) · **Optional:** [`ex03_dotnet_modernization.md`](exercises/ex03_dotnet_modernization.md) (requires Docker)  
+**File:** [`ex04_java_upgrade.md`](exercises/ex04_java_upgrade.md)  
 **Duration:** 45 min  
-**Objective:** Walk through a full migration using the AGY primitives from this module.
+**Objective:** Migrate Spring PetClinic to Java 21 / Spring Boot 3 using either approach below.
+
+</div>
 
 **Choose your approach** — both work on the Java lab (and the optional .NET lab):
 
@@ -451,6 +457,26 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 4. Install the `java-migration` skill (Section 2.4)
 5. Use `/fork` before the riskiest step — try it there first
 6. Use print mode to generate a post-phase report
+
+### Optional
+
+<div class="exercise-card" markdown>
+
+### :material-language-csharp: .NET 5 → 8 Cloud-Native Migration &nbsp;·&nbsp; `Optional`
+
+**File:** [`ex03_dotnet_modernization.md`](exercises/ex03_dotnet_modernization.md)  
+**Duration:** 45 min  
+**Objective:** The .NET alternative to the Java lab. Requires Docker.
+
+</div>
+
+<div class="exercise-card" markdown>
+
+### :material-swap-horizontal: Migration Walkthrough (Gemini CLI → AGY) &nbsp;·&nbsp; `Optional`
+
+**File:** [`ex13_migration_walkthrough.md`](exercises/ex13_migration_walkthrough.md)  
+**Duration:** 20 min  
+**Objective:** Migrate a Gemini CLI project to Antigravity CLI and validate it with the migration-validator subagent.
 
 </div>
 
