@@ -9,24 +9,25 @@
 
 ## Workshop Overview
 
-This workshop teaches engineers how to use agy-cli as a daily-driver AI coding assistant and automation tool. It covers five modules, from first interactive session to building and deploying production ADK agents.
+This workshop teaches engineers how to use `agy` as a daily-driver AI coding assistant and automation tool, and how to build agents on top of it. It is designed for **real customer / enterprise delivery**, authenticating to **Google Cloud / Vertex AI** throughout. It covers four modules, from first interactive session to building and deploying production agents.
 
 | Module | Topic | Duration |
 | :-- | :-- | :-- |
-| **1. SDLC Productivity** | First session, code understanding, refactoring, test generation, review + plugins | 75 min |
-| **2. Legacy Modernization ⭐** | Strict mode, agent self-onboarding, .NET/Java migration, `/rewind` | 90 min |
-| **3. Building AGY Agents** | Antigravity SDK, Agent/Tools/Hooks, session state, Cloud Run deploy | 90 min |
-| **4. Multi-Agent & Advanced** | Subagents, `/btw` mid-task steering, scheduling, session resumption | 60 min |
-| **5. ADK Agents with agents-cli** | Scaffold, build, evaluate, deploy ADK agents via agents-cli | 75 min |
+| **1. Antigravity CLI Fundamentals** | First session, the **Artifacts** plan-review-verify workflow, custom skills & rules, connecting tools via **MCP**, sandbox governance | 90 min |
+| **2. Legacy Modernization & Advanced CLI ⭐** | Strict mode, agent self-onboarding, Java migration (optional .NET), then subagents, `/btw` mid-task steering, headless `--print` automation | 120 min |
+| **3. ADK Agents with agents-cli** | Scaffold, build, evaluate, and deploy ADK agents via `agents-cli` (optional GCP Data Cloud lab) | 75 min |
+| **4. Advanced: Building Agents with the Antigravity SDK** | The `google-antigravity` SDK on Vertex — tools, hooks, triggers, multi-agent orchestration, Cloud Run | 90 min |
 
-Total: ~7 hours (extended) · Full day: Modules 1–4 (~5.5 hrs) · Half-day: Modules 1–2 · Lightning: Module 1 + M2 highlights
+Total: ≈7 hours (extended) · Full day: Modules 1–3 (≈5.5 hrs) · Half-day: Modules 1–2 (3.5 hrs) · Lightning: Module 1 (1.5 hrs)
+
+There are **16 hands-on exercises** (`ex01`–`ex16`) mapped across the four modules.
 
 ---
 
 ## Quick Start
 
 ```bash
-# Install agy-cli (if not already installed)
+# Install agy (if not already installed)
 curl -fsSL https://antigravity.google/cli/install.sh | bash
 
 # Clone the workshop repo
@@ -34,42 +35,49 @@ git clone https://github.com/carlosmscabral/agy-cli-field-workshop.git
 cd agy-cli-field-workshop
 
 # Validate your environment
-chmod +x scripts/check-env.sh
 make check-env
 
-# Serve the docs locally
+# Serve the docs locally (creates a local .venv)
 make install-deps
 make serve
 ```
 
 Open [http://localhost:8000](http://localhost:8000) for the workshop site.
 
+> **Pre-work:** attendees pick a setup track — **Track A: Enterprise / Corporate (GCP + Vertex AI)** (the primary path) or **Track B: Cloud Shell Sandbox**. Both are documented under [`docs/setup.md`](docs/setup.md). The hands-on labs use a separate sample app, [`carlosmscabral/agy-sample-app`](https://github.com/carlosmscabral/agy-sample-app), cloned alongside this repo.
+
 ---
 
 ## Repository Structure
 
-```bash
-├── docs/                    # Workshop documentation (MkDocs Material)
-│   ├── index.md             # Home page
-│   ├── setup.md             # Environment setup
-│   ├── sdlc-productivity.md # Module 1
-│   ├── legacy-modernization.md # Module 2
-│   ├── agy-sdk.md           # Module 3
-│   ├── multi-agent-advanced.md # Module 4
-│   ├── agents-cli.md        # Module 5
-│   ├── cheatsheet.md        # Reference
-│   ├── plugin-ecosystem.md  # Reference
-│   ├── devops-automation.md # Reference
+```text
+├── docs/                        # Workshop documentation (MkDocs Material)
+│   ├── index.md                 # Home page
+│   ├── setup.md                 # Pre-work: track selector
+│   ├── setup-enterprise-admin.md  # Track A — IT Admin provisioning (IAM/APIs)
+│   ├── setup-corporate.md       # Track A — developer workstation
+│   ├── setup-cloud-shell.md     # Track B — Cloud Shell sandbox
+│   ├── sdlc-productivity.md     # Module 1 — Antigravity CLI Fundamentals
+│   ├── legacy-modernization.md  # Module 2 — Legacy Modernization (+ advanced CLI)
+│   ├── multi-agent-advanced.md  # Module 2 — Advanced CLI (subagents, /btw, --print)
+│   ├── agents-cli.md            # Module 3 — ADK Agents with agents-cli
+│   ├── agy-sdk.md               # Module 4 — Advanced: Antigravity SDK
+│   ├── cheatsheet.md            # Reference
+│   ├── plugin-ecosystem.md      # Reference
+│   ├── devops-automation.md     # Reference
 │   ├── facilitator-guide.md
-│   └── exercises/           # Hands-on exercises (14 total)
-├── demos/                   # VHS tape scripts for terminal GIFs
-├── samples/                 # Sample configs and scripts
+│   └── exercises/               # Hands-on exercises (ex01–ex16, 16 total)
+├── demos/                       # VHS tape scripts for terminal GIFs
+├── samples/                     # Sample configs, agents, hooks, plugin
 ├── scripts/
-│   ├── check-env.sh         # Pre-workshop validator
-│   ├── precommit-checks.sh  # Structural integrity checks
-│   └── detect-drift.sh      # Ground truth drift detection
-├── AUDIT.md                 # Ground truth for upstream claims
-├── VERIFICATION.md          # Maintenance playbook
+│   ├── check-env.sh             # Pre-workshop validator
+│   ├── verify-workstation.sh    # Workstation verifier (Bash + PowerShell)
+│   ├── bootstrap-enterprise.sh  # One-command sandbox + Vertex bootstrap
+│   ├── validate-code-blocks.sh  # Doc code-block validation (recursive)
+│   └── detect-drift.sh          # Ground-truth drift detection
+├── research/                    # Verified grounding references (agy CLI + SDK)
+├── AUDIT.md                     # Ground truth for upstream claims + test register
+├── VERIFICATION.md              # Maintenance playbook
 ├── Makefile
 └── mkdocs.yml
 ```
@@ -80,20 +88,22 @@ Open [http://localhost:8000](http://localhost:8000) for the workshop site.
 
 | Format | Modules | Duration |
 | :-- | :-- | :-- |
-| ⚡ Lightning | 1 + 2 highlights | 1.5 hrs |
-| 📋 Half-day | 1 + 2 | 2.5 hrs |
-| 📦 Full day | Modules 1–4 | ~5.5 hrs |
-| 🏗️ Extended | All 5 modules + open lab | 7 hrs |
+| ⚡ Lightning | Module 1 | 1.5 hrs |
+| 📋 Half-day | Modules 1 + 2 | 3.5 hrs |
+| 📦 Full day | Modules 1–3 | ≈5.5 hrs |
+| 🏗️ Extended | All 4 modules + open lab | 7 hrs |
 
-See [Facilitator Guide](docs/facilitator-guide.md) for delivery instructions.
+See the [Facilitator Guide](docs/facilitator-guide.md) for delivery instructions.
 
 ---
 
 ## Prerequisites
 
-- agy-cli installed and authenticated (see [Environment Setup](docs/setup.md))
-- Familiarity with terminal, Git, and basic coding workflows
+- `agy` installed and authenticated against your GCP project / Vertex AI (see [Environment Setup](docs/setup.md))
+- A GCP project with the Vertex AI API enabled and `roles/aiplatform.user` (Modules 3–4 add Cloud Run / Artifact Registry / Cloud Build roles — see the IT Admin guide)
+- Familiarity with a terminal, Git, and basic coding workflows
+- Docker is **optional** — only the optional .NET modernization exercise (ex03) uses it
 
 ---
 
-*Built with [MkDocs Material](https://squidfundamentals.github.io/mkdocs-material/).*
+*Built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/).*

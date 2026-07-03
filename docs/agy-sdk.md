@@ -1,7 +1,7 @@
 # Module 4 — Advanced: Building Agents with the Antigravity SDK
 
 <div class="module-header" markdown>
-**Duration:** ~90 minutes  
+**Duration:** ≈90 minutes  
 **Goal:** Build a production-ready AGY agent from scratch using the `google-antigravity` Python library — tools, hooks, policy, session state, multi-agent orchestration, and structured output.  
 **Exercises:** [Exercise 5: Your First Agent](exercises/ex05_first_agent.md) · [Exercise 6: Multi-Agent Pipeline](exercises/ex06_multi_agent_pipeline.md)
 </div>
@@ -170,7 +170,7 @@ asyncio.run(main())
 
 > **`async with Agent(config) as agent:`** — always use the context manager. It starts
 > the Go runtime bridge (`bin/localharness`) and tears it down cleanly on exit.
-
+>
 > **Every `LocalAgentConfig` needs the backend fields.** The remaining examples in this
 > module omit them for brevity, but each one runs against Vertex AI by spreading
 > `**VERTEX_BACKEND` (defined above) — e.g. `LocalAgentConfig(model=..., **VERTEX_BACKEND, ...)`.

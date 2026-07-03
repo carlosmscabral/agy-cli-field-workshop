@@ -15,7 +15,7 @@ An enterprise Java REST API (Spring PetClinic REST) runs on Java 8 and Spring Bo
 | **Security compliance** | Java 8 is EOL — no security patches. Audit finding blocks next SOC 2 renewal. |
 | **Performance** | Java 21 Virtual Threads reduce thread pool contention on high-concurrency endpoints. Estimated 30% reduction in p99 latency. |
 | **Cost** | Improved memory footprint means smaller container instances. Estimated 20% infrastructure savings. |
-| **Developer experience** | Records, sealed classes, pattern matching, text blocks — reduces boilerplate by ~15%. |
+| **Developer experience** | Records, sealed classes, pattern matching, text blocks — reduces boilerplate by ≈15%. |
 
 ## Scope
 

@@ -3,7 +3,7 @@
 ![Module 3 — ADK Agents with agents-cli](assets/agents-cli-hero.png)
 
 <div class="module-header" markdown>
-**Duration:** ~75 minutes  
+**Duration:** ≈75 minutes  
 **Goal:** Use `agents-cli` to scaffold, build, evaluate, and deploy a production-grade ADK agent — entirely from within your Antigravity CLI session.  
 **Exercise:** [Exercise 10: ADK Agent — Scaffold, Eval, Deploy](exercises/ex10_agents_cli_lifecycle.md)
 </div>
