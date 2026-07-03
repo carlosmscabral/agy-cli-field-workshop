@@ -59,7 +59,7 @@ nav:
           - "1. First Session (ex01)": exercises/ex01_first_session.md
           - "2. Artifacts - Plan & Review (ex15)": exercises/ex15_artifacts.md
           - "3. Custom Skills (ex02)": exercises/ex02_custom_skills.md
-          - "4. Connect Tools with MCP (ex16)": exercises/ex16_mcp_basics.md
+          - "4. Governed Access with MCP (ex16)": exercises/ex16_mcp_basics.md
           - "5. Sandbox & Governance (ex09)": exercises/ex09_sandbox_governance.md
       - "Module 2 - Modernization & Advanced CLI":
           - "6. Java Upgrade (ex04)": exercises/ex04_java_upgrade.md

@@ -296,9 +296,9 @@ You can also write custom directives in `.agents/rules.md` (or `.agents/rules/*.
 
 ---
 
-## 1.8 — Connect Tools & Data with MCP <span class="duration-badge">10 min</span>
+## 1.8 — Governed Access with MCP <span class="duration-badge">10 min</span>
 
-Skills and rules customize how `agy` *thinks*; **MCP (Model Context Protocol)** servers extend what it can *do* — giving the agent tools and data beyond your local files (a filesystem server, GitHub, a database, or your own internal service).
+Skills and rules customize how `agy` *thinks*. **MCP (Model Context Protocol)** servers change what it can *reach* — but the value isn't raw capability: `agy` already reads files, runs shell, and hits URLs, so wrapping those in MCP adds nothing. MCP's real payoff is **governance** — the server owns the connection and credentials and exposes only *scoped, structured* operations, so you can grant the agent a specific capability **without handing it raw shell or secrets**, even when shell is switched off.
 
 MCP servers are declared in a JSON config, not via an `agy` subcommand:
 
@@ -308,18 +308,18 @@ MCP servers are declared in a JSON config, not via an `agy` subcommand:
 ```json
 {
   "mcpServers": {
-    "filesystem": {
+    "billing-db": {
       "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
+      "command": "uvx",
+      "args": ["mcp-server-sqlite", "--db-path", "./billing.db"]
     }
   }
 }
 ```
 
-Remote servers use `serverUrl` (with `type` `sse` or `streamable-http`) instead of a local `command`. Once configured, run `/mcp` inside the TUI to confirm the server is connected and see the tools it exposes — the agent can then call them during a session.
+Local servers run as a subprocess (`type: "stdio"`); remote servers use `serverUrl` (with `type` `sse` or `streamable-http`) — and there the server, not the agent, holds the credentials. Run `/mcp` inside the TUI to confirm a server is connected and see the scoped tools it exposes.
 
-> **Try it:** [Exercise: Connect agy to Tools with MCP](exercises/ex16_mcp_basics.md) registers a filesystem server and has the agent use it.
+> **Try it:** [Exercise: Governed Access with MCP](exercises/ex16_mcp_basics.md) connects agy to a billing database, denies shell with `/permissions strict`, and has the agent answer business questions *only* through the MCP server's query tools.
 
 ---
 
@@ -361,11 +361,11 @@ Remote servers use `serverUrl` (with `type` `sse` or `streamable-http`) instead 
 
 <div class="exercise-card" markdown>
 
-### :material-transit-connection-variant: Connect Tools with MCP &nbsp;·&nbsp; `Core`
+### :material-transit-connection-variant: Governed Access with MCP &nbsp;·&nbsp; `Core`
 
 **File:** [`ex16_mcp_basics.md`](exercises/ex16_mcp_basics.md)  
 **Duration:** 20 min  
-**Objective:** Register an MCP server in `.agents/mcp_config.json`, confirm it with `/mcp`, and let the agent use its tools.
+**Objective:** Connect agy to a billing database via MCP, deny shell with `/permissions strict`, and answer business questions *only* through the server's scoped query tools.
 
 </div>
 
