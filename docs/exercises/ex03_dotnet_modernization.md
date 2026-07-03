@@ -15,7 +15,7 @@ A partially-upgraded ASP.NET application (ContosoUniversity) runs on .NET 5 with
 | **Security compliance** | .NET 5 is EOL — no security patches. Blocks compliance certification. |
 | **Deployment speed** | From manual VM deployment to 3-minute container push on Cloud Run |
 | **Scalability** | Cloud Run auto-scales from 0 to N instances based on traffic |
-| **Cost** | Eliminate Windows Server licensing — Linux containers on Cloud Run cost ~70% less |
+| **Cost** | Eliminate Windows Server licensing — Linux containers on Cloud Run cost ≈70% less |
 | **Data layer** | Migrate from EF6/SQL Server to EF Core 8/PostgreSQL for managed Cloud SQL |
 
 ## Target Repository

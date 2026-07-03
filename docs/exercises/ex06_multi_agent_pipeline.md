@@ -121,7 +121,7 @@ Output a complete, ready-to-review privacy policy document.
 ```
 
 > **Key concept:** `skills_paths=["skills/"]` tells the SDK to auto-discover all `SKILL.md` files under that directory. The writer agent gets the GDPR skill injected automatically.
-
+>
 > **Backend note:** Every `LocalAgentConfig` in this exercise uses the same `**VERTEX_BACKEND` fields. The analyst config below spreads them too; the parallel and resume variants derive from these via `.model_copy(...)`, so they inherit the backend automatically. The SDK will not pick up Vertex from the environment on its own.
 
 ---
@@ -317,7 +317,7 @@ specific use case. Return structured output.""",
     return report
 ```
 
-> **When to use parallel:** Any time you have N independent analyses. Running the writer and legal pre-check simultaneously cuts wall-clock time by ~50%.
+> **When to use parallel:** Any time you have N independent analyses. Running the writer and legal pre-check simultaneously cuts wall-clock time by ≈50%.
 
 ---
 

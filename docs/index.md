@@ -73,7 +73,7 @@ hide:
 | `5:35` | **Module 4:** Advanced — Antigravity SDK | 90 min |
 | `7:05` | Wrap-up & Q&A | 15 min |
 
-> **Full day:** Modules 1–3 (~5.5 hrs). **Extended:** All 4 modules (7 hrs). **Half-day:** Modules 1 + 2 (3.5 hrs). **Lightning:** Module 1 (1.5 hrs).
+> **Full day:** Modules 1–3 (≈5.5 hrs). **Extended:** All 4 modules (7 hrs). **Half-day:** Modules 1 + 2 (3.5 hrs). **Lightning:** Module 1 (1.5 hrs).
 
 ---
 

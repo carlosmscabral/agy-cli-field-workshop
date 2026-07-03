@@ -89,7 +89,7 @@ python standup_sidecar.py
 You should see the "Standup sidecar running" line and the process stays in the foreground.
 
 > [!TIP]
-> The daily interval won't fire during a 20-minute lab. To see it work now, temporarily set `STANDUP_INTERVAL_SECONDS = 60`, run again, and wait ~60 seconds — the agent will produce a git summary on its own. **Remember to change it back.**
+> The daily interval won't fire during a 20-minute lab. To see it work now, temporarily set `STANDUP_INTERVAL_SECONDS = 60`, run again, and wait ≈60 seconds — the agent will produce a git summary on its own. **Remember to change it back.**
 
 ---
 

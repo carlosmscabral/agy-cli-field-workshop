@@ -74,10 +74,8 @@ echo 'GOOGLE_GENAI_USE_VERTEXAI=True' >> .env
 
 > [!IMPORTANT]
 > On the Google Cloud path, `GOOGLE_GENAI_USE_VERTEXAI=True` is **required** — without it the ADK/`google-genai` stack falls back to the AI-Studio (API-key) backend and ignores your project's ADC, so the agent fails on a machine with no `GOOGLE_API_KEY`.
-
-> **Location Choice**
 >
-> Using `global` for `GOOGLE_CLOUD_LOCATION` is generally recommended on the Agent Platform to ensure compatibility with all model families. If you must use a regional endpoint (e.g., `us-central1` or `us-east5`), ensure the models you are using are available in that region in your GCP project.
+> **Location:** Using `global` for `GOOGLE_CLOUD_LOCATION` is generally recommended on the Agent Platform to ensure compatibility with all model families. If you must use a regional endpoint (e.g., `us-central1` or `us-east5`), ensure the models you are using are available in that region in your GCP project.
 
 ---
 

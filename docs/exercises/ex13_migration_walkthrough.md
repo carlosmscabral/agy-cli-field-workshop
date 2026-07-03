@@ -81,7 +81,7 @@ EOF
 mkdir -p scripts .github/workflows
 cat > scripts/review.sh << 'EOF'
 #!/usr/bin/env bash
-gemini -p "Review the diff: $(git diff HEAD~1)" > review.md
+gemini -p "Review the diff: $(git diff HEAD≈1)" > review.md
 EOF
 ```
 

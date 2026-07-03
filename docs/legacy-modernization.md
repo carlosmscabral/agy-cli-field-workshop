@@ -1,7 +1,7 @@
 # Module 2 — Legacy Modernization & Advanced CLI
 
 <div class="module-header" markdown>
-**Duration:** ~75 minutes  
+**Duration:** ≈75 minutes  
 **Goal:** Migrate a legacy application safely using Antigravity CLI primitives — strict permissions gating, agent self-onboarding, parallel subagent analysis, hooks as guardrails, and `/rewind` as your safety net. The module then continues into the [Advanced CLI](multi-agent-advanced.md) half — subagents, mid-task steering, and non-interactive automation.  
 **Exercise PRD:** [Java Upgrade](exercises/ex04_java_upgrade.md) (primary) · [.NET Modernization](exercises/ex03_dotnet_modernization.md) (optional — requires Docker)
 </div>

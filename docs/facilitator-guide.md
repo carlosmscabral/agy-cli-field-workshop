@@ -6,7 +6,7 @@
 
 ## Overview
 
-This is a **4-module, ~7-hour hands-on workshop** for Antigravity CLI. It is designed for developer audiences: engineers, tech leads, and solution architects evaluating or adopting Antigravity CLI.
+This is a **4-module, ≈7-hour hands-on workshop** for Antigravity CLI. It is designed for developer audiences: engineers, tech leads, and solution architects evaluating or adopting Antigravity CLI.
 
 ---
 
@@ -16,7 +16,7 @@ This is a **4-module, ~7-hour hands-on workshop** for Antigravity CLI. It is des
 | :-- | :-- | :-- |
 | ⚡ Lightning | Module 1 + Module 2 highlights | 1.5 hrs |
 | 📋 Half-day | Modules 1 + 2 | 2.5 hrs |
-| 📦 Full day | Modules 1–3 | ~5.5 hrs |
+| 📦 Full day | Modules 1–3 | ≈5.5 hrs |
 | 🏗️ Extended | All 4 modules + open lab | 7 hrs |
 
 ---
@@ -66,10 +66,10 @@ This is a **4-module, ~7-hour hands-on workshop** for Antigravity CLI. It is des
 5. `ctrl+g` — open the generated plan in the editor, make one visible edit to show human control
 6. Switch to `request-review`, execute Phase 1 only
 7. Show `/rewind` — revert the phase if anything goes wrong
-8. Total demo: ~15 min, then participants do it themselves
+8. Total demo: ≈15 min, then participants do it themselves
 
 - **Common question:** "Can it do the whole migration?" — Yes, but the value is in reviewing and steering, not just watching it run. Encourage them to edit the plan.
-- **Facilitator timing note:** Phase 0–1 together take ~20 min per participant. Let them work through Phase 2 while you circulate.
+- **Facilitator timing note:** Phase 0–1 together take ≈20 min per participant. Let them work through Phase 2 while you circulate.
 
 **Advanced CLI half (subagents, `/btw`, automation):**
 

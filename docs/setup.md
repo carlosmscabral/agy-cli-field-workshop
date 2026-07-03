@@ -1,6 +1,6 @@
 # Environment Setup
 
-> Complete this before starting any module. Takes ~15 minutes.
+> Complete this before starting any module. Takes ≈15 minutes.
 
 Welcome to the **Antigravity CLI Field Workshop**! To participate in the hands-on coding modules and exercises, you must first set up your development environment.
 
@@ -30,9 +30,9 @@ We provide two onboarding pathways. **The primary path for real customer and ent
 
     **A zero-install option for quick trials and lab environments.** Run the workshop inside a Google-provided, browser-based Cloud Shell (or Qwiklabs) with Owner on a temporary project.
 
-    - All dependencies and tools are pre-configured.
-    - APIs are enabled directly by you (as project Owner).
-    - Docker & Docker Compose are pre-installed.
+  - All dependencies and tools are pre-configured.
+  - APIs are enabled directly by you (as project Owner).
+  - Docker & Docker Compose are pre-installed.
 
     [:octicons-arrow-right-24: Follow Track B Guide](setup-cloud-shell.md)
 
