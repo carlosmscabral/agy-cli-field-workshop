@@ -1,6 +1,6 @@
 # Exercise 1: First Session
 
-> **Duration:** 15 min | **Module:** 1 — SDLC Productivity
+> **Duration:** 15 min | **Module:** 1 — Antigravity CLI Fundamentals
 
 ---
 
@@ -12,7 +12,7 @@ Launch `agy` CLI, explore a sandbox codebase, and create an `AGENTS.md` file tha
 
 ## Setup
 
-For this exercise, we will operate within the dedicated sandbox workspace `agy-sample-app` prepared by the enterprise bootstrap script.
+For this exercise, we will operate within the dedicated sandbox workspace `agy-sample-app` that you cloned during setup (or that the `scripts/bootstrap-enterprise.sh` script prepared for you).
 
 ```bash
 # Navigate to the sandbox project directory

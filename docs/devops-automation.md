@@ -207,6 +207,7 @@ For maximum control, pair sandbox mode with the permissions model:
 {
   "enableTerminalSandbox": true,
   "permissions": {
+    "mode": "strict",
     "allow": ["read_file", "command(git)"],
     "deny": ["command(rm)", "unsandboxed"]
   }
@@ -233,7 +234,7 @@ Hooks let you run custom logic at 5 lifecycle events:
 | `PostInvocation` | After agy finishes a response |
 | `Stop` | When the session ends |
 
-Configure hooks in `hooks.json` (in `.agents/` for project or `~/.gemini/config/` for global). Hook scripts receive JSON on stdin and return JSON on stdout.
+Configure workspace or global hooks under the `"hooks"` key in `settings.json` (`.agents/settings.json` for project, `~/.gemini/config/settings.json` for global). Hook scripts receive JSON on stdin and return JSON on stdout. A standalone `hooks.json` file is used only when hooks are bundled inside a plugin.
 
 #### Sample Hooks (in `samples/hooks/`)
 
@@ -284,4 +285,4 @@ Example `.agents/rules.md`:
 
 ## Next Module
 
-→ **[Module 4: Multi-Agent & Advanced](multi-agent-advanced.md)** — subagents, /btw mid-task steering, scheduling.
+→ **[Module 2 (continued): Advanced CLI](multi-agent-advanced.md)** — subagents, /btw mid-task steering, scheduling.

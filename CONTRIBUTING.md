@@ -34,10 +34,6 @@ agy "Find all bash code blocks in docs/devops-automation.md and check if they're
 # "I want to check if new agy CLI flags need to be documented"
 agy "Read AUDIT.md and check which ⚠️ claims could now be verified with agy --help"
 
-# "I want to add a new language translation"
-# Launch a research subagent to check what's already translated
-agy "What docs exist under docs/ko/ and what's missing compared to docs/?"
-
 # "I want to validate migration guide accuracy"
 agy "Run the migration-validator agent against the migration guide examples"
 ```
@@ -87,50 +83,6 @@ All issues are automatically triaged with type, area, and priority labels.
 - **Module structure:** Each use case follows: context → demo → hands-on exercise → recap.
 - **Grounding:** All technical claims must be verifiable against the live `agy` binary (`agy --help`, `agy plugin help`) or official docs at `antigravity.google/docs`. See [`AUDIT.md`](AUDIT.md) for the full claims table.
 
-### Translations (i18n)
-
-The workshop supports multiple languages via an automated Gemini-powered pipeline:
-
-| Language | Code | Status |
-| :-- | :-- | :-- |
-| English | `en` | Source of truth |
-| Korean | `ko` | Active |
-| Indonesian | `id` | Active |
-| Chinese (Simplified) | `zh` | Active |
-
-**If you change English source files:**
-
-- Note in your PR which docs changed — translation owners will regenerate
-- Never edit `docs/{lang}/*.md` directly — these are generated files
-- Re-translate changed files with:
-
-  ```bash
-  export GOOGLE_CLOUD_PROJECT=<your-gcp-project>
-
-  # Single file, one language
-  make translate-file FILE=docs/agy-sdk.md L=ko P=8
-
-  # All files, all languages in parallel (fastest)
-  make translate L=ko P=8 & make translate L=zh P=8 & make translate L=id P=8 & wait
-  ```
-
-- After translating, **always run the post-translation lint fix**:
-
-  ```bash
-  # Auto-fix, normalize tables, fix MD022 blank lines
-  npx markdownlint-cli2 --fix "docs/id/**/*.md" "docs/ko/**/*.md" "docs/zh/**/*.md"
-  find docs/id docs/ko docs/zh -name "*.md" | while read f; do
-    perl -i -0pe 's/(\S)\n(##\s)/$1\n\n$2/g' "$f"
-    perl -i -pe '
-      if (/^\|[-:| ]+\|$/) { s/\|\s*:?-+:?\s*/| :-- /g; s/ $//; s/\| :-- $/|/; }
-      s/^```\n$/```text\n/;
-    ' "$f"
-  done
-  npx markdownlint-cli2 "docs/id/**/*.md" "docs/ko/**/*.md" "docs/zh/**/*.md"
-  ```
-
-**To add a new language:** Open a Content Improvement issue first to discuss glossary coverage.
-
 ---
 
 ## Quality Checklist
@@ -141,21 +93,18 @@ The workshop supports multiple languages via an automated Gemini-powered pipelin
 Run these before every commit:
 
 ```bash
-# 1. Markdown lint — English source
-npx markdownlint-cli2 "docs/*.md" "README.md"
+# 1. Markdown lint
+npx markdownlint-cli2 "docs/**/*.md" "README.md"
 
-# 2. Markdown lint — translated files
-npx markdownlint-cli2 "docs/id/**/*.md" "docs/ko/**/*.md" "docs/zh/**/*.md"
-
-# 3. Code block syntax validation
+# 2. Code block syntax validation
 bash scripts/validate-code-blocks.sh docs/
 # Expected: ALL PASSED
 
-# 4. MkDocs strict build (catches broken links, nav mismatches)
+# 3. MkDocs strict build (catches broken links, nav mismatches)
 .venv/bin/mkdocs build --strict
 # Expected: Documentation built in X.XXs (no warnings)
 
-# 5. Full CI simulation
+# 4. Full CI simulation
 make test
 ```
 
@@ -169,7 +118,7 @@ make test
 | `MD001` — heading level skipped | Don't jump from `##` to `####` — use `###` |
 | Code block: Invalid bash syntax | Prompt text tagged as `bash` — retag as `` ```text `` |
 | Code block: Invalid YAML | YAML snippet with `${{ }}` (GH Actions template) — retag as `` ```text `` |
-| MkDocs warning: link not found | Check relative path depth in translated files (`../` not `../../`) |
+| MkDocs warning: link not found | Check the relative link path and that the target page is in `mkdocs.yml` nav |
 
 ## Code of Conduct
 

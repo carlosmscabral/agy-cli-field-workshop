@@ -1,10 +1,10 @@
-# Module 4: Multi-Agent & Advanced <span class="duration-badge">45 min</span>
+# Module 2 (continued) — Advanced CLI: Subagents, Steering & Automation <span class="duration-badge">45 min</span>
 
-> **Where agy goes beyond a chat assistant.** This module covers the features that separate agy-cli from every other AI coding tool: parallel subagents, mid-task steering with `/btw`, background scheduling, and session resumption.
+> **The second half of Module 2 — where the CLI goes beyond a chat assistant.** Building on the modernization primitives from the [first half](legacy-modernization.md), this half covers the advanced CLI features that separate agy-cli from every other AI coding tool: parallel subagents, mid-task steering with `/btw`, background scheduling, and session resumption.
 
 ---
 
-## 4.0 — The agy Agent Model <span class="duration-badge">5 min</span>
+## 2.8 — The agy Agent Model <span class="duration-badge">5 min</span>
 
 agy-cli can spawn **subagents** — isolated task runners that operate in parallel, each with their own workspace context. Unlike running multiple terminal tabs with separate agy sessions, subagents are coordinated: they can share a workspace, work on isolated branches, or operate on a cloned copy.
 
@@ -30,7 +30,7 @@ This opens a model picker showing available options (Gemini 3.5 Flash, Gemini 3.
 
 ---
 
-## 4.1 — Spawning Subagents <span class="duration-badge">15 min</span>
+## 2.9 — Spawning Subagents <span class="duration-badge">15 min</span>
 
 > **Pattern: Parallel Execution** — dispatch multiple agents to work simultaneously.
 > 📖 Full reference: [Subagents docs](https://www.antigravity.google/docs/subagents)
@@ -101,11 +101,14 @@ The adversarial reviewer pattern is particularly powerful for security-sensitive
 
 ---
 
-## 4.2 — /btw: Mid-Task Steering <span class="duration-badge">10 min</span>
+## 2.10 — /btw: Mid-Task Steering <span class="duration-badge">10 min</span>
 
 > **Pattern: Steer Without Interrupting** — inject context into a running task without stopping it.
 
-`/btw` is one of agy's most distinctive features. When agy is mid-task, you can send it a message without cancelling the current operation.
+!!! note "`/btw` is a workshop convention, not a built-in command"
+    In this workshop, `/btw` is shorthand for a **mid-task steering message** — extra context you type ("by the way, also...") while the agent is still working. It is not a built-in slash command. What matters is the underlying capability: agy can absorb new instructions mid-task without you having to cancel and restart.
+
+Mid-task steering is one of agy's most distinctive workflows. When agy is mid-task, you can send it a message without cancelling the current operation.
 
 ### How It Works
 
@@ -140,7 +143,7 @@ agy incorporates your note into the ongoing task without stopping. It's like lea
 
 ---
 
-## 4.3 — Background Execution & Scheduling <span class="duration-badge">10 min</span>
+## 2.11 — Background Execution & Scheduling <span class="duration-badge">10 min</span>
 
 > **Pattern: Async Agy** — kick off long-running tasks and get notified when they finish.
 
@@ -180,7 +183,7 @@ Cron expressions (up to 5 fields) are supported:
 
 ---
 
-## 4.4 — Session Resumption <span class="duration-badge">5 min</span>
+## 2.12 — Session Resumption <span class="duration-badge">5 min</span>
 
 > **Pattern: Long-Running Work** — pick up exactly where you left off.
 > 📖 Full reference: [Using Antigravity CLI](https://www.antigravity.google/docs/cli-using)
@@ -234,7 +237,7 @@ agy will have the full context, including code written, decisions made, and open
 
 ---
 
-## 4.5 — Advanced: Combining Patterns <span class="duration-badge">Optional</span>
+## 2.13 — Advanced: Combining Patterns <span class="duration-badge">Optional</span>
 
 > **The full power stack:** subagents + /btw + background + scheduling + conversation resumption.
 
@@ -258,7 +261,7 @@ This is multi-agent incident triage — two parallel investigations, steerable m
 
 ---
 
-## Module 4 Exercises
+## Advanced CLI Exercises
 
 <div class="exercise-card" markdown>
 
@@ -302,9 +305,11 @@ This is multi-agent incident triage — two parallel investigations, steerable m
 
 ---
 
-## You're Done 🎉
+## Next Module
 
-→ **[Cheatsheet](cheatsheet.md)** — every command from all four modules in one place
+That completes Module 2. Next, you'll shift from *using* the CLI to *building agents* with it.
+
+→ **[Module 3 — ADK Agents with agents-cli](agents-cli.md)** — scaffold, evaluate, and deploy a production-grade ADK agent from inside your agy session.
 
 → **[Reference: DevOps Patterns](devops-automation.md)** — `--print` pipelines, CI/CD, sandbox deep dive
 

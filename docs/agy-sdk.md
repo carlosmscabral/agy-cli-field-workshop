@@ -1,4 +1,4 @@
-# Module 3: Building AGY Agents with the SDK
+# Module 4 — Advanced: Building Agents with the Antigravity SDK
 
 <div class="module-header" markdown>
 **Duration:** ~90 minutes  
@@ -25,7 +25,7 @@ The CLI is a **general-purpose assistant**. An agent you build with the SDK is a
 
 ---
 
-## 3.1 — SDK Setup <span class="duration-badge">10 min</span>
+## 4.1 — SDK Setup <span class="duration-badge">10 min</span>
 
 ### Prerequisites
 
@@ -54,7 +54,7 @@ print("google-antigravity installed ✅")
 
 ---
 
-## 3.2 — Core Primitives: Agent, Config, Tool <span class="duration-badge">20 min</span>
+## 4.2 — Core Primitives: Agent, Config, Tool <span class="duration-badge">20 min</span>
 
 The `google-antigravity` SDK has three building blocks: `Agent`, `LocalAgentConfig`, and tools (plain Python functions). Learn these and you can build anything.
 
@@ -197,7 +197,7 @@ Skills can also be loaded natively via `LocalAgentConfig(skills_paths=["/path/to
 
 ---
 
-## 3.3 — Policy and Safety <span class="duration-badge">10 min</span>
+## 4.3 — Policy and Safety <span class="duration-badge">10 min</span>
 
 **Policy is the first thing you configure** — it controls what the agent is allowed to do without human approval. Every `LocalAgentConfig` needs a `policies=` list:
 
@@ -233,7 +233,7 @@ policy.workspace_only(["/path/to/project"])
 
 ---
 
-## 3.4 — Hooks: Observability and Control <span class="duration-badge">10 min</span>
+## 4.4 — Hooks: Observability and Control <span class="duration-badge">10 min</span>
 
 Hooks let you intercept and react to every event in the agent lifecycle — for logging, auditing, guardrails, or custom approval flows:
 
@@ -282,7 +282,7 @@ config = LocalAgentConfig(
 
 ---
 
-## 3.5 — Multi-Agent Orchestration <span class="duration-badge">15 min</span>
+## 4.5 — Multi-Agent Orchestration <span class="duration-badge">15 min</span>
 
 `google-antigravity` has no `SequentialAgent` or `ParallelAgent` classes. Multi-agent is done two ways: **model-driven** (let the agent spawn subagents) or **Python-driven** (you orchestrate `Agent` instances directly).
 
@@ -355,7 +355,7 @@ async def parallel_analysis(file_path: str):
 
 ---
 
-## 3.6 — Streaming and Structured Output <span class="duration-badge">5 min</span>
+## 4.6 — Streaming and Structured Output <span class="duration-badge">5 min</span>
 
 ### Streaming Responses
 
@@ -406,7 +406,7 @@ asyncio.run(main())
 
 ---
 
-## 3.7 — Session Resume and Persistence <span class="duration-badge">5 min</span>
+## 4.7 — Session Resume and Persistence <span class="duration-badge">5 min</span>
 
 ```python
 # First session — save the conversation ID
@@ -427,7 +427,7 @@ async with Agent(resume_config) as agent:
 
 ---
 
-## 3.8 — Triggers: Autonomous Background Agents <span class="duration-badge">5 min</span>
+## 4.8 — Triggers: Autonomous Background Agents <span class="duration-badge">5 min</span>
 
 ```python
 import asyncio
@@ -464,7 +464,7 @@ asyncio.run(main())
 
 ---
 
-## 3.9 — Project Structure Conventions <span class="duration-badge">5 min</span>
+## 4.9 — Project Structure Conventions <span class="duration-badge">5 min</span>
 
 Structure your agent project for maintainability:
 
@@ -577,8 +577,12 @@ gcloud run deploy my-code-reviewer \
 
 ---
 
-## Next Step
+## You've Completed the Workshop 🎉
 
-→ Continue to **[Module 4: Multi-Agent & Advanced Patterns](multi-agent-advanced.md)**
+From your first `agy` session to building, evaluating, and deploying production agents — you've worked through all four modules. This SDK capstone is the deepest point of the workshop.
 
-→ Reference: **[Cheatsheet](cheatsheet.md)** — all commands in one place
+→ **[Cheatsheet](cheatsheet.md)** — every command in one place
+
+→ **[Reference: DevOps Patterns](devops-automation.md)** — `--print` pipelines, CI/CD, sandbox deep dive
+
+→ **[Reference: Plugin Ecosystem](plugin-ecosystem.md)** — full plugin lifecycle reference

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Pre-commit hook: run fast offline lint checks before every commit
 # Only runs: markdown lint + code block validation (fast, offline, objective)
-# Translation drift is advisory — run: make check-translations
 # Full check: make precommit
 
 set -euo pipefail

@@ -16,7 +16,7 @@ Work through each section systematically:
 
 ### 1. Config File Locations
 - [ ] `settings.json` is at `~/.gemini/antigravity-cli/settings.json` (not `~/.gemini/settings.json`)
-- [ ] MCP servers are defined in `mcp.json` (not inside `settings.json`)
+- [ ] MCP servers are defined in `mcp_config.json` (not inside `settings.json`)
 - [ ] Project rules are in `.agents/rules.md` (not `.gemini/GEMINI.md` — though GEMINI.md still works)
 
 ### 2. MCP Server Config Format

@@ -1,6 +1,6 @@
 # Exercise 8: /btw & Scheduling
 
-> **Duration:** 20 min | **Module:** 4 — Multi-Agent & Advanced
+> **Duration:** 20 min | **Module:** 2 — Legacy Modernization & Advanced CLI
 
 ---
 

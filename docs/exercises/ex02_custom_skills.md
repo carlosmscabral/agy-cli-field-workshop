@@ -1,6 +1,6 @@
 # Exercise 2: Custom Skills and Workspace Customization
 
-> **Duration:** 20 min | **Module:** 1 — SDLC Productivity
+> **Duration:** 20 min | **Module:** 1 — Antigravity CLI Fundamentals
 
 ---
 

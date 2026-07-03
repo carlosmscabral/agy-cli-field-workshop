@@ -178,6 +178,30 @@ else
   check_result "FAIL" "agy CLI is not installed or not in your system PATH" "Follow the instructions in setup.md to install agy"
 fi
 
+# Check uv (Python package/venv manager used by the SDK exercises)
+if command -v uv &>/dev/null; then
+  UV_VERSION=$(uv --version 2>/dev/null | awk '{print $2}')
+  check_result "PASS" "uv is installed (version $UV_VERSION)"
+else
+  check_result "WARN" "uv is not installed" "uv is the recommended Python toolchain for the SDK exercises. Install it from https://docs.astral.sh/uv/getting-started/installation/"
+fi
+
+# Check agents-cli (Agent Development Kit CLI)
+if command -v agents-cli &>/dev/null; then
+  check_result "PASS" "agents-cli is installed and in user PATH"
+else
+  check_result "WARN" "agents-cli is not installed or not in your system PATH" "agents-cli is required for the SDK exercises. Follow the instructions in setup.md to install it."
+fi
+
+# Check google-antigravity Python package
+if command -v python3 &>/dev/null; then
+  if python3 -c "import google.antigravity" &>/dev/null; then
+    check_result "PASS" "google-antigravity Python package is importable"
+  else
+    check_result "WARN" "google-antigravity Python package is not installed" "Install it into your workshop environment (e.g. uv pip install google-antigravity) as described in setup.md"
+  fi
+fi
+
 # Check Docker Client installation
 if command -v docker &>/dev/null; then
   DOCKER_VER=$(docker --version | awk '{print $3}' | tr -d ',')
@@ -202,7 +226,7 @@ if command -v docker &>/dev/null; then
   if docker info &>/dev/null; then
     check_result "PASS" "Docker Daemon is active & running"
   else
-    check_result "FAIL" "Docker Daemon is not running" "Start Docker Desktop or Rancher Desktop to activate the local container runtime"
+    check_result "WARN" "Docker Daemon is not running" "Docker is only needed for the modernization module's container exercises. CLI-only attendees can skip this. To run those exercises, start Docker Desktop or Rancher Desktop to activate the local container runtime."
   fi
 fi
 
@@ -227,13 +251,13 @@ else
     check_result "FAIL" "Unable to obtain local Application Default Credentials token" "Re-run: gcloud auth application-default login"
   else
     # Run API connectivity & IAM check via a real Vertex AI Gemini API endpoint call
-    # We target gemini-3.5-flash as mandated.
+    # We target gemini-3.1-pro-preview (a live-supported, stable id).
     # We check HTTP status code output.
     HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
       -X POST \
       -H "Authorization: Bearer $ADC_TOKEN" \
       -H "Content-Type: application/json" \
-      "https://us-central1-aiplatform.googleapis.com/v1/projects/${GCP_PROJECT}/locations/us-central1/publishers/google/models/gemini-3.5-flash:generateContent" \
+      "https://us-central1-aiplatform.googleapis.com/v1/projects/${GCP_PROJECT}/locations/us-central1/publishers/google/models/gemini-3.1-pro-preview:generateContent" \
       -d '{"contents": [{"role": "user", "parts": [{"text": "Hello, is this API active?"}]}]}' \
       --max-time 10 || echo "000")
 
@@ -242,11 +266,11 @@ else
     elif [ "$HTTP_STATUS" = "403" ]; then
       check_result "FAIL" "IAM Permission Denied (HTTP 403) accessing Vertex AI on project $GCP_PROJECT" "Verify your GCP user has been granted the 'Vertex AI User' (roles/aiplatform.user) role in the project."
     elif [ "$HTTP_STATUS" = "404" ]; then
-      check_result "FAIL" "Vertex AI Model API not found (HTTP 404)" "Ensure the Vertex AI API (aiplatform.googleapis.com) has been enabled in the project: gcloud services enable aiplatform.googleapis.com"
+      check_result "FAIL" "Vertex AI Model API not found (HTTP 404)" "The model id or region may be unavailable in this project. Verify the Vertex AI API (aiplatform.googleapis.com) is enabled (gcloud services enable aiplatform.googleapis.com), and that the model gemini-3.1-pro-preview is available in region us-central1 for your project."
     elif [ "$HTTP_STATUS" = "000" ]; then
       check_result "FAIL" "Connection timed out (no network response)" "Outbound traffic to *.aiplatform.googleapis.com on port 443 is blocked. Please contact your Enterprise Security/Network team to whitelist Google Cloud APIs."
     else
-      check_result "WARN" "Received unexpected response (HTTP $HTTP_STATUS) from Vertex AI API" "Ensure your project has Vertex AI API enabled and that you are using a validated regional endpoint."
+      check_result "WARN" "Received unexpected response (HTTP $HTTP_STATUS) from Vertex AI API" "The model id or region may be unavailable in this project. Confirm the Vertex AI API is enabled, that model gemini-3.1-pro-preview is offered in region us-central1 for your project, and that you are using a validated regional endpoint."
     fi
   fi
 fi

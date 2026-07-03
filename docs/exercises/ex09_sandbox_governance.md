@@ -1,6 +1,6 @@
 # Exercise 9: Sandbox & Governance
 
-> **Duration:** 15 min | **Module:** 4 — Multi-Agent & Advanced
+> **Duration:** 15 min | **Module:** 1 — Antigravity CLI Fundamentals
 
 ---
 
@@ -10,17 +10,20 @@ Run agy in `--sandbox` mode for safe code audits, understand the `--dangerously-
 
 ---
 
-## Part 1: Sandbox Mode — Safe Audit (7 min)
+## Part 1: Sandbox Mode — Safe Automated Review (7 min)
 
-Run a security audit with terminal restrictions enabled:
+Run an automated code review with terminal restrictions enabled:
 
 ```bash
 agy --sandbox \
-    --print "Scan this entire codebase for: (1) hardcoded secrets or API keys, (2) SQL injection risks, (3) insecure direct object references, (4) any .env files or credentials committed to the repo. Output findings as markdown with severity levels." \
+    --print "Review this codebase and produce a markdown report with a severity for each finding. Look for: (1) values hardcoded in source that should be read from the environment, (2) error handling that hides failures, (3) endpoints that do not validate their inputs, (4) any committed .env or config files that should not be in version control. Cite file:line and suggest a fix for each." \
     --print-timeout 5m > audit-sandbox.md
 
 cat audit-sandbox.md
 ```
+
+> [!TIP]
+> **Prompt framing matters.** Ask for a constructive *code review / hardening report* ("find values that should move to env vars", "flag error handling that hides failures") rather than a "scan for vulnerabilities / secrets." Phrased as an adversarial vulnerability scan, the model may decline; phrased as remediation-focused review it surfaces the same issues (hardcoded credentials, swallowed errors, unvalidated inputs) with fixes.
 
 Key properties of this run:
 
@@ -39,6 +42,9 @@ Key properties of this run:
 ## Part 2: Auto-Approve Mode — Understand the Risk (5 min)
 
 `--dangerously-skip-permissions` bypasses all tool approval prompts. agy executes file writes and shell commands without asking.
+
+> [!NOTE]
+> **The autonomy spectrum (interactive).** The same trade-off exists inside a session, dialed with slash commands instead of flags: `/grill-me` (agy asks *you* clarifying questions before acting — maximum alignment) → `/permissions request-review` (approve artifacts at milestones — the default) → `/permissions always-proceed` or `/goal` (agy runs to completion, auto-approving its own plan). `/goal` is the interactive cousin of `--dangerously-skip-permissions` — reserve it for well-scoped, low-risk, or batch tasks. *(`/goal` is reported in the I/O 2026 update; confirm it against your CLI version before relying on it.)*
 
 **Safe demonstration:** run it with `--sandbox` to show auto-approval without actual command execution:
 

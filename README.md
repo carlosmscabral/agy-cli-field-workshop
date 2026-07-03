@@ -60,8 +60,8 @@ Open [http://localhost:8000](http://localhost:8000) for the workshop site.
 │   ├── cheatsheet.md        # Reference
 │   ├── plugin-ecosystem.md  # Reference
 │   ├── devops-automation.md # Reference
-│   └── facilitator-guide.md
-├── exercises/               # Hands-on exercises (12 total)
+│   ├── facilitator-guide.md
+│   └── exercises/           # Hands-on exercises (14 total)
 ├── demos/                   # VHS tape scripts for terminal GIFs
 ├── samples/                 # Sample configs and scripts
 ├── scripts/

@@ -1,8 +1,8 @@
-# Module 2: Legacy Codebase Modernization
+# Module 2 — Legacy Modernization & Advanced CLI
 
 <div class="module-header" markdown>
 **Duration:** ~75 minutes  
-**Goal:** Migrate a legacy application safely using Antigravity CLI primitives — strict permissions gating, agent self-onboarding, parallel subagent analysis, hooks as guardrails, and `/rewind` as your safety net.  
+**Goal:** Migrate a legacy application safely using Antigravity CLI primitives — strict permissions gating, agent self-onboarding, parallel subagent analysis, hooks as guardrails, and `/rewind` as your safety net. The module then continues into the [Advanced CLI](multi-agent-advanced.md) half — subagents, mid-task steering, and non-interactive automation.  
 **Exercise PRDs:** [.NET Modernization](exercises/ex03_dotnet_modernization.md) · [Java Upgrade](exercises/ex04_java_upgrade.md)
 </div>
 
@@ -480,6 +480,6 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 ## Next Step
 
-→ Continue to **[Module 3: Building AGY Agents with the SDK](agy-sdk.md)**
+→ Continue to **[Module 2 (continued): Advanced CLI — Subagents, Steering & Automation](multi-agent-advanced.md)**
 
 → **[Cheatsheet](cheatsheet.md)** — all commands in one place

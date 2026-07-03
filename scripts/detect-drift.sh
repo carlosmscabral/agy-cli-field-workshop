@@ -48,11 +48,17 @@ log_section "🔍 Local Drift Detection"
 # --- 1. File paths referenced in docs should exist ---
 log_section "  Checking file path references..."
 
-grep -rhoE '(samples|exercises)/[a-zA-Z0-9_./-]+' docs/*.md 2>/dev/null | sort -u | while read -r ref_path; do
+grep -rhoE --include='*.md' '(samples|exercises)/[a-zA-Z0-9_./-]+' docs/ 2>/dev/null | sort -u | while read -r ref_path; do
   ref_path=$(echo "$ref_path" | sed 's/[).,;:]*$//')
-  if [ -e "$ref_path" ]; then
+  # Links live in docs/*.md and render relative to docs/, so exercises/exNN.md
+  # resolves under docs/exercises/. samples/ paths are repo-root relative.
+  case "$ref_path" in
+    exercises/*) resolved="docs/${ref_path}" ;;
+    *)           resolved="$ref_path" ;;
+  esac
+  if [ -e "$resolved" ]; then
     log_ok "Referenced path exists: $ref_path"
-  elif [ -e "$(dirname "$ref_path")" ]; then
+  elif [ -e "$(dirname "$resolved")" ]; then
     log_warn "Path not found (parent exists): $ref_path"
   else
     log_fail "Referenced path not found: $ref_path"
@@ -65,7 +71,7 @@ log_section "  Checking agent documentation coverage..."
 for agent_file in samples/agents/*.md; do
   [ -f "$agent_file" ] || continue
   agent_name=$(basename "$agent_file" .md)
-  if grep -rq "$agent_name" docs/*.md 2>/dev/null; then
+  if grep -rq --include='*.md' "$agent_name" docs/ 2>/dev/null; then
     log_ok "Agent '$agent_name' is documented"
   else
     log_warn "Agent '$agent_name' exists in samples/ but is not referenced in any doc"
@@ -78,7 +84,7 @@ log_section "  Checking hook documentation coverage..."
 for hook_file in samples/hooks/*.sh; do
   [ -f "$hook_file" ] || continue
   hook_name=$(basename "$hook_file" .sh)
-  if grep -rq "$hook_name" docs/*.md 2>/dev/null; then
+  if grep -rq --include='*.md' "$hook_name" docs/ 2>/dev/null; then
     log_ok "Hook '$hook_name' is documented"
   else
     log_warn "Hook '$hook_name' exists in samples/ but is not referenced in any doc"
@@ -106,7 +112,8 @@ STALE_EVENTS=("SessionStart" "BeforeTool" "AfterTool")
 AGY_EVENTS=("PreInvocation" "PreToolUse" "PostToolUse")
 
 for stale in "${STALE_EVENTS[@]}"; do
-  if grep -rq "\"${stale}\"" docs/*.md samples/ 2>/dev/null; then
+  # Exclude the migration walkthrough — it intentionally shows legacy Gemini CLI hook names.
+  if grep -rq --include='*.md' --exclude='ex07_migration_walkthrough.md' --exclude='ex13_migration_walkthrough.md' "\"${stale}\"" docs/ 2>/dev/null || grep -rq "\"${stale}\"" samples/ 2>/dev/null; then
     log_fail "Stale Gemini CLI hook event '${stale}' found — use AGY equivalent: PreInvocation/PreToolUse/PostToolUse"
   fi
 done
@@ -115,10 +122,11 @@ log_ok "Hook event names: no stale Gemini CLI names found"
 # --- 6. AGY binary references — flag any 'gemini' binary calls in docs ---
 log_section "  Checking for stale 'gemini' binary references in docs..."
 
-# Allow "gemini" as a noun (e.g., "from Gemini CLI") but flag bare 'gemini' commands
-if grep -rqE '^\s*(gemini |`gemini )' docs/*.md 2>/dev/null; then
+# Allow "gemini" as a noun (e.g., "from Gemini CLI") but flag bare 'gemini' commands.
+# Exclude the migration walkthrough — it intentionally shows legacy Gemini CLI commands.
+if grep -rqE --include='*.md' --exclude='ex07_migration_walkthrough.md' --exclude='ex13_migration_walkthrough.md' '^\s*(gemini |`gemini )' docs/ 2>/dev/null; then
   log_warn "Found bare 'gemini' command in docs — verify these should be 'agy'"
-  grep -rnoE '^\s*(gemini |`gemini )' docs/*.md 2>/dev/null | head -5
+  grep -rnoE --include='*.md' --exclude='ex07_migration_walkthrough.md' --exclude='ex13_migration_walkthrough.md' '^\s*(gemini |`gemini )' docs/ 2>/dev/null | head -5
 else
   log_ok "No stale 'gemini' binary references found"
 fi
@@ -151,7 +159,7 @@ if $CHECK_UPSTREAM; then
 
     # --- Check CLI flags used in docs are grounded in AUDIT.md ---
     log_section "  Checking agy CLI flags against AUDIT.md..."
-    grep -rhoE 'agy --[a-z-]+' docs/*.md 2>/dev/null | sed 's/agy //' | sort -u | while read -r flag; do
+    grep -rhoE --include='*.md' 'agy --[a-z-]+' docs/ 2>/dev/null | sed 's/agy //' | sort -u | while read -r flag; do
       if grep -q -- "$flag" "$AUDIT_FILE"; then
         log_ok "CLI flag '$flag' grounded in AUDIT.md"
       else
@@ -161,7 +169,7 @@ if $CHECK_UPSTREAM; then
 
     # --- Check slash commands used in docs are grounded in AUDIT.md ---
     log_section "  Checking slash commands against AUDIT.md..."
-    grep -rhoE '/[a-z]+' docs/*.md 2>/dev/null | grep -E '^/[a-z]{2,}$' | sort -u | while read -r cmd; do
+    grep -rhoE --include='*.md' '/[a-z]+' docs/ 2>/dev/null | grep -E '^/[a-z]{2,}$' | sort -u | while read -r cmd; do
       cmd_name="${cmd#/}"
       # Skip common false positives (file paths, URLs)
       case "$cmd_name" in dev|bin|etc|usr|tmp|src|var|opt|home|docs) continue ;; esac

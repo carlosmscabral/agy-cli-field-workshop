@@ -1,6 +1,6 @@
 # Exercise 5: Your First AGY Agent
 
-> **Duration:** 45 min | **Module:** 3 — Building AGY Agents
+> **Duration:** 45 min | **Module:** 4 — Advanced: Building Agents with the Antigravity SDK
 
 ---
 

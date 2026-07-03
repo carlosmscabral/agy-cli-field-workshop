@@ -41,7 +41,6 @@ body:
         - '⚠️ M09 — Migration Guide'
         - '📋 Facilitator Guide'
         - '📄 Cheatsheet'
-        - '🌐 Translations (i18n)'
         - 'New module / use case'
         - 'Other'
     validations:

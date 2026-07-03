@@ -7,10 +7,10 @@ or locally via `make precommit`. Run the full suite with `make precommit`.
 
 | ID | Test Name | Command | What It Catches | Status |
 | :-- | :-- | :-- | :-- | :-- |
-| T-01 | Markdown Lint — English | `npx markdownlint-cli2 "docs/*.md" "README.md" "AGENTS.md" "CONTRIBUTING.md"` | MD022 (blank lines), MD040 (untagged fences), MD060 (table style), MD001 (heading levels) | ✅ CI |
-| T-02 | Markdown Lint — Translated | `npx markdownlint-cli2 "docs/id/**/*.md" "docs/ko/**/*.md" "docs/zh/**/*.md"` | Same rules on generated translations; MD022 most common failure | ✅ CI |
-| T-03 | Code Block Validation | `bash scripts/validate-code-blocks.sh docs/` | `bash` blocks with non-bash content (prompts, tables, CLI output); `yaml` blocks with prose | ✅ CI |
-| T-04 | MkDocs Strict Build | `.venv/bin/mkdocs build --strict` | Broken relative links (wrong depth in translated files), nav mismatches, missing i18n plugin | ✅ CI |
+| T-01 | Markdown Lint — English | `npx markdownlint-cli2 "docs/**/*.md" "README.md"` | MD022 (blank lines), MD040 (untagged fences), MD060 (table style), MD001 (heading levels) | ✅ CI |
+| T-02 | ~~Markdown Lint — Translated~~ | — | **Removed 2026-07-03** — i18n/translations dropped; `docs/{id,ko,zh}` no longer exist | ❌ Retired |
+| T-03 | Code Block Validation | `bash scripts/validate-code-blocks.sh docs/` | `bash` blocks with non-bash content (prompts, tables, CLI output); `yaml` blocks with prose. **Now recurses into `docs/exercises/`** (previously non-recursive → exercises went unvalidated) | ✅ CI |
+| T-04 | MkDocs Strict Build | `mkdocs build --strict` | Broken relative links, nav mismatches (no i18n plugin — translations retired) | ✅ CI |
 | T-05 | Required Files | CI step: "Check required files exist" | Deleted or renamed core files (README.md, mkdocs.yml, AUDIT.md, etc.) | ✅ CI |
 | T-06 | JSON Config Syntax | `jq . samples/configs/*.json` | Invalid JSON in settings/mcp samples | ✅ CI |
 | T-07 | Shell Script Syntax | `bash -n scripts/*.sh` | Broken shell scripts in scripts/ and samples/hooks/ | ✅ CI |
@@ -18,8 +18,8 @@ or locally via `make precommit`. Run the full suite with `make precommit`.
 | T-09 | Stale Binary References | `grep -rE 'gemini ' docs/*.md` | Docs that still say `gemini` instead of `agy` | ✅ CI |
 | T-10 | Stale Hook Event Names | `grep -r '"SessionStart"' docs/` | Old Gemini CLI hook names (SessionStart, BeforeTool, AfterTool) | ✅ CI |
 | T-11 | Drift Detection | `bash scripts/detect-drift.sh` | AUDIT.md claims that conflict with detected binary behavior | ✅ CI |
-| T-12 | Translation Coverage | `make check-translations` | Auto-detects all language subdirs under docs/; tells contributor which translations need regenerating — non-blocking | ⚠️ Advisory |
-| T-13 | Translation Drift | `make check-translations` | Auto-detects all language subdirs under docs/; shows which English files have changed since last translation — non-blocking | ⚠️ Advisory |
+| T-12 | ~~Translation Coverage~~ | — | **Removed 2026-07-03** — translation pipeline retired | ❌ Retired |
+| T-13 | ~~Translation Drift~~ | — | **Removed 2026-07-03** — translation pipeline retired | ❌ Retired |
 | T-14 | Live Smoke Test | `make test-live` | agy binary present and responding (needs GCP auth) | 🔧 Local only |
 
 ### Known Root Causes of Recurring CI Failures

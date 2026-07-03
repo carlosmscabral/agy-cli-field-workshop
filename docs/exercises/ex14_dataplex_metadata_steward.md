@@ -1,6 +1,6 @@
 # Exercise 14: Dataplex Metadata Curation (Optional)
 
-> **Duration:** 20 min | **Module:** Appendix — GCP Data Cloud & MCP
+> **Duration:** 20 min | **Module:** 3 — ADK Agents with agents-cli
 
 ---
 

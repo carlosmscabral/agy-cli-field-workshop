@@ -1,6 +1,6 @@
 # Exercise 10: ADK Agent Lifecycle with agents-cli
 
-> **Duration:** 45 min | **Module:** 5 — Building ADK Agents with agents-cli
+> **Duration:** 45 min | **Module:** 3 — ADK Agents with agents-cli
 
 ---
 
@@ -12,7 +12,10 @@ Use `agents-cli` to scaffold, build, evaluate, and iterate on an ADK agent — f
 
 ## Prerequisites
 
-- `agents-cli` installed (`uvx google-agents-cli setup`)
+- `agents-cli` installed (`uvx google-agents-cli==0.1.3 setup`)
+
+    > **Version note:** This lab targets **agents-cli 0.1.3** so the commands below match the installed interface. A `1.0.0` release exists, but its command surface differs — pin `0.1.3` for this exercise.
+
 - `uv` installed ([install guide](https://docs.astral.sh/uv/getting-started/installation/))
 - A Google Cloud project or [AI Studio API key](https://aistudio.google.com/apikey)
 - Antigravity CLI (agy) installed and working
@@ -47,7 +50,7 @@ uv sync
 
 > **google-adk ≠ google-antigravity**
 >
-> Module 3 uses `google-antigravity` (the Antigravity SDK for building agents within agy). Module 5 uses `google-adk` (the Agent Development Kit for building standalone ADK agents deployed to Google Cloud). They are different packages with different APIs. `agents-cli scaffold` always sets up `google-adk` automatically.
+> Module 4 uses `google-antigravity` (the Antigravity SDK for building agents within agy). Module 3 (this module) uses `google-adk` (the Agent Development Kit for building standalone ADK agents deployed to Google Cloud). They are different packages with different APIs. `agents-cli scaffold` always sets up `google-adk` automatically.
 
 ### Step 3: Configure Environment
 
@@ -55,10 +58,14 @@ uv sync
 # If using AI Studio:
 echo 'GOOGLE_API_KEY=your-key-here' >> .env
 
-# If using Google Cloud:
+# If using Google Cloud (Vertex AI — the enterprise path):
 echo 'GOOGLE_CLOUD_PROJECT=your-project-id' >> .env
 echo 'GOOGLE_CLOUD_LOCATION=global' >> .env
+echo 'GOOGLE_GENAI_USE_VERTEXAI=True' >> .env
 ```
+
+> [!IMPORTANT]
+> On the Google Cloud path, `GOOGLE_GENAI_USE_VERTEXAI=True` is **required** — without it the ADK/`google-genai` stack falls back to the AI-Studio (API-key) backend and ignores your project's ADC, so the agent fails on a machine with no `GOOGLE_API_KEY`.
 
 > **Location Choice**
 >
@@ -243,12 +250,13 @@ custom_metrics:
 ### Step 3: Run the Eval
 
 ```bash
-# Generate traces (runs agent on each eval case)
-agents-cli eval generate
-
-# Grade the traces
-agents-cli eval grade
+# Runs each eval case AND grades the traces in one step
+agents-cli eval run --all
 ```
+
+`eval run` wraps `adk eval` — it runs inference on every eval case in
+`tests/eval/evalsets/` (use `--all` to cover all sets, or `--evalset <path>`
+for a single one) and grades the results against your configured metrics.
 
 Review the output. If any metric scores below threshold, proceed to Part 4.
 
@@ -283,14 +291,13 @@ Common fixes:
 ### Step 3: Re-Evaluate and Compare
 
 ```bash
-# Save the previous results
+# Save the previous results as the baseline
 cp artifacts/grade_results/results_*.json artifacts/grade_results/baseline.json
 
-# Re-run
-agents-cli eval generate
-agents-cli eval grade
+# Re-run inference + grading after your fix
+agents-cli eval run --all
 
-# Compare
+# Compare baseline vs. the new results (positional args: BASELINE CANDIDATE)
 agents-cli eval compare \
   artifacts/grade_results/baseline.json \
   artifacts/grade_results/results_*.json
@@ -318,15 +325,16 @@ agents-cli deploy
 agents-cli scaffold enhance . --cicd-runner github_actions
 ```
 
-### Synthesize More Eval Cases
+### Add More Eval Cases
 
-```bash
-# Auto-generate multi-turn eval scenarios
-agents-cli eval dataset synthesize \
-  -n 5 \
-  --instruction "User provides meeting transcripts of varying complexity" \
-  --max-turns 3
-```
+Grow coverage by adding cases to the evalset JSON under `tests/eval/evalsets/`.
+Each case follows the same shape as the ones in `basic-dataset.json` — a unique
+`eval_case_id` plus a `prompt` with the user's transcript. Add a few that stress
+different situations (no deadlines, many attendees, ambiguous assignees), then
+re-run `agents-cli eval run --all` to score them.
+
+> **Tip:** You can also capture real interactions from `agents-cli playground`
+> and save them into an evalset instead of writing every case by hand.
 
 ### Let agy Drive the Whole Flow
 
@@ -338,7 +346,7 @@ Open an agy session and say:
   Analyze the failures and fix them.
 ```
 
-Watch agy load the eval skill, run `eval analyze`, identify failure clusters, and iteratively fix the agent.
+Watch agy load the eval skill, run `agents-cli eval run` to score the agent, read the results to identify failure clusters, and iteratively fix the agent.
 
 ---
 
@@ -350,7 +358,7 @@ Watch agy load the eval skill, run `eval analyze`, identify failure clusters, an
 - [ ] Smoke test passes with `agents-cli run`
 - [ ] Three eval cases written in `basic-dataset.json`
 - [ ] Custom `meeting_summary_quality` metric defined
-- [ ] `agents-cli eval generate` + `eval grade` runs successfully
+- [ ] `agents-cli eval run` runs and grades the eval cases successfully
 - [ ] At least one eval-fix iteration completed with `eval compare` showing improvement
 
 ---

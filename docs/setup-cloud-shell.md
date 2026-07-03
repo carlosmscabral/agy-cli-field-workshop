@@ -24,11 +24,23 @@ export PROJECT_ID=$(gcloud config get-value project)
 gcloud config set project "$PROJECT_ID"
 
 # Enable Vertex AI, Cloud Run, Artifact Registry, and Cloud Build
+# (add bigquery.googleapis.com dataplex.googleapis.com if you plan to run the optional Exercise 14)
 gcloud services enable aiplatform.googleapis.com \
                        run.googleapis.com \
                        artifactregistry.googleapis.com \
                        cloudbuild.googleapis.com
 ```
+
+Export the canonical Vertex AI environment so the SDK and `agents-cli` (ADK) exercises route through Vertex:
+
+```bash
+export GOOGLE_CLOUD_PROJECT="$PROJECT_ID"
+export GOOGLE_CLOUD_LOCATION="global"          # or a region, e.g. us-central1
+export GOOGLE_GENAI_USE_VERTEXAI=True           # routes google-genai / ADK calls through Vertex AI
+```
+
+> [!NOTE]
+> Cloud Shell already provides ambient Google Cloud credentials, so you don't need a separate `gcloud auth application-default login` here. `GOOGLE_GENAI_USE_VERTEXAI=True` is what makes the Python SDK and `agents-cli` target Vertex instead of the AI-Studio API-key backend.
 
 ---
 
@@ -131,4 +143,4 @@ Expected output: `Cloud Shell Ready!`
 ## Next Step
 
 Once your smoke test succeeds, you are ready to start:
-👉 Go to **[Module 1: SDLC Productivity](sdlc-productivity.md)**
+👉 Go to **[Module 1: Antigravity CLI Fundamentals](sdlc-productivity.md)**

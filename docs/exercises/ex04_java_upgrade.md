@@ -1,6 +1,6 @@
 # PRD: Java 8 → Java 21 & Spring Boot 3 Migration
 
-> **Workshop Use:** Practice exercise for [Module 2 — Legacy Codebase Modernization](../legacy-modernization.md). Demonstrates the large-context codebase investigation pattern, AGENTS.md self-onboarding, and how agy handles mechanical namespace migrations that are error-prone for humans.
+> **Workshop Use:** Practice exercise for [Module 2 — Legacy Modernization & Advanced CLI](../legacy-modernization.md). Demonstrates the large-context codebase investigation pattern, AGENTS.md self-onboarding, and how agy handles mechanical namespace migrations that are error-prone for humans.
 
 ## Problem
 
