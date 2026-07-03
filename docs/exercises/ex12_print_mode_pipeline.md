@@ -1,6 +1,6 @@
 # Exercise 12: --print Mode Pipeline
 
-> **Duration:** 20 min | **Module:** Appendix — Optional Advanced Topics
+> **Duration:** 20 min | **Module:** 2 — Legacy Modernization & Advanced CLI
 
 ---
 
@@ -39,6 +39,7 @@ Pick a source file with functions or routes:
 
 ```bash
 # Generate docs for a specific file
+mkdir -p docs
 cat src/routes/api.js | \
   agy -p "Generate OpenAPI-style documentation for all routes in this file. Output as YAML." \
   --print-timeout 90s > docs/api-generated.yaml
@@ -73,6 +74,7 @@ agy --add-dir ./backend --add-dir ./frontend \
 ## Part 4: Draft a CI/CD Workflow (5 min)
 
 ```bash
+mkdir -p .github/workflows
 agy -p "Write a GitHub Actions workflow that: (1) checks out the repo, (2) runs agy in print mode to review changed files, (3) posts the review as a PR comment. Use --dangerously-skip-permissions for CI. Output as a complete .yml file." \
   --print-timeout 2m > .github/workflows/agy-review.yml
 

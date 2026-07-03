@@ -15,55 +15,45 @@ hide:
 
 <div class="grid cards" markdown>
 
-- :material-rocket-launch:{ .lg .middle } **Module 1 — SDLC Productivity**
+- :material-rocket-launch:{ .lg .middle } **Module 1 — Antigravity CLI Fundamentals**
 
     ---
 
-    Your first Antigravity CLI session. Explain, refactor, test, review — plus extending your toolchain with plugins in one command.
+    Your first Antigravity CLI session, the **Artifacts** plan-review-verify workflow, custom skills & rules, connecting tools via **MCP**, and safe sandbox governance.
 
-    **75 min** · Sections 1.0–1.7
+    **90 min** · Exercises: ex01, ex15, ex02, ex16, ex09
 
     [:octicons-arrow-right-24: Start Module 1](sdlc-productivity.md)
 
-- :material-wrench:{ .lg .middle } **Module 2 — Legacy Modernization ⭐**
+- :material-wrench:{ .lg .middle } **Module 2 — Legacy Modernization & Advanced CLI ⭐**
 
     ---
 
-    The flagship module. Migrate a real legacy codebase (.NET or Java) using strict mode, agent self-onboarding, and subagent planning.
+    The flagship module. Migrate a real legacy **Java** codebase with strict mode and agent self-onboarding (an optional **.NET** path is included) — then layer in the advanced CLI: subagents, `/btw` mid-task steering, and headless `--print` automation.
 
-    **90 min** · Exercises: ex03, ex04
+    **120 min** · Exercises: ex04, ex13, ex07, ex08, ex12 · *ex03 (.NET) optional — needs Docker*
 
     [:octicons-arrow-right-24: Start Module 2](legacy-modernization.md)
 
-- :material-code-braces:{ .lg .middle } **Module 3 — Building AGY Agents**
+- :material-rocket-launch-outline:{ .lg .middle } **Module 3 — ADK Agents with agents-cli**
 
     ---
 
-    Build production agents with the Antigravity SDK. Tools, session state, multi-agent orchestration, and deploy to Cloud Run.
+    Use agents-cli to scaffold, build, evaluate, and deploy production ADK agents — the full lifecycle from prototype to Cloud Run, plus an optional GCP Data Cloud lab.
 
-    **90 min** · Exercises: ex05, ex06
+    **75 min** · Exercises: ex10, ex14 (optional)
 
-    [:octicons-arrow-right-24: Start Module 3](agy-sdk.md)
+    [:octicons-arrow-right-24: Start Module 3](agents-cli.md)
 
-- :material-sitemap:{ .lg .middle } **Module 4 — Multi-Agent & Advanced**
-
-    ---
-
-    Spawn isolated subagents, steer tasks mid-flight with `/btw`, schedule recurring jobs, and resume long-running sessions by ID.
-
-    **60 min** · Exercises: ex07–ex09
-
-    [:octicons-arrow-right-24: Start Module 4](multi-agent-advanced.md)
-
-- :material-rocket-launch-outline:{ .lg .middle } **Module 5 — ADK Agents with agents-cli**
+- :material-code-braces:{ .lg .middle } **Module 4 — Advanced: Building Agents with the Antigravity SDK**
 
     ---
 
-    Use agents-cli to scaffold, build, evaluate, and deploy production ADK agents — the full 7-phase lifecycle from prototype to Cloud Run.
+    The advanced capstone. Build agents in Python with the Antigravity SDK — tools, hooks, triggers, multi-agent orchestration, and deploy to Cloud Run.
 
-    **75 min** · Exercise: ex10
+    **90 min** · Exercises: ex05, ex06, ex11
 
-    [:octicons-arrow-right-24: Start Module 5](agents-cli.md)
+    [:octicons-arrow-right-24: Start Module 4](agy-sdk.md)
 
 </div>
 
@@ -74,17 +64,16 @@ hide:
 | Time | Content | Duration |
 | :-- | :-- | :-- |
 | `0:00` | Setup + first run | 20 min |
-| `0:20` | **Module 1:** SDLC Productivity + Plugins | 75 min |
-| `1:35` | :coffee: Break | 10 min |
-| `1:45` | **Module 2:** Legacy Codebase Modernization | 90 min |
-| `3:15` | :coffee: Break | 10 min |
-| `3:25` | **Module 3:** Building AGY Agents with the SDK | 90 min |
-| `4:55` | **Module 4:** Multi-Agent & Advanced | 60 min |
-| `5:55` | :coffee: Break | 10 min |
-| `6:05` | **Module 5:** ADK Agents with agents-cli | 75 min |
-| `7:20` | Wrap-up & Q&A | 15 min |
+| `0:20` | **Module 1:** Antigravity CLI Fundamentals | 90 min |
+| `1:50` | :coffee: Break | 10 min |
+| `2:00` | **Module 2:** Legacy Modernization & Advanced CLI | 120 min |
+| `4:00` | :coffee: Break | 10 min |
+| `4:10` | **Module 3:** ADK Agents with agents-cli | 75 min |
+| `5:25` | :coffee: Break | 10 min |
+| `5:35` | **Module 4:** Advanced — Antigravity SDK | 90 min |
+| `7:05` | Wrap-up & Q&A | 15 min |
 
-> **Full day:** Modules 1–4 (~5.5 hrs). **Extended:** All 5 modules (7 hrs). **Half-day:** Modules 1 + 2 (2.5 hrs). **Lightning:** Module 1 + M2 highlights (1.5 hrs).
+> **Full day:** Modules 1–3 (~5.5 hrs). **Extended:** All 4 modules (7 hrs). **Half-day:** Modules 1 + 2 (3.5 hrs). **Lightning:** Module 1 (1.5 hrs).
 
 ---
 

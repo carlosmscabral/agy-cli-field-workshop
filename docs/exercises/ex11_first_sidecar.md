@@ -1,200 +1,144 @@
-# Exercise 11: Your First Sidecar
+# Exercise 11: Your First Sidecar (SDK Triggers)
 
-> **Duration:** 20 min | **Module:** Appendix — Optional Advanced Topics
+> **Duration:** 20 min | **Module:** 4 — Advanced: Building Agents with the Antigravity SDK
 
 ---
 
 ## Objective
 
-Build a scheduled **daily standup sidecar** that fires at 9am Monday–Friday, creates a new AGY conversation, and asks it to summarise yesterday's git commits across your repos.
+Build a scheduled **daily standup sidecar** — a long-running Python process built with the Antigravity SDK that periodically wakes itself up and asks an agent to summarise your recent git activity. You'll use the SDK's **triggers** system (`every()` and `on_file_change()`) to drive an agent without any human typing a prompt.
 
 ---
 
 ## Background
 
-Sidecars are persistent background processes that AGY manages for you — they launch automatically when AGY starts, restart on crash, and run independently of your active conversation. The `schedule` builtin takes a cron expression and a command to run on that schedule.
+A "sidecar" here is just a persistent Python program that hosts an `Agent` and lets **triggers** — not a human — start each turn. The Antigravity SDK ships two ready-made trigger factories:
+
+- `every(seconds, handler)` — fire on a fixed interval (polling/schedule).
+- `on_file_change(path, handler)` — fire when a watched path changes.
+
+Each handler receives a `TriggerContext` and calls `await ctx.send(...)` to inject a message into the agent's conversation. This is the grounded, supported way to schedule agent work — there is no separate scheduler binary to install.
+
+> [!NOTE]
+> **Prerequisites:** `google-antigravity` installed in your virtualenv and your Vertex AI environment configured (`GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, `GOOGLE_GENAI_USE_VERTEXAI=True`). See the setup guide.
 
 ---
 
-## Part 1: Create the Sidecar Config (5 min)
+## Part 1: Create the Standup Sidecar (8 min)
 
-Create the sidecar directory and configuration file:
+Create a working directory and a script `standup_sidecar.py`:
 
 ```bash
-mkdir -p ~/.gemini/config/sidecars/standup
+mkdir -p ~/agy-sidecars && cd ~/agy-sidecars
 ```
 
-Create `~/.gemini/config/sidecars/standup/sidecar.json`:
+```python
+# standup_sidecar.py
+import asyncio
 
-```json
-{
-  "description": "Daily standup — summarises yesterday's git commits",
-  "builtin": "schedule",
-  "args": [
-    "0 9 * * 1-5",
-    "agentapi",
-    "new-conversation",
-    "Summarise all git commits from yesterday across my repos. Group by repo, list the most impactful changes first, and flag any commits that touch security-sensitive files."
-  ]
-}
+from google.antigravity import Agent, LocalAgentConfig
+from google.antigravity.hooks import policy
+from google.antigravity.triggers import every, TriggerContext
+
+# Fire once per day. Drop to 60 for a quick test (see the tip in Part 2).
+STANDUP_INTERVAL_SECONDS = 24 * 60 * 60
+
+
+async def run_standup(ctx: TriggerContext) -> None:
+    """Injected on each interval — asks the agent to summarise recent git activity."""
+    await ctx.send(
+        "Summarise all git commits from the last 24 hours across my repos. "
+        "Group by repo, list the most impactful changes first, and flag any "
+        "commits that touch security-sensitive files."
+    )
+
+
+async def main() -> None:
+    config = LocalAgentConfig(
+        model="gemini-3.5-flash",
+        system_instructions="You are a daily standup assistant that summarises git activity.",
+        triggers=[every(STANDUP_INTERVAL_SECONDS, run_standup)],
+        policies=[policy.allow_all()],  # required when the agent runs unattended
+        workspaces=["."],
+    )
+    async with Agent(config) as agent:  # noqa: F841 — the context keeps triggers alive
+        print("Standup sidecar running — fires every 24h. Press Ctrl-C to stop.")
+        await asyncio.Event().wait()  # keep the process alive so triggers can fire
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 **Key decisions:**
 
-- `builtin: "schedule"` — uses AGY's built-in cron scheduler instead of a raw command
-- `0 9 * * 1-5` — fires at 09:00 Monday through Friday
-- `agentapi new-conversation` — programmatically opens a new AGY conversation with your standup prompt
+- `triggers=[every(...)]` — the SDK's built-in interval trigger drives each turn.
+- `policies=[policy.allow_all()]` — an unattended sidecar can't stop to ask you for approval.
+- `await asyncio.Event().wait()` — a standard idiom to keep the process alive; the agent keeps servicing triggers until you stop it.
 
 ---
 
-## Part 2: Enable the Sidecar (5 min)
+## Part 2: Run and Verify (6 min)
 
-Sidecars are **disabled by default**. Enable it in `~/.gemini/config/config.json`:
+Run the sidecar from your activated virtualenv:
 
 ```bash
-# View current config (create if it doesn't exist)
-cat ~/.gemini/config/config.json 2>/dev/null || echo '{}'
+python standup_sidecar.py
 ```
 
-Edit `~/.gemini/config/config.json` to include the sidecar entry:
+You should see the "Standup sidecar running" line and the process stays in the foreground.
 
-```json
-{
-  "sidecars": {
-    "standup": {
-      "enabled": true
-    }
-  }
-}
-```
-
-> **Note:** If you already have content in `config.json`, merge the `sidecars` block into your existing JSON — don't replace the file.
+> [!TIP]
+> The daily interval won't fire during a 20-minute lab. To see it work now, temporarily set `STANDUP_INTERVAL_SECONDS = 60`, run again, and wait ~60 seconds — the agent will produce a git summary on its own. **Remember to change it back.**
 
 ---
 
-## Part 3: Verify the Sidecar (5 min)
+## Part 3: File-Watcher Sidecar (6 min)
 
-Start AGY and check that the sidecar was discovered:
-
-```bash
-agy
-```
-
-Inside the session, ask:
-
-```text
-> What sidecars are currently configured? Is the standup sidecar active?
-```
-
-Check the sidecar's runtime data directory:
-
-```bash
-ls -la ~/.gemini/antigravity/sidecar_data/standup/logs/
-```
-
-If the directory exists, the sidecar has been registered. Log files appear here with timestamped stdout/stderr output after each scheduled run.
-
-> **Tip:** The sidecar won't fire until 9am on a weekday. To test immediately, temporarily change the cron to `* * * * *` (every minute), wait 60 seconds, then check logs. **Remember to change it back.**
-
----
-
-## Part 4: Inspect the Runtime Layout (5 min)
-
-Examine the full sidecar data structure:
-
-```bash
-# The sidecar runtime directory layout
-find ~/.gemini/antigravity/sidecar_data/standup/ -type f 2>/dev/null
-```
-
-Expected structure:
-
-```text
-~/.gemini/antigravity/sidecar_data/standup/
-├── data/     ← persistent storage (ANTIGRAVITY_EXECUTABLE_DATA_DIR env var)
-├── logs/     ← timestamped stdout/stderr logs
-└── events/   ← JSON records of agentapi calls
-```
-
----
-
-## Stretch Goal: File-Watcher Sidecar
-
-Add a second sidecar that uses `command: python3` instead of the `schedule` builtin. This one watches a local file for changes and sends a message to an existing conversation when it detects a diff.
-
-Create `~/.gemini/config/sidecars/file-watcher/sidecar.json`:
-
-```json
-{
-  "description": "Watches a target file and alerts on changes",
-  "command": "python3",
-  "args": ["watch.py"],
-  "restart_policy": "on-failure",
-  "env": {
-    "WATCH_FILE": "/path/to/your/important-file.yaml"
-  }
-}
-```
-
-Create `~/.gemini/config/sidecars/file-watcher/watch.py`:
+Swap the schedule for a file watcher using `on_file_change()`. Create `watcher_sidecar.py`:
 
 ```python
-import os
-import time
-import hashlib
-import subprocess
+# watcher_sidecar.py
+import asyncio
 
-WATCH_FILE = os.environ.get("WATCH_FILE", "")
-POLL_INTERVAL = 5  # seconds
+from google.antigravity import Agent, LocalAgentConfig
+from google.antigravity.hooks import policy
+from google.antigravity.triggers import on_file_change, TriggerContext
 
-def file_hash(path: str) -> str:
-    with open(path, "rb") as f:
-        return hashlib.sha256(f.read()).hexdigest()
+WATCH_PATH = "./important-config.yaml"
 
-def main():
-    if not os.path.exists(WATCH_FILE):
-        print(f"File not found: {WATCH_FILE}")
-        return
 
-    last_hash = file_hash(WATCH_FILE)
-    print(f"Watching {WATCH_FILE} (initial hash: {last_hash[:12]}...)")
+async def on_change(ctx: TriggerContext, changes) -> None:
+    paths = [c.path for c in changes]
+    await ctx.send(
+        f"These files just changed: {paths}. "
+        "Review the changes and flag anything risky or misconfigured."
+    )
 
-    while True:
-        time.sleep(POLL_INTERVAL)
-        current_hash = file_hash(WATCH_FILE)
-        if current_hash != last_hash:
-            print(f"Change detected! {last_hash[:12]} -> {current_hash[:12]}")
-            subprocess.run([
-                "agentapi", "new-conversation",
-                f"The file {WATCH_FILE} was modified. Please review the changes."
-            ])
-            last_hash = current_hash
+
+async def main() -> None:
+    config = LocalAgentConfig(
+        model="gemini-3.5-flash",
+        triggers=[on_file_change(WATCH_PATH, on_change)],
+        policies=[policy.allow_all()],
+        workspaces=["."],
+    )
+    async with Agent(config):  # keep the context open so the watcher stays active
+        print(f"Watching {WATCH_PATH} for changes. Press Ctrl-C to stop.")
+        await asyncio.Event().wait()
+
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
 ```
 
-Enable it in `~/.gemini/config/config.json`:
-
-```json
-{
-  "sidecars": {
-    "standup": {
-      "enabled": true
-    },
-    "file-watcher": {
-      "enabled": true
-    }
-  }
-}
-```
+Run it, then in another terminal `echo "# edit" >> important-config.yaml` and watch the agent react.
 
 ---
 
 ## Completion Criteria
 
-- [ ] `~/.gemini/config/sidecars/standup/sidecar.json` exists with `schedule` builtin and `0 9 * * 1-5` cron
-- [ ] `~/.gemini/config/config.json` has `sidecars.standup.enabled: true`
-- [ ] AGY recognises the sidecar (confirmed via session query or log directory presence)
-- [ ] Sidecar runtime directory exists at `~/.gemini/antigravity/sidecar_data/standup/`
-- [ ] *(Stretch)* File-watcher sidecar created with `command: python3` and a working `watch.py`
+- [ ] `standup_sidecar.py` runs and prints the "running" banner
+- [ ] With a short test interval, the scheduled trigger fires and the agent produces a git summary unprompted
+- [ ] `watcher_sidecar.py` reacts when the watched file changes
+- [ ] You can explain how `every()` / `on_file_change()` + `TriggerContext.send()` drive an agent without human input

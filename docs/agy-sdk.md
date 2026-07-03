@@ -1,4 +1,4 @@
-# Module 3: Building AGY Agents with the SDK
+# Module 4 — Advanced: Building Agents with the Antigravity SDK
 
 <div class="module-header" markdown>
 **Duration:** ~90 minutes  
@@ -25,12 +25,16 @@ The CLI is a **general-purpose assistant**. An agent you build with the SDK is a
 
 ---
 
-## 3.1 — SDK Setup <span class="duration-badge">10 min</span>
+## 4.1 — SDK Setup <span class="duration-badge">10 min</span>
 
 ### Prerequisites
 
 - Python 3.11+
-- A Gemini API key — set as `GEMINI_API_KEY` or pass via `api_key=` in config
+- **Vertex AI / GEAP (enterprise — the primary path in this workshop):**
+  - `gcloud auth application-default login` (Application Default Credentials — no API key)
+  - The `roles/aiplatform.user` IAM role on your account
+  - `GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_LOCATION` set in the environment (location `global` works; a region like `us-central1` also works)
+- **Gemini API key (AI Studio — alternative for quick local dev):** a key set as `GEMINI_API_KEY` or passed via `api_key=` in config
 
 ### Install
 
@@ -48,13 +52,18 @@ from google.antigravity.hooks import policy
 print("google-antigravity installed ✅")
 ```
 
-> **API key vs Vertex AI:** For quick local development, use `api_key="AIza..."` in
-> `LocalAgentConfig`. For production on GCP, authenticate with
-> `gcloud auth application-default login` — the library picks up ADC automatically.
+> **Vertex AI vs API key:** For enterprise use on GCP — the primary path in this
+> workshop — pass `LocalAgentConfig(vertex=True, project=..., location=...)`. The SDK
+> then builds a `VertexEndpoint` and authenticates via Application Default Credentials
+> from `gcloud auth application-default login` (no API key). There is **no** env-var
+> auto-detection: `vertex=True` plus `project` and `location` must be set explicitly on
+> **every** config — unlike the CLI/ADK, `GOOGLE_GENAI_USE_VERTEXAI` alone does **not**
+> switch the SDK to Vertex. For quick local development against AI Studio instead, drop
+> the Vertex fields and pass `api_key="AIza..."` (or set the `GEMINI_API_KEY` env var).
 
 ---
 
-## 3.2 — Core Primitives: Agent, Config, Tool <span class="duration-badge">20 min</span>
+## 4.2 — Core Primitives: Agent, Config, Tool <span class="duration-badge">20 min</span>
 
 The `google-antigravity` SDK has three building blocks: `Agent`, `LocalAgentConfig`, and tools (plain Python functions). Learn these and you can build anything.
 
@@ -120,11 +129,23 @@ def record_finding(
 
 ```python
 import asyncio
+import os
 from google.antigravity import Agent, LocalAgentConfig
 from google.antigravity.hooks import policy
 
+# Enterprise (Vertex AI / GEAP) backend — the primary path in this workshop.
+# Authenticates via Application Default Credentials (`gcloud auth application-default
+# login`); no API key. The SDK has NO env-var auto-detection, so these fields must be
+# passed on EVERY LocalAgentConfig. Define them once and spread with **VERTEX_BACKEND.
+VERTEX_BACKEND = dict(
+    vertex=True,
+    project=os.environ["GOOGLE_CLOUD_PROJECT"],
+    location=os.environ.get("GOOGLE_CLOUD_LOCATION", "global"),
+)
+
 config = LocalAgentConfig(
     model="gemini-3.5-flash",
+    **VERTEX_BACKEND,                        # enterprise Vertex AI backend (see above)
     system_instructions="""You are a code reviewer specialising in Python.
 When given a file path, read the file and provide a structured review covering:
 - Correctness and edge cases
@@ -149,6 +170,11 @@ asyncio.run(main())
 
 > **`async with Agent(config) as agent:`** — always use the context manager. It starts
 > the Go runtime bridge (`bin/localharness`) and tears it down cleanly on exit.
+
+> **Every `LocalAgentConfig` needs the backend fields.** The remaining examples in this
+> module omit them for brevity, but each one runs against Vertex AI by spreading
+> `**VERTEX_BACKEND` (defined above) — e.g. `LocalAgentConfig(model=..., **VERTEX_BACKEND, ...)`.
+> Swap in `api_key="AIza..."` instead only if you are using the AI Studio path.
 
 ### Model Selection
 
@@ -197,7 +223,7 @@ Skills can also be loaded natively via `LocalAgentConfig(skills_paths=["/path/to
 
 ---
 
-## 3.3 — Policy and Safety <span class="duration-badge">10 min</span>
+## 4.3 — Policy and Safety <span class="duration-badge">10 min</span>
 
 **Policy is the first thing you configure** — it controls what the agent is allowed to do without human approval. Every `LocalAgentConfig` needs a `policies=` list:
 
@@ -233,7 +259,7 @@ policy.workspace_only(["/path/to/project"])
 
 ---
 
-## 3.4 — Hooks: Observability and Control <span class="duration-badge">10 min</span>
+## 4.4 — Hooks: Observability and Control <span class="duration-badge">10 min</span>
 
 Hooks let you intercept and react to every event in the agent lifecycle — for logging, auditing, guardrails, or custom approval flows:
 
@@ -282,7 +308,7 @@ config = LocalAgentConfig(
 
 ---
 
-## 3.5 — Multi-Agent Orchestration <span class="duration-badge">15 min</span>
+## 4.5 — Multi-Agent Orchestration <span class="duration-badge">15 min</span>
 
 `google-antigravity` has no `SequentialAgent` or `ParallelAgent` classes. Multi-agent is done two ways: **model-driven** (let the agent spawn subagents) or **Python-driven** (you orchestrate `Agent` instances directly).
 
@@ -355,7 +381,7 @@ async def parallel_analysis(file_path: str):
 
 ---
 
-## 3.6 — Streaming and Structured Output <span class="duration-badge">5 min</span>
+## 4.6 — Streaming and Structured Output <span class="duration-badge">5 min</span>
 
 ### Streaming Responses
 
@@ -406,7 +432,7 @@ asyncio.run(main())
 
 ---
 
-## 3.7 — Session Resume and Persistence <span class="duration-badge">5 min</span>
+## 4.7 — Session Resume and Persistence <span class="duration-badge">5 min</span>
 
 ```python
 # First session — save the conversation ID
@@ -427,7 +453,7 @@ async with Agent(resume_config) as agent:
 
 ---
 
-## 3.8 — Triggers: Autonomous Background Agents <span class="duration-badge">5 min</span>
+## 4.8 — Triggers: Autonomous Background Agents <span class="duration-badge">5 min</span>
 
 ```python
 import asyncio
@@ -464,7 +490,7 @@ asyncio.run(main())
 
 ---
 
-## 3.9 — Project Structure Conventions <span class="duration-badge">5 min</span>
+## 4.9 — Project Structure Conventions <span class="duration-badge">5 min</span>
 
 Structure your agent project for maintainability:
 
@@ -577,8 +603,12 @@ gcloud run deploy my-code-reviewer \
 
 ---
 
-## Next Step
+## You've Completed the Workshop 🎉
 
-→ Continue to **[Module 4: Multi-Agent & Advanced Patterns](multi-agent-advanced.md)**
+From your first `agy` session to building, evaluating, and deploying production agents — you've worked through all four modules. This SDK capstone is the deepest point of the workshop.
 
-→ Reference: **[Cheatsheet](cheatsheet.md)** — all commands in one place
+→ **[Cheatsheet](cheatsheet.md)** — every command in one place
+
+→ **[Reference: DevOps Patterns](devops-automation.md)** — `--print` pipelines, CI/CD, sandbox deep dive
+
+→ **[Reference: Plugin Ecosystem](plugin-ecosystem.md)** — full plugin lifecycle reference

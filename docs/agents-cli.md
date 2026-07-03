@@ -1,6 +1,6 @@
-# Module 5: Building ADK Agents with agents-cli
+# Module 3 — ADK Agents with agents-cli
 
-![Module 5 — Building ADK Agents with agents-cli](assets/agents-cli-hero.png)
+![Module 3 — ADK Agents with agents-cli](assets/agents-cli-hero.png)
 
 <div class="module-header" markdown>
 **Duration:** ~75 minutes  
@@ -27,7 +27,7 @@ Think of it this way: **agy is your hands, agents-cli is the power tools**.
 
 ---
 
-## 5.1 — Setup <span class="duration-badge">10 min</span>
+## 3.1 — Setup <span class="duration-badge">10 min</span>
 
 ### Prerequisites
 
@@ -59,7 +59,7 @@ agents-cli info
 
 ---
 
-## 5.2 — The 7-Phase Lifecycle <span class="duration-badge">10 min</span>
+## 3.2 — The 7-Phase Lifecycle <span class="duration-badge">10 min</span>
 
 agents-cli enforces a **structured development lifecycle**. Each phase has a dedicated skill that your coding agent loads when it reaches that stage:
 
@@ -81,7 +81,7 @@ graph LR
 | 1 — Study Samples | — | Clone and study matching [adk-samples](https://github.com/google/adk-samples) |
 | 2 — Scaffold | `google-agents-cli-scaffold` | `agents-cli scaffold create <name>` |
 | 3 — Build | `google-agents-cli-adk-code` | Write agent code — tools, callbacks, state |
-| 4 — Evaluate | `google-agents-cli-eval` | `agents-cli eval generate` → `eval grade` → fix → repeat |
+| 4 — Evaluate | `google-agents-cli-eval` | `agents-cli eval run` (runs + grades) → fix → `eval compare` → repeat |
 | 5 — Deploy | `google-agents-cli-deploy` | `agents-cli deploy` to Agent Runtime / Cloud Run / GKE |
 | 6 — Publish | `google-agents-cli-publish` | Register with Gemini Enterprise (optional) |
 | 7 — Observe | `google-agents-cli-observability` | Cloud Trace, logging, monitoring |
@@ -90,7 +90,7 @@ graph LR
 
 ---
 
-## 5.3 — Scaffolding a Project <span class="duration-badge">10 min</span>
+## 3.3 — Scaffolding a Project <span class="duration-badge">10 min</span>
 
 ### The Prototype-First Pattern
 
@@ -144,7 +144,7 @@ my-agent/
 
 ---
 
-## 5.4 — Building Agent Code <span class="duration-badge">15 min</span>
+## 3.4 — Building Agent Code <span class="duration-badge">15 min</span>
 
 ### Agent Definition Pattern
 
@@ -194,22 +194,22 @@ agents-cli playground
 
 ---
 
-## 5.5 — The Evaluation Loop <span class="duration-badge">20 min</span>
+## 3.5 — The Evaluation Loop <span class="duration-badge">20 min</span>
 
 > **This is the most important section.** Evaluation is what separates a demo from a production agent.
 
 ### The Quality Flywheel
 
 ```text
-┌─ 1. Prepare Data ─────── Write eval cases or synthesize them
+┌─ 1. Prepare Data ─────── Write eval cases in tests/eval/evalsets/
 │
-├─ 2. Run Inference ────── agents-cli eval generate
+├─ 2. Run + Grade ──────── agents-cli eval run --all
 │
-├─ 3. Grade Traces ─────── agents-cli eval grade
+├─ 3. Analyze Failures ──── Read results, identify root causes
 │
-├─ 4. Analyze Failures ──── Read results, identify root causes
+├─ 4. Fix & Iterate ────── Fix agent code, re-run eval run
 │
-└─ 5. Fix & Iterate ────── Fix agent code, go back to step 2
+└─ 5. Compare ──────────── agents-cli eval compare baseline.json candidate.json
 ```
 
 ### Eval Dataset Format
@@ -251,14 +251,13 @@ Eval cases are JSON files with prompts and optional expected behavior:
 ### Running Evals
 
 ```bash
-# One command: generate traces + grade them
-agents-cli eval run
+# Runs each eval case AND grades the traces (wraps adk eval)
+agents-cli eval run --all
 
-# Or two-step for more control
-agents-cli eval generate
-agents-cli eval grade
+# Or target a single eval set
+agents-cli eval run --evalset tests/eval/evalsets/basic-dataset.json
 
-# Compare before/after a fix
+# Compare before/after a fix (positional: BASELINE CANDIDATE)
 agents-cli eval compare baseline.json candidate.json
 ```
 
@@ -292,7 +291,7 @@ custom_metrics:
 
 ---
 
-## 5.6 — Deployment <span class="duration-badge">10 min</span>
+## 3.6 — Deployment <span class="duration-badge">10 min</span>
 
 Once evals pass, add deployment and ship:
 
@@ -324,7 +323,7 @@ agents-cli scaffold enhance . --cicd-runner google_cloud_build
 
 ---
 
-## 5.7 — Using agents-cli from Antigravity CLI <span class="duration-badge">5 min</span>
+## 3.7 — Using agents-cli from Antigravity CLI <span class="duration-badge">5 min</span>
 
 The real power is combining agy + agents-cli. In an Antigravity CLI session:
 
@@ -378,4 +377,4 @@ The 7 skills installed by `agents-cli setup`:
 
 ---
 
-> **Next:** [Module 4 — Multi-Agent & Advanced](multi-agent-advanced.md) for orchestrating multiple agents, subagent patterns, and the `/btw` scheduling system.
+> **Next:** [Module 4 — Advanced: Building Agents with the Antigravity SDK](agy-sdk.md) — the capstone: build a production agent from scratch with the `google-antigravity` SDK.

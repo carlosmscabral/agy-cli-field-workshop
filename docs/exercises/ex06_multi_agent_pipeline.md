@@ -1,6 +1,6 @@
 # Exercise 6: Multi-Agent Pipeline
 
-> **Duration:** 45 min | **Module:** 3 — Building AGY Agents
+> **Duration:** 45 min | **Module:** 4 — Advanced: Building Agents with the Antigravity SDK
 
 ---
 
@@ -23,9 +23,15 @@ source .venv/bin/activate
 pip install google-antigravity pydantic
 ```
 
+Authenticate with the enterprise **Vertex AI / GEAP** path (the primary option in this workshop). This uses Application Default Credentials — no API key. You need the `roles/aiplatform.user` IAM role on your account.
+
 ```bash
-export GEMINI_API_KEY="your-api-key-here"
+gcloud auth application-default login
+export GOOGLE_CLOUD_PROJECT="your-project-id"
+export GOOGLE_CLOUD_LOCATION="global"   # a region like us-central1 also works
 ```
+
+> **AI Studio alternative:** For quick local dev without GCP, skip the Vertex fields in the configs and set a Gemini API key instead: `export GEMINI_API_KEY="your-api-key-here"`.
 
 ---
 
@@ -78,11 +84,23 @@ When writing privacy-related documentation, ensure coverage of:
 Create `writer_agent.py`:
 
 ```python
+import os
+
 from google.antigravity import LocalAgentConfig
 from google.antigravity.hooks import policy
 
+# Enterprise (Vertex AI / GEAP) backend — authenticates via Application Default
+# Credentials, no API key. The SDK has no env-var auto-detection, so vertex/project/
+# location must be passed on EVERY LocalAgentConfig. Define once, spread everywhere.
+VERTEX_BACKEND = dict(
+    vertex=True,
+    project=os.environ["GOOGLE_CLOUD_PROJECT"],
+    location=os.environ.get("GOOGLE_CLOUD_LOCATION", "global"),
+)
+
 writer_config = LocalAgentConfig(
     model="gemini-3.5-flash",
+    **VERTEX_BACKEND,                        # enterprise Vertex AI backend (see above)
     skills_paths=["skills/"],
     system_instructions="""You are a Technical Writer specialising in privacy documentation.
 
@@ -104,6 +122,8 @@ Output a complete, ready-to-review privacy policy document.
 
 > **Key concept:** `skills_paths=["skills/"]` tells the SDK to auto-discover all `SKILL.md` files under that directory. The writer agent gets the GDPR skill injected automatically.
 
+> **Backend note:** Every `LocalAgentConfig` in this exercise uses the same `**VERTEX_BACKEND` fields. The analyst config below spreads them too; the parallel and resume variants derive from these via `.model_copy(...)`, so they inherit the backend automatically. The SDK will not pick up Vertex from the environment on its own.
+
 ---
 
 ## Part 2: Build the Compliance Analyst Agent (10 min)
@@ -114,6 +134,8 @@ Create `analyst_agent.py`:
 import pydantic
 from google.antigravity import LocalAgentConfig
 from google.antigravity.hooks import policy
+
+from writer_agent import VERTEX_BACKEND   # reuse the enterprise Vertex AI backend
 
 
 class GDPRGap(pydantic.BaseModel):
@@ -134,6 +156,7 @@ class ComplianceReport(pydantic.BaseModel):
 
 analyst_config = LocalAgentConfig(
     model="gemini-3.5-flash",
+    **VERTEX_BACKEND,                        # enterprise Vertex AI backend
     response_schema=ComplianceReport,
     system_instructions="""You are a GDPR Compliance Analyst.
 

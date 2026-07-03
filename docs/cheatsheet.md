@@ -45,8 +45,11 @@ agy install        # Configure PATH and shell aliases
 | `--dangerously-skip-permissions` | — | Auto-approve all tool requests (CI only) |
 | `--print-timeout <duration>` | — | Timeout for print mode (default: 5m) |
 | `--log-file <path>` | — | Override log output path |
+| `--model <name>` | — | Select the reasoning model for this run |
+| `--new-project` | — | Start the session in a new project workspace |
+| `--project <path>` | — | Target a specific project workspace |
 
-> **Note:** Model selection and strict mode are set via `/model` and `/permissions` slash commands, not CLI flags. See [Features docs](https://antigravity.google/docs/cli-features).
+> **Note:** `--model` sets the reasoning model for a single run; the `/model` slash command sets the persistent default. Strict mode is set via the `/permissions` slash command — there is no `--strict` flag. See [Features docs](https://antigravity.google/docs/cli-features).
 
 ---
 
@@ -60,7 +63,11 @@ agy install        # Configure PATH and shell aliases
 | `/rewind` (`/undo`) | Conversation | Roll back conversation history to a previous checkpoint |
 | `/fork` | Conversation | Branch the current conversation into a parallel isolated workspace — trial risky steps without affecting the original |
 | `/rename <name>` | Conversation | Rename the active conversation thread |
-| `/permissions` | Config | Set autonomy level: `request-review`, `always-proceed`, `strict` |
+| `/planning` | Artifacts | Enter planning mode — produce an Implementation Plan (and Task List) before writing code |
+| `/artifact` (`/artifacts`) | Artifacts | View the artifacts for the current session |
+| `/permissions` | Autonomy | Set autonomy level: `request-review`, `always-proceed`, `strict` |
+| `/grill-me` | Autonomy | Have agy ask **you** clarifying questions to align on the spec/plan *before* it implements |
+| `/goal` | Autonomy | Run autonomously to completion — agy auto-approves its own plan and won't stop for input *(reported — verify against the CLI)* |
 | `/model` | Config | Select default reasoning model (persists across sessions) |
 | `/config` (`/settings`) | Config | Open full-screen settings overlay |
 | `/keybindings` | Config | Open the interactive keyboard shortcut editor |
@@ -72,6 +79,22 @@ agy install        # Configure PATH and shell aliases
 | `/open <path>` | Utility | Open a file in your preferred external editor |
 | `/usage` | Utility | Open the inline interactive help manual |
 | `/logout` | Account | Log out and clear cached credentials |
+
+> **The autonomy spectrum.** Dial how much the agent checks in with you: `/grill-me` (agent interrogates you first — max alignment) → `/permissions request-review` (review artifacts at milestones — the default) → `/permissions always-proceed` / `/goal` (agent runs to completion, auto-approving its own plan). Tighten for ambiguous/high-stakes work; loosen for well-scoped, low-risk, or batch tasks.
+
+---
+
+## Artifacts
+
+> Structured, verifiable deliverables the agent emits as it works — review milestones instead of raw tool calls. Types: **Implementation Plan** (approach + files to change, before coding), **Task List** (`task.md` ticked off during implementation), **Walkthrough** (post-completion summary + how to verify). See [Exercise 15](exercises/ex15_artifacts.md).
+
+| Action | How |
+| :-- | :-- |
+| Plan before coding | `/planning` (produces an Implementation Plan artifact) |
+| View session artifacts | `/artifact` (alias `/artifacts`) |
+| Open the Artifact Review panel | `ctrl+r` — leave inline comments to co-steer without stopping the agent |
+| Edit an artifact in `$EDITOR` | `ctrl+g` |
+| Control approval flow | `/permissions` — `request-review` pauses for you, `always-proceed` auto-approves |
 
 ---
 
@@ -86,7 +109,8 @@ agy install        # Configure PATH and shell aliases
 | `esc esc` | Clear your prompt box (when no streaming is active) |
 | `?` | Get help and list all slash commands |
 | `alt+enter` / `shift+enter` | Insert newline without submitting |
-| `ctrl+g` | Edit prompt inside your default shell editor |
+| `ctrl+r` | Open the Artifact Review panel (leave inline comments to co-steer the agent) |
+| `ctrl+g` | Open the current prompt or artifact in your `$EDITOR` |
 | `ctrl+l` | Clear TUI screen |
 | `ctrl+d` | Exit the CLI session |
 | `ctrl+z` | Suspend CLI to terminal background |
@@ -169,10 +193,10 @@ Minimal `sidecar.json` — scheduled recurring task:
 
 ```bash
 # Project config directory:
-.agents/                    # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
+.agents/                    # settings.json (permissions + hooks), mcp_config.json, rules.md, skills/, plugins/
 
 # Global config directory:
-~/.gemini/config/           # settings.json, mcp.json, hooks.json, rules.md, skills/, plugins/
+~/.gemini/config/           # settings.json (permissions + hooks), mcp_config.json, rules.md, skills/, plugins/
 
 # User settings:
 ~/.gemini/antigravity/settings.json
@@ -235,7 +259,8 @@ agy --sandbox --dangerously-skip-permissions \
 # Adversarial review
 > Spawn an adversarial reviewer subagent — its job is to find reasons to NOT merge this PR.
 
-# Steer mid-task
+# Steer mid-task — `/btw` is a workshop convention, NOT a built-in command.
+# Just type the steering message inline while the agent is working:
 /btw Focus only on the authentication module, skip the frontend.
 
 # Background task

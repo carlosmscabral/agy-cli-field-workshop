@@ -1,8 +1,8 @@
-# Track B — Role 1: IT Admin Provisioning
+# Track A — Role 1: IT Admin Provisioning (Enterprise / Corporate)
 
 This guide is designed for **enterprise cloud administrators**, **IT infrastructure managers**, and **workshop facilitators**. It explains how to provision Google Cloud Platform (GCP) resources and configure network parameters for the **Antigravity CLI Field Workshop** running on local corporate developer workstations.
 
-This is **Role 1 (one-time IT Admin configuration)** under the unified **Track B: Corporate Dev Track**. For the developer-specific workstation onboarding (Python, virtualenvs, local Docker config, and credentials login), refer developers to **[Role 2: Developer Workstation Setup](setup-corporate.md)**.
+This is **Role 1 (one-time IT Admin configuration)** under the primary **Track A: Enterprise / Corporate Dev Track**. For the developer-specific workstation onboarding (Python, virtualenvs, local Docker config, and credentials login), refer developers to **[Role 2: Developer Workstation Setup](setup-corporate.md)**.
 
 ---
 
@@ -55,15 +55,20 @@ gcloud projects create agy-workshop-sandbox-99 --name="Antigravity Workshop Sand
 
 ### 1.2 — Enable Required APIs
 
-Enable the Vertex AI, Cloud Run, Artifact Registry, and Cloud Build APIs. These are required for CLI model inference, SDK testing, and containerized service deployment:
+Enable every API the workshop uses across all modules — CLI/SDK model inference (Vertex AI), containerized agent deployment (Cloud Run, Artifact Registry, Cloud Build), and the optional GCP Data Cloud lab (BigQuery, Dataplex). Enabling them centrally means attendees never need `serviceusage` permissions themselves:
 
 ```bash
 gcloud services enable aiplatform.googleapis.com \
                        run.googleapis.com \
                        artifactregistry.googleapis.com \
                        cloudbuild.googleapis.com \
+                       bigquery.googleapis.com \
+                       dataplex.googleapis.com \
                        --project="agy-workshop-sandbox-99"
 ```
+
+> [!NOTE]
+> The optional Dataplex/Developer-Knowledge MCP lab (Exercise 14) additionally uses `developerknowledge.googleapis.com`. Enable it only if you plan to run that lab: `gcloud services enable developerknowledge.googleapis.com --project="agy-workshop-sandbox-99"`.
 
 ### 1.3 — Configure IAM Roles for Attendees
 
@@ -71,11 +76,15 @@ Grant each attendee (employee) the following minimum permissions in the workshop
 
 | IAM Role | Role Identifier | Why it's needed |
 | :-- | :-- | :-- |
-| **Vertex AI User** | `roles/aiplatform.user` | Essential. Allows `agy` CLI and the Python SDK to invoke Gemini models. |
-| **Cloud Run Developer** | `roles/run.developer` | Allows attendees to deploy SDK agents to Google Cloud Run during advanced modules. |
-| **Artifact Registry Writer** | `roles/artifactregistry.writer` | Allows container images to be pushed to Artifact Registry during deployments. |
-| **Storage Object Viewer** | `roles/storage.objectViewer` | Allows Cloud Build to pull build sources from Google Cloud Storage buckets. |
-| **Service Account User** | `roles/iam.serviceAccountUser` | Allows attendees to run services as the default Compute Engine service account. |
+| **Vertex AI User** | `roles/aiplatform.user` | Essential. Allows the `agy` CLI, the Python SDK, and `agents-cli` (ADK) to invoke Gemini models on Vertex AI. |
+| **Cloud Run Admin** | `roles/run.admin` | Deploy agents to Cloud Run **and** set the invoker policy for `--allow-unauthenticated` (the plain `roles/run.developer` cannot set IAM policy, so `--allow-unauthenticated` fails with it). |
+| **Cloud Build Editor** | `roles/cloudbuild.builds.editor` | `gcloud run deploy --source` / `agents-cli deploy` submit a Cloud Build job to build the container image. |
+| **Artifact Registry Writer** | `roles/artifactregistry.writer` | Allows the built container images to be pushed to Artifact Registry. |
+| **Storage Admin** | `roles/storage.admin` | Source-based deploys upload the build context to a Cloud Storage staging bucket, which the deploying identity must be able to create and write (read-only `objectViewer` is not enough). |
+| **Service Account User** | `roles/iam.serviceAccountUser` | Allows attendees to deploy services that *run as* the runtime (default Compute Engine) service account. |
+
+> [!NOTE]
+> **Optional GCP Data Cloud lab (Exercise 14)** additionally needs `roles/bigquery.dataEditor`, `roles/bigquery.jobUser`, and `roles/dataplex.catalogEditor`. Add them to the loop below only if you are running that lab.
 
 To assign these roles in bulk to a Google Group via `gcloud`, run the following script:
 
@@ -87,14 +96,26 @@ export ATTENDEE_GROUP="group:agy-workshop-attendees@yourcompany.com"
 # Bind each required role
 for role in \
   roles/aiplatform.user \
-  roles/run.developer \
+  roles/run.admin \
+  roles/cloudbuild.builds.editor \
   roles/artifactregistry.writer \
-  roles/storage.objectViewer \
+  roles/storage.admin \
   roles/iam.serviceAccountUser; do
     gcloud projects add-iam-policy-binding "$PROJECT_ID" \
       --member="$ATTENDEE_GROUP" \
       --role="$role"
 done
+```
+
+### 1.4 — Grant the Runtime Service Account Vertex Access
+
+Deployed agents run **as** the project's default Compute Engine service account, and that identity — not the attendee — makes the Vertex AI calls at runtime. Without this grant, a successfully deployed agent still returns `403` on its first model call:
+
+```bash
+PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com" \
+  --role="roles/aiplatform.user"
 ```
 
 Alternatively, to grant these roles to individual employees individually, run:
@@ -129,7 +150,8 @@ Ensure outbound HTTPS (port 443) traffic is whitelisted to the following domains
 | Resource Group | Domain Pattern | Reason |
 | :-- | :-- | :-- |
 | **Vertex AI API** | `*.aiplatform.googleapis.com` (e.g. `us-central1-aiplatform.googleapis.com`) | For model calls from `agy` and python. |
-| **GCP Services** | `*.googleapis.com` and `*.g_service_account_com` | For authentication and Cloud Run deployments. |
+| **Google Auth** | `accounts.google.com`, `oauth2.googleapis.com` | For `agy` sign-in and Application Default Credentials login. |
+| **GCP Services** | `*.googleapis.com`, `*.run.app` | For API access and reaching deployed Cloud Run services. |
 | **Python Packages** | `pypi.org` and `files.pythonhosted.org` | For installing dependencies inside developer virtualenvs. |
 | **GitHub** | `github.com` | For cloning the curriculum and sandbox codebases. |
 | **Antigravity CLI** | `antigravity.google` | For downloading and installing the `agy` binary. |

@@ -97,9 +97,9 @@ Each project can have a `.agents/settings.json` file to manage fine-grained beha
 
 ```json
 {
-  "toolPermission": "request-review",
   "enableTerminalSandbox": true,
   "permissions": {
+    "mode": "request-review",
     "allow": [
       "read_file",
       "command(git)",
@@ -118,7 +118,7 @@ Each project can have a `.agents/settings.json` file to manage fine-grained beha
 
 | Key | Type | Description |
 | :-- | :-- | :-- |
-| `toolPermission` | `string` | Sets autonomy level (`always-proceed`, `request-review`, `strict`). |
+| `permissions.mode` | `string` | Sets autonomy level (`always-proceed`, `request-review`, `strict`). |
 | `enableTerminalSandbox` | `bool` | Runs command tool execution in a restricted container/sandbox. |
 | `permissions.allow` | `array` | Explicitly lists allowed commands or file/URL paths. |
 | `permissions.deny` | `array` | Explicitly lists forbidden commands or file/URL paths. |
@@ -144,3 +144,58 @@ You can expose custom developer tools (e.g., issue trackers, database browsers, 
 ```
 
 Once registered, the tools provided by the MCP server will appear directly in your `/mcp` TUI panel and will be callable by `agy` during sessions.
+
+---
+
+## 2.5 — Plugin Lifecycle <span class="duration-badge">10 min</span>
+
+> **Pattern: Package and Share** — a **plugin** bundles skills, rules, subagents, MCP servers, and hooks into a single installable unit so a whole team can adopt the same customizations at once.
+
+Where a Skill or a `rules.md` file customizes a single workspace, a **plugin** packages those same components (plus MCP servers and hooks) so they can be installed, versioned, enabled, and disabled as a unit. Plugins are managed with the `agy plugin` subcommand (aliased `agy plugins`).
+
+### Plugin Directory Layout
+
+A plugin is just a directory with a `plugin.json` marker file at its root. Everything else is optional and mirrors the workspace customization roots you already know:
+
+```text
+~/.gemini/antigravity-cli/plugins/<plugin_name>/
+├── plugin.json          # ← Required marker file (name, version, metadata)
+├── mcp_config.json      # Optional: MCP server definitions
+├── hooks.json           # Optional: event hooks (PreInvocation, PreToolUse, PostToolUse)
+├── skills/              # Optional: skill instruction sets (SKILL.md dirs)
+├── agents/              # Optional: subagent definitions
+├── rules/              # Optional: rule files
+└── import_manifest.json # Auto-generated when a plugin is imported
+```
+
+> **Note:** `hooks.json` is a plugin-bundled component. For *workspace* or *global* hooks (outside a plugin), configure the `"hooks"` key inside `settings.json` instead.
+
+### Managing Plugins
+
+```bash
+# List installed plugins and their enabled/disabled state
+agy plugin list
+
+# Install / remove a plugin
+agy plugin install <name>
+agy plugin uninstall <name>
+
+# Toggle a plugin without uninstalling it
+agy plugin enable <name>
+agy plugin disable <name>
+
+# Validate a plugin's structure and manifest before shipping it
+agy plugin validate <name>
+
+# Import existing Gemini CLI (or Claude) extensions as plugins
+agy plugin import gemini
+```
+
+### Typical Workflow
+
+1. Scaffold a directory with a `plugin.json` and drop your `skills/`, `rules/`, `agents/`, `mcp_config.json`, and `hooks.json` into it.
+2. Run `agy plugin validate <name>` to confirm the manifest and component layout are correct.
+3. `agy plugin install <name>` to register it, then `agy plugin list` to confirm it is enabled.
+4. Use `agy plugin disable <name>` / `enable <name>` to toggle it per project without losing the install.
+
+> 📖 Full details: [Plugins docs](https://antigravity.google/docs/plugins) · [cli-features — Plugins](https://antigravity.google/docs/cli-features)

@@ -1,6 +1,8 @@
 # PRD: Java 8 → Java 21 & Spring Boot 3 Migration
 
-> **Workshop Use:** Practice exercise for [Module 2 — Legacy Codebase Modernization](../legacy-modernization.md). Demonstrates the large-context codebase investigation pattern, AGENTS.md self-onboarding, and how agy handles mechanical namespace migrations that are error-prone for humans.
+> **This is the primary modernization lab** (Maven only — no Docker needed). Work through it using **either approach** — Plan-First or Subagent-First — described in [Module 2](../legacy-modernization.md). A .NET alternative is available as the optional [.NET Modernization](ex03_dotnet_modernization.md) exercise.
+>
+> **Workshop Use:** Practice exercise for [Module 2 — Legacy Modernization & Advanced CLI](../legacy-modernization.md). Demonstrates the large-context codebase investigation pattern, AGENTS.md self-onboarding, and how agy handles mechanical namespace migrations that are error-prone for humans.
 
 ## Problem
 

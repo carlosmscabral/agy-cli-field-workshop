@@ -116,7 +116,8 @@ if (Test-Path $pipIniPath) {
 # Sandbox venv and local pip test
 if ($pythonCmd) {
     Write-Host "  🧪 Testing virtual environment and local pip installations..."
-    $tempDir = Join-Path [System.IO.Path]::GetTempPath() ("agy_venv_verify_" + [System.IO.Path]::GetRandomFileName())
+    $tempRoot = [System.IO.Path]::GetTempPath()
+    $tempDir = Join-Path $tempRoot ("agy_venv_verify_" + [System.IO.Path]::GetRandomFileName())
     
     try {
         # Attempt to create virtual environment
@@ -209,6 +210,37 @@ if ($agyCmd) {
     Assert-Result "FAIL" "agy CLI is not installed or not in your system PATH" "Follow the instructions in setup.md to install agy"
 }
 
+# Check uv (Python package/venv manager used by the SDK exercises)
+$uvCmd = Get-Command uv -ErrorAction SilentlyContinue
+if ($uvCmd) {
+    try {
+        $uvVer = (uv --version 2>$null) -join ""
+        Assert-Result "PASS" "uv is installed ($uvVer)"
+    } catch {
+        Assert-Result "PASS" "uv is installed"
+    }
+} else {
+    Assert-Result "WARN" "uv is not installed" "uv is the recommended Python toolchain for the SDK exercises. Install it from https://docs.astral.sh/uv/getting-started/installation/"
+}
+
+# Check agents-cli (Agent Development Kit CLI)
+$agentsCliCmd = Get-Command agents-cli -ErrorAction SilentlyContinue
+if ($agentsCliCmd) {
+    Assert-Result "PASS" "agents-cli is installed and in user PATH"
+} else {
+    Assert-Result "WARN" "agents-cli is not installed or not in your system PATH" "agents-cli is required for the SDK exercises. Follow the instructions in setup.md to install it."
+}
+
+# Check google-antigravity Python package
+if ($pythonCmd) {
+    & $pythonCmd -c "import google.antigravity" 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        Assert-Result "PASS" "google-antigravity Python package is importable"
+    } else {
+        Assert-Result "WARN" "google-antigravity Python package is not installed" "Install it into your workshop environment (e.g. uv pip install google-antigravity) as described in setup.md"
+    }
+}
+
 # Check Docker Client installation
 $dockerCmd = Get-Command docker -ErrorAction SilentlyContinue
 if ($dockerCmd) {
@@ -251,10 +283,10 @@ if ($dockerCmd) {
         if ($infoProc.ExitCode -eq 0) {
             Assert-Result "PASS" "Docker Daemon is active & running"
         } else {
-            Assert-Result "FAIL" "Docker Daemon is not running" "Start Docker Desktop or Rancher Desktop to activate the local container runtime"
+            Assert-Result "WARN" "Docker Daemon is not running" "Docker is only needed for the modernization module's container exercises. CLI-only attendees can skip this. To run those exercises, start Docker Desktop or Rancher Desktop to activate the local container runtime."
         }
     } catch {
-        Assert-Result "FAIL" "Docker Daemon is not running" "Start Docker Desktop or Rancher Desktop to activate the local container runtime"
+        Assert-Result "WARN" "Docker Daemon is not running" "Docker is only needed for the modernization module's container exercises. CLI-only attendees can skip this. To run those exercises, start Docker Desktop or Rancher Desktop to activate the local container runtime."
     }
 }
 
@@ -283,8 +315,8 @@ if (-not $gcpProject) {
     if (-not $adcToken) {
         Assert-Result "FAIL" "Unable to obtain local Application Default Credentials token" "Re-run: gcloud auth application-default login"
     } else {
-        # Target endpoint model is gemini-3.5-flash
-        $uri = "https://us-central1-aiplatform.googleapis.com/v1/projects/$gcpProject/locations/us-central1/publishers/google/models/gemini-3.5-flash:generateContent"
+        # Target endpoint model is gemini-3.1-pro-preview (a live-supported, stable id)
+        $uri = "https://us-central1-aiplatform.googleapis.com/v1/projects/$gcpProject/locations/us-central1/publishers/google/models/gemini-3.1-pro-preview:generateContent"
         
         $headers = @{
             "Authorization" = "Bearer $adcToken"
@@ -310,7 +342,7 @@ if (-not $gcpProject) {
             if ($response.StatusCode -eq 200) {
                 Assert-Result "PASS" "Vertex AI Gemini Model access is healthy & verified"
             } else {
-                Assert-Result "WARN" "Received HTTP status code $($response.StatusCode) from Vertex AI API"
+                Assert-Result "WARN" "Received HTTP status code $($response.StatusCode) from Vertex AI API" "The model id or region may be unavailable in this project. Confirm the Vertex AI API is enabled and that model gemini-3.1-pro-preview is offered in region us-central1 for your project."
             }
         } catch {
             $ex = $_.Exception
@@ -319,9 +351,9 @@ if (-not $gcpProject) {
                 if ($statusCode -eq 403) {
                     Assert-Result "FAIL" "IAM Permission Denied (HTTP 403) accessing Vertex AI on project $gcpProject" "Verify your GCP user has been granted the 'Vertex AI User' (roles/aiplatform.user) role in the project."
                 } elseif ($statusCode -eq 404) {
-                    Assert-Result "FAIL" "Vertex AI Model API not found (HTTP 404)" "Ensure the Vertex AI API (aiplatform.googleapis.com) has been enabled in the project: gcloud services enable aiplatform.googleapis.com"
+                    Assert-Result "FAIL" "Vertex AI Model API not found (HTTP 404)" "The model id or region may be unavailable in this project. Verify the Vertex AI API (aiplatform.googleapis.com) is enabled (gcloud services enable aiplatform.googleapis.com), and that model gemini-3.1-pro-preview is available in region us-central1 for your project."
                 } else {
-                    Assert-Result "FAIL" "API Error (HTTP $statusCode) accessing Vertex AI" "Check your project configurations and API status."
+                    Assert-Result "FAIL" "API Error (HTTP $statusCode) accessing Vertex AI" "The model id or region may be unavailable in this project. Check that the Vertex AI API is enabled and that model gemini-3.1-pro-preview is offered in region us-central1 for your project."
                 }
             } else {
                 # General connection issue (DNS, proxy, block)

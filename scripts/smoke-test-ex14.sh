@@ -1,10 +1,14 @@
 #!/bin/bash
 # scripts/smoke-test-ex14.sh
-# Verifies provisioning and teardown of BQ and Dataplex resources in the vibe-cabral project context.
+# Verifies provisioning and teardown of BQ and Dataplex resources in the active gcloud project context.
 
 set -euo pipefail
 
-PROJECT_ID="vibe-cabral"
+PROJECT_ID="${PROJECT_ID:-$(gcloud config get-value project 2>/dev/null)}"
+if [ -z "${PROJECT_ID}" ] || [ "${PROJECT_ID}" = "(unset)" ]; then
+  echo "ERROR: No project configured. Set one with 'gcloud config set project <PROJECT_ID>' or run: PROJECT_ID=<PROJECT_ID> $0" >&2
+  exit 1
+fi
 LOCATION="us-central1"
 DATASET_ID="raw_data_lake"
 TABLE_ID="customer_feedback_raw"

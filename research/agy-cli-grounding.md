@@ -14,6 +14,7 @@
 
 | Page | URL | How to read |
 |:--|:--|:--|
+| **Command Reference (primary)** | https://antigravity.google/docs/cli-reference | Chrome DevTools MCP (SPA) — canonical source for flags & slash commands. The `/docs/cli/reference` path aliases here. |
 | CLI Overview | https://antigravity.google/docs/cli-overview | Chrome DevTools MCP |
 | Getting Started | https://antigravity.google/docs/cli-getting-started | Chrome DevTools MCP |
 | Using Antigravity CLI | https://antigravity.google/docs/cli-using | Chrome DevTools MCP |
@@ -91,6 +92,10 @@ All flags verified against `agy --help` live binary output.
 | `--dangerously-skip-permissions` | Auto-approve all tool permission requests without prompting |
 | `--print-timeout <duration>` | Timeout for print mode (default: `5m0s`) |
 | `--log-file <path>` | Override CLI log file path |
+| `--model <model>` | Model for the current CLI session (also settable persistently via `/model`) |
+| `--project <id>` | Project ID for the current CLI session |
+| `--new-project` | Create a new project for this session |
+| `--version` | Print the CLI version (works on the binary though omitted from `--help`) |
 
 ### ❌ Flags that do NOT exist
 
@@ -99,8 +104,9 @@ These were in older drafts and have been removed. Do not reference them:
 | Flag | Why absent |
 |:--|:--|
 | `--strict` | Not a flag. Strict mode is set via `/permissions` slash command |
-| `--model <model>` | Not a flag. Model is set via `/model` slash command |
 | `--workspace <path>` | Not in `agy --help` or any official doc |
+
+> **Corrected 2026-07-03:** `--model` **is** a real flag (verified in `agy --help` v1.0.16) — earlier drafts wrongly listed it here.
 
 ---
 
@@ -145,12 +151,65 @@ Official source: [cli-features — Core Slash Commands](https://antigravity.goog
 
 | Command | Status |
 |:--|:--|
-| `/browser` | Not in any official doc |
 | `/compact` | Not in any official doc |
-| `/plan` | Not in any official doc — "Plan Mode" concept maps to `/permissions strict` |
+| `/plan` | Not a command — the real command is **`/planning`** (verified manually on v1.0.16; `/plan` alone does nothing). See the [Artifacts](#artifacts) section. |
 | `/stats` | Not in any official doc |
 | `/memory` | Not in any official doc |
 | `/security:analyze` | Not in any official doc — was from an unofficial extension |
+
+### 🔎 Reported commands to verify against the Command Reference
+
+Surfaced from the [Command Reference](https://antigravity.google/docs/cli-reference) / I/O 2026 update / live sessions but not yet fully re-grounded via Chrome DevTools MCP. Treat as likely-real; confirm exact names/syntax before hard-coding into workshop content:
+
+| Command | Source / status |
+|:--|:--|
+| `/planning` | **Confirmed** (manual test on v1.0.16 — enters planning mode; `/plan` alone does nothing) |
+| `/grill-me` | **Confirmed** — observed live: agy suggests it to align on task details before implementing |
+| `/goal` | Reported (I/O 2026): run autonomously until the task is finished, auto-approving its own plan |
+| `/schedule` | Reported (I/O 2026): run a prompt once in the future or on a recurring schedule (Scheduled Tasks) |
+| `/browser` | Reported (I/O 2026): browser use moved to a slash command (autonomous browser subagent) |
+| `/workflow-name` | Reported: custom workflows saved as markdown are invoked as `/<workflow-name>` |
+
+---
+
+## Artifacts
+
+> **Last verified:** 2026-07-03 against the live `agy` **v1.0.16** binary changelog (`agy changelog`) + binary strings.
+> This flow is **interactive (TUI) only** — not available in headless/print mode.
+
+**What artifacts are:** structured, verifiable deliverables the agent generates as it works, so you review high-level milestones instead of scrolling raw tool calls. Artifacts can embed code diffs and Mermaid diagrams, and you can leave **inline comments** on an artifact (like commenting on a doc); the agent incorporates the feedback without stopping its flow.
+
+### Core artifact types
+
+| Type | Description |
+|:--|:--|
+| **Implementation Plan** | Markdown: the approach, which files change, and how the change fits the codebase. Produced *before* code is written. |
+| **Task List** | A `task.md` the agent ticks off as it completes each step during implementation. |
+| **Walkthrough** | Post-completion summary of what changed and how to verify it. |
+
+### Slash commands
+
+| Command | Description |
+|:--|:--|
+| `/artifact` (alias `/artifacts`) | View the artifacts for the current session in the TUI |
+| `/planning` | Enter planning mode — produces an Implementation Plan (and Task List) artifact **before** writing code, for you to review/approve (plan-then-implement / spec-driven loop). *(Verified manually: `/planning`, not `/plan`.)* |
+
+### Review & co-steering shortcuts (TUI)
+
+| Shortcut | Action |
+|:--|:--|
+| `ctrl+r` | Open the Artifact Review panel |
+| `ctrl+g` | Open the current artifact in `$EDITOR` (same key that opens the current prompt in `$EDITOR`) |
+
+### Artifact review mode / autonomy
+
+Whether the agent pauses for you to approve artifacts or auto-proceeds is governed by the review/permissions mode (the `/permissions` autonomy levels in section 8):
+
+- `request-review` — agent pauses for you to review/approve artifacts (default)
+- `always-proceed` — agent auto-approves artifacts and keeps going
+- `strict` — tightest control
+
+> **Do NOT claim** exact pixel-level TUI layouts — the exact rendering of panels varies by version. Describe panels/shortcuts generically.
 
 ---
 

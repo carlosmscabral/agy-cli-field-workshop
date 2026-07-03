@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # validate-code-blocks.sh — Extract fenced code blocks from markdown and validate by language
 #
-# Extracts every ```lang ... ``` block from docs/*.md, classifies by language tag,
+# Extracts every ```lang ... ``` block from docs/ (recursively), classifies by language tag,
 # and runs the appropriate syntax validator. Catches broken JSON, YAML, and
 # bash snippets embedded in workshop documentation before participants hit them.
 #
@@ -83,7 +83,7 @@ if ! $HAS_PYYAML; then
 fi
 echo ""
 
-for md_file in "${DOCS_DIR}"/*.md; do
+while IFS= read -r md_file; do
   [ -f "$md_file" ] || continue
   file_errors=0
 
@@ -167,7 +167,7 @@ with open(sys.argv[1]) as f:
     log_ok "$md_file"
   fi
   ERRORS=$((ERRORS + file_errors))
-done
+done < <(find "$DOCS_DIR" -type f -name '*.md' | sort)
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

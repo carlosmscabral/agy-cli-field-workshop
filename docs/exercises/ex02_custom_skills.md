@@ -1,6 +1,6 @@
 # Exercise 2: Custom Skills and Workspace Customization
 
-> **Duration:** 20 min | **Module:** 1 — SDLC Productivity
+> **Duration:** 20 min | **Module:** 1 — Antigravity CLI Fundamentals
 
 ---
 
@@ -115,10 +115,15 @@ If you package skills, rules, and MCP servers together as a plugin, you can vali
    agy plugin validate samples/plugins/workshop-helpers/
    ```
 
-Verify that the output displays:
+Verify that the validator reports the plugin as OK (exit code 0), for example:
 
 ```text
-✔ Plugin manifest is valid
+  [ok]    samples/plugins/workshop-helpers/
+          ✔ skills      : 1 processed
+          - agents      : skipped (not found)
+          - commands    : skipped (not found)
+          - mcpServers  : skipped (not found)
+          - hooks       : skipped (not found)
 ```
 
 ---

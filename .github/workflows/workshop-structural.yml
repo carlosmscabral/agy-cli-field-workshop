@@ -99,7 +99,7 @@ jobs:
       - name: Validate mkdocs.yml nav alignment
         run: |
           echo "📋 Checking nav alignment..."
-          pip install mkdocs-material mkdocs-static-i18n mkdocs-minify-plugin -q
+          pip install mkdocs-material mkdocs-minify-plugin -q
           mkdocs build --strict
           echo "  ✅ MkDocs build (strict) passed"
 

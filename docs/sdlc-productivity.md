@@ -1,4 +1,4 @@
-# Module 1: SDLC Productivity <span class="duration-badge">75 min</span>
+# Module 1 — Antigravity CLI Fundamentals <span class="duration-badge">90 min</span>
 
 > **Your first real Antigravity CLI session.** This module covers the core daily-driver workflows — understanding code, refactoring, generating tests, and reviewing changes — plus how to extend the CLI with your own Custom Skills and Rules.
 
@@ -89,6 +89,7 @@ Use the `/permissions` slash command to view or change the active level. You can
 ```json
 {
   "permissions": {
+    "mode": "request-review",
     "allow": ["command(git)", "read_file"],
     "deny": ["command(rm -rf)"]
   }
@@ -129,13 +130,19 @@ If any tests fail, feed the output back to the agent:
 
 ### Exercise: Review and Diff
 
-Before staging your changes, inspect the modifications you have made during the session. Use the `/diff` slash command:
+Before staging your changes, inspect the modifications you have made during the session. Use the shell escape (`!`) to run `git diff` without leaving `agy`:
 
 ```text
-> /diff
+> !git diff
 ```
 
-This opens the built-in TUI diff viewer. Once you are done reviewing, run a comprehensive code review query:
+You can also ask `agy` to walk you through the changes in natural language:
+
+```text
+> Show me the diff of my changes and summarize what I modified.
+```
+
+Once you are done reviewing, run a comprehensive code review query:
 
 ```text
 > Review my unsaved changes for correctness, security gaps, and styling consistency. Be direct and list any potential bugs.
@@ -146,6 +153,28 @@ To stage changes from inside the session, run:
 ```text
 > !git add -p
 ```
+
+---
+
+## 1.4a — Artifacts: Verifiable, Reviewable Agent Output <span class="duration-badge">5 min</span>
+
+> **Pattern: Review Milestones, Not Tool Calls** — Steer the agent by reviewing structured deliverables instead of scrolling raw output.
+
+As `agy` works, it emits **artifacts** — structured, verifiable deliverables you review at a high level, rather than watching every individual tool call scroll past. This is the capability that most distinguishes `agy` from chat-style coding tools: the agent shows its work as reviewable milestones you can actually steer.
+
+Three core artifact types cover the everyday loop:
+
+| Artifact | What it is | When it appears |
+| :-- | :-- | :-- |
+| **Implementation Plan** | Markdown plan: the approach, which files change, and how the change fits the codebase | *Before* code is written |
+| **Task List** | A `task.md` the agent ticks off step by step | During implementation |
+| **Walkthrough** | A post-completion summary of what changed and how to verify it | After completion |
+
+Artifacts can embed code diffs and Mermaid diagrams. Enter planning mode with `/planning` to make `agy` produce an Implementation Plan (and Task List) *before* implementing — the plan-then-implement loop. View artifacts for the current session with `/artifact`.
+
+The review workflow is where co-steering happens. Press `ctrl+r` to open the **Artifact Review panel**, or `ctrl+g` to open the current artifact in your `$EDITOR`. You can leave **inline comments** on an artifact — like commenting on a shared doc — and the agent incorporates your feedback *without stopping its flow*. Whether the agent pauses for your approval or auto-proceeds is governed by your `/permissions` autonomy level: `request-review` waits for you, `always-proceed` auto-approves and keeps going.
+
+> **Try it:** [Exercise 15 — Artifacts: Plan, Review, and Verify](exercises/ex15_artifacts.md) implements the `GET /health` endpoint you scoped in Exercise 1, entirely through the Artifacts workflow.
 
 ---
 
@@ -287,4 +316,4 @@ You can also write custom directives in `.agents/rules.md` (or `.agents/rules/*.
 
 ## Next Module
 
-→ **[Module 2: Legacy Codebase Modernization](legacy-modernization.md)** — strict mode, agent self-onboarding, subagents, and `/rewind` as your safety net.
+→ **[Module 2: Legacy Modernization & Advanced CLI](legacy-modernization.md)** — strict mode, agent self-onboarding, subagents, and `/rewind` as your safety net.

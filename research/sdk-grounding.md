@@ -143,7 +143,10 @@ class LocalAgentConfig(AgentConfig):  # pydantic.BaseModel subclass
     # LocalAgentConfig-specific:
     gemini_config: types.GeminiConfig = GeminiConfig()
     model: str | None = None        # shorthand → gemini_config.models.default
-    api_key: str | None = None      # shorthand → gemini_config.api_key
+    api_key: str | None = None      # shorthand → Gemini Developer API key (AI Studio)
+    vertex: bool | None = None      # shorthand → build VertexEndpoint, auth via ADC
+    project: str | None = None      # shorthand → GCP project for VertexEndpoint
+    location: str | None = None     # shorthand → GCP location (e.g. "global", "us-central1")
 ```
 
 ---
@@ -556,6 +559,26 @@ config = LocalAgentConfig(
 - `DEFAULT_MODEL = "gemini-3.5-flash"`
 - `DEFAULT_IMAGE_GENERATION_MODEL = "gemini-3.1-flash-image-preview"`
 - `ThinkingLevel` values: `MINIMAL`, `LOW`, `MEDIUM`, `HIGH`
+
+### Backends: Vertex AI vs Gemini Developer API
+
+Two auth/serving backends, selected by the `LocalAgentConfig` shorthand fields:
+
+- **Vertex AI / GEAP (enterprise):** `vertex=True` + `project=...` + `location=...`. The
+  SDK builds a `VertexEndpoint(project=..., location=...)` and authenticates via
+  **Application Default Credentials** (`gcloud auth application-default login`,
+  `roles/aiplatform.user`) — no API key. Location `"global"` works; a region such as
+  `"us-central1"` also works.
+- **Gemini Developer API (AI Studio):** leave `vertex` unset/False and pass `api_key=`
+  (or set the `GEMINI_API_KEY` env var).
+
+> **No env-var auto-detection for the SDK's Vertex mode.** Unlike the CLI/ADK, setting
+> `GOOGLE_GENAI_USE_VERTEXAI` alone does **not** switch the SDK to Vertex — you MUST pass
+> `vertex=True` + `project` + `location` on `LocalAgentConfig`.
+>
+> **Verified live 2026-07-03 on project `vibe-cabral` (ADC, no API key):**
+> `LocalAgentConfig(model="gemini-3.5-flash", vertex=True, project=os.environ["GOOGLE_CLOUD_PROJECT"], location=os.environ.get("GOOGLE_CLOUD_LOCATION","global"), policies=[policy.allow_all()])`
+> returns real responses.
 
 ---
 

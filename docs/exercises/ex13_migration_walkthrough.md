@@ -1,6 +1,6 @@
 # Exercise 13 — Migration Walkthrough
 
-> **Module:** Appendix — Migration Guide
+> **Module:** 2 — Legacy Modernization & Advanced CLI
 > **Time:** 20 min
 > **Format:** Individual or pair
 
@@ -19,7 +19,7 @@ When teams migrate from Gemini CLI to AGY CLI, there are four common breakage po
 | What breaks | Why |
 | :-- | :-- |
 | Hook events `SessionStart`, `BeforeTool`, `AfterTool` | Renamed to `PreInvocation`, `PreToolUse`, `PostToolUse` |
-| MCP `url` key in `settings.json` | AGY uses `serverUrl` in a separate `mcp.json` |
+| MCP `url` key in `settings.json` | AGY uses `serverUrl` in a separate `mcp_config.json` |
 | `.gemini/` project config dir | AGY uses `.agents/` |
 | `gemini` binary in scripts | Must be updated to `agy` |
 
@@ -78,7 +78,7 @@ Use gemini for code reviews before merging PRs.
 EOF
 
 # Create a CI script that calls the old binary
-mkdir -p .github/workflows
+mkdir -p scripts .github/workflows
 cat > scripts/review.sh << 'EOF'
 #!/usr/bin/env bash
 gemini -p "Review the diff: $(git diff HEAD~1)" > review.md
@@ -103,8 +103,8 @@ cp .gemini/settings.json .agents/settings.json
 ### Step 2: Separate MCP config
 
 ```bash
-# AGY uses mcp.json, not mcpServers in settings.json
-cat > .agents/mcp.json << 'EOF'
+# AGY uses mcp_config.json, not mcpServers in settings.json
+cat > .agents/mcp_config.json << 'EOF'
 {
   "mcpServers": {
     "github": {
@@ -185,7 +185,7 @@ The `migration-validator` subagent will check:
 **Reflection questions:**
 
 1. What would break first in CI if you forgot to update the hook event names?
-2. Why does AGY separate MCP config into `mcp.json` instead of bundling it in `settings.json`?
+2. Why does AGY separate MCP config into `mcp_config.json` instead of bundling it in `settings.json`?
 3. If you have a monorepo with 10 projects, what would your migration script look like?
 
 ---
@@ -208,6 +208,6 @@ Refer to [`samples/hooks/secret-scanner.sh`](https://github.com/carlosmscabral/a
 | `replace_in_file` tool | `edit` tool |
 | `.gemini/` project dir | `.agents/` project dir |
 | `GEMINI.md` | `AGENTS.md` |
-| `settings.json` MCP block | `mcp.json` with `serverUrl` |
+| `settings.json` MCP block | `mcp_config.json` with `serverUrl` |
 | `url:` for SSE | `serverUrl:` for SSE |
 | `gemini` binary | `agy` binary |

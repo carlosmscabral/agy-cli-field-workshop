@@ -1,4 +1,4 @@
-# Track B — Corporate Dev Track Setup
+# Track A — Enterprise / Corporate Dev Track Setup
 
 This track is designed for teams running the workshop on **customer-managed corporate physical machines** (such as company laptops running macOS, Windows, or Linux).
 
@@ -67,9 +67,12 @@ gcloud --version
 
 - Follow the official install guide: [cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install).
 
-### 1.4 — Docker & Docker Compose (v2)
+### 1.4 — Docker & Docker Compose (v2) — *optional*
 
-Required to build containerized services and spin up sandbox databases. Check with:
+> [!NOTE]
+> **Only needed for the .NET modernization exercise (ex03).** Modules 1, 3, and 4, and the Java track, do not use Docker — `agents-cli`/SDK deploys build server-side on Cloud Build, not local Docker. Skip this step if you're not running ex03 (the workstation verifier treats Docker as a warning, not a failure).
+
+If you plan to run ex03, check with:
 
 ```bash
 docker --version
@@ -93,6 +96,9 @@ cd agy-cli-field-workshop
 # 2. Clone the Sandbox Application (into the parent directory)
 git clone https://github.com/carlosmscabral/agy-sample-app.git ../agy-sample-app
 ```
+
+> [!TIP]
+> **One-command bootstrap (optional).** Once `gcloud` and `agy` are installed, `scripts/bootstrap-enterprise.sh` automates the rest — it clones the `agy-sample-app` sandbox, runs the ADC login, exports the canonical Vertex environment, and creates the sandbox virtualenv with `google-antigravity`. Run it from the workshop repo root: `bash scripts/bootstrap-enterprise.sh`. You can then skip Steps 3, 5, and 6 below.
 
 ---
 
@@ -175,11 +181,9 @@ pip install google-antigravity uvicorn fastapi pytest
 
 ---
 
-## Step 6: Google Cloud Authentication (Local ADC)
+## Step 6: Google Cloud Authentication & Vertex AI Environment
 
-The Antigravity Python SDK uses local Application Default Credentials (ADC) to authorize outbound requests to Vertex AI.
-
-Configure your local credentials:
+The workshop runs against **your company's GCP project on Vertex AI**. This one canonical setup authorizes the `agy` CLI, the Antigravity Python SDK, and `agents-cli` (ADK) — no personal/API-key path is needed.
 
 ```bash
 # 1. Log in to Application Default Credentials (triggers browser auth)
@@ -187,7 +191,16 @@ gcloud auth application-default login
 
 # 2. Set your active workshop project (replace with the project ID from your IT Admin)
 gcloud config set project "your-workshop-project-id"
+
+# 3. Export the canonical Vertex AI environment (add these to your shell profile
+#    so every new terminal — and every SDK/agents-cli exercise — targets Vertex)
+export GOOGLE_CLOUD_PROJECT="your-workshop-project-id"
+export GOOGLE_CLOUD_LOCATION="global"          # or a region, e.g. us-central1
+export GOOGLE_GENAI_USE_VERTEXAI=True           # routes google-genai / ADK calls through Vertex AI
 ```
+
+> [!IMPORTANT]
+> **`GOOGLE_GENAI_USE_VERTEXAI=True` is required for the enterprise path.** Without it, the underlying `google-genai`/ADK stack defaults to the AI-Studio (API-key) backend and ignores your ADC/project — the SDK (Module 4) and `agents-cli` (Module 3) exercises will fail on a customer machine that has no `GOOGLE_API_KEY`.
 
 ---
 
@@ -217,6 +230,20 @@ Verify that the CLI is accessible:
 ```bash
 agy --version
 ```
+
+### Sign in to `agy` with your Google Cloud identity
+
+Launch `agy` once to complete authentication. On an enterprise workstation, sign in with the **Google Cloud identity** that your IT Admin granted `roles/aiplatform.user` — `agy` then runs inference through your project on the Gemini Enterprise Agent Platform (billed at Agent Platform consumption pricing), not a personal Google account.
+
+```bash
+# Launch agy; it opens your browser to Google Sign-In.
+# On a headless/SSH box it prints a secure authorization URL instead —
+# open it in your local browser and paste the code back.
+agy
+```
+
+> [!NOTE]
+> `agy` uses the project from `GOOGLE_CLOUD_PROJECT` (set in Step 6) to select which GCP project handles inference. Type `/logout` inside `agy` to clear cached credentials.
 
 ---
 
@@ -262,7 +289,7 @@ Run the verifier corresponding to your host OS:
   ✅ PASS: Active Google Cloud project configured: your-workshop-project-id
 
 [4/5] Checking Antigravity CLI (agy) & Docker Environment
-  ✅ PASS: agy CLI is installed and in user PATH (version 2.0.4)
+  ✅ PASS: agy CLI is installed and in user PATH (version 1.0.16)
   ✅ PASS: Docker client & Compose are installed
   ✅ PASS: Docker Daemon is active & running
 
@@ -298,4 +325,4 @@ Expected output: `Workstation Ready!`
 ## Next Step
 
 Once your smoke test succeeds, you are ready to start:
-👉 Go to **[Module 1: SDLC Productivity](sdlc-productivity.md)**
+👉 Go to **[Module 1: Antigravity CLI Fundamentals](sdlc-productivity.md)**

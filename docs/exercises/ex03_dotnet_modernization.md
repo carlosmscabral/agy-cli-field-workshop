@@ -1,6 +1,8 @@
 # PRD: .NET 5 → .NET 8 Cloud-Native Migration
 
-> **Workshop Use:** Practice exercise for [Module 2 — Legacy Codebase Modernization](../legacy-modernization.md). Demonstrates agy strict mode, agent self-onboarding with AGENTS.md, subagent planning, and `ctrl+g` plan editing. The target repository includes a reference `modernization-prompt.md` authored by GCP Cloud Solutions Architects — a gold-standard example of prompt engineering for migration tasks.
+> **Optional exercise.** This is the **.NET alternative** to the primary [Java Upgrade](ex04_java_upgrade.md) lab — choose it if your team is .NET-focused. It is the **only exercise that requires Docker & Docker Compose**; skip it (and Docker) otherwise. The same two approaches (Plan-First / Subagent-First) from [Module 2](../legacy-modernization.md) apply here.
+>
+> **Workshop Use:** Practice exercise for [Module 2 — Legacy Modernization & Advanced CLI](../legacy-modernization.md). Demonstrates agy strict mode, agent self-onboarding with AGENTS.md, subagent planning, and `ctrl+g` plan editing. The target repository includes a reference `modernization-prompt.md` authored by GCP Cloud Solutions Architects — a gold-standard example of prompt engineering for migration tasks.
 
 ## Problem
 

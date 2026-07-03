@@ -52,10 +52,15 @@ fi
 
 # Step 3: Trigger Keyless Application Default Credentials (ADC) login
 echo -e "\n${BLUE}[3/5] Authenticating with Vertex AI (Application Default Credentials)...${NC}"
-echo -e "${YELLOW}  Opening browser window to authenticate with Google Cloud...${NC}"
-gcloud auth application-default login --no-launch-browser || gcloud auth application-default login
+echo -e "${YELLOW}  gcloud auto-detects Cloud Shell/SSH and prints a URL; otherwise it opens your browser...${NC}"
+# Single invocation — gcloud picks the right flow itself (avoids double-prompting).
+gcloud auth application-default login
 
-echo -e "  ✅ Application Default Credentials configured successfully!"
+# Canonical Vertex AI environment — required so the SDK / agents-cli (ADK) route through Vertex.
+export GOOGLE_CLOUD_LOCATION="${GOOGLE_CLOUD_LOCATION:-global}"
+export GOOGLE_GENAI_USE_VERTEXAI=True
+
+echo -e "  ✅ Application Default Credentials + Vertex AI environment configured successfully!"
 
 # Step 4: Clone the attendee hands-on sandbox repository
 echo -e "\n${BLUE}[4/5] Preparing Sandbox Workspace...${NC}"
@@ -87,8 +92,7 @@ echo -e "  Installing google-antigravity pip package..."
 .venv/bin/pip install --upgrade pip
 .venv/bin/pip install google-antigravity
 
-# Create workspace .agents directory to ensure local customization works
-mkdir -p .agents
+# Note: we intentionally do NOT pre-create .agents/ — Exercise 2 has attendees create it themselves.
 
 echo -e "\n================═════════════════════════════════════"
 echo -e "${GREEN}🎉 Enterprise Bootstrap Completed Successfully!${NC}"
@@ -97,5 +101,7 @@ echo -e "To start your first Antigravity CLI session, run:"
 echo -e "  ${CYAN}cd ${SANDBOX_DIR}${NC}"
 echo -e "  ${CYAN}source .venv/bin/activate${NC}"
 echo -e "  ${CYAN}export GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}${NC}"
+echo -e "  ${CYAN}export GOOGLE_CLOUD_LOCATION=${GOOGLE_CLOUD_LOCATION}${NC}"
+echo -e "  ${CYAN}export GOOGLE_GENAI_USE_VERTEXAI=True${NC}"
 echo -e "  ${CYAN}agy${NC}"
 echo -e "\nHappy agent hacking! 🤖"
