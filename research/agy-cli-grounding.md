@@ -170,6 +170,17 @@ Surfaced from the [Command Reference](https://antigravity.google/docs/cli-refere
 | `/browser` | Reported (I/O 2026): browser use moved to a slash command (autonomous browser subagent) |
 | `/workflow-name` | Reported: custom workflows saved as markdown are invoked as `/<workflow-name>` |
 
+### Mid-task input is queued, not a live interrupt
+
+Verified from the v1.0.16 binary (proto/enum symbols): typing a message while the agent is working creates a **queued user-input step** (`CortexStepUserInput.IsQueuedMessage`, `QueuedSteps`, `SendAllQueuedMessages`, `DeleteQueuedUserInputStep`). It does **not** inject into the currently-running model/tool call. Delivery is governed by the `queued_message_delivery_strategy` user setting (`exa.cortex_pb.MessageDeliveryStrategy`):
+
+| Value | Effect |
+|:--|:--|
+| `MESSAGE_DELIVERY_STRATEGY_NEXT_INVOCATION` | Delivered at the agent's next step — steers the rest of the ongoing task |
+| `MESSAGE_DELIVERY_STRATEGY_WHEN_IDLE` | Held until the current task finishes, then delivered (answered after) |
+
+To hard-stop/redirect the active operation, use `Esc` / `ctrl+c` (interrupt). The internal `store.Manager.sendMessageOrSteer` confirms a distinct steer path exists. The workshop's `/btw` is a convention for such a queued steering message — not a built-in command. The most reliable "steer without stopping" channel is **Artifacts inline comments** (review the plan, comment, agent incorporates without halting).
+
 ---
 
 ## Artifacts

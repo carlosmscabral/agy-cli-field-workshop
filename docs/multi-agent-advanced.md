@@ -114,43 +114,53 @@ This repo ships four ready-to-use subagent definitions under [`samples/agents/`]
 
 ## 2.10 — /btw: Mid-Task Steering <span class="duration-badge">10 min</span>
 
-> **Pattern: Steer Without Interrupting** — inject context into a running task without stopping it.
+> **Pattern: Queue a Steering Note** — hand the agent new context while it works, instead of cancelling and restarting.
 
 !!! note "`/btw` is a workshop convention, not a built-in command"
     In this workshop, `/btw` is shorthand for a **mid-task steering message** — extra context you type ("by the way, also...") while the agent is still working. It is not a built-in slash command. What matters is the underlying capability: agy can absorb new instructions mid-task without you having to cancel and restart.
 
-Mid-task steering is one of agy's most distinctive workflows. When agy is mid-task, you can send it a message without cancelling the current operation.
+### How it actually works
 
-### How It Works
+When you type a message while agy is mid-task, it is **queued** — it does *not* interrupt the model or tool call that's currently running. *When* the queued message is delivered is governed by agy's **queued-message delivery strategy**:
+
+| Strategy | Behavior |
+| :-- | :-- |
+| `next-invocation` | Picked up at the agent's **next step**, so it steers the *rest* of the ongoing task from that point on. |
+| `when-idle` | Held until the current task finishes, then delivered — answered **after**, not woven into the running work. |
+
+So a mid-task note is a *queued steer*, not a live injection into the current thought.
 
 ```text
-> Refactor the entire authentication module to use JWT instead of sessions. This will touch multiple files. Start with the backend.
+> Refactor the entire authentication module to use JWT instead of sessions. Start with the backend.
 ```
 
-*agy starts working... while it's running:*
+*While agy is working, you queue:*
 
 ```bash
-/btw Actually, keep backward compatibility with sessions for 30 days — implement a dual-mode auth.
+/btw Keep backward compatibility with sessions for 30 days — implement a dual-mode auth.
 ```
 
-agy incorporates your note into the ongoing task without stopping. It's like leaving a sticky note for a developer in the middle of a sprint — they see it and adjust.
+With `next-invocation` delivery, agy picks this up at its next step and adjusts the remaining work; with `when-idle`, it addresses it once the current step completes.
 
-### Use Cases for /btw
+!!! warning "To stop or hard-redirect *right now*, interrupt"
+    A queued message does not abort what's running. Press `Esc` (or `ctrl+c`) to **interrupt** the active operation, then send a new prompt. Use interrupt when the agent is heading the wrong way; use a queued note for context you're fine with it applying at its next step.
+
+!!! tip "The strongest co-steering is Artifacts"
+    The "steer without stopping" experience is most reliable through **Artifacts** (Module 1, §1.4a): leave an inline comment on the Implementation Plan and the agent incorporates it *without halting*. Free-text steering messages are queued; artifact comments are the first-class review-and-redirect channel.
+
+### Use cases for a queued steer
 
 ```bash
 /btw The API rate limit is 100 req/min, factor that into any retry logic you add.
 ```
 
 ```bash
-/btw The team uses conventional commits — make sure any commit messages follow that format.
+/btw The team uses conventional commits — match that format in any commit messages.
 ```
 
 ```bash
 /btw Skip the frontend changes for now, just focus on the backend API.
 ```
-
-!!! info "Contrast with interrupting"
-    Without `/btw`, steering a long-running task means cancelling it, adjusting your prompt, and restarting — losing all progress. `/btw` lets you course-correct without that cost.
 
 ---
 

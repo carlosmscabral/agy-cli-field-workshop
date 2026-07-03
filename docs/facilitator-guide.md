@@ -89,7 +89,7 @@ Exercises are tagged **Core** (everyone does) or **Optional** (stretch) in each 
 
 - **Key message:** subagents + `/btw` is the qualitative leap. This is where agy becomes an orchestrator, not just a chatbot.
 - **Subagent demo is the wow moment.** Spawn two agents live, show both running simultaneously.
-- **/btw demo:** start a long-ish task (refactor a file), then use `/btw` mid-task. Show participants the cursor keeps moving while the injected note is incorporated. Remind them `/btw` is a workshop convention for a mid-task steering message, not a built-in slash command.
+- **/btw demo:** start a long-ish task, then type a `/btw` note mid-task. Be accurate about the mechanism: the note is **queued** (not a live interrupt) and, under the `next-invocation` delivery strategy, picked up at the agent's next step to steer the remaining work; to hard-stop, press `Esc`/`ctrl+c`. Remind them `/btw` is a workshop convention (not a built-in command), and that the strongest no-stop co-steering is Artifacts inline comments.
 - **Scheduling:** describe the pattern conceptually, don't demo live (latency makes it awkward in a workshop).
 
 ### Module 3 — ADK Agents with agents-cli (75 min)
