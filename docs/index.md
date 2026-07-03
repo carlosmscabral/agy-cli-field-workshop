@@ -29,9 +29,9 @@ hide:
 
     ---
 
-    The flagship module. Migrate a real legacy codebase (.NET or Java) with strict mode and agent self-onboarding — then layer in the advanced CLI: subagents, `/btw` mid-task steering, and headless `--print` automation.
+    The flagship module. Migrate a real legacy **Java** codebase with strict mode and agent self-onboarding (an optional **.NET** path is included) — then layer in the advanced CLI: subagents, `/btw` mid-task steering, and headless `--print` automation.
 
-    **120 min** · Exercises: ex03, ex04, ex13, ex07, ex08, ex12
+    **120 min** · Exercises: ex04, ex13, ex07, ex08, ex12 · *ex03 (.NET) optional — needs Docker*
 
     [:octicons-arrow-right-24: Start Module 2](legacy-modernization.md)
 

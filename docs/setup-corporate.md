@@ -1,4 +1,4 @@
-# Track B — Corporate Dev Track Setup
+# Track A — Enterprise / Corporate Dev Track Setup
 
 This track is designed for teams running the workshop on **customer-managed corporate physical machines** (such as company laptops running macOS, Windows, or Linux).
 
@@ -67,9 +67,12 @@ gcloud --version
 
 - Follow the official install guide: [cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install).
 
-### 1.4 — Docker & Docker Compose (v2)
+### 1.4 — Docker & Docker Compose (v2) — *optional*
 
-Required to build containerized services and spin up sandbox databases. Check with:
+> [!NOTE]
+> **Only needed for the .NET modernization exercise (ex03).** Modules 1, 3, and 4, and the Java track, do not use Docker — `agents-cli`/SDK deploys build server-side on Cloud Build, not local Docker. Skip this step if you're not running ex03 (the workstation verifier treats Docker as a warning, not a failure).
+
+If you plan to run ex03, check with:
 
 ```bash
 docker --version

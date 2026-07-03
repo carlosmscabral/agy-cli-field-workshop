@@ -54,6 +54,14 @@ uv sync
 
 ### Step 3: Configure Environment
 
+> **Already handled by the scaffold (belt-and-suspenders):** The generated
+> `app/agent.py` already calls `google.auth.default()` and sets
+> `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, and
+> `GOOGLE_GENAI_USE_VERTEXAI=True` at import time, so on the Vertex AI path an
+> agent run works from your ADC without any manual `.env`. Writing the values
+> below is still worth doing — it documents intent, keeps other tooling (e.g.
+> `adk`, notebooks) consistent, and lets you override the project or location.
+
 ```bash
 # If using AI Studio:
 echo 'GOOGLE_API_KEY=your-key-here' >> .env
@@ -77,7 +85,7 @@ echo 'GOOGLE_GENAI_USE_VERTEXAI=True' >> .env
 
 ### Step 1: Define the Tool
 
-Edit `app/tools.py` to add a summary formatting tool:
+The scaffold already creates `app/tools.py` with placeholder example tools. **Edit** it — replace its contents with the summary-formatting tool this agent needs:
 
 ```python
 def format_summary(
@@ -118,15 +126,39 @@ def format_summary(
 
 ### Step 2: Configure the Agent
 
-Edit `app/agent.py`:
+Edit `app/agent.py`. The scaffold ships a working `agent.py` that already
+imports the ADK classes, auto-configures Vertex AI from your ADC, and wires up an
+`App`. Keep that scaffolding and edit the `root_agent` definition (name, model,
+instruction, tools) to match the meeting-notes agent below:
 
 ```python
-from google.adk import Agent
+import datetime
+from zoneinfo import ZoneInfo
+
+from google.adk.agents import Agent
+from google.adk.apps import App
+from google.adk.models import Gemini
+from google.genai import types
+
+import os
+import google.auth
+
+# The scaffold auto-configures Vertex AI from your Application Default
+# Credentials — no manual .env editing is strictly required for this.
+_, project_id = google.auth.default()
+os.environ["GOOGLE_CLOUD_PROJECT"] = project_id
+os.environ["GOOGLE_CLOUD_LOCATION"] = "global"
+os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
+
+
 from app.tools import format_summary
 
 root_agent = Agent(
     name="meeting_notes",
-    model="gemini-3.5-flash",
+    model=Gemini(
+        model="gemini-3.5-flash",
+        retry_options=types.HttpRetryOptions(attempts=3),
+    ),
     instruction="""You are a meeting notes summarizer. Your job is to take raw
 meeting transcripts and produce structured, actionable summaries.
 
@@ -144,7 +176,19 @@ Rules:
 """,
     tools=[format_summary],
 )
+
+app = App(
+    root_agent=root_agent,
+    name="app",
+)
 ```
+
+> **Imports and model wiring**
+>
+> Note the import paths: `Agent` comes from `google.adk.agents`, `App` from
+> `google.adk.apps`, and `Gemini` from `google.adk.models` — **not** a bare
+> `from google.adk import Agent`. The model is set by passing a `Gemini(...)`
+> object (not a plain string), which lets you attach retry options.
 
 ### Step 3: Smoke Test
 
@@ -165,87 +209,131 @@ Verify:
 
 ## Part 3: Write Eval Cases (10 min)
 
-### Step 1: Create the Eval Dataset
+### Step 1: Write the Eval Cases
 
-Edit `tests/eval/datasets/basic-dataset.json`:
+The scaffold ships a starter evalset at `tests/eval/evalsets/basic.evalset.json`
+with generic placeholder cases. **Edit** it — replace the `eval_cases` with
+meeting-notes transcripts. The evalset follows the ADK evaluation format: each
+case has an `eval_id`, a `conversation` (a list of turns, each with a
+`user_content.parts` array), and a `session_input` (`app_name` must match the
+`App` name in `agent.py` — `app`).
 
 ```json
 {
+  "eval_set_id": "basic_eval",
+  "name": "Meeting Notes Evaluation",
+  "description": "Evaluation set for the meeting-notes summarizer agent.",
   "eval_cases": [
     {
-      "eval_case_id": "simple_meeting",
-      "prompt": {
-        "role": "user",
-        "parts": [
-          {
-            "text": "Summarize this meeting transcript:\n\nMeeting: Sprint Planning\nDate: 2026-06-01\n\nAlice: Let's review the backlog. The auth migration is top priority.\nBob: I can take the auth migration. Should be done by end of week.\nCarol: I'll handle the API rate limiting. Need two weeks for that.\nAlice: Agreed. Let's also deprecate the v1 endpoints — Carol, can you add that to your scope?\nCarol: Sure, I'll bundle it with the rate limiting work.\nBob: One more thing — we decided to use Redis for session caching instead of Memcached.\nAlice: Confirmed. Meeting adjourned."
+      "eval_id": "simple_meeting",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Summarize this meeting transcript:\n\nMeeting: Sprint Planning\nDate: 2026-06-01\n\nAlice: Let's review the backlog. The auth migration is top priority.\nBob: I can take the auth migration. Should be done by end of week.\nCarol: I'll handle the API rate limiting. Need two weeks for that.\nAlice: Agreed. Let's also deprecate the v1 endpoints — Carol, can you add that to your scope?\nCarol: Sure, I'll bundle it with the rate limiting work.\nBob: One more thing — we decided to use Redis for session caching instead of Memcached.\nAlice: Confirmed. Meeting adjourned."
+              }
+            ]
           }
-        ]
+        }
+      ],
+      "session_input": {
+        "app_name": "app",
+        "user_id": "eval_user",
+        "state": {}
       }
     },
     {
-      "eval_case_id": "meeting_no_deadlines",
-      "prompt": {
-        "role": "user",
-        "parts": [
-          {
-            "text": "Summarize this meeting:\n\nTeam standup. Dave mentioned he's blocked on the database schema review. Eve said she'll look at it when she gets a chance. Frank reported that the CI pipeline is green. No specific deadlines were discussed."
+      "eval_id": "meeting_no_deadlines",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Summarize this meeting:\n\nTeam standup. Dave mentioned he's blocked on the database schema review. Eve said she'll look at it when she gets a chance. Frank reported that the CI pipeline is green. No specific deadlines were discussed."
+              }
+            ]
           }
-        ]
+        }
+      ],
+      "session_input": {
+        "app_name": "app",
+        "user_id": "eval_user",
+        "state": {}
       }
     },
     {
-      "eval_case_id": "meeting_with_decisions",
-      "prompt": {
-        "role": "user",
-        "parts": [
-          {
-            "text": "Meeting notes: Architecture Review\n\nParticipants: Grace, Heidi, Ivan\n\nGrace proposed moving from monolith to microservices. After discussion, the team decided to start with extracting the payment service first. Heidi will create the service boundary document by next Wednesday. Ivan will set up the new GKE cluster by Friday. They also decided to keep the monolith running in parallel for 3 months during migration. Grace will present the migration timeline to leadership next Monday."
+      "eval_id": "meeting_with_decisions",
+      "conversation": [
+        {
+          "user_content": {
+            "parts": [
+              {
+                "text": "Meeting notes: Architecture Review\n\nParticipants: Grace, Heidi, Ivan\n\nGrace proposed moving from monolith to microservices. After discussion, the team decided to start with extracting the payment service first. Heidi will create the service boundary document by next Wednesday. Ivan will set up the new GKE cluster by Friday. They also decided to keep the monolith running in parallel for 3 months during migration. Grace will present the migration timeline to leadership next Monday."
+              }
+            ]
           }
-        ]
+        }
+      ],
+      "session_input": {
+        "app_name": "app",
+        "user_id": "eval_user",
+        "state": {}
       }
     }
   ]
 }
 ```
 
-### Step 2: Configure Metrics
+### Step 2: Configure the Judge
 
-Edit `tests/eval/eval_config.yaml`:
+Grading is configured in `tests/eval/eval_config.json` (JSON, not YAML). The
+scaffold ships a rubric-based criterion,
+`rubric_based_final_response_quality_v1`, where you set a `threshold`, the
+`judgeModelOptions.judgeModel`, and a list of `rubrics` the judge scores the
+response against. **Edit** it to add meeting-notes-specific rubrics:
 
-```yaml
-metrics_to_run:
-  - multi_turn_task_success
-  - multi_turn_tool_use_quality
-  - final_response_quality
-  - meeting_summary_quality
-
-custom_metrics:
-  - name: meeting_summary_quality
-    # Optional: override the judge model for this custom metric.
-    # Must be a fully-qualified resource path. Omit to use the service default autorater.
-    judge_model: projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/gemini-3.1-flash-lite
-    prompt_template: |
-      Evaluate the agent's meeting summary on these criteria (1-5 each):
-
-      1. **Completeness**: Are all action items from the transcript captured?
-      2. **Attribution**: Does every action item have an assignee?
-      3. **Deadlines**: Are deadlines captured or correctly marked as TBD?
-      4. **Decisions**: Are key decisions listed accurately?
-      5. **No hallucination**: Does the summary contain ONLY information from the transcript?
-
-      Transcript/Prompt: {prompt}
-      Agent response: {response}
-      Full trace: {agent_data}
-
-      Return JSON: {"score": <1-5 average>, "explanation": "<detailed reasoning>"}
+```json
+{
+  "criteria": {
+    "rubric_based_final_response_quality_v1": {
+      "threshold": 0.8,
+      "judgeModelOptions": {
+        "judgeModel": "gemini-flash-latest",
+        "numSamples": 1
+      },
+      "rubrics": [
+        {
+          "rubricId": "completeness",
+          "rubricContent": { "textProperty": "All action items from the transcript are captured in the summary." }
+        },
+        {
+          "rubricId": "attribution",
+          "rubricContent": { "textProperty": "Every action item has an assignee (or is explicitly marked 'Unassigned')." }
+        },
+        {
+          "rubricId": "deadlines",
+          "rubricContent": { "textProperty": "Deadlines are captured accurately, or correctly marked as 'TBD' when none was stated." }
+        },
+        {
+          "rubricId": "decisions",
+          "rubricContent": { "textProperty": "Key decisions from the meeting are listed accurately and concretely." }
+        },
+        {
+          "rubricId": "no_hallucination",
+          "rubricContent": { "textProperty": "The summary contains ONLY information present in the transcript — no fabricated attendees or actions." }
+        }
+      ]
+    }
+  }
+}
 ```
 
-> **Agent Platform Judge Model Configuration**
+> **Judge model and threshold**
 >
-> 1. **Default autorater**: Built-in metrics (e.g. `multi_turn_task_success`, `final_response_quality`) use the GenAI Evaluation Service's server-side autorater — you cannot override the judge model for these. For custom `LLMMetric` entries, omitting `judge_model` also uses the service default.
-> 2. **Resource path format**: Custom `LLMMetric` entries accept an optional `judge_model` field. It **must** be a fully-qualified path: `projects/<PROJECT_ID>/locations/<LOCATION>/publishers/google/models/<MODEL_NAME>`. Short names like `gemini-3.1-flash-lite` alone will fail with `400 INVALID_ARGUMENT`. See the [Agent Platform Judge Model Configuration](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/configure-judge-model) documentation.
-> 3. **Model choice**: Use `gemini-3.1-flash-lite` for cost-efficient judging or `gemini-3.1-pro-preview` for higher-quality rubric evaluation. Do not use deprecated models (`gemini-1.5-flash`, `gemini-1.5-pro`).
+> 1. **`judgeModel`**: The scaffold defaults to `gemini-flash-latest`, a cost-efficient autorater. You can point it at a stronger model for higher-quality rubric evaluation. Do not use deprecated models (`gemini-1.5-flash`, `gemini-1.5-pro`).
+> 2. **`threshold`**: A case passes when its rubric score meets or exceeds this value (`0.8` by default). Raise it to make grading stricter.
+> 3. **`rubrics`**: Each rubric is a single, checkable statement in `rubricContent.textProperty`. Keep them specific and independent — the judge scores the response against every rubric in the list.
 
 ### Step 3: Run the Eval
 
@@ -256,9 +344,10 @@ agents-cli eval run --all
 
 `eval run` wraps `adk eval` — it runs inference on every eval case in
 `tests/eval/evalsets/` (use `--all` to cover all sets, or `--evalset <path>`
-for a single one) and grades the results against your configured metrics.
+for a single one) and grades the results against the rubric criteria in
+`tests/eval/eval_config.json`.
 
-Review the output. If any metric scores below threshold, proceed to Part 4.
+Review the output. If any case scores below the configured `threshold`, proceed to Part 4.
 
 ---
 
@@ -328,10 +417,11 @@ agents-cli scaffold enhance . --cicd-runner github_actions
 ### Add More Eval Cases
 
 Grow coverage by adding cases to the evalset JSON under `tests/eval/evalsets/`.
-Each case follows the same shape as the ones in `basic-dataset.json` — a unique
-`eval_case_id` plus a `prompt` with the user's transcript. Add a few that stress
-different situations (no deadlines, many attendees, ambiguous assignees), then
-re-run `agents-cli eval run --all` to score them.
+Each case follows the same shape as the ones in `basic.evalset.json` — a unique
+`eval_id` plus a `conversation` whose `user_content.parts` carries the user's
+transcript. Add a few that stress different situations (no deadlines, many
+attendees, ambiguous assignees), then re-run `agents-cli eval run --all` to
+score them.
 
 > **Tip:** You can also capture real interactions from `agents-cli playground`
 > and save them into an evalset instead of writing every case by hand.
@@ -342,7 +432,7 @@ Open an agy session and say:
 
 ```text
 > Use agents-cli to improve my meeting-notes agent.
-  The eval scores for meeting_summary_quality are low.
+  The rubric-based eval scores are below threshold.
   Analyze the failures and fix them.
 ```
 
@@ -356,8 +446,8 @@ Watch agy load the eval skill, run `agents-cli eval run` to score the agent, rea
 - [ ] `format_summary` tool defined in `app/tools.py`
 - [ ] Agent instruction includes clear workflow and rules
 - [ ] Smoke test passes with `agents-cli run`
-- [ ] Three eval cases written in `basic-dataset.json`
-- [ ] Custom `meeting_summary_quality` metric defined
+- [ ] Three eval cases written in `tests/eval/evalsets/basic.evalset.json`
+- [ ] Rubric criteria configured in `tests/eval/eval_config.json`
 - [ ] `agents-cli eval run` runs and grades the eval cases successfully
 - [ ] At least one eval-fix iteration completed with `eval compare` showing improvement
 

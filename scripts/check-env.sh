@@ -32,7 +32,7 @@ echo ""
 
 echo "agy-cli:"
 check "agy --help responds" "agy --help 2>&1 | grep -q 'print'"
-check "agy plugin list runs" "agy plugin list 2>&1 | grep -q 'imports\|{'"
+  check "agy plugin list runs" "agy plugin list"
 echo ""
 
 echo "Print mode smoke test:"

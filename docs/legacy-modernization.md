@@ -3,7 +3,7 @@
 <div class="module-header" markdown>
 **Duration:** ~75 minutes  
 **Goal:** Migrate a legacy application safely using Antigravity CLI primitives — strict permissions gating, agent self-onboarding, parallel subagent analysis, hooks as guardrails, and `/rewind` as your safety net. The module then continues into the [Advanced CLI](multi-agent-advanced.md) half — subagents, mid-task steering, and non-interactive automation.  
-**Exercise PRDs:** [.NET Modernization](exercises/ex03_dotnet_modernization.md) · [Java Upgrade](exercises/ex04_java_upgrade.md)
+**Exercise PRD:** [Java Upgrade](exercises/ex04_java_upgrade.md) (primary) · [.NET Modernization](exercises/ex03_dotnet_modernization.md) (optional — requires Docker)
 </div>
 
 > 📖 Sources: [Permissions](https://antigravity.google/docs/permissions) · [Strict Mode](https://antigravity.google/docs/strict-mode) · [Subagents](https://antigravity.google/docs/subagents) · [Skills](https://antigravity.google/docs/skills) · [Hooks](https://antigravity.google/docs/hooks) · [cli-features](https://antigravity.google/docs/cli-features) · [cli-using](https://antigravity.google/docs/cli-using)
@@ -424,15 +424,15 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 <div class="exercise-card" markdown>
 
-### :material-file-document: Exercises 3 & 4: Legacy Modernization
+### :material-file-document: Legacy Modernization Exercise
 
-**Files:** [`ex03_dotnet_modernization.md`](exercises/ex03_dotnet_modernization.md) · [`ex04_java_upgrade.md`](exercises/ex04_java_upgrade.md)  
+**Primary:** [`ex04_java_upgrade.md`](exercises/ex04_java_upgrade.md) (Maven — no Docker) · **Optional:** [`ex03_dotnet_modernization.md`](exercises/ex03_dotnet_modernization.md) (requires Docker)  
 **Duration:** 45 min  
 **Objective:** Walk through a full migration using the AGY primitives from this module.
 
-**Choose your track:**
+**Choose your approach** — both work on the Java lab (and the optional .NET lab):
 
-#### Track A: Plan-First (Strict → Investigate → Execute)
+#### Path A: Plan-First (Strict → Investigate → Execute)
 
 1. Set `/permissions` to `strict` — lock all writes
 2. Give the agent a full investigation mandate (Section 2.1)
@@ -443,7 +443,7 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 7. Use `/rewind` if the agent drifts outside scope
 8. Rename the session: `/rename "Migration — Phase 1 complete"`
 
-#### Track B: Subagent-First (Parallel Analysis → Context → Execute)
+#### Path B: Subagent-First (Parallel Analysis → Context → Execute)
 
 1. Spawn three parallel subagents: security scan, dependency map, test coverage
 2. Monitor via `/agents` — use `ctrl+j` and `ctrl+k` for approvals

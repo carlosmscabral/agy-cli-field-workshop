@@ -16,14 +16,14 @@ Run an automated code review with terminal restrictions enabled:
 
 ```bash
 agy --sandbox \
-    --print "Review this codebase and produce a markdown report with a severity for each finding. Look for: (1) values hardcoded in source that should be read from the environment, (2) error handling that hides failures, (3) endpoints that do not validate their inputs, (4) any committed .env or config files that should not be in version control. Cite file:line and suggest a fix for each." \
+    --print "As a senior engineer doing a code review, read this codebase and write a markdown report of concrete improvements, each with a severity and a suggested fix. Focus on: configuration values hard-coded in source that belong in environment variables, error handling that hides failures, request handlers that don't validate their inputs, and any config or .env files that shouldn't be committed. Cite file:line for each." \
     --print-timeout 5m > audit-sandbox.md
 
 cat audit-sandbox.md
 ```
 
 > [!TIP]
-> **Prompt framing matters.** Ask for a constructive *code review / hardening report* ("find values that should move to env vars", "flag error handling that hides failures") rather than a "scan for vulnerabilities / secrets." Phrased as an adversarial vulnerability scan, the model may decline; phrased as remediation-focused review it surfaces the same issues (hardcoded credentials, swallowed errors, unvalidated inputs) with fixes.
+> **Prompt framing matters.** Ask for a constructive *code review* ("improvements to make", "values that should move to env vars") — **not** an adversarial "scan for vulnerabilities / secrets", which reliably triggers a refusal. Note the model is nondeterministic: even a well-framed review prompt may *occasionally* decline. If `audit-sandbox.md` comes back with a one-line refusal instead of findings, just **re-run the command** (or lightly rephrase) — it succeeds on retry.
 
 Key properties of this run:
 

@@ -43,10 +43,10 @@ nav:
   - Home: index.md
   - "📦 Pre-Work":
       - Introduction & Tracks: setup.md
-      - Track A - Cloud Shell Setup: setup-cloud-shell.md
-      - Track B - Corporate Dev Setup:
+      - "Track A - Enterprise / Corporate (GCP + Vertex AI)":
           - IT Admin Provisioning (Admin): setup-enterprise-admin.md
           - Workstation Setup (Dev): setup-corporate.md
+      - Track B - Cloud Shell Sandbox: setup-cloud-shell.md
   - "🛠️ Workshop":
       - "1. Antigravity CLI Fundamentals": sdlc-productivity.md
       - "2. Legacy Modernization & Advanced CLI ⭐":
@@ -62,8 +62,8 @@ nav:
           - "4. Connect Tools with MCP (ex16)": exercises/ex16_mcp_basics.md
           - "5. Sandbox & Governance (ex09)": exercises/ex09_sandbox_governance.md
       - "Module 2 - Modernization & Advanced CLI":
-          - "6. .NET Modernization (ex03)": exercises/ex03_dotnet_modernization.md
-          - "7. Java Upgrade (ex04)": exercises/ex04_java_upgrade.md
+          - "6. Java Upgrade (ex04)": exercises/ex04_java_upgrade.md
+          - "7. .NET Modernization - Optional (ex03)": exercises/ex03_dotnet_modernization.md
           - "8. Migration Walkthrough (ex13)": exercises/ex13_migration_walkthrough.md
           - "9. Subagents (ex07)": exercises/ex07_subagents.md
           - "10. Mid-Task Steering with /btw (ex08)": exercises/ex08_btw_scheduling.md
