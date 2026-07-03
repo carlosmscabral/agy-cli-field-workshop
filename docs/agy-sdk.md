@@ -540,42 +540,41 @@ gcloud run deploy my-code-reviewer \
 
 ---
 
-## Hands-On Exercises
+## Module 4 Exercises
+
+> **How the module runs:** ① the facilitator presents the concepts and demos above → ② you work the exercises below **on your own** → ③ the facilitator wraps up by walking through each exercise's solution (live or pre-done) and answering questions. Do the **Core** exercises in order; **Optional** ones are stretch goals if you finish early.
+
+### Core
 
 <div class="exercise-card" markdown>
 
-### :material-code-braces: Exercise 5: Your First AGY Agent
+### :material-code-braces: Your First AGY Agent &nbsp;·&nbsp; `Core`
 
 **File:** [`ex05_first_agent.md`](exercises/ex05_first_agent.md)  
 **Duration:** 45 min  
-**Build:** A **Code Review Agent** that reads files, identifies issues, and produces a structured review report.
-
-**What you'll implement:**
-
-1. Define 3 tools: `read_file`, `list_directory`, `record_finding` (with `ToolContext`)
-2. Write a system prompt with a review rubric (loaded from a `SKILL.md`)
-3. Configure `LocalAgentConfig` with `policy.allow_all()` and `CapabilitiesConfig`
-4. Add a `@hooks.pre_tool_call_decide` security guard
-5. Run with streaming output and structured `ReviewResult` Pydantic schema
+**Objective:** Build a read-only code-review agent with the Antigravity SDK.
 
 </div>
 
 <div class="exercise-card" markdown>
 
-### :material-graph: Exercise 6: Multi-Agent Pipeline
+### :material-graph: Multi-Agent Pipeline &nbsp;·&nbsp; `Core`
 
 **File:** [`ex06_multi_agent_pipeline.md`](exercises/ex06_multi_agent_pipeline.md)  
 **Duration:** 45 min  
-**Build:** A **Write-then-Audit Pipeline** — a Technical Writer agent produces a document, then a Compliance Analyst audits it for GDPR gaps.
+**Objective:** Compose a writer→analyst pipeline; parallelize and resume sessions.
 
-**What you'll implement:**
+</div>
 
-1. Build a `technical_writer` agent with a GDPR SKILL.md loaded via `skills_paths`
-2. Build a `compliance_analyst` agent with `response_schema=ComplianceReport`
-3. Wire them sequentially: output of writer passed as input to analyst
-4. Add a parallel variant using `asyncio.gather` for simultaneous draft + legal check
-5. Add session resume: analyst reads the writer's `conversation_id` to load context
-6. Deploy to Cloud Run as `my-pipeline` using `gcloud run deploy`
+### Optional
+
+<div class="exercise-card" markdown>
+
+### :material-timer-cog: Your First Sidecar (SDK Triggers) &nbsp;·&nbsp; `Optional`
+
+**File:** [`ex11_first_sidecar.md`](exercises/ex11_first_sidecar.md)  
+**Duration:** 20 min  
+**Objective:** Build a scheduled / file-watch sidecar with the SDK triggers API.
 
 </div>
 

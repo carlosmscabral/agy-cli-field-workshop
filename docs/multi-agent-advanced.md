@@ -272,45 +272,39 @@ This is multi-agent incident triage — two parallel investigations, steerable m
 
 ---
 
-## Advanced CLI Exercises
+## Module 2 Exercises — Advanced CLI
+
+> **How the module runs:** ① the facilitator presents the concepts and demos above → ② you work the exercises below **on your own** → ③ the facilitator wraps up by walking through each exercise's solution (live or pre-done) and answering questions. Do the **Core** exercises in order; **Optional** ones are stretch goals if you finish early.
+
+### Core
 
 <div class="exercise-card" markdown>
 
-### :material-file-document: Exercise 7: Subagents
+### :material-account-group: Subagents &nbsp;·&nbsp; `Core`
 
-**File:** [`ex07_subagents.md`](exercises/ex07_subagents.md)
-**Duration:** 20 min
-**Objective:** Spawn a parallel audit team. Practice the adversarial reviewer pattern.
-
-</div>
-
-<div class="exercise-card" markdown>
-
-### :material-file-document: Exercise 8: /btw & Scheduling
-
-**File:** [`ex08_btw_scheduling.md`](exercises/ex08_btw_scheduling.md)
-**Duration:** 20 min
-**Objective:** Use /btw to steer a long-running task. Schedule a recurring code quality report.
-
-</div>
-
-<div class="exercise-card" markdown>
-
-### :material-file-document: Exercise 9: Sandbox Governance
-
-**File:** [`ex09_sandbox_governance.md`](exercises/ex09_sandbox_governance.md)  
-**Duration:** 15 min  
-**Objective:** Configure sandbox mode in settings.json and test with the permissions model.
-
-</div>
-
-<div class="exercise-card" markdown>
-
-### :material-file-document: Exercise 14: Dataplex Metadata Curation (Optional)
-
-**File:** [`exercises/ex14_dataplex_metadata_steward.md`](exercises/ex14_dataplex_metadata_steward.md)  
+**File:** [`ex07_subagents.md`](exercises/ex07_subagents.md)  
 **Duration:** 20 min  
-**Objective:** Ground the agent on official docs via the Developer Knowledge MCP, discover untagged data lake entries, and curate BigQuery tables inside the `agy` CLI using Google's native managed remote MCP servers.
+**Objective:** Spawn parallel subagents and an adversarial reviewer; manage them via /agents.
+
+</div>
+
+<div class="exercise-card" markdown>
+
+### :material-steering: Mid-Task Steering with /btw &nbsp;·&nbsp; `Core`
+
+**File:** [`ex08_btw_scheduling.md`](exercises/ex08_btw_scheduling.md)  
+**Duration:** 20 min  
+**Objective:** Steer a running task mid-flight using the /btw convention.
+
+</div>
+
+<div class="exercise-card" markdown>
+
+### :material-console-line: Headless --print Pipelines &nbsp;·&nbsp; `Core`
+
+**File:** [`ex12_print_mode_pipeline.md`](exercises/ex12_print_mode_pipeline.md)  
+**Duration:** 20 min  
+**Objective:** Chain non-interactive `agy -p` calls into an automation pipeline.
 
 </div>
 
