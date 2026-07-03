@@ -65,6 +65,7 @@ agy install        # Configure PATH and shell aliases
 | `/rename <name>` | Conversation | Rename the active conversation thread |
 | `/planning` | Artifacts | Enter planning mode — produce an Implementation Plan (and Task List) before writing code |
 | `/artifact` (`/artifacts`) | Artifacts | View the artifacts for the current session |
+| `/diff` | Review | Open agy's built-in diff view of the changes made in your session |
 | `/permissions` | Autonomy | Set autonomy level: `request-review`, `always-proceed`, `strict` |
 | `/grill-me` | Autonomy | Have agy ask **you** clarifying questions to align on the spec/plan *before* it implements |
 | `/goal` | Autonomy | Run autonomously to completion — agy auto-approves its own plan and won't stop for input *(reported — verify against the CLI)* |

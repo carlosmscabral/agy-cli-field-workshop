@@ -139,6 +139,7 @@ Official source: [cli-features — Core Slash Commands](https://antigravity.goog
 | `/tasks` | Monitor and terminate background tasks | cli-features uid 5_248–5_250 |
 | `/skills` | Browse available agent skills | cli-features uid 5_251–5_253 |
 | `/mcp` | Manage MCP servers | cli-features uid 5_254–5_256 |
+| `/diff` | Open the built-in diff view of the session's changes | **Confirmed manually on v1.0.16** (2026-07-03) |
 | `/open <path>` | Open a file in the external editor | cli-features uid 5_257–5_259 |
 | `/usage` | Inline interactive help manual | cli-features uid 5_260–5_262 |
 | `/logout` | Log out and clear cached credentials | cli-features uid 5_263–5_265 |
@@ -148,6 +149,8 @@ Official source: [cli-features — Core Slash Commands](https://antigravity.goog
 | `/fork` | Spin up a separate parallel workspace *(quick tips only)* | cli-using uid 3_221 |
 
 ### ❌ Slash commands that do NOT exist
+
+> ⚠️ **Do not use `strings <binary>` to decide whether a slash command exists.** Slash commands are registered in data, not emitted as literal `/name` strings, so grep gives false negatives — `/planning` and `/diff` both looked "absent" in the binary yet are real (confirmed by live testing). Only mark a command non-existent after checking the [Command Reference](https://antigravity.google/docs/cli-reference) (via Chrome DevTools MCP) or trying it live.
 
 | Command | Status |
 |:--|:--|

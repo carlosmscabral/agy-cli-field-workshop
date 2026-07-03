@@ -130,13 +130,19 @@ If any tests fail, feed the output back to the agent:
 
 ### Exercise: Review and Diff
 
-Before staging your changes, inspect the modifications you have made during the session. Use the shell escape (`!`) to run `git diff` without leaving `agy`:
+`agy` has a **built-in diff view** — type the `/diff` slash command to review the changes from your session inside the TUI:
+
+```text
+> /diff
+```
+
+Prefer raw `git`? Use the shell escape (`!`) to run `git diff` without leaving `agy`:
 
 ```text
 > !git diff
 ```
 
-You can also ask `agy` to walk you through the changes in natural language:
+The difference: **`/diff`** opens agy's native diff viewer, integrated with its change-review UI; **`!git diff`** simply runs `git` and prints the plain unified diff into the session. You can also ask `agy` to walk you through the changes in natural language:
 
 ```text
 > Show me the diff of my changes and summarize what I modified.
