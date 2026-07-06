@@ -304,20 +304,20 @@ You can also write custom directives as rule files under `.agents/rules/*.md` �
 
 Skills and rules customize how `agy` *thinks*. **MCP (Model Context Protocol)** servers change what it can *reach* — but the value isn't raw capability: `agy` already reads files, runs shell, and hits URLs, so wrapping those in MCP adds nothing. MCP's real payoff is **governance** — the server owns the connection and credentials and exposes only *scoped, structured* operations, so you can grant the agent a specific capability **without handing it raw shell or secrets**, even when shell is switched off.
 
-MCP servers are declared in a JSON config file, not via an `agy` subcommand. This build reads them from the **global** `~/.gemini/config/mcp_config.json` (all projects) or from a **plugin**'s `plugins/<name>/mcp_config.json`:
+MCP servers are declared in a JSON config file, not via an `agy` subcommand — in a workspace `.agents/mcp_config.json` (this project), the global `~/.gemini/config/mcp_config.json` (all projects), or a plugin's `mcp_config.json`:
 
 ```json
 {
   "mcpServers": {
     "billing-db": {
       "command": "uvx",
-      "args": ["mcp-server-sqlite", "--db-path", "/absolute/path/to/billing.db"]
+      "args": ["mcp-server-sqlite", "--db-path", "./billing.db"]
     }
   }
 }
 ```
 
-A local server runs as a subprocess (`command` + `args`); a remote server uses `serverUrl` instead — and there the server, not the agent, holds the credentials. (The transport is inferred from which field you set; there is no separate `type` field.) Run `/mcp` inside the TUI to confirm a server is connected and see the scoped tools it exposes.
+A local server runs as a subprocess (`command` + `args`); a remote server uses `serverUrl` instead — and there the server, not the agent, holds the credentials. (The transport is inferred from which field you set; there is no separate `type` field.) Run `/mcp` inside the TUI to confirm a server is connected and see the scoped tools it exposes — and note that a single **broken** server (often a stale global one) can suppress the whole list, so check for errored servers if yours is missing.
 
 > **Try it:** [Exercise: Governed Access with MCP](exercises/ex16_mcp_basics.md) connects agy to a billing database, denies shell with `strict` mode (`/config` → Tool Permissions), and has the agent answer business questions *only* through the MCP server's query tools.
 

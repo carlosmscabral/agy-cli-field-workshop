@@ -134,7 +134,7 @@ Each project can have a `.agents/settings.json` file to manage fine-grained beha
 
 ## 2.4 — Registering Local MCP Servers (`mcp_config.json`) <span class="duration-badge">10 min</span>
 
-You can expose custom developer tools (e.g., issue trackers, database browsers, or compliance scanners) via **Model Context Protocol (MCP)**. This build loads MCP servers from the **global** `~/.gemini/config/mcp_config.json` or from a **plugin**'s `mcp_config.json` (a workspace `.agents/mcp_config.json` isn't surfaced by all builds — see [Exercise 16](exercises/ex16_mcp_basics.md)). Register them like this:
+You can expose custom developer tools (e.g., issue trackers, database browsers, or compliance scanners) via **Model Context Protocol (MCP)**. Register workspace-specific servers in `.agents/mcp_config.json` (or globally in `~/.gemini/config/mcp_config.json`, or inside a plugin):
 
 ```json
 {

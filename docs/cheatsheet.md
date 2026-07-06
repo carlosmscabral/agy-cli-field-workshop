@@ -195,11 +195,9 @@ Minimal `sidecar.json` — scheduled recurring task:
 
 ```bash
 # Project config directory:
-.agents/                    # settings.json (permissions + hooks), rules/, skills/, plugins/, agents/
-                            #   (MCP: bundle in a plugin's mcp_config.json — a bare .agents/mcp_config.json
-                            #    isn't surfaced by all builds; use the global file below instead)
+.agents/                    # settings.json (permissions + hooks), mcp_config.json, rules/, skills/, plugins/, agents/
 
-# Global config directory (MCP servers load from here):
+# Global config directory:
 ~/.gemini/config/           # settings.json (permissions + hooks), mcp_config.json, rules/, skills/, plugins/
 
 # User settings:

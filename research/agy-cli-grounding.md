@@ -501,14 +501,12 @@ Global context file: `~/.gemini/GEMINI.md` (uid 7_241–7_243)
 
 ```
 .agents/
+  mcp_config.json  # Workspace MCP servers (works — see §15)
   rules/           # rules/<name>.md — each needs `trigger` frontmatter (see Rules below); a bare rules.md is NOT loaded
   skills/          # Workspace skills (skills/<name>/SKILL.md)
   agents/          # Custom subagent definitions
   plugins/         # Workspace plugins (plugins/<name>/ with plugin.json, mcp_config.json, hooks.json, rules/, skills/)
 ```
-
-> ⚠️ A bare `.agents/mcp_config.json` is **not** read by all builds (see §15). MCP servers load from the global
-> `~/.gemini/config/mcp_config.json` or from a plugin's `mcp_config.json`.
 
 ### Rules (`.agents/rules/*.md`) — verified 2026-07-06
 
@@ -548,23 +546,24 @@ Source: [cli-using](https://antigravity.google/docs/cli-using)
 
 Source: built-in `agy-customizations/docs/mcp_servers.md` (shipped with the binary) · [MCP](https://antigravity.google/docs/mcp) · [gcli-migration](https://antigravity.google/docs/gcli-migration) uid 7_293–7_320
 
-MCP configs are stored in a **separate `mcp_config.json`** file, not inside `settings.json`.
-
-**Ground truth (2026-07-06, from the binary's built-in MCP doc + live `/mcp` behavior):** this build discovers MCP servers from only **two** locations:
+MCP configs are stored in a **separate `mcp_config.json`** file, not inside `settings.json`. **Three** locations (all verified working, 2026-07-06):
 
 | Scope | Path | Notes |
 |:--|:--|:--|
-| **Global** | `~/.gemini/config/mcp_config.json` | Active in all sessions. **This is what the workshop uses.** |
+| **Workspace** | `.agents/mcp_config.json` | Scoped to the project; relative paths (e.g. `./billing.db`) resolve against the repo root. **This is what the workshop uses.** |
+| **Global** | `~/.gemini/config/mcp_config.json` | Active in all sessions. |
 | **Plugin** | `plugins/<name>/mcp_config.json` (e.g. `.agents/plugins/…`) | Active only while the plugin is enabled; shows under the "Plugins" group in `/mcp`. |
 
-> ⚠️ **Workspace `.agents/mcp_config.json` caveat:** the live docs (antigravity.google/docs/mcp) advertise a
-> per-workspace `.agents/mcp_config.json`, but the binary's built-in `mcp_servers.md` lists **only** Global +
-> Plugin, and a workspace `.agents/mcp_config.json` did **not** appear under `/mcp` on the tested build
-> (user-verified 2026-07-06 — moving the same config to `~/.gemini/config/mcp_config.json` made it appear).
-> Prefer the global file (or a plugin) for anything that must actually load.
+> ⚠️ **One bad server hides them all (root cause of a 2026-07-06 investigation).** If a server in *any*
+> config fails to start / is misconfigured — commonly a stale entry in the **global**
+> `~/.gemini/config/mcp_config.json` — `/mcp` can fail to list the *other*, healthy servers, including a valid
+> workspace `.agents/mcp_config.json`. This originally looked like "workspace configs don't load"; it was actually
+> a broken global server poisoning the whole list. Fix/remove the errored server and the rest reappear.
+> (Correction: the earlier claim that `.agents/mcp_config.json` isn't read was **wrong** — it works.)
 
-**Schema (from the built-in doc):** stdio = `{ "command", "args", "env" }`; remote = `{ "serverUrl" }`. There is
-**no `type` field** — the transport is inferred from `command` vs `serverUrl`.
+**Schema:** stdio = `{ "command", "args", "env" }`; remote = `{ "serverUrl" }`. The built-in `mcp_servers.md` shows
+**no `type` field** — the transport is inferred from `command` vs `serverUrl` — though a stray `type` appears to be
+tolerated (the original workshop configs included `"type": "stdio"` and still loaded).
 
 ```json
 {

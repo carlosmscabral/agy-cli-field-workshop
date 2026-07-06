@@ -16,7 +16,7 @@ Work through each section systematically:
 
 ### 1. Config File Locations
 - [ ] `settings.json` is at `~/.gemini/config/settings.json` (not `~/.gemini/settings.json`)
-- [ ] MCP servers are defined in `mcp_config.json` at `~/.gemini/config/` or in a plugin (a bare workspace `.agents/mcp_config.json` isn't surfaced by all builds)
+- [ ] MCP servers are defined in `mcp_config.json` (workspace `.agents/mcp_config.json`, global `~/.gemini/config/mcp_config.json`, or a plugin) — not inside `settings.json`
 - [ ] Project rules are in `.agents/rules/<name>.md` with `trigger` frontmatter (a bare `.agents/rules.md` is not loaded; root `AGENTS.md`/`GEMINI.md` still work for always-on context)
 
 ### 2. MCP Server Config Format
