@@ -194,14 +194,14 @@ Minimal `sidecar.json` — scheduled recurring task:
 ## Workspace & Context
 
 ```bash
-# Project config directory:
-.agents/                    # settings.json (permissions + hooks), mcp_config.json, rules/, skills/, plugins/, agents/
+# Project config directory (NO settings.json — permissions are global-only, by design):
+.agents/                    # mcp_config.json, hooks.json, rules/, skills/, plugins/, agents/
 
-# Global config directory:
-~/.gemini/config/           # settings.json (permissions + hooks), mcp_config.json, rules/, skills/, plugins/
+# Global customization directory:
+~/.gemini/config/           # mcp_config.json, hooks.json, rules/, skills/, plugins/
 
-# User settings:
-~/.gemini/antigravity/settings.json
+# Settings + permissions (global, user-owned — .agents/settings.json is deliberately NOT read):
+~/.gemini/antigravity-cli/settings.json
 
 # Context file (hierarchical: cwd → parent → home):
 AGENTS.md

@@ -91,19 +91,20 @@ for hook_file in samples/hooks/*.sh; do
   fi
 done
 
-# --- 4. Hooks referenced in settings.json should exist in samples/hooks/ ---
-log_section "  Checking samples/configs/settings.json ↔ hook file alignment..."
+# --- 4. Hooks referenced in hooks.json/settings.json should exist in samples/hooks/ ---
+log_section "  Checking samples/configs hooks ↔ hook file alignment..."
 
-if [ -f "samples/configs/settings.json" ]; then
-  grep -oE 'hooks/[a-zA-Z0-9_-]+\.sh' samples/configs/settings.json | sort -u | while read -r hook_ref; do
+for cfg in samples/configs/hooks.json samples/configs/settings.json; do
+  [ -f "$cfg" ] || continue
+  grep -oE 'hooks/[a-zA-Z0-9_-]+\.sh' "$cfg" | sort -u | while read -r hook_ref; do
     hook_basename=$(basename "$hook_ref" .sh)
     if [ -f "samples/hooks/${hook_basename}.sh" ]; then
-      log_ok "settings.json hook '${hook_basename}' has matching script"
+      log_ok "$(basename "$cfg") hook '${hook_basename}' has matching script"
     else
-      log_fail "settings.json references '${hook_ref}' but samples/hooks/${hook_basename}.sh not found"
+      log_fail "$(basename "$cfg") references '${hook_ref}' but samples/hooks/${hook_basename}.sh not found"
     fi
   done
-fi
+done
 
 # --- 5. AGY CLI hook event names — flag any Gemini CLI leftovers ---
 log_section "  Checking for stale Gemini CLI hook event names..."

@@ -1,0 +1,61 @@
+{
+  "session-context": {
+    "PreInvocation": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$AGY_PROJECT_DIR/.agents/hooks/session-context.sh",
+            "timeout": 3000,
+            "description": "Injects project state (branch, dirty files) at session start"
+          }
+        ]
+      }
+    ]
+  },
+  "secret-scanner": {
+    "PreToolUse": [
+      {
+        "matcher": "write_file|edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$AGY_PROJECT_DIR/.agents/hooks/secret-scanner.sh",
+            "timeout": 2000,
+            "description": "Blocks hardcoded credentials, steers toward env vars"
+          }
+        ]
+      }
+    ]
+  },
+  "git-context": {
+    "PreToolUse": [
+      {
+        "matcher": "write_file|edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$AGY_PROJECT_DIR/.agents/hooks/git-context-injector.sh",
+            "timeout": 3000,
+            "description": "Injects recent git history for the target file"
+          }
+        ]
+      }
+    ]
+  },
+  "test-nudge": {
+    "PostToolUse": [
+      {
+        "matcher": "write_file|edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$AGY_PROJECT_DIR/.agents/hooks/test-nudge.sh",
+            "timeout": 1000,
+            "description": "Reminds agent to consider running tests after source changes"
+          }
+        ]
+      }
+    ]
+  }
+}

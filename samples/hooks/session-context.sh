@@ -8,7 +8,7 @@
 # awareness of what's in-flight.
 #
 # AGY CLI hook event: PreInvocation
-# Register in: .agents/hooks.json or settings.json under "PreInvocation"
+# Register in: .agents/hooks.json (workspace) under "PreInvocation"
 
 input=$(cat)
 cwd=$(echo "$input" | jq -r '.cwd' 2>/dev/null)

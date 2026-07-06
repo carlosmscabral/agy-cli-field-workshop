@@ -10,10 +10,14 @@
 > **Maintainer:** Update this doc whenever you verify a new claim against official sources.
 > Add the source URL + uid node reference with every new entry.
 >
-> **Config home (ground truth, 2026-07-06):** the global customization root is **`~/.gemini/config/`** (holds
-> `settings.json`, `mcp_config.json`, `skills/`, `rules/`, `plugins/`, `config.json`). `~/.gemini/antigravity-cli/`
-> is the binary's *install* dir (built-in skills/docs), **not** the user config home. Per the built-in
-> `agy-customizations/docs/json_configs.md`, the customization root is `.agents/` (project) or `~/.gemini/config/` (global).
+> **Config roots (ground truth, 2026-07-06 — two distinct roots):**
+> - **Customizations** (mcp_config.json, hooks.json, skills/, rules/, plugins/, config.json) live in the customization
+>   root: **`.agents/`** (project) or **`~/.gemini/config/`** (global) — per built-in `json_configs.md`.
+> - **settings.json** (colorScheme, telemetry, gcp, trustedWorkspaces, and the **permissions/allow-list**) lives at
+>   **`~/.gemini/antigravity-cli/settings.json`** (verified on disk). It is **global-only** — a per-workspace
+>   `.agents/settings.json` is **deliberately NOT read** (security: an untrusted cloned repo must not be able to ship
+>   a settings file that auto-approves destructive commands, disables the sandbox, or weakens guardrails).
+> - `~/.gemini/antigravity-cli/` also holds the binary's *install* files (built-in skills/docs).
 
 ---
 
@@ -308,9 +312,13 @@ Source: [cli-features](https://antigravity.google/docs/cli-features) — uid 5_2
 
 ## 9. Settings File
 
-Location: `~/.gemini/config/settings.json`
+Location: **`~/.gemini/antigravity-cli/settings.json`** (verified on disk 2026-07-06; contains
+`colorScheme`, `enableTelemetry`, `gcp`, `trustedWorkspaces`, and the `permissions` allow-list).
 
-Source: [cli-using](https://antigravity.google/docs/cli-using) — uid 3_161
+> ⚠️ **Global-only, by design.** A per-workspace `.agents/settings.json` is **NOT read** — a deliberate security
+> boundary so an untrusted cloned repo can't ship a settings file that auto-approves destructive commands, disables the
+> sandbox, or weakens guardrails (user-verified 2026-07-06). Correction: earlier notes citing
+> `~/.gemini/config/settings.json` or a workspace `.agents/settings.json` override were **wrong**.
 
 Open from inside the CLI: `/config` or `/settings`
 
@@ -326,27 +334,31 @@ Source: cli-using uid 3_166–3_169: "Type `/config` or `/settings` to open a fu
 
 Source: [cli-features](https://antigravity.google/docs/cli-features) — uid 5_185–5_207 (exact JSON key, boolean, default false)
 
-### Hook Registration
+### Hook Registration (`hooks.json`, NOT settings.json)
+
+Per the built-in `agy-customizations/docs/hooks.md`, hooks are defined in a standalone **`hooks.json`** placed in a
+customization root — `.agents/hooks.json` (workspace), `~/.gemini/config/hooks.json` (global), or a plugin. Each
+top-level key is a **named** hook; events nest under it with an optional `matcher`. There is **no** `"hooks"` key in
+`settings.json` (correction 2026-07-06 — the earlier settings.json-based form was wrong).
 
 ```json
 {
-  "hooks": {
+  "session-context": {
     "PreInvocation": [
-      { "command": ".agents/hooks/session-context.sh" }
-    ],
+      { "hooks": [ { "type": "command", "command": ".agents/hooks/session-context.sh" } ] }
+    ]
+  },
+  "scope-guard": {
     "PreToolUse": [
-      { "matcher": "write_file|edit", "command": ".agents/hooks/scope-guard.sh" }
-    ],
-    "PostToolUse": [
-      { "matcher": "write_file", "command": ".agents/hooks/test-nudge.sh" }
+      { "matcher": "write_file|edit", "hooks": [ { "command": ".agents/hooks/scope-guard.sh" } ] }
     ]
   }
 }
 ```
 
-Source: [Hooks](https://antigravity.google/docs/hooks)
+Source: built-in `agy-customizations/docs/hooks.md` · [Hooks](https://antigravity.google/docs/hooks)
 
-> Hook event names: `PreInvocation`, `PreToolUse`, `PostToolUse`
+> Hook event names: `PreInvocation`, `PreToolUse`, `PostToolUse`, `Stop`
 > Tool names used by AGY: `write_file`, `edit` (not `replace_in_file`)
 
 ---
@@ -589,7 +601,7 @@ Source: [gcli-migration](https://antigravity.google/docs/gcli-migration) · [Goo
 | Workspace config dir | `.gemini/` | `.agents/` |
 | Workspace skills | `.gemini/skills/` | `.agents/skills/` |
 | Workspace MCP config | `settings.json` (mcpServers key) | `.agents/mcp_config.json` |
-| Global settings | `~/.gemini/settings.json` | `~/.gemini/config/settings.json` |
+| Global settings | `~/.gemini/settings.json` | `~/.gemini/antigravity-cli/settings.json` (no workspace override) |
 | Global MCP config | inside settings.json | `~/.gemini/config/mcp_config.json` |
 | Global skills | `~/.gemini/skills/` | Shared — no action needed |
 | Context file | `GEMINI.md` | `AGENTS.md` (both are read) |

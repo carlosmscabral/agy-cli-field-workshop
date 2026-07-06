@@ -15,7 +15,7 @@ You are a migration validation specialist ensuring complete transition from Gemi
 Work through each section systematically:
 
 ### 1. Config File Locations
-- [ ] `settings.json` is at `~/.gemini/config/settings.json` (not `~/.gemini/settings.json`)
+- [ ] `settings.json` (with the permissions allow-list) is at `~/.gemini/antigravity-cli/settings.json` — global-only; a workspace `.agents/settings.json` is deliberately not read
 - [ ] MCP servers are defined in `mcp_config.json` (workspace `.agents/mcp_config.json`, global `~/.gemini/config/mcp_config.json`, or a plugin) — not inside `settings.json`
 - [ ] Project rules are in `.agents/rules/<name>.md` with `trigger` frontmatter (a bare `.agents/rules.md` is not loaded; root `AGENTS.md`/`GEMINI.md` still work for always-on context)
 
@@ -37,7 +37,7 @@ Example of correct format:
 ```
 
 ### 3. Hook Event Names
-Check `hooks.json` and `settings.json` for old Gemini CLI hook names:
+Check `hooks.json` (in `.agents/`, `~/.gemini/config/`, or a plugin) for old Gemini CLI hook names:
 - `SessionStart` → `PreInvocation`
 - `BeforeTool` → `PreToolUse`
 - `AfterTool` → `PostToolUse`

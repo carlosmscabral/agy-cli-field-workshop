@@ -98,9 +98,9 @@ description: Corporate engineering standards
 
 ---
 
-## 2.3 — Workspace Configuration & Permissions (`settings.json`) <span class="duration-badge">5 min</span>
+## 2.3 — Configuration & Permissions (`settings.json`) <span class="duration-badge">5 min</span>
 
-Each project can have a `.agents/settings.json` file to manage fine-grained behavior and permissions for that workspace:
+Behavior and permissions are managed in your **global** settings file at `~/.gemini/antigravity-cli/settings.json`:
 
 ```json
 {
@@ -120,6 +120,9 @@ Each project can have a `.agents/settings.json` file to manage fine-grained beha
   }
 }
 ```
+
+> [!IMPORTANT]
+> Antigravity does **not** read a per-workspace `.agents/settings.json` — this is a deliberate security boundary. Otherwise an untrusted repo you clone could ship a `.agents/settings.json` that auto-approves destructive commands, disables the sandbox, or weakens other guardrails. Permissions live only in your global, user-owned file. (MCP servers, hooks, rules, and skills *are* workspace-scoped via `.agents/` — permissions are the deliberate exception.)
 
 ### Key Workspace Keys
 
@@ -175,7 +178,7 @@ A plugin is just a directory with a `plugin.json` marker file at its root. Every
 └── import_manifest.json # Auto-generated when a plugin is imported
 ```
 
-> **Note:** `hooks.json` is a plugin-bundled component. For *workspace* or *global* hooks (outside a plugin), configure the `"hooks"` key inside `settings.json` instead.
+> **Note:** hooks are always defined in a `hooks.json` file placed in a customization root — `.agents/hooks.json` (workspace), `~/.gemini/config/hooks.json` (global), or inside a plugin. They are **not** configured under a `settings.json` key.
 
 ### Managing Plugins
 

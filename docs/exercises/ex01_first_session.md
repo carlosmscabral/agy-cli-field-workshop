@@ -105,7 +105,12 @@ When `request-review` prompts you and you choose to **always allow** a specific 
 }
 ```
 
-Your global settings live at `~/.gemini/config/settings.json`; a workspace can override them with its own `.agents/settings.json`. Keeping `request-review` as the default while building a targeted `allow` list is the enterprise sweet spot — the agent moves fast on the operations you've blessed and still stops for anything new.
+Your permissions (and other settings) are saved **globally**, at `~/.gemini/antigravity-cli/settings.json`.
+
+> [!IMPORTANT]
+> Antigravity deliberately does **not** read a per-workspace `.agents/settings.json`. That's a security boundary: if it did, cloning an untrusted repo could silently ship a `.agents/settings.json` that auto-approves destructive commands (`rm -rf`, network `curl`), disables the terminal sandbox, or loosens other guardrails — all without your consent. Permissions live only in your global, user-owned file.
+
+Keeping `request-review` as the default while building a targeted `allow` list is the enterprise sweet spot — the agent moves fast on the operations you've blessed and still stops for anything new.
 
 > [!TIP]
 > For a hands-on look at `strict` and the two-phase governance workflow, see the **Sandbox & Governance** exercise later in this module.
