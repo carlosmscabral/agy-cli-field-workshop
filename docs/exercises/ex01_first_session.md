@@ -74,13 +74,13 @@ The list shows the Gemini family (e.g. **Gemini 3.5 Flash** for fast, cost-effic
 
 ## Part 2: Tool Permissions — What the Agent May Do (5 min)
 
-Before you let the agent change anything, understand how `agy` decides when to ask you first. This is the **permission mode**. Set it from the settings overlay — run `/config` and open **Tool Permissions** — or change it directly with the `/permissions` slash command:
+Before you let the agent change anything, understand how `agy` decides when to ask you first. This is the **permission mode**. Set it from the settings overlay — run `/config` and open **Tool Permissions**:
 
 ```text
-/permissions
+/config
 ```
 
-There are four modes:
+In the overlay, open **Tool Permissions** and choose one of four modes:
 
 | Mode | Behavior |
 | :-- | :-- |
@@ -105,7 +105,7 @@ When `request-review` prompts you and you choose to **always allow** a specific 
 }
 ```
 
-Your global settings live at `~/.gemini/antigravity-cli/settings.json`; a workspace can override them with its own `.agents/settings.json`. Keeping `request-review` as the default while building a targeted `allow` list is the enterprise sweet spot — the agent moves fast on the operations you've blessed and still stops for anything new.
+Your global settings live at `~/.gemini/config/settings.json`; a workspace can override them with its own `.agents/settings.json`. Keeping `request-review` as the default while building a targeted `allow` list is the enterprise sweet spot — the agent moves fast on the operations you've blessed and still stops for anything new.
 
 > [!TIP]
 > For a hands-on look at `strict` and the two-phase governance workflow, see the **Sandbox & Governance** exercise later in this module.
@@ -188,7 +188,7 @@ Or pick from your past sessions with the in-session picker:
 
 - [ ] `agy` launched and answered questions about the sandbox in interactive mode
 - [ ] Switched the reasoning model with `/model`
-- [ ] You can name the four permission modes and set one via `/permissions` (or `/config` → Tool Permissions)
+- [ ] You can name the four permission modes and set one via `/config` → Tool Permissions
 - [ ] Used `@` to focus the agent on a specific file
 - [ ] `AGENTS.md` exists at the project root of `agy-sample-app`
 - [ ] A **fresh** interactive `agy` session correctly describes the project from `AGENTS.md` (verified interactively, not with `agy -p`)

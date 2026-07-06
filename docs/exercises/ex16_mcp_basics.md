@@ -15,14 +15,16 @@ Give `agy` access to a system it **cannot** reach on its own terms — a databas
 
 ## Background
 
-MCP servers are declared in a JSON config, not via an `agy` subcommand:
+MCP servers are declared in a JSON config file, not via an `agy` subcommand. This build reads them from two places (per agy's built-in MCP docs):
 
-- **Workspace scope:** `.agents/mcp_config.json` (this project only)
-- **Global scope:** `~/.gemini/antigravity-cli/mcp_config.json` (all projects)
+- **Global:** `~/.gemini/config/mcp_config.json` — available in every project. **This lab uses this file.**
+- **Plugin:** `plugins/<name>/mcp_config.json` inside a plugin bundle — active only while that plugin is enabled.
 
-Local servers run as a subprocess (`type: "stdio"`); remote ones use `type: "sse"` / `"streamable-http"` with a `serverUrl`.
+A **local** server runs as a subprocess — give it a `command` and `args`. A **remote** server instead gets a `serverUrl`. The transport is inferred from which field you set; there is no separate `type` field.
 
 > [!NOTE]
+> The live docs also describe a per-workspace file at `.agents/mcp_config.json`. Some `agy` builds don't surface it (it never shows up under `/mcp`) — if yours is one of them, use the **global** file above, which is what this lab uses.
+>
 > **Prerequisites:** `uv` installed (provides `uvx`, same as Module 3) and `python3`. No accounts or API keys.
 
 ---
@@ -58,29 +60,31 @@ INSERT INTO invoices VALUES
  (4,4,99000,'USD','open'),(5,6,900,'USD','open');
 """)
 db.commit(); db.close()
-print("billing.db created")
+import os
+print("billing.db created at", os.path.abspath("billing.db"))
 PY
 ```
+
+Copy the **absolute path** it prints (e.g. `/home/you/agy-sample-app/billing.db`) — you'll paste it into the MCP config in the next step.
 
 ---
 
 ## Part 2: Register the Database MCP Server (3 min)
 
-Create `.agents/mcp_config.json` — a local SQLite MCP server (via `uvx`, no account) scoped to that database:
+Open (or create) the global MCP config at `~/.gemini/config/mcp_config.json` and register a local SQLite MCP server (via `uvx`, no account) pointed at the database. Because a global config isn't tied to the project directory, use the **absolute** path you printed in Part 1 (not a relative `./billing.db`):
 
 ```json
 {
   "mcpServers": {
     "billing-db": {
-      "type": "stdio",
       "command": "uvx",
-      "args": ["mcp-server-sqlite", "--db-path", "./billing.db"]
+      "args": ["mcp-server-sqlite", "--db-path", "/ABSOLUTE/PATH/TO/agy-sample-app/billing.db"]
     }
   }
 }
 ```
 
-The server exposes structured tools (`list_tables`, `describe_table`, `read_query`, …) — the agent calls those instead of shelling out to a `sqlite3` binary.
+If the file already lists other servers, just add `billing-db` inside the existing `mcpServers` object. The server exposes structured tools (`list_tables`, `describe_table`, `read_query`, …) — the agent calls those instead of shelling out to a `sqlite3` binary.
 
 ---
 
@@ -96,11 +100,11 @@ agy
 /mcp
 ```
 
-Verify `billing-db` shows **connected**. Now **remove the agent's ability to shell or write** so the MCP tool is its *only* path to the data:
+Verify `billing-db` shows **connected**. Now **remove the agent's ability to shell or write** so the MCP tool is its *only* path to the data. Open the settings overlay and switch the permission mode to `strict`:
 
 ```text
-/permissions
-# select: strict
+/config
+# open Tool Permissions → select: strict
 ```
 
 In `strict` mode agy cannot run `!`-shell commands, `curl`, or write files. Ask it business questions anyway — it must use the `billing-db` query tool:
@@ -130,12 +134,10 @@ Remote MCP servers use `serverUrl` instead of a local `command` — and the serv
 {
   "mcpServers": {
     "billing-db": {
-      "type": "stdio",
       "command": "uvx",
-      "args": ["mcp-server-sqlite", "--db-path", "./billing.db"]
+      "args": ["mcp-server-sqlite", "--db-path", "/ABSOLUTE/PATH/TO/agy-sample-app/billing.db"]
     },
     "managed-data": {
-      "type": "sse",
       "serverUrl": "https://your-mcp-server.example.com/sse",
       "env": { "API_KEY": "$MCP_API_KEY" }
     }
@@ -149,7 +151,7 @@ This is exactly how the **managed GCP data lab in Module 3** works — Google-ho
 
 ## Completion Criteria
 
-- [ ] `billing.db` created and `.agents/mcp_config.json` registers the `billing-db` server
+- [ ] `billing.db` created and `~/.gemini/config/mcp_config.json` registers the `billing-db` server
 - [ ] `/mcp` shows `billing-db` connected
-- [ ] With `/permissions strict` (shell denied), agy answered the business questions **only** via the MCP query tool
+- [ ] With `strict` mode set via `/config` → Tool Permissions (shell denied), agy answered the business questions **only** via the MCP query tool
 - [ ] You can explain MCP's real value — governed, credential-mediated, scoped access — versus letting the agent shell/`curl` freely

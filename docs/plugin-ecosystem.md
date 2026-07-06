@@ -65,22 +65,29 @@ Always follow these rules when writing SQL or database manipulation methods:
 
 ---
 
-## 2.2 — Defining Project Rules (`rules.md`) <span class="duration-badge">10 min</span>
+## 2.2 — Defining Project Rules (`.agents/rules/`) <span class="duration-badge">10 min</span>
 
 > **Pattern: Strict Boundaries** — Set project-wide, unconditional standards that the agent must obey.
 
 While **Skills** are matched semantically (only triggering on related questions), **Rules** are loaded unconditionally as part of the agent's system prompt instructions on every single turn.
 
-Create a rules file inside your workspace root:
+Each rule is a Markdown file placed **directly under a `rules/` folder** (subfolders are not crawled):
 
-* **Workspace rules**: `.agents/rules.md` (or `.agents/rules/*.md`)
-* **Global rules**: `~/.gemini/config/rules.md` (or `~/.gemini/config/rules/*.md`)
+* **Workspace rules**: `.agents/rules/<name>.md`
+* **Global rules**: `~/.gemini/config/rules/<name>.md`
+
+> A bare `.agents/rules.md`, or a rule file without frontmatter, is **not** loaded — rules live under `.agents/rules/` and must declare a `trigger`.
 
 ### Rules Formatting
 
-Rules are authored as clean Markdown files containing style guidelines, engineering practices, or forbidden patterns:
+Each rule needs **YAML frontmatter** with a `trigger` (`always_on`, `model_decision`, `glob`, or `manual`). An `always_on` rule is injected into the system prompt on every turn:
 
 ```markdown
+---
+trigger: always_on
+description: Corporate engineering standards
+---
+
 # Corporate Engineering Rules
 
 - All source files must contain the standard SPDX copyright header.
@@ -127,7 +134,7 @@ Each project can have a `.agents/settings.json` file to manage fine-grained beha
 
 ## 2.4 — Registering Local MCP Servers (`mcp_config.json`) <span class="duration-badge">10 min</span>
 
-You can expose custom developer tools (e.g., issue trackers, database browsers, or compliance scanners) via **Model Context Protocol (MCP)**. Register workspace-specific servers in `.agents/mcp_config.json`:
+You can expose custom developer tools (e.g., issue trackers, database browsers, or compliance scanners) via **Model Context Protocol (MCP)**. This build loads MCP servers from the **global** `~/.gemini/config/mcp_config.json` or from a **plugin**'s `mcp_config.json` (a workspace `.agents/mcp_config.json` isn't surfaced by all builds — see [Exercise 16](exercises/ex16_mcp_basics.md)). Register them like this:
 
 ```json
 {
@@ -151,14 +158,14 @@ Once registered, the tools provided by the MCP server will appear directly in yo
 
 > **Pattern: Package and Share** — a **plugin** bundles skills, rules, subagents, MCP servers, and hooks into a single installable unit so a whole team can adopt the same customizations at once.
 
-Where a Skill or a `rules.md` file customizes a single workspace, a **plugin** packages those same components (plus MCP servers and hooks) so they can be installed, versioned, enabled, and disabled as a unit. Plugins are managed with the `agy plugin` subcommand (aliased `agy plugins`).
+Where a Skill or a rule file customizes a single workspace, a **plugin** packages those same components (plus MCP servers and hooks) so they can be installed, versioned, enabled, and disabled as a unit. Plugins are managed with the `agy plugin` subcommand (aliased `agy plugins`).
 
 ### Plugin Directory Layout
 
 A plugin is just a directory with a `plugin.json` marker file at its root. Everything else is optional and mirrors the workspace customization roots you already know:
 
 ```text
-~/.gemini/antigravity-cli/plugins/<plugin_name>/
+~/.gemini/config/plugins/<plugin_name>/
 ├── plugin.json          # ← Required marker file (name, version, metadata)
 ├── mcp_config.json      # Optional: MCP server definitions
 ├── hooks.json           # Optional: event hooks (PreInvocation, PreToolUse, PostToolUse)

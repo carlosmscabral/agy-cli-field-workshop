@@ -4,9 +4,16 @@
 > Use this before writing, editing, or reviewing any workshop content.
 > Do NOT invent commands or flags — if it's not in this doc, fetch the source first.
 >
-> **Last verified:** 2026-05-25 via Chrome DevTools MCP (rendered SPA) + `agy --help` live binary
+> **Last verified:** 2026-07-06 via the CLI's own **built-in customization docs** (shipped with the binary at
+> `~/.gemini/antigravity-cli/builtin/skills/agy-customizations/docs/*.md`) + `agy --help` live binary; earlier
+> entries verified 2026-05-25 via Chrome DevTools MCP (rendered SPA).
 > **Maintainer:** Update this doc whenever you verify a new claim against official sources.
 > Add the source URL + uid node reference with every new entry.
+>
+> **Config home (ground truth, 2026-07-06):** the global customization root is **`~/.gemini/config/`** (holds
+> `settings.json`, `mcp_config.json`, `skills/`, `rules/`, `plugins/`, `config.json`). `~/.gemini/antigravity-cli/`
+> is the binary's *install* dir (built-in skills/docs), **not** the user config home. Per the built-in
+> `agy-customizations/docs/json_configs.md`, the customization root is `.agents/` (project) or `~/.gemini/config/` (global).
 
 ---
 
@@ -103,7 +110,7 @@ These were in older drafts and have been removed. Do not reference them:
 
 | Flag | Why absent |
 |:--|:--|
-| `--strict` | Not a flag. Strict mode is set via `/permissions` slash command |
+| `--strict` | Not a flag. Strict mode is set via `/config` → **Tool Permissions** |
 | `--workspace <path>` | Not in `agy --help` or any official doc |
 
 > **Corrected 2026-07-03:** `--model` **is** a real flag (verified in `agy --help` v1.0.16) — earlier drafts wrongly listed it here.
@@ -132,7 +139,7 @@ Official source: [cli-features — Core Slash Commands](https://antigravity.goog
 | `/resume` (alias `/switch`) | Open session picker — list and resume previous conversations | cli-features uid 5_213–5_219 |
 | `/rewind` (alias `/undo`) | Roll back conversation history to a previous turn | cli-features uid 5_220–5_226 |
 | `/rename <name>` | Rename the active conversation thread | cli-features uid 5_227–5_229 |
-| `/permissions` | View/set tool-permission mode: `request-review`, `always-proceed`, `proceed-in-sandbox`, `strict` (also via `/config` → Tool Permissions) | cli-features uid 5_230–5_238 + Tool Permissions UI |
+| `/config` → **Tool Permissions** | Set the tool-permission mode: `request-review`, `always-proceed`, `proceed-in-sandbox`, `strict`. **Correction (2026-07-06):** the mode is set from the Tool Permissions overlay under `/config`, *not* via a standalone `/permissions` command (user-verified). | Tool Permissions UI |
 | `/model` | Select default reasoning model — persists across sessions | cli-features uid 5_239–5_241 |
 | `/keybindings` | Open keyboard shortcut editor | cli-features uid 5_242–5_244 |
 | `/statusline` | Customize the CLI status bar | cli-features uid 5_245–5_247 |
@@ -217,7 +224,7 @@ To hard-stop/redirect the active operation, use `Esc` / `ctrl+c` (interrupt). Th
 
 ### Artifact review mode / autonomy
 
-Whether the agent pauses for you to approve artifacts or auto-proceeds is governed by the review/permissions mode (the `/permissions` autonomy levels in section 8):
+Whether the agent pauses for you to approve artifacts or auto-proceeds is governed by the Tool Permissions mode (the autonomy levels in section 8):
 
 - `request-review` — agent pauses for you to review/approve artifacts (default)
 - `always-proceed` — agent auto-approves artifacts and keeps going
@@ -271,7 +278,7 @@ Source: [cli-using — Keybindings](https://antigravity.google/docs/cli-using) u
 
 Source: [Permissions](https://antigravity.google/docs/permissions) · [Strict Mode](https://antigravity.google/docs/strict-mode)
 
-Set via the `/permissions` slash command, via `/config` → **Tool Permissions** (settings overlay), or in `settings.json`. **Four** modes (the 4th, `proceed-in-sandbox`, confirmed in the Tool Permissions UI 2026-07-03):
+Set via `/config` → **Tool Permissions** (settings overlay), or in `settings.json`. **Correction (2026-07-06):** the mode is set from the Tool Permissions overlay under `/config`, not via a standalone `/permissions` command (user-verified). **Four** modes (the 4th, `proceed-in-sandbox`, confirmed in the Tool Permissions UI 2026-07-03):
 
 | Level | Behaviour |
 |:--|:--|
@@ -301,7 +308,7 @@ Source: [cli-features](https://antigravity.google/docs/cli-features) — uid 5_2
 
 ## 9. Settings File
 
-Location: `~/.gemini/antigravity-cli/settings.json`
+Location: `~/.gemini/config/settings.json`
 
 Source: [cli-using](https://antigravity.google/docs/cli-using) — uid 3_161
 
@@ -367,7 +374,7 @@ Source: [cli-features — Plugins](https://antigravity.google/docs/cli-features)
 ### Plugin Directory Structure
 
 ```
-~/.gemini/antigravity-cli/plugins/<plugin_name>/
+~/.gemini/config/plugins/<plugin_name>/
   plugin.json          # Required marker file
   mcp_config.json      # Optional: MCP server definitions
   hooks.json           # Optional: event hooks
@@ -450,7 +457,7 @@ Source: [Skills](https://antigravity.google/docs/skills) · [cli-features /skill
 
 ```
 ~/.gemini/skills/                              # Shared with Gemini CLI (no action needed)
-~/.gemini/antigravity-cli/skills/              # AGY-specific global skills
+~/.gemini/config/skills/              # AGY-specific global skills
 ```
 
 Source: [gcli-migration](https://antigravity.google/docs/gcli-migration) uid 7_248–7_263, 7_270
@@ -494,11 +501,44 @@ Global context file: `~/.gemini/GEMINI.md` (uid 7_241–7_243)
 
 ```
 .agents/
-  rules.md         # (or rules/*.md) — injected as system prompt directives
-  skills/          # Workspace skills
+  rules/           # rules/<name>.md — each needs `trigger` frontmatter (see Rules below); a bare rules.md is NOT loaded
+  skills/          # Workspace skills (skills/<name>/SKILL.md)
   agents/          # Custom subagent definitions
-  mcp_config.json  # Workspace MCP server config
+  plugins/         # Workspace plugins (plugins/<name>/ with plugin.json, mcp_config.json, hooks.json, rules/, skills/)
 ```
+
+> ⚠️ A bare `.agents/mcp_config.json` is **not** read by all builds (see §15). MCP servers load from the global
+> `~/.gemini/config/mcp_config.json` or from a plugin's `mcp_config.json`.
+
+### Rules (`.agents/rules/*.md`) — verified 2026-07-06
+
+Rules are individual Markdown files placed **directly under `.agents/rules/`** (workspace) or `~/.gemini/config/rules/`
+(global). **Subfolders are not crawled**, and each file **must** begin with YAML frontmatter declaring a `trigger`.
+A bare `.agents/rules.md`, or any rule file without frontmatter, is **silently ignored** (user-verified: canary rules
+in both `.agents/rules.md` and `.agents/rules/rules.md` without frontmatter produced no effect).
+
+| `trigger` | Activation |
+|:--|:--|
+| `always_on` | Always injected into the initial system prompt |
+| `model_decision` | Agent decides based on the rule's `description` |
+| `glob` | Loaded when working on files matching `globs` (e.g. `globs: "*.py"`) |
+| `manual` | Only when explicitly `@`-mentioned |
+
+```markdown
+---
+trigger: always_on
+description: Enforce early return style and documentation requirements
+---
+
+# Coding Guidelines
+- Always prefer early returns instead of deeply nested if-conditions.
+- Write a clear docstring for all new public functions and classes.
+```
+
+**Also valid (verified):** a root **`AGENTS.md`** / **`GEMINI.md`** carries always-on project context/rules with **no
+frontmatter required** — read by walking up from cwd to the repo root. This is the separate directory-based mechanism
+from the built-in `rules.md` doc; the `trigger`-based files above are the `.agents/rules/` mechanism from
+[rules-workflows](https://antigravity.google/docs/rules-workflows).
 
 Source: [cli-using](https://antigravity.google/docs/cli-using)
 
@@ -506,23 +546,31 @@ Source: [cli-using](https://antigravity.google/docs/cli-using)
 
 ## 15. MCP Configuration
 
-Source: [MCP](https://antigravity.google/docs/mcp) · [gcli-migration](https://antigravity.google/docs/gcli-migration) uid 7_293–7_320
+Source: built-in `agy-customizations/docs/mcp_servers.md` (shipped with the binary) · [MCP](https://antigravity.google/docs/mcp) · [gcli-migration](https://antigravity.google/docs/gcli-migration) uid 7_293–7_320
 
 MCP configs are stored in a **separate `mcp_config.json`** file, not inside `settings.json`.
 
-| Scope | Path |
-|:--|:--|
-| Global | `~/.gemini/antigravity-cli/mcp_config.json` |
-| Workspace | `.agents/mcp_config.json` |
+**Ground truth (2026-07-06, from the binary's built-in MCP doc + live `/mcp` behavior):** this build discovers MCP servers from only **two** locations:
 
-**Key field rename from Gemini CLI:**
+| Scope | Path | Notes |
+|:--|:--|:--|
+| **Global** | `~/.gemini/config/mcp_config.json` | Active in all sessions. **This is what the workshop uses.** |
+| **Plugin** | `plugins/<name>/mcp_config.json` (e.g. `.agents/plugins/…`) | Active only while the plugin is enabled; shows under the "Plugins" group in `/mcp`. |
+
+> ⚠️ **Workspace `.agents/mcp_config.json` caveat:** the live docs (antigravity.google/docs/mcp) advertise a
+> per-workspace `.agents/mcp_config.json`, but the binary's built-in `mcp_servers.md` lists **only** Global +
+> Plugin, and a workspace `.agents/mcp_config.json` did **not** appear under `/mcp` on the tested build
+> (user-verified 2026-07-06 — moving the same config to `~/.gemini/config/mcp_config.json` made it appear).
+> Prefer the global file (or a plugin) for anything that must actually load.
+
+**Schema (from the built-in doc):** stdio = `{ "command", "args", "env" }`; remote = `{ "serverUrl" }`. There is
+**no `type` field** — the transport is inferred from `command` vs `serverUrl`.
 
 ```json
 {
   "mcpServers": {
-    "my-server": {
-      "serverUrl": "https://..."
-    }
+    "local-server":  { "command": "uvx", "args": ["mcp-server-sqlite", "--db-path", "/abs/path/db.sqlite"] },
+    "remote-server": { "serverUrl": "https://..." }
   }
 }
 ```
@@ -542,12 +590,12 @@ Source: [gcli-migration](https://antigravity.google/docs/gcli-migration) · [Goo
 | Workspace config dir | `.gemini/` | `.agents/` |
 | Workspace skills | `.gemini/skills/` | `.agents/skills/` |
 | Workspace MCP config | `settings.json` (mcpServers key) | `.agents/mcp_config.json` |
-| Global settings | `~/.gemini/settings.json` | `~/.gemini/antigravity-cli/settings.json` |
-| Global MCP config | inside settings.json | `~/.gemini/antigravity-cli/mcp_config.json` |
+| Global settings | `~/.gemini/settings.json` | `~/.gemini/config/settings.json` |
+| Global MCP config | inside settings.json | `~/.gemini/config/mcp_config.json` |
 | Global skills | `~/.gemini/skills/` | Shared — no action needed |
 | Context file | `GEMINI.md` | `AGENTS.md` (both are read) |
 | MCP `url` field | `url` / `httpUrl` | `serverUrl` |
-| Extensions | `.gemini/extensions/` | Plugins: `~/.gemini/antigravity-cli/plugins/` |
+| Extensions | `.gemini/extensions/` | Plugins: `~/.gemini/config/plugins/` |
 | `gemini skills` command | existed | **No equivalent** — use `npx skills install` or create manually |
 
 Source: gcli-migration uid 7_282–7_286: "Antigravity CLI does not currently have an equivalent to the `gemini skills` command"

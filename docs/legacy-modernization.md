@@ -29,13 +29,13 @@ The AGY equivalent of "Plan Mode" is **strict permissions** — a hard gate that
 ### Lock Down Before You Explore
 
 ```bash
-/permissions
+/config
 ```
 
-Set the level to `strict`:
+Open **Tool Permissions** and set the mode to `strict`:
 
 ```bash
-# In the permissions dialog, select: strict
+# In /config → Tool Permissions, select: strict
 # Or set directly in settings.json:
 ```
 
@@ -84,8 +84,8 @@ This drops you into `$EDITOR` with the current agent output. Edit constraints, a
 Once the plan is signed off, restore write access selectively:
 
 ```bash
-/permissions
-# Select: request-review
+/config
+# Open Tool Permissions → select: request-review
 ```
 
 In `request-review` mode, the agent asks for approval before every write or shell command. You see exactly what it wants to do before it does it.
@@ -135,10 +135,13 @@ For large projects, keep AGENTS.md lean and import detailed specs:
 
 ### Rules Files for Hard Constraints
 
-For non-negotiable requirements, use `.agents/rules.md` — these are injected as system prompt directives, not just context:
+For non-negotiable requirements, add a rule file such as `.agents/rules/migration-guardrails.md` with `trigger: always_on` — these are injected as system prompt directives, not just context. The frontmatter must be the **first line** of the file:
 
 ```markdown
-# .agents/rules.md
+---
+trigger: always_on
+description: Migration guardrails
+---
 
 - NEVER delete migration files (MIGRATION.md, phase-*.md)
 - NEVER modify files outside the current migration module's directory
@@ -146,7 +149,7 @@ For non-negotiable requirements, use `.agents/rules.md` — these are injected a
 - ALWAYS commit with message format: "migrate(phase-N): <description>"
 ```
 
-> 📖 Source: [cli-using](https://antigravity.google/docs/cli-using) — `.agents/rules.md` system prompt directives
+> 📖 Source: [Rules & Workflows](https://antigravity.google/docs/rules-workflows) — `.agents/rules/*.md` with `trigger` frontmatter
 
 ---
 
@@ -440,11 +443,11 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 #### Path A: Plan-First (Strict → Investigate → Execute)
 
-1. Set `/permissions` to `strict` — lock all writes
+1. Set the Tool Permissions mode to `strict` (`/config` → Tool Permissions) — lock all writes
 2. Give the agent a full investigation mandate (Section 2.1)
 3. Use `ctrl+g` to open the plan in your editor and add team constraints
 4. Write an AGENTS.md encoding the migration rules (or have the agent write it)
-5. Add a `.agents/rules.md` with hard non-negotiables
+5. Add a rule under `.agents/rules/` (`trigger: always_on`) with hard non-negotiables
 6. Switch to `request-review` — begin Phase 1 with oversight
 7. Use `/rewind` if the agent drifts outside scope
 8. Rename the session: `/rename "Migration — Phase 1 complete"`
@@ -486,11 +489,11 @@ agy -p "Scan src/auth/ for javax.persistence.* usage" | \
 
 | Primitive | What It Does | When to Use |
 | :-- | :-- | :-- |
-| `/permissions strict` | Hard read-only gate — no writes or commands | Investigation phase |
-| `/permissions request-review` | Agent asks before every write | Controlled execution |
+| Tool Permissions → `strict` | Hard read-only gate — no writes or commands | Investigation phase |
+| Tool Permissions → `request-review` | Agent asks before every write | Controlled execution |
 | `ctrl+g` | Open plan in `$EDITOR` for collaborative editing | Plan refinement |
 | **AGENTS.md** | Persistent migration standards across sessions | Always — encode constraints |
-| `.agents/rules.md` | Hard system-prompt directives | Non-negotiable guardrails |
+| `.agents/rules/*.md` (`trigger: always_on`) | Hard system-prompt directives | Non-negotiable guardrails |
 | **Subagents** | Parallel analysis teams | Multi-concern investigations |
 | `/agents` + `ctrl+j` + `ctrl+k` | Monitor and approve subagent work | During parallel runs |
 | **Hooks** (PreToolUse) | Block writes outside migration scope | Automated guardrails |

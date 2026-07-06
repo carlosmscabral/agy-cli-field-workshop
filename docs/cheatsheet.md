@@ -49,7 +49,7 @@ agy install        # Configure PATH and shell aliases
 | `--new-project` | — | Start the session in a new project workspace |
 | `--project <path>` | — | Target a specific project workspace |
 
-> **Note:** `--model` sets the reasoning model for a single run; the `/model` slash command sets the persistent default. Strict mode is set via the `/permissions` slash command — there is no `--strict` flag. See [Features docs](https://antigravity.google/docs/cli-features).
+> **Note:** `--model` sets the reasoning model for a single run; the `/model` slash command sets the persistent default. Strict mode is set from `/config` → **Tool Permissions** — there is no `--strict` flag. See [Features docs](https://antigravity.google/docs/cli-features).
 
 ---
 
@@ -66,7 +66,7 @@ agy install        # Configure PATH and shell aliases
 | `/planning` | Artifacts | Enter planning mode — produce an Implementation Plan (and Task List) before writing code |
 | `/artifact` | Artifacts | Open the artifact panel — view the session's artifacts (singular; `/artifacts` is not accepted) |
 | `/diff` | Review | Open agy's built-in diff view of the changes made in your session |
-| `/permissions` | Autonomy | Set tool-permission mode: `request-review`, `always-proceed`, `proceed-in-sandbox`, `strict` (also via `/config` → Tool Permissions) |
+| `/config` → Tool Permissions | Autonomy | Set the tool-permission mode: `request-review`, `always-proceed`, `proceed-in-sandbox`, `strict` |
 | `/grill-me` | Autonomy | Have agy ask **you** clarifying questions to align on the spec/plan *before* it implements |
 | `/goal` | Autonomy | Run autonomously to completion — agy auto-approves its own plan and won't stop for input *(reported — verify against the CLI)* |
 | `/model` | Config | Select default reasoning model (persists across sessions) |
@@ -81,7 +81,7 @@ agy install        # Configure PATH and shell aliases
 | `/usage` | Utility | Open the inline interactive help manual |
 | `/logout` | Account | Log out and clear cached credentials |
 
-> **The autonomy spectrum.** Dial how much the agent checks in with you: `/grill-me` (agent interrogates you first — max alignment) → `/permissions request-review` (review artifacts at milestones — the default) → `/permissions always-proceed` / `/goal` (agent runs to completion, auto-approving its own plan). Tighten for ambiguous/high-stakes work; loosen for well-scoped, low-risk, or batch tasks.
+> **The autonomy spectrum.** Dial how much the agent checks in with you: `/grill-me` (agent interrogates you first — max alignment) → Tool Permissions `request-review` (review artifacts at milestones — the default) → Tool Permissions `always-proceed` / `/goal` (agent runs to completion, auto-approving its own plan). Set the mode from `/config` → Tool Permissions. Tighten for ambiguous/high-stakes work; loosen for well-scoped, low-risk, or batch tasks.
 
 ---
 
@@ -96,7 +96,7 @@ agy install        # Configure PATH and shell aliases
 | Open the Artifact Review panel | `/artifact` or `ctrl+r` |
 | Comment on / approve an artifact | In the panel: `c` to add a comment, `esc` to finish, `y` to approve |
 | Edit an artifact in `$EDITOR` | `ctrl+g` |
-| Control approval flow | `/permissions` — `request-review` pauses for you, `always-proceed` auto-approves |
+| Control approval flow | `/config` → Tool Permissions — `request-review` pauses for you, `always-proceed` auto-approves |
 
 ---
 
@@ -195,10 +195,12 @@ Minimal `sidecar.json` — scheduled recurring task:
 
 ```bash
 # Project config directory:
-.agents/                    # settings.json (permissions + hooks), mcp_config.json, rules.md, skills/, plugins/
+.agents/                    # settings.json (permissions + hooks), rules/, skills/, plugins/, agents/
+                            #   (MCP: bundle in a plugin's mcp_config.json — a bare .agents/mcp_config.json
+                            #    isn't surfaced by all builds; use the global file below instead)
 
-# Global config directory:
-~/.gemini/config/           # settings.json (permissions + hooks), mcp_config.json, rules.md, skills/, plugins/
+# Global config directory (MCP servers load from here):
+~/.gemini/config/           # settings.json (permissions + hooks), mcp_config.json, rules/, skills/, plugins/
 
 # User settings:
 ~/.gemini/antigravity/settings.json
