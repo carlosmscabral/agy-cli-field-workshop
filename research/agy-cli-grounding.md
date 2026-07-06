@@ -132,7 +132,7 @@ Official source: [cli-features — Core Slash Commands](https://antigravity.goog
 | `/resume` (alias `/switch`) | Open session picker — list and resume previous conversations | cli-features uid 5_213–5_219 |
 | `/rewind` (alias `/undo`) | Roll back conversation history to a previous turn | cli-features uid 5_220–5_226 |
 | `/rename <name>` | Rename the active conversation thread | cli-features uid 5_227–5_229 |
-| `/permissions` | View/set autonomy level: `request-review`, `always-proceed`, `strict` | cli-features uid 5_230–5_238 |
+| `/permissions` | View/set tool-permission mode: `request-review`, `always-proceed`, `proceed-in-sandbox`, `strict` (also via `/config` → Tool Permissions) | cli-features uid 5_230–5_238 + Tool Permissions UI |
 | `/model` | Select default reasoning model — persists across sessions | cli-features uid 5_239–5_241 |
 | `/keybindings` | Open keyboard shortcut editor | cli-features uid 5_242–5_244 |
 | `/statusline` | Customize the CLI status bar | cli-features uid 5_245–5_247 |
@@ -271,12 +271,13 @@ Source: [cli-using — Keybindings](https://antigravity.google/docs/cli-using) u
 
 Source: [Permissions](https://antigravity.google/docs/permissions) · [Strict Mode](https://antigravity.google/docs/strict-mode)
 
-Three autonomy levels set via `/permissions` or `settings.json`:
+Set via the `/permissions` slash command, via `/config` → **Tool Permissions** (settings overlay), or in `settings.json`. **Four** modes (the 4th, `proceed-in-sandbox`, confirmed in the Tool Permissions UI 2026-07-03):
 
 | Level | Behaviour |
 |:--|:--|
 | `request-review` | **Default.** CLI asks for approval before writing files or running commands |
 | `always-proceed` | Auto-approve all tool calls — useful for trusted scripts and CI pipelines |
+| `proceed-in-sandbox` | Auto-proceed, but run terminal commands inside the sandbox (restricted) — autonomy with a safety net |
 | `strict` | Deny all tool use unless explicitly allowed — maximum control, read-only equivalent |
 
 ### Fine-Grained Allow Rules (settings.json)

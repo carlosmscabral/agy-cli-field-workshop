@@ -66,7 +66,7 @@ agy install        # Configure PATH and shell aliases
 | `/planning` | Artifacts | Enter planning mode — produce an Implementation Plan (and Task List) before writing code |
 | `/artifact` (`/artifacts`) | Artifacts | View the artifacts for the current session |
 | `/diff` | Review | Open agy's built-in diff view of the changes made in your session |
-| `/permissions` | Autonomy | Set autonomy level: `request-review`, `always-proceed`, `strict` |
+| `/permissions` | Autonomy | Set tool-permission mode: `request-review`, `always-proceed`, `proceed-in-sandbox`, `strict` (also via `/config` → Tool Permissions) |
 | `/grill-me` | Autonomy | Have agy ask **you** clarifying questions to align on the spec/plan *before* it implements |
 | `/goal` | Autonomy | Run autonomously to completion — agy auto-approves its own plan and won't stop for input *(reported — verify against the CLI)* |
 | `/model` | Config | Select default reasoning model (persists across sessions) |
