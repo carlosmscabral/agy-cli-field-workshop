@@ -60,6 +60,16 @@ Are there any obvious code quality issues or tech debt?
 > [!NOTE]
 > `agy` read and indexed your codebase automatically using standard Git repository scanning — you didn't upload or paste any files.
 
+### Switching the reasoning model
+
+Use `/model` to open a picker and choose the model for your session — the choice **persists across sessions**:
+
+```text
+/model
+```
+
+The list shows the Gemini family (e.g. **Gemini 3.5 Flash** for fast, cost-efficient work; **Gemini 3.1 Pro** for heavier reasoning). To override the model for a *single* run without changing your default, pass the `--model` flag (run `agy models` to see the available names).
+
 ---
 
 ## Part 2: Tool Permissions — What the Agent May Do (5 min)
@@ -177,6 +187,7 @@ Or pick from your past sessions with the in-session picker:
 ## Completion Criteria
 
 - [ ] `agy` launched and answered questions about the sandbox in interactive mode
+- [ ] Switched the reasoning model with `/model`
 - [ ] You can name the four permission modes and set one via `/permissions` (or `/config` → Tool Permissions)
 - [ ] Used `@` to focus the agent on a specific file
 - [ ] `AGENTS.md` exists at the project root of `agy-sample-app`
