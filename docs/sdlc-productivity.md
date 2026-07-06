@@ -17,7 +17,7 @@ agy
 You'll land in the interactive prompt. Try:
 
 ```text
-> What files are in this project and what does each one do?
+What files are in this project and what does each one do?
 ```
 
 Observe how `agy` reads your workspace — it indexes the git repo, reads file contents, and responds with context. This is **automatic**: no configuration or complex prompt engineering required.
@@ -30,27 +30,30 @@ Observe how `agy` reads your workspace — it indexes the git repo, reads file c
 
 ### The Shell Escape Prefix (`!`)
 
-If you need to run a shell command, check Git status, or run a test suite, you **do not** need to exit `agy`. Simply prefix your command with `!` to run it directly from within the TUI:
+If you need to run a shell command, check Git status, or run a test suite, you **do not** need to exit `agy`. **Type** a `!` at the start of your input at the agy prompt to run the rest of the line in your shell:
 
 ```text
-> !git status
-> !python3 -m pytest
+!git status
+!python3 -m pytest
 ```
+
+> [!NOTE]
+> The leading `!` is a keystroke you **type** at the agy prompt (it switches that line to shell mode) — it's not a terminal command to copy-paste elsewhere. The prompts and slash commands shown in these blocks, by contrast, *can* be pasted straight into agy.
 
 ### Exercise: Map an Unfamiliar Codebase
 
 Without exiting your active session, ask `agy` to guide you through the sandbox:
 
 ```text
-> Give me a high-level architecture overview of this project. What are the main components and how do they connect?
+Give me a high-level architecture overview of this project. What are the main components and how do they connect?
 ```
 
 Then steer the session interactively with follow-ups:
 
 ```text
-> Which file handles the entry point?
-> What external dependencies does this project have?
-> Are there any obvious code smells or tech debt?
+Which file handles the entry point?
+What external dependencies does this project have?
+Are there any obvious code smells or tech debt?
 ```
 
 ---
@@ -64,13 +67,13 @@ Then steer the session interactively with follow-ups:
 Still inside the same `agy` session, request a target refactoring:
 
 ```text
-> I want to refactor the error handling in the main module. First, show me all the places where errors are currently caught or returned — don't change anything yet.
+I want to refactor the error handling in the main module. First, show me all the places where errors are currently caught or returned — don't change anything yet.
 ```
 
 Review the findings. Then, steer the agent to propose a change:
 
 ```text
-> Now propose a refactored version using a consistent error handling pattern. Show me the diff before applying.
+Now propose a refactored version using a consistent error handling pattern. Show me the diff before applying.
 ```
 
 Only approve the write tool when you are satisfied with the proposed code.
@@ -108,19 +111,19 @@ Use the `/permissions` slash command to view or change the active level. You can
 Use `agy` to write unit tests for the sandbox code. Ask:
 
 ```text
-> Look at the main module. Generate a comprehensive unit test suite for it. Include happy path, edge cases, and error conditions. Use the testing framework already in this project.
+Look at the main module. Generate a comprehensive unit test suite for it. Include happy path, edge cases, and error conditions. Use the testing framework already in this project.
 ```
 
 Once the files are written, use the TUI shell escape to execute them live without exiting (the sample app uses **pytest**):
 
 ```text
-> !python3 -m pytest
+!python3 -m pytest
 ```
 
 If any tests fail, feed the output back to the agent:
 
 ```text
-> The test suite returned errors. Analyze the failures and correct the code to pass.
+The test suite returned errors. Analyze the failures and correct the code to pass.
 ```
 
 ---
@@ -134,31 +137,31 @@ If any tests fail, feed the output back to the agent:
 `agy` has a **built-in diff view** — type the `/diff` slash command to review the changes from your session inside the TUI:
 
 ```text
-> /diff
+/diff
 ```
 
 Prefer raw `git`? Use the shell escape (`!`) to run `git diff` without leaving `agy`:
 
 ```text
-> !git diff
+!git diff
 ```
 
 The difference: **`/diff`** opens agy's native diff viewer, integrated with its change-review UI; **`!git diff`** simply runs `git` and prints the plain unified diff into the session. You can also ask `agy` to walk you through the changes in natural language:
 
 ```text
-> Show me the diff of my changes and summarize what I modified.
+Show me the diff of my changes and summarize what I modified.
 ```
 
 Once you are done reviewing, run a comprehensive code review query:
 
 ```text
-> Review my unsaved changes for correctness, security gaps, and styling consistency. Be direct and list any potential bugs.
+Review my unsaved changes for correctness, security gaps, and styling consistency. Be direct and list any potential bugs.
 ```
 
 To stage changes from inside the session, run:
 
 ```text
-> !git add -p
+!git add -p
 ```
 
 ---

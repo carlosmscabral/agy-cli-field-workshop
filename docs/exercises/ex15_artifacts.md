@@ -49,13 +49,13 @@ agy
 Put `agy` into planning mode so it produces a plan *before* touching code:
 
 ```text
-> /planning
+/planning
 ```
 
 Then describe the feature. Ask for the health endpoint you scoped back in Exercise 1:
 
 ```text
-> Add a GET /health endpoint to this FastAPI app. It should return an overall status, the application version, and a count of the seeded records (plans, subscriptions, invoices, users). Produce an implementation plan first.
+Add a GET /health endpoint to this FastAPI app. It should return an overall status, the application version, and a count of the seeded records (plans, subscriptions, invoices, users). Produce an implementation plan first.
 ```
 
 `agy` responds with an **Implementation Plan** artifact rather than immediately editing files. Read it: it should name `app/main.py` as the primary edit, reference the app `version` and the in-memory store in `app/database.py`, and explain how the endpoint fits the existing routing.
@@ -97,7 +97,7 @@ Once you approve the plan, `agy` produces a **Task List** artifact — a `task.m
 List the artifacts for this session at any time:
 
 ```text
-> /artifact
+/artifact
 ```
 
 Open the **Task List** to follow progress, then, once the agent finishes, open the **Walkthrough** artifact. The Walkthrough summarizes exactly what changed and tells you how to verify it.
@@ -114,7 +114,7 @@ Trust, but verify — the Walkthrough tells you how, so confirm it yourself.
 Run the existing test suite from inside the session using the shell escape:
 
 ```text
-> !python3 -m pytest -q
+!python3 -m pytest -q
 ```
 
 Or run the app and hit the new endpoint directly. In a separate terminal:

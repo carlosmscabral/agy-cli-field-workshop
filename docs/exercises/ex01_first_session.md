@@ -45,17 +45,17 @@ agy
 At the `agy` prompt, ask:
 
 ```text
-> What does this project do? Give me a one-paragraph summary.
+What does this project do? Give me a one-paragraph summary.
 ```
 
 Then follow up:
 
 ```text
-> What are the top 3 files I should read to understand the core logic?
+What are the top 3 files I should read to understand the core logic?
 ```
 
 ```text
-> Are there any obvious code quality issues or tech debt?
+Are there any obvious code quality issues or tech debt?
 ```
 
 > [!NOTE]
@@ -68,11 +68,11 @@ Then follow up:
 Pick one file from `agy`'s suggestions and go deeper:
 
 ```text
-> Explain [filename] in detail. Walk me through what each function does and how they connect.
+Explain [filename] in detail. Walk me through what each function does and how they connect.
 ```
 
 ```text
-> If I wanted to add a simple feature like a health check endpoint, where would I start?
+If I wanted to add a simple feature like a health check endpoint, where would I start?
 ```
 
 ---
@@ -82,13 +82,13 @@ Pick one file from `agy`'s suggestions and go deeper:
 Now codify what you've learned so every future session starts with full context:
 
 ```text
-> Based on our conversation, generate an AGENTS.md file for this project. Include: project purpose, tech stack, key conventions, and anything I should tell an AI assistant before asking it to modify this code.
+Based on our conversation, generate an AGENTS.md file for this project. Include: project purpose, tech stack, key conventions, and anything I should tell an AI assistant before asking it to modify this code.
 ```
 
 Review what `agy` generates. Edit it if anything is wrong. Then ask `agy` to write it:
 
 ```text
-> Write that AGENTS.md to the project root.
+Write that AGENTS.md to the project root.
 ```
 
 Start a new session and verify it loads the rules:

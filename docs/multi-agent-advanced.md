@@ -38,17 +38,17 @@ This opens a model picker showing available options (Gemini 3.5 Flash, Gemini 3.
 ### From an Interactive Session
 
 ```text
-> Spawn a subagent to write unit tests for the auth module while I work on the API refactor.
+Spawn a subagent to write unit tests for the auth module while I work on the API refactor.
 ```
 
 agy will spawn a subagent, report its ID, and continue your main session. The subagent works independently.
 
 ```text
-> What's the status of the test-writing subagent?
+What's the status of the test-writing subagent?
 ```
 
 ```text
-> Show me what the test subagent produced.
+Show me what the test subagent produced.
 ```
 
 ### Managing Subagents with /agents
@@ -76,12 +76,12 @@ Subagent lifecycle: **Running → Idle → Killed**
 ### Parallel Audit Pattern
 
 ```text
-> Spawn three subagents in parallel:
-> 1. Security audit — scan for hardcoded credentials, injection risks, and insecure dependencies
-> 2. Performance audit — find N+1 queries, unindexed lookups, and memory leaks
-> 3. Coverage audit — identify untested functions and missing integration tests
->
-> Use branch workspace mode for each. Report back when all three complete.
+Spawn three subagents in parallel:
+1. Security audit — scan for hardcoded credentials, injection risks, and insecure dependencies
+2. Performance audit — find N+1 queries, unindexed lookups, and memory leaks
+3. Coverage audit — identify untested functions and missing integration tests
+
+Use branch workspace mode for each. Report back when all three complete.
 ```
 
 Watch three independent analyses run simultaneously. When they finish, agy synthesizes the results.
@@ -92,9 +92,9 @@ Watch three independent analyses run simultaneously. When they finish, agy synth
 ### Adversarial Review Pattern
 
 ```text
-> Spawn a subagent to act as an adversarial reviewer for the changes in this branch.
-> Its only job: find reasons why this code should NOT be merged.
-> It should challenge every assumption and look for edge cases the implementer missed.
+Spawn a subagent to act as an adversarial reviewer for the changes in this branch.
+Its only job: find reasons why this code should NOT be merged.
+It should challenge every assumption and look for edge cases the implementer missed.
 ```
 
 The adversarial reviewer pattern is particularly powerful for security-sensitive changes, infrastructure modifications, or any PR where "looks good to me" isn't sufficient.
@@ -131,7 +131,7 @@ When you type a message while agy is mid-task, it is **queued** — it does *not
 So a mid-task note is a *queued steer*, not a live injection into the current thought.
 
 ```text
-> Refactor the entire authentication module to use JWT instead of sessions. Start with the backend.
+Refactor the entire authentication module to use JWT instead of sessions. Start with the backend.
 ```
 
 *While agy is working, you queue:*
@@ -173,7 +173,7 @@ With `next-invocation` delivery, agy picks this up at its next step and adjusts 
 agy supports asynchronous execution — you can kick off a task and continue working. agy notifies you when it completes.
 
 ```text
-> In the background, do a comprehensive security audit of this entire codebase. Take as long as you need. Notify me when done.
+In the background, do a comprehensive security audit of this entire codebase. Take as long as you need. Notify me when done.
 ```
 
 agy runs the audit without blocking your terminal. When it finishes, you receive a notification with the results.
@@ -183,7 +183,7 @@ agy runs the audit without blocking your terminal. When it finishes, you receive
 agy supports cron-style scheduling for recurring analysis:
 
 ```text
-> Schedule a nightly code quality report every day at 2am. It should check for new TODOs, failing tests, and dependency updates. Save the report to reports/nightly-YYYY-MM-DD.md.
+Schedule a nightly code quality report every day at 2am. It should check for new TODOs, failing tests, and dependency updates. Save the report to reports/nightly-YYYY-MM-DD.md.
 ```
 
 Cron expressions (up to 5 fields) are supported:
@@ -251,7 +251,7 @@ agy --conversation <conversation-id>
 ```
 
 ```text
-> What was the last thing we decided about the payment API schema?
+What was the last thing we decided about the payment API schema?
 ```
 
 agy will have the full context, including code written, decisions made, and open questions.
@@ -265,11 +265,11 @@ agy will have the full context, including code written, decisions made, and open
 ### Enterprise Incident Response
 
 ```text
-> I'm starting an incident response for a production issue. Spawn:
-> 1. A log-analyzer subagent (branch mode) — read the last 1000 lines of app.log and identify the root cause
-> 2. A config-checker subagent (branch mode) — review all environment configs and recent deploys for anomalies
->
-> Report back when both complete. I'll be monitoring in the meantime.
+I'm starting an incident response for a production issue. Spawn:
+1. A log-analyzer subagent (branch mode) — read the last 1000 lines of app.log and identify the root cause
+2. A config-checker subagent (branch mode) — review all environment configs and recent deploys for anomalies
+
+Report back when both complete. I'll be monitoring in the meantime.
 ```
 
 While they run:

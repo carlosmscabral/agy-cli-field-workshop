@@ -255,17 +255,17 @@ agy --sandbox --dangerously-skip-permissions \
 
 ```text
 # Spawn parallel subagents (in interactive mode)
-> Spawn a security auditor and a performance auditor in parallel (branch mode).
+Spawn a security auditor and a performance auditor in parallel (branch mode).
 
 # Adversarial review
-> Spawn an adversarial reviewer subagent — its job is to find reasons to NOT merge this PR.
+Spawn an adversarial reviewer subagent — its job is to find reasons to NOT merge this PR.
 
 # Steer mid-task — `/btw` is a workshop convention, NOT a built-in command.
 # Just type the steering message inline while the agent is working:
 /btw Focus only on the authentication module, skip the frontend.
 
 # Background task
-> In the background, audit all dependencies for known CVEs. Notify me when done.
+In the background, audit all dependencies for known CVEs. Notify me when done.
 ```
 
 ---

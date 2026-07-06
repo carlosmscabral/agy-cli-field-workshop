@@ -21,23 +21,23 @@ agy
 Dispatch a parallel audit team:
 
 ```text
-> Spawn two subagents in parallel using branch workspace mode:
-> 1. A security auditor — scan for: hardcoded credentials, injection vulnerabilities, exposed sensitive data, and insecure dependencies
-> 2. A test coverage auditor — identify: untested public functions, missing edge cases, and integration test gaps
->
-> Report back when both complete with a combined findings summary.
+Spawn two subagents in parallel using branch workspace mode:
+1. A security auditor — scan for: hardcoded credentials, injection vulnerabilities, exposed sensitive data, and insecure dependencies
+2. A test coverage auditor — identify: untested public functions, missing edge cases, and integration test gaps
+
+Report back when both complete with a combined findings summary.
 ```
 
 While they run, ask:
 
 ```text
-> What's the status of the subagents?
+What's the status of the subagents?
 ```
 
 When they finish:
 
 ```text
-> Show me the combined findings from both audits. What are the top 3 things to fix?
+Show me the combined findings from both audits. What are the top 3 things to fix?
 ```
 
 ---
@@ -55,10 +55,10 @@ git add -A
 Back in agy:
 
 ```text
-> I have changes on the current branch. Spawn an adversarial reviewer subagent.
-> Its only job: find reasons why these changes should NOT be merged.
-> It should challenge assumptions, look for edge cases, and be skeptical of everything.
-> Be harsh — this is an adversarial review, not a supportive one.
+I have changes on the current branch. Spawn an adversarial reviewer subagent.
+Its only job: find reasons why these changes should NOT be merged.
+It should challenge assumptions, look for edge cases, and be skeptical of everything.
+Be harsh — this is an adversarial review, not a supportive one.
 ```
 
 Read the adversarial findings. The goal is to identify what a thorough code review would catch.
@@ -68,7 +68,7 @@ Read the adversarial findings. The goal is to identify what a thorough code revi
 ## Part 3: Resume a Subagent's Work (3 min)
 
 ```text
-> One of the subagent findings mentioned [specific issue]. Let's fix it. Create a subagent in inherit mode to implement the fix.
+One of the subagent findings mentioned [specific issue]. Let's fix it. Create a subagent in inherit mode to implement the fix.
 ```
 
 Note the difference from branch mode: `inherit` means the subagent works in the same directory as your main session — appropriate for targeted, non-conflicting fixes.

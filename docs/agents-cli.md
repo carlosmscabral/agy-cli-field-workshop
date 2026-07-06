@@ -328,7 +328,7 @@ agents-cli scaffold enhance . --cicd-runner google_cloud_build
 The real power is combining agy + agents-cli. In an Antigravity CLI session:
 
 ```text
-> Use agents-cli to scaffold an ADK agent called "expense-tracker"
+Use agents-cli to scaffold an ADK agent called "expense-tracker"
   that processes receipts and categorizes expenses.
   Start with a prototype.
 ```
