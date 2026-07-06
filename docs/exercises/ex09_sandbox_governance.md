@@ -16,7 +16,7 @@ Run an automated code review with terminal restrictions enabled:
 
 ```bash
 agy --sandbox \
-    --print "As a senior engineer doing a code review, read this codebase and write a markdown report of concrete improvements, each with a severity and a suggested fix. Focus on: configuration values hard-coded in source that belong in environment variables, error handling that hides failures, request handlers that don't validate their inputs, and any config or .env files that shouldn't be committed. Cite file:line for each." \
+    --print "As a senior engineer doing a code review, read this project (the FastAPI app in ./app) and write a markdown report of concrete improvements, each with a severity and a suggested fix. Focus on: configuration values hard-coded in source that belong in environment variables, error handling that hides failures, request handlers that don't validate their inputs, and any config or .env files that shouldn't be committed. Cite file:line for each." \
     --print-timeout 5m > audit-sandbox.md
 
 cat audit-sandbox.md
@@ -73,9 +73,12 @@ Model a two-phase governance workflow:
 
 ```bash
 agy --sandbox \
-    --print "Analyze all database operations in this codebase. Flag any that lack transaction safety or input validation." \
+    --print "As a senior engineer, review the API request handlers in this project (the FastAPI app in ./app). For each endpoint, note inputs that aren't validated at the boundary and any error handling that could silently swallow failures, and suggest a concrete improvement with file:line. Write the report to stdout." \
     --print-timeout 3m > phase1-analysis.md
 ```
+
+> [!IMPORTANT]
+> **Same framing rule as Part 1.** Keep this a constructive *review* ("improvements to make", "inputs that should be validated") — an adversarial "flag vulnerabilities / transaction-safety flaws" prompt reliably **refuses** (`"Sorry, I cannot fulfill your request…"`). Also **anchor the prompt to this project** ("the FastAPI app in `./app`"): in `--sandbox --print` the agent won't always scope itself to your current directory, and a vaguely-scoped prompt can wander off and analyze an unrelated repo on your machine. If the output is a one-line refusal or clearly about the wrong code, re-run (the model is nondeterministic).
 
 ### Phase 2: Human reviews, then approves interactive session
 
@@ -83,7 +86,7 @@ agy --sandbox \
 cat phase1-analysis.md  # human reviews findings
 
 # If approved, continue with interactive session for remediation
-agy -i "Based on the findings in phase1-analysis.md, fix the top 3 database safety issues."
+agy -i "Based on the findings in phase1-analysis.md, fix the top 3 input-validation and error-handling issues."
 ```
 
 This pattern is the enterprise-grade model: **read without trust, write only after review**.
