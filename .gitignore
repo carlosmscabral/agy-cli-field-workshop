@@ -8,3 +8,5 @@ __pycache__/
 nanobanana-output/
 tmp/
 docs/exercises/ex12_lab_guide_gdoc.md
+.claude/settings.local.json
+.claude/*.tmp*
