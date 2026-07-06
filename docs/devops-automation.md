@@ -173,7 +173,7 @@ git diff --cached | agy --dangerously-skip-permissions \
 
 ### Enabling the Sandbox
 
-The sandbox is configured via `settings.json` (either project `.agents/settings.json` or user `~/.gemini/antigravity/settings.json`):
+The sandbox is configured in your global `settings.json` at `~/.gemini/antigravity-cli/settings.json` (a per-workspace `.agents/settings.json` is deliberately not read — see the permissions note in [Plugin Ecosystem §2.3](plugin-ecosystem.md)):
 
 ```json
 {
@@ -234,7 +234,7 @@ Hooks let you run custom logic at 5 lifecycle events:
 | `PostInvocation` | After agy finishes a response |
 | `Stop` | When the session ends |
 
-Configure workspace or global hooks under the `"hooks"` key in `settings.json` (`.agents/settings.json` for project, `~/.gemini/config/settings.json` for global). Hook scripts receive JSON on stdin and return JSON on stdout. A standalone `hooks.json` file is used only when hooks are bundled inside a plugin.
+Configure hooks in a `hooks.json` file placed in a customization root: `.agents/hooks.json` (workspace), `~/.gemini/config/hooks.json` (global), or inside a plugin. Each top-level key is a named hook mapping to its event configuration. Hook scripts receive JSON on stdin and return JSON on stdout.
 
 #### Sample Hooks (in `samples/hooks/`)
 

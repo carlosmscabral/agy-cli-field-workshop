@@ -9,7 +9,7 @@
 # decides whether to act on the nudge.
 #
 # AGY CLI hook event: PostToolUse
-# Register in: .agents/hooks.json or settings.json under "PostToolUse"
+# Register in: .agents/hooks.json (workspace) under "PostToolUse"
 # Tool names for matcher: write_file, edit (AGY uses "edit" not "replace_in_file")
 
 input=$(cat)

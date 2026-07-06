@@ -8,7 +8,7 @@
 # embedding secrets directly in code.
 #
 # AGY CLI hook event: PreToolUse
-# Register in: .agents/hooks.json or settings.json under "PreToolUse"
+# Register in: .agents/hooks.json (workspace) under "PreToolUse"
 # Tool names for matcher: write_file, edit (AGY uses "edit" not "replace_in_file")
 
 input=$(cat)

@@ -97,8 +97,13 @@ Migrate the project yourself:
 mkdir -p .agents/hooks
 # AGY reads .agents/ instead of .gemini/ for project config
 cp .gemini/GEMINI.md .agents/AGENTS.md
-cp .gemini/settings.json .agents/settings.json
 ```
+
+> [!NOTE]
+> **Settings and permissions don't move into the workspace.** AGY reads them only from the global
+> `~/.gemini/antigravity-cli/settings.json` — a `.agents/settings.json` is deliberately ignored (security boundary;
+> see [Exercise 1](ex01_first_session.md)). Merge any needed permission entries from the old `.gemini/settings.json`
+> into that global file by hand.
 
 ### Step 2: Separate MCP config
 
@@ -119,26 +124,29 @@ cat > .agents/mcp_config.json << 'EOF'
 EOF
 ```
 
-### Step 3: Rewrite hook event names in settings.json
+### Step 3: Move hooks into `.agents/hooks.json`
+
+AGY reads hooks from a standalone `hooks.json` (in `.agents/`, `~/.gemini/config/`, or a plugin) — not from a
+`settings.json` "hooks" key. Each **top-level key is the hook name**, with events nested under it:
 
 ```json
 {
-  "hooks": {
+  "session-context": {
     "PreInvocation": [
       {
         "hooks": [{
-          "name": "session-context",
           "type": "command",
           "command": "$AGY_PROJECT_DIR/.agents/hooks/session-context.sh",
           "timeout": 3000
         }]
       }
-    ],
+    ]
+  },
+  "secret-scanner": {
     "PreToolUse": [
       {
         "matcher": "write_file|edit",
         "hooks": [{
-          "name": "secret-scanner",
           "type": "command",
           "command": "$AGY_PROJECT_DIR/.agents/hooks/secret-scanner.sh",
           "timeout": 2000

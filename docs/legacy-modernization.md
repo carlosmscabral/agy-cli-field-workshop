@@ -315,15 +315,15 @@ if [[ "$TOOL_NAME" == "write_file" || "$TOOL_NAME" == "edit" ]]; then
 fi
 ```
 
-Register in `settings.json`:
+Register in `.agents/hooks.json` (the top-level key is the hook name):
 
 ```json
 {
-  "hooks": {
+  "scope-guard": {
     "PreToolUse": [
       {
         "matcher": "write_file|edit",
-        "command": ".agents/hooks/scope-guard.sh"
+        "hooks": [{ "type": "command", "command": ".agents/hooks/scope-guard.sh" }]
       }
     ]
   }

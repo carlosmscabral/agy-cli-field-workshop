@@ -121,7 +121,7 @@ Exercises are tagged **Core** (everyone does) or **Optional** (stretch) in each 
 | "How is this different from older assistants?" | `agy` provides workspace-level isolation, customizable Skills (`.agents/skills/`), native subagent orchestration, and `/btw` mid-task steering. |
 | "Can I use my own API key / browser Sign-In / Enterprise GCP?" | `agy` uses browser-based Google Sign-In by default; for AI Studio you can set an API key. Enterprise users go through Vertex AI on their own GCP project — authenticate with `gcloud auth application-default login` (ADC) and set `GOOGLE_GENAI_USE_VERTEXAI=true`. See [Enterprise docs](https://www.antigravity.google/docs/enterprise). |
 | "Is the code sent to Google?" | See the [FAQ](https://www.antigravity.google/docs/faq) for data handling details. |
-| "What about hooks?" | `agy-cli` runs hooks configured in `settings.json` (under the `"hooks"` key); a `hooks.json` file is only used for hooks bundled inside a plugin. See [Hooks docs](https://www.antigravity.google/docs/hooks). |
+| "What about hooks?" | `agy-cli` runs hooks defined in a `hooks.json` file in a customization root (`.agents/hooks.json` for a workspace, `~/.gemini/config/hooks.json` globally, or inside a plugin) — not under a `settings.json` key. See [Hooks docs](https://www.antigravity.google/docs/hooks). |
 | "Where are conversation logs stored?" | `~/.gemini/antigravity/conversations/` |
 | "Can I deploy SDK agents to Cloud Run?" | Yes — since Antigravity SDK agents are standard Python applications, you can containerize them and deploy using standard `gcloud run deploy`. See Module 4 section 4.9. |
 
