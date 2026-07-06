@@ -96,7 +96,7 @@ log_section "  Checking samples/configs hooks ↔ hook file alignment..."
 
 for cfg in samples/configs/hooks.json samples/configs/settings.json; do
   [ -f "$cfg" ] || continue
-  grep -oE 'hooks/[a-zA-Z0-9_-]+\.sh' "$cfg" | sort -u | while read -r hook_ref; do
+  { grep -oE 'hooks/[a-zA-Z0-9_-]+\.sh' "$cfg" || true; } | sort -u | while read -r hook_ref; do
     hook_basename=$(basename "$hook_ref" .sh)
     if [ -f "samples/hooks/${hook_basename}.sh" ]; then
       log_ok "$(basename "$cfg") hook '${hook_basename}' has matching script"
