@@ -19,7 +19,7 @@ agy
 ```
 
 ```text
-> I want to refactor the error handling across this entire project to use a consistent pattern. Start by analyzing all error handling in the codebase, then propose and implement a unified approach. This will touch multiple files — start with the analysis phase.
+I want to refactor the error handling across this entire project to use a consistent pattern. Start by analyzing all error handling in the codebase, then propose and implement a unified approach. This will touch multiple files — start with the analysis phase.
 ```
 
 As agy starts working (during the analysis phase), inject a constraint:
@@ -55,13 +55,13 @@ agy -c
 ```
 
 ```text
-> Remind me what we decided about the error handling refactor. What was the approach?
+Remind me what we decided about the error handling refactor. What was the approach?
 ```
 
 agy will have full context. Now continue the work:
 
 ```text
-> Let's implement step 1 of the plan we discussed.
+Let's implement step 1 of the plan we discussed.
 ```
 
 ---
@@ -73,18 +73,18 @@ agy
 ```
 
 ```text
-> Schedule a daily dependency check every weekday morning at 8am. It should:
-> 1. Check for outdated dependencies with security advisories
-> 2. List any new CVEs affecting our current dependency versions
-> 3. Save the report to reports/deps-YYYY-MM-DD.md
->
-> Create the reports/ directory if it doesn't exist.
+Schedule a daily dependency check every weekday morning at 8am. It should:
+1. Check for outdated dependencies with security advisories
+2. List any new CVEs affecting our current dependency versions
+3. Save the report to reports/deps-YYYY-MM-DD.md
+
+Create the reports/ directory if it doesn't exist.
 ```
 
 Confirm the schedule was accepted. Ask:
 
 ```text
-> What scheduled tasks are currently active?
+What scheduled tasks are currently active?
 ```
 
 ---

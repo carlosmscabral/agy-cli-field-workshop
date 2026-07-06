@@ -429,7 +429,7 @@ score them.
 Open an agy session and say:
 
 ```text
-> Use agents-cli to improve my meeting-notes agent.
+Use agents-cli to improve my meeting-notes agent.
   The rubric-based eval scores are below threshold.
   Analyze the failures and fix them.
 ```

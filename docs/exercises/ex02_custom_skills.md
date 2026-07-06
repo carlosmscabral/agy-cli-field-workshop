@@ -61,13 +61,13 @@ agy
 At the interactive prompt, type the `/skills` slash command to open the active skills registry viewer:
 
 ```text
-> /skills
+/skills
 ```
 
 Verify that `project-advisor-skill` appears in the list as active. Press `ESC` to exit the list viewer, and trigger the skill using your keywords:
 
 ```text
-> Propose a refactored version of the main file. What structural or architectural patterns should I use?
+Propose a refactored version of the main file. What structural or architectural patterns should I use?
 ```
 
 Notice how `agy` matches your keywords, activates the `project-advisor-skill`, and directly references your guidelines (such as Single Responsibility, Boundary Validation, and specific Error Catching) in its proposal!

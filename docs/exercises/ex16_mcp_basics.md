@@ -93,28 +93,28 @@ agy
 ```
 
 ```text
-> /mcp
+/mcp
 ```
 
 Verify `billing-db` shows **connected**. Now **remove the agent's ability to shell or write** so the MCP tool is its *only* path to the data:
 
 ```text
-> /permissions
+/permissions
 # select: strict
 ```
 
 In `strict` mode agy cannot run `!`-shell commands, `curl`, or write files. Ask it business questions anyway — it must use the `billing-db` query tool:
 
 ```text
-> Using the billing-db tools, how many active subscriptions are there per plan? Show plan name and count.
+Using the billing-db tools, how many active subscriptions are there per plan? Show plan name and count.
 ```
 
 ```text
-> Compute monthly recurring revenue (MRR) by plan. Treat yearly plans as amount_cents / 12. Which tier contributes the most?
+Compute monthly recurring revenue (MRR) by plan. Treat yearly plans as amount_cents / 12. Which tier contributes the most?
 ```
 
 ```text
-> List the users who have an invoice in 'open' status, with the amount.
+List the users who have an invoice in 'open' status, with the amount.
 ```
 
 > [!TIP]
