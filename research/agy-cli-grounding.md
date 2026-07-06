@@ -205,7 +205,7 @@ To hard-stop/redirect the active operation, use `Esc` / `ctrl+c` (interrupt). Th
 
 | Command | Description |
 |:--|:--|
-| `/artifact` (alias `/artifacts`) | View the artifacts for the current session in the TUI |
+| `/artifact` | Open the artifact panel / view the session's artifacts in the TUI. **Singular only** — `/artifacts` (plural) is not accepted (verified 2026-07-03). Also opens the review panel where `c` adds a comment, `esc` finishes it, `y` approves. |
 | `/planning` | Enter planning mode — produces an Implementation Plan (and Task List) artifact **before** writing code, for you to review/approve (plan-then-implement / spec-driven loop). *(Verified manually: `/planning`, not `/plan`.)* |
 
 ### Review & co-steering shortcuts (TUI)

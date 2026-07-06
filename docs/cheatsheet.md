@@ -64,7 +64,7 @@ agy install        # Configure PATH and shell aliases
 | `/fork` | Conversation | Branch the current conversation into a parallel isolated workspace — trial risky steps without affecting the original |
 | `/rename <name>` | Conversation | Rename the active conversation thread |
 | `/planning` | Artifacts | Enter planning mode — produce an Implementation Plan (and Task List) before writing code |
-| `/artifact` (`/artifacts`) | Artifacts | View the artifacts for the current session |
+| `/artifact` | Artifacts | Open the artifact panel — view the session's artifacts (singular; `/artifacts` is not accepted) |
 | `/diff` | Review | Open agy's built-in diff view of the changes made in your session |
 | `/permissions` | Autonomy | Set tool-permission mode: `request-review`, `always-proceed`, `proceed-in-sandbox`, `strict` (also via `/config` → Tool Permissions) |
 | `/grill-me` | Autonomy | Have agy ask **you** clarifying questions to align on the spec/plan *before* it implements |
@@ -92,8 +92,9 @@ agy install        # Configure PATH and shell aliases
 | Action | How |
 | :-- | :-- |
 | Plan before coding | `/planning` (produces an Implementation Plan artifact) |
-| View session artifacts | `/artifact` (alias `/artifacts`) |
-| Open the Artifact Review panel | `ctrl+r` — leave inline comments to co-steer without stopping the agent |
+| View session artifacts | `/artifact` (opens the artifact panel) |
+| Open the Artifact Review panel | `/artifact` or `ctrl+r` |
+| Comment on / approve an artifact | In the panel: `c` to add a comment, `esc` to finish, `y` to approve |
 | Edit an artifact in `$EDITOR` | `ctrl+g` |
 | Control approval flow | `/permissions` — `request-review` pauses for you, `always-proceed` auto-approves |
 
