@@ -64,26 +64,30 @@ Add a GET /health endpoint to this FastAPI app. It should return an overall stat
 
 ## Part 2: Review and Co-Steer with an Inline Comment (6 min)
 
-Now review the plan and steer it — this is the core Artifacts loop.
-
-Open the **Artifact Review panel**:
+Now review the plan and steer it — this is the core Artifacts loop. Open the **Artifact Review panel** — either with the `/artifact` command or the `ctrl+r` shortcut:
 
 ```text
-ctrl+r
+/artifact
 ```
 
-From the review panel you can read the plan and attach an inline comment to a specific part of it. Add a comment asking the agent to broaden the health check, for example:
+Read the Implementation Plan in the panel, then leave an inline comment to broaden the health check. The keys are:
 
-```text
-Also include a dependency / data-store readiness check — confirm the in-memory store is reachable and report it in the response, not just a static "ok".
-```
+1. Press **`c`** to start a comment on the plan.
+2. Type the comment, for example:
 
-Submit the comment and watch the agent **incorporate your feedback into the plan** without you having to restart or re-prompt. The revised Implementation Plan should now account for the store readiness check.
+   ```text
+   Also include a dependency / data-store readiness check — confirm the in-memory store is reachable and report it in the response, not just a static "ok".
+   ```
+
+3. Press **`esc`** to finish the comment.
+4. Press **`y`** to approve the plan.
+
+`agy` incorporates your comment and moves into implementation — no restart or re-prompt. The revised plan now accounts for the store-readiness check.
 
 > [!TIP]
-> Prefer your own editor? Press `ctrl+g` to open the current artifact in `$EDITOR`. Edits and comments you make there flow back into the session the same way.
+> Prefer your own editor? Press `ctrl+g` to open the current artifact in `$EDITOR`; edits there flow back into the session the same way.
 
-When the plan looks right, approve it to move into implementation.
+That `y` approval step only appears when the agent is set to pause for you:
 
 > [!NOTE]
 > **Who approves, and when?** Whether `agy` pauses for your approval or auto-proceeds is governed by your autonomy level. Run `/permissions` to check it: in `request-review` (default) the agent waits for you to approve artifacts; in `always-proceed` it auto-approves and keeps going; `strict` holds tightest control. Keep it on `request-review` for this exercise so you see each artifact.
@@ -94,24 +98,24 @@ When the plan looks right, approve it to move into implementation.
 
 Once you approve the plan, `agy` produces a **Task List** artifact — a `task.md` broken into concrete steps (add the route, wire in the version and counts, add the readiness check, add/adjust a test) — and begins implementing, ticking off each item as it completes.
 
-List the artifacts for this session at any time:
+Open the **artifact panel** at any time to follow along:
 
 ```text
 /artifact
 ```
 
-Open the **Task List** to follow progress, then, once the agent finishes, open the **Walkthrough** artifact. The Walkthrough summarizes exactly what changed and tells you how to verify it.
+`/artifact` opens the artifact panel, where you can browse this session's artifacts — the Implementation Plan, the **Task List** (watch its items get checked off as the agent works), and, once the agent finishes, the **Walkthrough**.
 
 > [!NOTE]
-> `/artifacts` is an accepted alias for `/artifact`.
+> The command is `/artifact` (singular). `/artifacts` (plural) is **not** accepted.
 
 ---
 
-## Part 4: Verify (4 min)
+## Part 4: Analyze the Walkthrough, Then Verify (4 min)
 
-Trust, but verify — the Walkthrough tells you how, so confirm it yourself.
+When the agent finishes, open the **Walkthrough** artifact from the `/artifact` panel and read it end to end — this is your finalize step. The Walkthrough is the agent's own account of the work: which files it changed, the new `GET /health` route and the store-readiness check you requested, and the exact steps to verify. Reviewing it is how you close the plan → review → implement → **verify** loop before trusting the change.
 
-Run the existing test suite from inside the session using the shell escape:
+Then confirm it yourself. Run the existing test suite from inside the session using the shell escape:
 
 ```text
 !python3 -m pytest -q
@@ -148,8 +152,8 @@ This plan → review → implement → verify loop is the differentiator: `agy` 
 ## Completion Criteria
 
 - [ ] Entered planning mode with `/planning` and received an **Implementation Plan** artifact before any code was written
-- [ ] Opened the Artifact Review panel with `ctrl+r` (or edited via `ctrl+g`)
-- [ ] Left an **inline comment** and watched the agent incorporate it into the plan
-- [ ] Approved the plan and observed the **Task List** artifact tick off steps during implementation
-- [ ] Listed artifacts with `/artifact` and read the **Walkthrough**
+- [ ] Opened the artifact panel with `/artifact` (or `ctrl+r`)
+- [ ] Left an inline comment (`c` → type → `esc`) and approved the plan (`y`), and watched the agent incorporate the comment
+- [ ] Observed the **Task List** artifact tick off steps during implementation
+- [ ] Opened and analyzed the generated **Walkthrough** artifact (what changed + how to verify)
 - [ ] Verified the `GET /health` endpoint via `pytest` or `curl http://localhost:8000/health`
