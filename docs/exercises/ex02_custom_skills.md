@@ -89,13 +89,21 @@ Beyond skills (which trigger dynamically), you can set project-wide **Rules** th
    EOF
    ```
 
-2. Run `agy` in your sandbox directory to ask for a code modification:
+2. Start a **fresh** `agy` session so it loads the rule you just created (rules are read at launch), then ask it to add a small helper to a real file:
 
    ```text
-   > Generate a new helper function that formats currency values.
+   Add a reusable format_currency(amount_cents, currency) helper to app/billing.py.
    ```
 
-Observe that the generated helper function includes descriptive docstrings, type hints, and clean comments conforming exactly to your project rule!
+   Approve the write when prompted.
+
+3. Review the change with agy's built-in diff view and confirm the rule took effect:
+
+   ```text
+   /diff
+   ```
+
+   The new helper should carry a **descriptive docstring** and **type hints** on its signature — added automatically because `.agents/rules.md` is loaded on every run. That's the rule shaping the agent's output without you having to restate it.
 
 ---
 
@@ -132,5 +140,5 @@ Verify that the validator reports the plugin as OK (exit code 0), for example:
 
 * [ ] `.agents/skills/project-advisor/SKILL.md` exists with valid YAML frontmatter
 * [ ] Active skills list contains your custom skill
-* [ ] Code modifications conform to the `.agents/rules.md` style instructions
+* [ ] Code modifications conform to the `.agents/rules.md` style instructions (confirmed via `/diff` — docstring + type hints present)
 * [ ] Plugin validation command runs successfully on the workshop's helper plugin

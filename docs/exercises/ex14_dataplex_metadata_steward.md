@@ -140,7 +140,7 @@ At the `agy` prompt, use natural language conversation to execute the entire Dat
 1. **Ground on Dataplex curation best practices**:
 
    ```text
-   > Search the developer documentation for Dataplex Aspect Type and MetadataTemplate specifications to understand field naming rules.
+   Search the developer documentation for Dataplex Aspect Type and MetadataTemplate specifications to understand field naming rules.
    ```
 
    *Expected behavior*: The agent calls `developer-knowledge-remote.search_documents`, gets official schema guidelines (including case restrictions and required fields), and confirms that Aspect IDs must be lowercase with no underscores (e.g. `ai-steward-metadata`).
@@ -148,7 +148,7 @@ At the `agy` prompt, use natural language conversation to execute the entire Dat
 2. **Discover untagged catalog entry**:
 
    ```text
-   > Search Dataplex Catalog for assets in project "your-gcp-project" and region "us-central1".
+   Search Dataplex Catalog for assets in project "your-gcp-project" and region "us-central1".
    ```
 
    *Expected behavior*: The agent will ask for permission, run `knowledge-catalog-remote.search_entries`, and locate `raw_data_lake.customer_feedback_raw`.
@@ -156,7 +156,7 @@ At the `agy` prompt, use natural language conversation to execute the entire Dat
 3. **Inspect and audit table rows**:
 
    ```text
-   > Inspect the schema of raw_data_lake.customer_feedback_raw and query the first 3 rows to audit for PII and sentiment.
+   Inspect the schema of raw_data_lake.customer_feedback_raw and query the first 3 rows to audit for PII and sentiment.
    ```
 
    *Expected behavior*: The agent will run BQ MCP tools to retrieve schema and query rows. It should report back that column `usr_fb_txt` contains unmasked emails (PII) and that the sentiment is mixed.
@@ -164,7 +164,7 @@ At the `agy` prompt, use natural language conversation to execute the entire Dat
 4. **Tag catalog asset**:
 
    ```text
-   > Tag the table with 'ai-steward-metadata' setting sentiment to "Mixed", contains_pii to True, and steward_notes to "Detected raw emails inside customer transcript log."
+   Tag the table with 'ai-steward-metadata' setting sentiment to "Mixed", contains_pii to True, and steward_notes to "Detected raw emails inside customer transcript log."
    ```
 
    *Expected behavior*: The agent calls `knowledge-catalog-remote.create_or_update_aspect` to apply the tag directly to the Dataplex entry.
