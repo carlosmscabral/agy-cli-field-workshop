@@ -102,10 +102,7 @@ cp .gemini/settings.json .agents/settings.json
 
 ### Step 2: Separate MCP config
 
-The key migration change is that AGY pulls MCP out of `settings.json` into its own `mcp_config.json` (with `serverUrl` replacing `url`/`httpUrl`).
-
-> [!NOTE]
-> To make the server actually load, put it in the **global** `~/.gemini/config/mcp_config.json` (or bundle it in a plugin). A workspace `.agents/mcp_config.json` isn't surfaced by all builds — see [Exercise 16](ex16_mcp_basics.md). The file below shows the migrated *shape*; copy it to the global path to have it appear under `/mcp`.
+The key migration change is that AGY pulls MCP out of `settings.json` into its own workspace `.agents/mcp_config.json` (with `serverUrl` replacing `url`/`httpUrl`).
 
 ```bash
 # AGY uses mcp_config.json, not mcpServers in settings.json

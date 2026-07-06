@@ -93,12 +93,15 @@ gcloud dataplex aspect-types create ai-steward-metadata \
 
 ## Part 1: Register Native GCP Remote MCP Servers (5 min)
 
-Antigravity natively integrates with the open-source Model Context Protocol (MCP). Because Google Cloud serves native, remote MCP endpoints for BigQuery, Dataplex, and developer documentation knowledge, we register them in the **global** MCP config so `agy` mounts them automatically.
+Antigravity natively integrates with the open-source Model Context Protocol (MCP). Because Google Cloud serves native, remote MCP endpoints for BigQuery, Dataplex, and developer documentation knowledge, we configure our workspace `.agents/mcp_config.json` to mount them automatically.
 
-> [!NOTE]
-> This build reads MCP servers from the **global** `~/.gemini/config/mcp_config.json` (or from a plugin), not from a workspace `.agents/mcp_config.json`. Register the remote servers globally so they show up under `/mcp`.
+1. Create a `.agents/` folder in your workspace root if it does not already exist:
 
-1. Save the following remote server configuration as `~/.gemini/config/mcp_config.json` (create the file if it doesn't exist; if it already lists servers, add these inside the existing `mcpServers` object):
+   ```bash
+   mkdir -p .agents
+   ```
+
+2. Save the following remote server configuration as `.agents/mcp_config.json`:
 
    ```json
    {
@@ -117,7 +120,7 @@ Antigravity natively integrates with the open-source Model Context Protocol (MCP
    ```
 
 > [!TIP]
-> Run `/mcp` inside the interactive `agy` shell to verify that all three remote MCP servers are successfully mounted and active. The `developer-knowledge-remote` server allows the agent to search real-time official Google Cloud and Antigravity documentation to ground its workflows dynamically.
+> Run `/mcp` inside the interactive `agy` shell to verify that all three remote MCP servers are successfully mounted and active. If a server is missing, check `/mcp` for any **errored** server (in this or your global config) — a single broken entry can suppress the whole list. The `developer-knowledge-remote` server allows the agent to search real-time official Google Cloud and Antigravity documentation to ground its workflows dynamically.
 
 ---
 
@@ -189,7 +192,7 @@ At the `agy` prompt, use natural language conversation to execute the entire Dat
 ## Completion Criteria
 
 - [ ] BigQuery dataset and Dataplex custom aspect type provisioned
-- [ ] Remote MCP servers, including `developer-knowledge-remote`, configured in `~/.gemini/config/mcp_config.json`
+- [ ] Remote MCP servers, including `developer-knowledge-remote`, configured in `.agents/mcp_config.json`
 - [ ] Grounded curation decisions on official Google developer documentation via the Developer Knowledge MCP server
 - [ ] Discovered raw table and audited unmasked emails interactively inside `agy` CLI
 - [ ] Applied `ai-steward-metadata` Aspect Tag to the catalog entry via `agy`
