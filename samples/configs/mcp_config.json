@@ -1,7 +1,6 @@
 {
   "mcpServers": {
     "plugin-tool": {
-      "type": "stdio",
       "command": "node",
       "args": ["./server/index.js"],
       "env": {

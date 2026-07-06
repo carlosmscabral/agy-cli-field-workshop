@@ -76,14 +76,30 @@ Notice how `agy` matches your keywords, activates the `project-advisor-skill`, a
 
 ## Part 3: Write a Project-Scoped Rule (5 min)
 
-Beyond skills (which trigger dynamically), you can set project-wide **Rules** that are loaded unconditionally on every run.
+Beyond skills (which trigger dynamically), you can set project **Rules**. Each rule is a Markdown file placed **directly under `.agents/rules/`** with **YAML frontmatter** whose `trigger` field controls when it activates:
 
-1. Create a rules file inside your sandbox `.agents/` folder:
+| `trigger` | When the rule loads |
+| :-- | :-- |
+| `always_on` | Always injected into the system prompt — every run |
+| `model_decision` | The agent decides based on the rule's `description` |
+| `glob` | Only when working on files matching a `globs` pattern |
+| `manual` | Only when you `@`-mention it |
+
+> [!IMPORTANT]
+> The frontmatter and folder are **not optional**. A bare `.agents/rules.md`, or a file with no frontmatter, is silently **ignored** — as is anything in a subfolder (`.agents/rules/` is not crawled recursively). Rules must be `.agents/rules/<name>.md` **with** a `trigger`. (For always-on *project context*, a root `AGENTS.md` also works and needs no frontmatter.)
+
+1. Create an `always_on` style rule under `.agents/rules/`:
 
    ```bash
-   cat > .agents/rules.md << 'EOF'
+   mkdir -p .agents/rules
+   cat > .agents/rules/style.md << 'EOF'
+   ---
+   trigger: always_on
+   description: Documentation and comment style for this project
+   ---
+
    # Project-Scope Style Rule
-   
+
    - Always include descriptive docstrings and type hints on every class and method.
    - When generating code comments, keep them professional, concise, and focused on non-obvious code rationale.
    EOF
@@ -103,7 +119,7 @@ Beyond skills (which trigger dynamically), you can set project-wide **Rules** th
    /diff
    ```
 
-   The new helper should carry a **descriptive docstring** and **type hints** on its signature — added automatically because `.agents/rules.md` is loaded on every run. That's the rule shaping the agent's output without you having to restate it.
+   The new helper should carry a **descriptive docstring** and **type hints** on its signature — added automatically because the `always_on` rule is loaded on every run. That's the rule shaping the agent's output without you having to restate it.
 
 ---
 
@@ -140,5 +156,5 @@ Verify that the validator reports the plugin as OK (exit code 0), for example:
 
 * [ ] `.agents/skills/project-advisor/SKILL.md` exists with valid YAML frontmatter
 * [ ] Active skills list contains your custom skill
-* [ ] Code modifications conform to the `.agents/rules.md` style instructions (confirmed via `/diff` — docstring + type hints present)
+* [ ] Code modifications conform to the `.agents/rules/style.md` (`trigger: always_on`) style instructions (confirmed via `/diff` — docstring + type hints present)
 * [ ] Plugin validation command runs successfully on the workshop's helper plugin

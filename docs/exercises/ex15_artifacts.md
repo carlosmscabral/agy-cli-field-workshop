@@ -90,7 +90,7 @@ Read the Implementation Plan in the panel, then leave an inline comment to broad
 That `y` approval step only appears when the agent is set to pause for you:
 
 > [!NOTE]
-> **Who approves, and when?** Whether `agy` pauses for your approval or auto-proceeds is governed by your autonomy level. Run `/permissions` to check it: in `request-review` (default) the agent waits for you to approve artifacts; in `always-proceed` it auto-approves and keeps going; `strict` holds tightest control. Keep it on `request-review` for this exercise so you see each artifact.
+> **Who approves, and when?** Whether `agy` pauses for your approval or auto-proceeds is governed by your Tool Permissions mode. Check it in `/config` → Tool Permissions: in `request-review` (default) the agent waits for you to approve artifacts; in `always-proceed` it auto-approves and keeps going; `strict` holds tightest control. Keep it on `request-review` for this exercise so you see each artifact.
 
 ---
 

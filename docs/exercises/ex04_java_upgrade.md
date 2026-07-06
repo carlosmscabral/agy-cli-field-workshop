@@ -55,7 +55,8 @@ Before writing a single line of migration code, the agent should build its own u
 - [ ] **Set strict mode** — no writes during investigation:
 
   ```text
-  /permissions strict
+  /config
+  # open Tool Permissions → select: strict
   ```
 
 - [ ] **Investigate the codebase:**
@@ -81,7 +82,8 @@ Before writing a single line of migration code, the agent should build its own u
 - [ ] **Switch to request-review** before Phase 1:
 
   ```text
-  /permissions request-review
+  /config
+  # open Tool Permissions → select: request-review
   ```
 
 > **Why this matters:** This is the "context engineering for migrations" pattern. Instead of a human writing the AGENTS.md from scratch, the agent uses its codebase investigation capabilities to bootstrap a rich context file. The agent then uses this file to guide its own migration work — a self-reinforcing loop where better context produces better code changes.

@@ -44,7 +44,7 @@ Key properties of this run:
 `--dangerously-skip-permissions` bypasses all tool approval prompts. agy executes file writes and shell commands without asking.
 
 > [!NOTE]
-> **The autonomy spectrum (interactive).** The same trade-off exists inside a session, dialed with slash commands instead of flags: `/grill-me` (agy asks *you* clarifying questions before acting — maximum alignment) → `/permissions request-review` (approve artifacts at milestones — the default) → `/permissions always-proceed` or `/goal` (agy runs to completion, auto-approving its own plan). `/goal` is the interactive cousin of `--dangerously-skip-permissions` — reserve it for well-scoped, low-risk, or batch tasks. *(`/goal` is reported in the I/O 2026 update; confirm it against your CLI version before relying on it.)*
+> **The autonomy spectrum (interactive).** The same trade-off exists inside a session, dialed with `/grill-me` and your Tool Permissions mode (set via `/config` → Tool Permissions) instead of flags: `/grill-me` (agy asks *you* clarifying questions before acting — maximum alignment) → **request-review** (approve artifacts at milestones — the default) → **always-proceed** or `/goal` (agy runs to completion, auto-approving its own plan). `/goal` is the interactive cousin of `--dangerously-skip-permissions` — reserve it for well-scoped, low-risk, or batch tasks. *(`/goal` is reported in the I/O 2026 update; confirm it against your CLI version before relying on it.)*
 
 **Safe demonstration:** run it with `--sandbox` to show auto-approval without actual command execution:
 

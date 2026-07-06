@@ -57,7 +57,8 @@ Before writing migration code, the agent should build its own understanding of t
 - [ ] **Set strict mode** — prevent accidental file writes during investigation:
 
   ```text
-  /permissions strict
+  /config
+  # open Tool Permissions → select: strict
   ```
 
 - [ ] **Investigate the codebase:**
@@ -76,7 +77,8 @@ Before writing migration code, the agent should build its own understanding of t
 - [ ] **Switch to request-review mode** before Phase 1:
 
   ```text
-  /permissions request-review
+  /config
+  # open Tool Permissions → select: request-review
   ```
 
 ### Phase 1: TFM and Package Upgrade

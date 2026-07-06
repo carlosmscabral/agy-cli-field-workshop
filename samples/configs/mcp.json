@@ -1,7 +1,6 @@
 {
   "mcpServers": {
     "github": {
-      "type": "stdio",
       "command": "npx",
       "args": ["-y", "github-mcp-server"],
       "env": {
@@ -9,12 +8,10 @@
       }
     },
     "filesystem": {
-      "type": "stdio",
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
     },
     "workshop-remote": {
-      "type": "sse",
       "serverUrl": "https://your-mcp-server.example.com/sse",
       "env": {
         "API_KEY": "$MCP_API_KEY"

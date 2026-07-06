@@ -249,16 +249,21 @@ Configure workspace or global hooks under the `"hooks"` key in `settings.json` (
 
 ### Rules
 
-Rules are markdown files injected into agy's system prompt as `RULE` blocks — hard constraints that agy must follow.
+Rules are markdown files (each with `trigger` frontmatter) injected into agy's system prompt as `RULE` blocks — hard constraints that agy must follow. They live **directly under** a `rules/` folder:
 
 | Scope | Location |
 | :-- | :-- |
-| **Project** | `.agents/rules.md` or `.agents/rules/*.md` |
-| **Global** | `~/.gemini/config/rules.md` or `~/.gemini/config/rules/*.md` |
+| **Project** | `.agents/rules/<name>.md` |
+| **Global** | `~/.gemini/config/rules/<name>.md` |
 
-Example `.agents/rules.md`:
+Example `.agents/rules/guardrails.md`:
 
 ```markdown
+---
+trigger: always_on
+description: Repository guardrails
+---
+
 - Never delete migration files
 - Always use TypeScript strict mode
 - Run `npm test` after any code change
