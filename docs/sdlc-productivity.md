@@ -6,10 +6,11 @@
 
 ## 1.0 — First Interactive Session <span class="duration-badge">5 min</span>
 
-Launch Antigravity CLI in your target sandbox directory (`agy-sample-app`):
+Launch Antigravity CLI in your target sandbox directory (`agy-sample-app`). First activate the sample app's own `.venv` (set up in [Exercise 1](exercises/ex01_first_session.md)) — this is the environment that runs the app and its tests throughout Modules 1–2:
 
 ```bash
 cd ../agy-sample-app
+source .venv/bin/activate
 agy
 ```
 
@@ -33,7 +34,7 @@ If you need to run a shell command, check Git status, or run a test suite, you *
 
 ```text
 > !git status
-> !python3 -m unittest
+> !python3 -m pytest
 ```
 
 ### Exercise: Map an Unfamiliar Codebase
@@ -110,10 +111,10 @@ Use `agy` to write unit tests for the sandbox code. Ask:
 > Look at the main module. Generate a comprehensive unit test suite for it. Include happy path, edge cases, and error conditions. Use the testing framework already in this project.
 ```
 
-Once the files are written, use the TUI shell escape to execute them live without exiting:
+Once the files are written, use the TUI shell escape to execute them live without exiting (the sample app uses **pytest**):
 
 ```text
-> !python3 -m unittest discover tests/
+> !python3 -m pytest
 ```
 
 If any tests fail, feed the output back to the agent:
@@ -205,7 +206,7 @@ This is a Python REST API built with FastAPI.
 
 ## Key Conventions
 - Style: PEP 8 compliant, type hints required on all function signatures
-- Testing: Unittest with 80% coverage minimum; run `python3 -m unittest` to validate
+- Testing: Pytest with 80% coverage minimum; run `python3 -m pytest` to validate
 - DO NOT use generic `except Exception` blocks; always catch specific errors
 - All database operations must utilize transaction handlers
 EOF

@@ -81,23 +81,23 @@ else
   git clone https://github.com/carlosmscabral/agy-sample-app.git "$SANDBOX_DIR"
 fi
 
-# Step 5: Set up Sandbox Virtual Environment and SDK dependencies
-echo -e "\n${BLUE}[5/5] Setting up Python SDK Dependencies...${NC}"
+# Step 5: Set up the sample app's own virtual environment and dependencies
+echo -e "\n${BLUE}[5/5] Setting up Sample App Dependencies...${NC}"
 cd "$SANDBOX_DIR"
 
 echo -e "  Creating virtual environment (.venv)..."
 python3 -m venv .venv
 
-echo -e "  Installing google-antigravity pip package..."
+echo -e "  Installing the sample app's dependencies from requirements.txt..."
 .venv/bin/pip install --upgrade pip
-.venv/bin/pip install google-antigravity
+.venv/bin/pip install -r requirements.txt
 
 # Note: we intentionally do NOT pre-create .agents/ — Exercise 2 has attendees create it themselves.
 
 echo -e "\n================═════════════════════════════════════"
 echo -e "${GREEN}🎉 Enterprise Bootstrap Completed Successfully!${NC}"
 echo -e "================═════════════════════════════════════\n"
-echo -e "To start your first Antigravity CLI session, run:"
+echo -e "To start your first Antigravity CLI session, run (this activates the sample app's own .venv):"
 echo -e "  ${CYAN}cd ${SANDBOX_DIR}${NC}"
 echo -e "  ${CYAN}source .venv/bin/activate${NC}"
 echo -e "  ${CYAN}export GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}${NC}"
