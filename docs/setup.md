@@ -48,7 +48,7 @@ If you are running on your local workstation, verify your system meets these bas
 | :-- | :-- | :-- |
 | **Antigravity CLI (agy)** | Latest | Installed during the onboarding guides. |
 | **Google Cloud SDK** | v410.0+ | Required for workstation-based ADC authentication. |
-| **Python** | v3.10 to v3.12 | Required for virtual environments and SDK exercises. |
+| **Python** | v3.10 to v3.12 | Required for the sample app and SDK exercises. Each project uses its own per-project virtualenv — there is no shared workshop venv. |
 | **Docker** *(optional)* | v24.0+ | **Only** for the .NET modernization exercise (ex03). Skip if you're not running that lab. |
 | **Docker Compose** *(optional)* | v2.20+ | **Only** for ex03 (running the sample's multi-container services). |
 | **Git** | v2.30+ | Required for cloning the workshop and sample repos. |
@@ -64,6 +64,9 @@ Regardless of which track you choose, you will work with **two separate reposito
 2. **Sample Application Sandbox (`agy-sample-app`)**: A separate target codebase (a premium FastAPI application) where you will run `agy` sessions, let agents run commands, and write SDK-based tools or test files.
 
 Both onboarding guides will walk you through cloning these repositories into adjacent directories.
+
+> [!NOTE]
+> **Environments are per-project — there is no shared workshop virtualenv.** Python dependencies live with the project that needs them: the sample app (Modules 1–2) has its own `.venv` created from its `requirements.txt`; the ADK project (Module 3) is managed by `uv sync`; the SDK project (Module 4) has its own `.venv` with `google-antigravity`. Pre-work only installs repo-agnostic tooling (`agy`, `gcloud`/ADC/Vertex, and `uv`).
 
 ---
 

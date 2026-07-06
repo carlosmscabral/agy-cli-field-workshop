@@ -98,41 +98,39 @@ git clone https://github.com/carlosmscabral/agy-sample-app.git ../agy-sample-app
 ```
 
 > [!TIP]
-> **One-command bootstrap (optional).** Once `gcloud` and `agy` are installed, `scripts/bootstrap-enterprise.sh` automates the rest — it clones the `agy-sample-app` sandbox, runs the ADC login, exports the canonical Vertex environment, and creates the sandbox virtualenv with `google-antigravity`. Run it from the workshop repo root: `bash scripts/bootstrap-enterprise.sh`. You can then skip Steps 3, 5, and 6 below.
+> **One-command bootstrap (optional).** Once `gcloud` and `agy` are installed, `scripts/bootstrap-enterprise.sh` automates the sample-app onboarding — it clones the `agy-sample-app` sandbox, runs the ADC login, exports the canonical Vertex environment, and creates the sample app's own `.venv` from its `requirements.txt`. Run it from the workshop repo root: `bash scripts/bootstrap-enterprise.sh`. You can then skip the sample-app clone above and Step 5 (Google Cloud Authentication) below. You still need `uv` (Step 3) and `agy` (Step 6).
 
 ---
 
-## Step 3: Configure Virtual Environment & Package Isolation
+## Step 3: Install uv (Python Package Manager)
 
-To prevent package conflicts and permission blocks on locked workstations, **always use an isolated virtual environment** for all workshop dependencies.
+Install [`uv`](https://docs.astral.sh/uv/), the fast Python package manager used by the ADK exercises (Module 3). It's a standalone binary — no virtual environment required to install it.
 
-Run these commands inside the `agy-cli-field-workshop` directory:
-
-### Create Environment on macOS / Linux
+### Install uv on macOS / Linux
 
 ```bash
-# Create the virtual environment
-python3 -m venv .venv
-
-# Activate it
-source .venv/bin/activate
+# Install uv, then re-source your shell and verify
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source ~/.bashrc
+uv --version
 ```
 
-### Create Environment on Windows
+### Install uv on Windows
 
 ```powershell
-# Create the virtual environment
-python -m venv .venv
-
-# Activate it
-.\.venv\Scripts\Activate.ps1
+# Install uv, then verify
+irm https://astral.sh/uv/install.ps1 | iex
+uv --version
 ```
+
+> [!NOTE]
+> **Python environments are per-project — there is no shared workshop venv.** Each module's first step sets up its own environment: the sample app (Modules 1–2) creates its own `.venv` and installs from its `requirements.txt`; the ADK project (Module 3) is managed by `uv sync`; the SDK project (Module 4) creates its own `.venv` with `google-antigravity`. This keeps each project's dependencies isolated and avoids `ModuleNotFoundError` from running an app in the wrong environment.
 
 ---
 
 ## Step 4: Handle Corporate Proxies, Private Mirrors, & SSL Certs
 
-Many corporate environments route traffic through SSL-decrypting firewalls or require private package registries (like Sonatype Nexus or JFrog Artifactory). If yours does not, **skip to Step 5**.
+Many corporate environments route traffic through SSL-decrypting firewalls or require private package registries (like Sonatype Nexus or JFrog Artifactory). The settings below apply to **every `pip install` you run inside a project's venv** throughout the workshop. If your network does not restrict outbound package traffic, **skip to Step 5**.
 
 ### 4.1 — Trusting Corporate Root Certificates
 
@@ -167,21 +165,7 @@ trusted-host = artifactory.yourcompany.com
 
 ---
 
-## Step 5: Install Workshop Python Packages
-
-With your virtual environment active, run the following commands to install dependencies:
-
-```bash
-# Upgrade pip inside the environment
-pip install --upgrade pip
-
-# Install required workshop packages
-pip install google-antigravity uvicorn fastapi pytest
-```
-
----
-
-## Step 6: Google Cloud Authentication & Vertex AI Environment
+## Step 5: Google Cloud Authentication & Vertex AI Environment
 
 The workshop runs against **your company's GCP project on Vertex AI**. This one canonical setup authorizes the `agy` CLI, the Antigravity Python SDK, and `agents-cli` (ADK) — no personal/API-key path is needed.
 
@@ -204,7 +188,7 @@ export GOOGLE_GENAI_USE_VERTEXAI=True           # routes google-genai / ADK call
 
 ---
 
-## Step 7: Install the Antigravity CLI (agy)
+## Step 6: Install the Antigravity CLI (agy)
 
 Install the `agy` binary locally:
 
@@ -243,11 +227,11 @@ agy
 ```
 
 > [!NOTE]
-> `agy` uses the project from `GOOGLE_CLOUD_PROJECT` (set in Step 6) to select which GCP project handles inference. Type `/logout` inside `agy` to clear cached credentials.
+> `agy` uses the project from `GOOGLE_CLOUD_PROJECT` (set in Step 5) to select which GCP project handles inference. Type `/logout` inside `agy` to clear cached credentials.
 
 ---
 
-## Step 8: Run the Workstation Verification Script
+## Step 7: Run the Workstation Verification Script
 
 To guarantee zero blockers, we provide an automated verifier that tests local binaries, package isolation, local credentials, Docker daemon connection, and Vertex AI IAM permissions.
 
@@ -309,7 +293,7 @@ Run the verifier corresponding to your host OS:
 
 ---
 
-## Step 9: Run the Quick TUI Smoke Test
+## Step 8: Run the Quick TUI Smoke Test
 
 Verify interactive sign-in works by triggering `agy`:
 

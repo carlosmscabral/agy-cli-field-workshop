@@ -23,14 +23,15 @@ This is a **4-module, ≈7-hour hands-on workshop** for Antigravity CLI. It is d
 
 ## Pre-Workshop Checklist
 
-- [ ] Participants have Antigravity CLI installed and authenticated *(see [setup.md](setup.md))*
+- [ ] **Pre-work is repo-agnostic:** participants have installed `agy` (standalone binary — no venv), set up `gcloud` + ADC + the Vertex env (`GOOGLE_CLOUD_PROJECT`/`GOOGLE_CLOUD_LOCATION`/`GOOGLE_GENAI_USE_VERTEXAI=True`), installed `uv`, and cloned both repos. **No shared workshop venv** *(see [setup.md](setup.md))*
 - [ ] Auth details distributed (session-specific — confirm with agy-cli team)
 - [ ] Participants have Git and a suitable demo codebase
 - [ ] Facilitator has run through all exercises end-to-end on the current agy-cli version
 - [ ] Screen sharing / projection tested
+- [ ] For Modules 1/2: the sample app uses its **own** `.venv` (`cd ../agy-sample-app && python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt`) — this installs the app's real deps (incl. `pydantic[email]`), so its tests run in the right environment
 - [ ] For Module 2: confirm participants can run `dotnet` or `mvn` (or use the provided container)
-- [ ] For Module 3: confirm `uv` and `agents-cli` are installed (`uvx google-agents-cli setup`)
-- [ ] For Module 4: confirm `pip install google-antigravity` and `gcloud auth application-default login` work
+- [ ] For Module 3: confirm `uv` and `agents-cli` are installed (`uvx google-agents-cli setup`); `agents-cli scaffold` + `uv sync` manage the ADK project's env
+- [ ] For Module 4: each SDK exercise creates its **own** project-local `.venv` with `pip install google-antigravity`; confirm `gcloud auth application-default login` works
 
 !!! warning "Auth is the #1 failure point"
     Always run a pre-workshop auth check 30 minutes before the session:

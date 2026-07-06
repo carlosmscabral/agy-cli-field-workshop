@@ -79,23 +79,28 @@ agy --version
 
 ---
 
-## Step 5: Virtual Environment & Packages
+## Step 5: Install uv (Python Package Manager)
 
-Initialize an isolated virtual environment and install the required workshop dependencies (including `google-antigravity`):
+Install [`uv`](https://docs.astral.sh/uv/), the fast Python package manager used by the ADK exercises (Module 3). It's a standalone binary — no virtual environment required to install it:
 
 ```bash
-# Create and activate virtual environment inside the workshop directory
-python3 -m venv .venv
-source .venv/bin/activate
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Upgrade pip and install standard packages
-pip install --upgrade pip
-pip install google-antigravity uvicorn fastapi pytest
+# Re-source your shell so uv is on PATH, then verify
+source ~/.bashrc
+uv --version
 ```
+
+> [!NOTE]
+> **Python environments are per-project — there is no shared workshop venv.** Each module's first step sets up its own environment: the sample app (Modules 1–2) creates its own `.venv` and installs from its `requirements.txt`; the ADK project (Module 3) is managed by `uv sync`; the SDK project (Module 4) creates its own `.venv` with `google-antigravity`. This keeps each project's dependencies isolated and avoids `ModuleNotFoundError` from running an app in the wrong environment.
 
 ---
 
-## Step 6: Docker Verification
+## Step 6: Docker Verification (Optional — only for ex03)
+
+> [!NOTE]
+> **Docker is only needed for the .NET modernization exercise (ex03).** Skip this step if you're not running that lab.
 
 Docker and Docker Compose (v2) are **fully pre-installed and running** out of the box inside Google Cloud Shell.
 

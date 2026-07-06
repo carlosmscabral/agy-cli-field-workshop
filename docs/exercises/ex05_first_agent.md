@@ -16,12 +16,15 @@ Build a **Code Review Agent** using the `google-antigravity` Python SDK. The age
 # Create project directory
 mkdir -p ~/agy-review-agent/tools ~/agy-review-agent/hooks ~/agy-review-agent/skills/python-review
 
-# Set up Python environment
+# Set up this project's own Python environment (no shared workshop venv)
 cd ~/agy-review-agent
 python3 -m venv .venv
 source .venv/bin/activate
 pip install google-antigravity pydantic
 ```
+
+> [!NOTE]
+> This SDK project owns its own `.venv` with `google-antigravity` — it is separate from the sample app's environment (Modules 1–2) and there is no shared workshop venv. Keep this venv activated for the rest of the exercise.
 
 Authenticate with the enterprise **Vertex AI / GEAP** path (the primary option in this workshop). This uses Application Default Credentials — no API key. You need the `roles/aiplatform.user` IAM role on your account.
 

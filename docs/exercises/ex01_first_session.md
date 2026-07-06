@@ -14,10 +14,26 @@ Launch `agy` CLI, explore a sandbox codebase, and create an `AGENTS.md` file tha
 
 For this exercise, we will operate within the dedicated sandbox workspace `agy-sample-app` that you cloned during setup (or that the `scripts/bootstrap-enterprise.sh` script prepared for you).
 
+**Set up the sample app environment.** The sample app owns its own virtualenv — there is no shared workshop venv. Create it and install the app's dependencies (this is what runs the app and its tests throughout Modules 1–2):
+
 ```bash
 # Navigate to the sandbox project directory
 cd ../agy-sample-app
 
+# Create and activate the sample app's own virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install the sample app's dependencies
+pip install -r requirements.txt
+```
+
+> [!NOTE]
+> If you ran `scripts/bootstrap-enterprise.sh`, this `.venv` already exists — just activate it with `source .venv/bin/activate`.
+
+Now launch your Antigravity CLI interactive shell:
+
+```bash
 # Launch your Antigravity CLI interactive shell
 agy
 ```
