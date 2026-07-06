@@ -242,7 +242,15 @@ if [ -z "$GCP_PROJECT" ] || [ "$GCP_PROJECT" = "(unset)" ]; then
 elif [ ! -f "$ADC_PATH" ]; then
   check_result "FAIL" "GCP API connection check skipped" "Ensure you have logged in via: gcloud auth application-default login"
 else
-  echo -e "  🌐 Testing outbound network connectivity to Vertex AI us-central1..."
+  # Test the location the attendee configured (GOOGLE_CLOUD_LOCATION); default to global.
+  # The global endpoint has no region prefix; regional endpoints do.
+  VERTEX_LOCATION="${GOOGLE_CLOUD_LOCATION:-global}"
+  if [ "$VERTEX_LOCATION" = "global" ]; then
+    VERTEX_HOST="aiplatform.googleapis.com"
+  else
+    VERTEX_HOST="${VERTEX_LOCATION}-aiplatform.googleapis.com"
+  fi
+  echo -e "  🌐 Testing outbound network connectivity to Vertex AI (location: ${VERTEX_LOCATION})..."
   
   # Fetch ADC Access Token to verify credential viability
   ADC_TOKEN=$(gcloud auth application-default print-access-token 2>/dev/null || true)
@@ -257,7 +265,7 @@ else
       -X POST \
       -H "Authorization: Bearer $ADC_TOKEN" \
       -H "Content-Type: application/json" \
-      "https://us-central1-aiplatform.googleapis.com/v1/projects/${GCP_PROJECT}/locations/us-central1/publishers/google/models/gemini-3.1-pro-preview:generateContent" \
+      "https://${VERTEX_HOST}/v1/projects/${GCP_PROJECT}/locations/${VERTEX_LOCATION}/publishers/google/models/gemini-3.1-pro-preview:generateContent" \
       -d '{"contents": [{"role": "user", "parts": [{"text": "Hello, is this API active?"}]}]}' \
       --max-time 10 || echo "000")
 
@@ -266,11 +274,11 @@ else
     elif [ "$HTTP_STATUS" = "403" ]; then
       check_result "FAIL" "IAM Permission Denied (HTTP 403) accessing Vertex AI on project $GCP_PROJECT" "Verify your GCP user has been granted the 'Vertex AI User' (roles/aiplatform.user) role in the project."
     elif [ "$HTTP_STATUS" = "404" ]; then
-      check_result "FAIL" "Vertex AI Model API not found (HTTP 404)" "The model id or region may be unavailable in this project. Verify the Vertex AI API (aiplatform.googleapis.com) is enabled (gcloud services enable aiplatform.googleapis.com), and that the model gemini-3.1-pro-preview is available in region us-central1 for your project."
+      check_result "FAIL" "Vertex AI Model API not found (HTTP 404)" "The model id or region may be unavailable in this project. Verify the Vertex AI API (aiplatform.googleapis.com) is enabled (gcloud services enable aiplatform.googleapis.com), and that the model gemini-3.1-pro-preview is available in location ${VERTEX_LOCATION} for your project."
     elif [ "$HTTP_STATUS" = "000" ]; then
       check_result "FAIL" "Connection timed out (no network response)" "Outbound traffic to *.aiplatform.googleapis.com on port 443 is blocked. Please contact your Enterprise Security/Network team to whitelist Google Cloud APIs."
     else
-      check_result "WARN" "Received unexpected response (HTTP $HTTP_STATUS) from Vertex AI API" "The model id or region may be unavailable in this project. Confirm the Vertex AI API is enabled, that model gemini-3.1-pro-preview is offered in region us-central1 for your project, and that you are using a validated regional endpoint."
+      check_result "WARN" "Received unexpected response (HTTP $HTTP_STATUS) from Vertex AI API" "The model id or region may be unavailable in this project. Confirm the Vertex AI API is enabled, that model gemini-3.1-pro-preview is offered in location ${VERTEX_LOCATION} for your project, and that GOOGLE_CLOUD_LOCATION matches a location where the model is available."
     fi
   fi
 fi

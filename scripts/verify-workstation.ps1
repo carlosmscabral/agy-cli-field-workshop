@@ -302,7 +302,11 @@ if (-not $gcpProject) {
 } elseif (-not (Test-Path $adcPath)) {
     Assert-Result "FAIL" "GCP API connection check skipped" "Ensure you have logged in via: gcloud auth application-default login"
 } else {
-    Write-Host "  🌐 Testing outbound network connectivity to Vertex AI us-central1..."
+    # Test the location the attendee configured (GOOGLE_CLOUD_LOCATION); default to global.
+    # The global endpoint has no region prefix; regional endpoints do.
+    $vertexLocation = if ($env:GOOGLE_CLOUD_LOCATION) { $env:GOOGLE_CLOUD_LOCATION } else { "global" }
+    if ($vertexLocation -eq "global") { $vertexHost = "aiplatform.googleapis.com" } else { $vertexHost = "${vertexLocation}-aiplatform.googleapis.com" }
+    Write-Host "  🌐 Testing outbound network connectivity to Vertex AI (location: $vertexLocation)..."
     
     # Safely extract ADC print-access-token
     try {
@@ -316,7 +320,7 @@ if (-not $gcpProject) {
         Assert-Result "FAIL" "Unable to obtain local Application Default Credentials token" "Re-run: gcloud auth application-default login"
     } else {
         # Target endpoint model is gemini-3.1-pro-preview (a live-supported, stable id)
-        $uri = "https://us-central1-aiplatform.googleapis.com/v1/projects/$gcpProject/locations/us-central1/publishers/google/models/gemini-3.1-pro-preview:generateContent"
+        $uri = "https://$vertexHost/v1/projects/$gcpProject/locations/$vertexLocation/publishers/google/models/gemini-3.1-pro-preview:generateContent"
         
         $headers = @{
             "Authorization" = "Bearer $adcToken"
@@ -342,7 +346,7 @@ if (-not $gcpProject) {
             if ($response.StatusCode -eq 200) {
                 Assert-Result "PASS" "Vertex AI Gemini Model access is healthy & verified"
             } else {
-                Assert-Result "WARN" "Received HTTP status code $($response.StatusCode) from Vertex AI API" "The model id or region may be unavailable in this project. Confirm the Vertex AI API is enabled and that model gemini-3.1-pro-preview is offered in region us-central1 for your project."
+                Assert-Result "WARN" "Received HTTP status code $($response.StatusCode) from Vertex AI API" "The model id or region may be unavailable in this project. Confirm the Vertex AI API is enabled and that model gemini-3.1-pro-preview is offered in location $vertexLocation for your project."
             }
         } catch {
             $ex = $_.Exception
@@ -351,9 +355,9 @@ if (-not $gcpProject) {
                 if ($statusCode -eq 403) {
                     Assert-Result "FAIL" "IAM Permission Denied (HTTP 403) accessing Vertex AI on project $gcpProject" "Verify your GCP user has been granted the 'Vertex AI User' (roles/aiplatform.user) role in the project."
                 } elseif ($statusCode -eq 404) {
-                    Assert-Result "FAIL" "Vertex AI Model API not found (HTTP 404)" "The model id or region may be unavailable in this project. Verify the Vertex AI API (aiplatform.googleapis.com) is enabled (gcloud services enable aiplatform.googleapis.com), and that model gemini-3.1-pro-preview is available in region us-central1 for your project."
+                    Assert-Result "FAIL" "Vertex AI Model API not found (HTTP 404)" "The model id or region may be unavailable in this project. Verify the Vertex AI API (aiplatform.googleapis.com) is enabled (gcloud services enable aiplatform.googleapis.com), and that model gemini-3.1-pro-preview is available in location $vertexLocation for your project."
                 } else {
-                    Assert-Result "FAIL" "API Error (HTTP $statusCode) accessing Vertex AI" "The model id or region may be unavailable in this project. Check that the Vertex AI API is enabled and that model gemini-3.1-pro-preview is offered in region us-central1 for your project."
+                    Assert-Result "FAIL" "API Error (HTTP $statusCode) accessing Vertex AI" "The model id or region may be unavailable in this project. Check that the Vertex AI API is enabled and that model gemini-3.1-pro-preview is offered in location $vertexLocation for your project."
                 }
             } else {
                 # General connection issue (DNS, proxy, block)
