@@ -53,7 +53,7 @@ This is a hands-on field workshop for the **Antigravity CLI (`agy`)**, built aro
 
     ---
 
-    Run parallel review **subagents**, then build a custom `code-cleaner` subagent to refactor the messy module.
+    Run parallel review **subagents**, then spawn one to refactor the messy module and fix the hard-coded key.
 
     [:octicons-arrow-right-24: Subagents](exercises/ex05_subagents.md)
 

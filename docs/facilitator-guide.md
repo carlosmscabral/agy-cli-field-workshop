@@ -85,7 +85,8 @@ Do the beats **in order** — each builds on the state the previous one left in 
 **Key message:** subagents turn `agy` into an orchestrator. This is the wow moment — spawn two review agents live and show both running in `/agents`.
 
 - Demo native parallel subagents (security + test-coverage) and the `ctrl+j` / `ctrl+k` approval keys.
-- Then the payoff: create `.agents/agents/code-cleaner.md` and invoke it to refactor `app/billing.py`. **Pre-verify** that the custom subagent appears in `/agents` on your `agy` build — the bundled CLI ships no subagent-format reference, so confirm the frontmatter (`model` + `tools.allow`) loads before the session.
+- Then the payoff: **spawn a subagent in inherit mode** to refactor `app/billing.py` (dedupe currency formatters, fix the bare `except:`) and move the hard-coded key to the environment. Approve its edits with `ctrl+k`; verify with `/diff` + `pytest`.
+- **Framing gotcha (the #1 issue):** a "security auditor / scan for hard-coded secrets & vulnerabilities" prompt makes the model **refuse**. Frame it as a *senior engineer suggesting hardening improvements* — it surfaces the same hard-coded key without declining. (Custom `.agents/agents/` subagent files are intentionally **not** taught here — they aren't surfaced reliably on current builds, so the beat uses spawned/native subagents.)
 
 ---
 
@@ -112,7 +113,7 @@ Do the beats **in order** — each builds on the state the previous one left in 
 | `agy plugin list` errors | Check that `~/.gemini/antigravity/` exists. |
 | Slow responses | Check network. First run after idle is slower due to workspace indexing. |
 | Subagent doesn't spawn | Confirm the participant is in interactive mode (not `--print`). |
-| Custom subagent missing from `/agents` | Re-check `.agents/agents/<name>.md` frontmatter; started from a **fresh** session (definitions load at launch). |
+| Security review refused (`"cannot fulfill…vulnerabilities"`) | Reframe as a constructive hardening review, not a "scan for secrets/vulnerabilities." |
 | MCP server missing from `/mcp` | A broken server in another config can hide the list — fix/remove the errored one. |
 | `ModuleNotFoundError` in the sample app | Activate its venv: `source .venv/bin/activate`. |
 
