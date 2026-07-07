@@ -1,6 +1,6 @@
-# Exercise 16: Governed Access with MCP
+# Exercise 4: Governed Access with MCP
 
-> **Duration:** 20 min | **Module:** 1 — Antigravity CLI Fundamentals
+> **Duration:** 20 min | **The Workshop · Beat 4 — Governed Data Access**
 
 ---
 
@@ -23,7 +23,7 @@ MCP servers are declared in a JSON config file, not via an `agy` subcommand. The
 
 A **local** server runs as a subprocess — give it a `command` and `args`. A **remote** server instead gets a `serverUrl`. The transport is inferred from which field you set; there is no separate `type` field.
 
-**Prerequisites:** `uv` installed (provides `uvx`, same as Module 3) and `python3`. No accounts or API keys.
+**Prerequisites:** `uv` installed (provides `uvx`) and `python3`. No accounts or API keys.
 
 > [!WARNING]
 > **One bad server hides them all.** If a server in *any* config (commonly a stale entry in your **global** `~/.gemini/config/mcp_config.json`) is misconfigured or fails to start, `/mcp` may fail to list the *other*, healthy servers — including your workspace one. If your server doesn't appear, open `/mcp`, look for a server in an **errored/disconnected** state, and fix or remove it.
@@ -143,7 +143,7 @@ Remote MCP servers use `serverUrl` instead of a local `command` — and the serv
 }
 ```
 
-This is exactly how the **managed GCP data lab in Module 3** works — Google-hosted BigQuery/Dataplex MCP servers where auth flows through your Vertex/ADC credentials and the agent never sees a key.
+This is exactly how **managed GCP MCP servers** work — e.g. Google-hosted BigQuery/Dataplex endpoints where auth flows through your Vertex/ADC credentials and the agent never sees a key.
 
 ---
 

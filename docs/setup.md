@@ -1,40 +1,28 @@
 # Environment Setup
 
-> Complete this before starting any module. Takes ≈15 minutes.
+> Complete this before the workshop. Takes ≈15 minutes.
 
-Welcome to the **Antigravity CLI Field Workshop**! To participate in the hands-on coding modules and exercises, you must first set up your development environment.
+Welcome to the **Antigravity CLI Field Workshop**! To run the hands-on beats, set up your enterprise development environment: a company-managed workstation authenticating to **your organization's GCP project via Vertex AI**.
 
-We provide two onboarding pathways. **The primary path for real customer and enterprise deployments is Track A — Enterprise / Corporate on GCP + Vertex AI.** Track B (Cloud Shell Sandbox) is a zero-install option for quick trials and lab environments. Pick the one that matches your setup.
-
----
-
-## Select Your Onboarding Track
+Setup has **two roles**:
 
 <div class="grid cards" markdown>
 
-- :material-laptop:{ .lg .middle } **Track A — Enterprise / Corporate (GCP + Vertex AI)** ⭐
+- :material-shield-account:{ .lg .middle } **IT Admin — Provisioning** (once, for the group)
 
     ---
 
-    **Recommended — the primary path for real customer deployments.** Develop on a company-managed laptop (macOS, Windows, or Linux), authenticating to **your organization's GCP project via Vertex AI**.
+    Provision the GCP project, enable APIs, and grant attendee IAM roles. Done once by a cloud/IT admin or facilitator before the session.
 
-    This track has **two roles**:
-    1. **IT Admin**: provisions the GCP project, enables APIs, and sets IAM permissions (*once* for the group).
-    2. **Developer**: sets up the local workstation, handles proxies, and validates the environment.
+    [:octicons-arrow-right-24: IT Admin Provisioning](setup-enterprise-admin.md)
 
-    [:octicons-arrow-right-24: Follow Track A Guide](setup-corporate.md)
-
-- :material-cloud:{ .lg .middle } **Track B — Cloud Shell Sandbox**
+- :material-laptop:{ .lg .middle } **Developer — Workstation** (each attendee)
 
     ---
 
-    **A zero-install option for quick trials and lab environments.** Run the workshop inside a Google-provided, browser-based Cloud Shell (or Qwiklabs) with Owner on a temporary project.
+    Install the tooling, authenticate with ADC + Vertex AI, clone the repos, and verify. Done by every attendee on their own laptop (macOS, Windows, or Linux).
 
-  - All dependencies and tools are pre-configured.
-  - APIs are enabled directly by you (as project Owner).
-  - Docker & Docker Compose are pre-installed.
-
-    [:octicons-arrow-right-24: Follow Track B Guide](setup-cloud-shell.md)
+    [:octicons-arrow-right-24: Workstation Setup](setup-corporate.md)
 
 </div>
 
@@ -42,34 +30,33 @@ We provide two onboarding pathways. **The primary path for real customer and ent
 
 ## General System Requirements
 
-If you are running on your local workstation, verify your system meets these baseline requirements. (If you are running on Cloud Shell, these are already pre-configured for you).
+Verify your workstation meets these baselines (the onboarding guides install the rest):
 
 | Component | Minimum | Notes |
 | :-- | :-- | :-- |
-| **Antigravity CLI (agy)** | Latest | Installed during the onboarding guides. |
-| **Google Cloud SDK** | v410.0+ | Required for workstation-based ADC authentication. |
-| **Python** | v3.10 to v3.12 | Required for the sample app and SDK exercises. Each project uses its own per-project virtualenv — there is no shared workshop venv. |
-| **Docker** *(optional)* | v24.0+ | **Only** for the .NET modernization exercise (ex03). Skip if you're not running that lab. |
-| **Docker Compose** *(optional)* | v2.20+ | **Only** for ex03 (running the sample's multi-container services). |
-| **Git** | v2.30+ | Required for cloning the workshop and sample repos. |
+| **Antigravity CLI (agy)** | Latest | Installed during the workstation guide. |
+| **Google Cloud SDK** | v410.0+ | Required for ADC authentication to Vertex AI. |
+| **Python** | v3.10 to v3.12 | Runs the sample app and its tests. |
+| **uv** | Latest | Provides `uvx` (used by the MCP beat). Installed during setup. |
+| **Git** | v2.30+ | For cloning the workshop and sample repos. |
 | **Terminal** | Any | bash, zsh, VS Code terminal, or PowerShell. |
 
 ---
 
 ## Why Two Repositories?
 
-Regardless of which track you choose, you will work with **two separate repositories** during this workshop to maintain clean configurations and prevent self-referencing issues:
+You'll work with **two adjacent repositories**:
 
-1. **Workshop Repository (`agy-cli-field-workshop`)**: Contains the curriculum, guidebooks, verifiers, and step-by-step exercise instructions. This is the repository you are reading now.
-2. **Sample Application Sandbox (`agy-sample-app`)**: A separate target codebase (a premium FastAPI application) where you will run `agy` sessions, let agents run commands, and write SDK-based tools or test files.
+1. **Workshop Repository (`agy-cli-field-workshop`)** — the curriculum, guides, verifiers, and exercise instructions. This is what you're reading now.
+2. **Sample Application (`agy-sample-app`)** — the target codebase (a FastAPI billing API) where you run `agy`, let agents make changes, and complete every beat.
 
-Both onboarding guides will walk you through cloning these repositories into adjacent directories.
+The workstation guide clones both into adjacent directories (or run `scripts/bootstrap-enterprise.sh` to do it in one command).
 
 > [!NOTE]
-> **Environments are per-project — there is no shared workshop virtualenv.** Python dependencies live with the project that needs them: the sample app (Modules 1–2) has its own `.venv` created from its `requirements.txt`; the ADK project (Module 3) is managed by `uv sync`; the SDK project (Module 4) has its own `.venv` with `google-antigravity`. Pre-work only installs repo-agnostic tooling (`agy`, `gcloud`/ADC/Vertex, and `uv`).
+> **The sample app owns its environment — there is no shared workshop virtualenv.** The sample app has its own `.venv` created from its `requirements.txt`; pre-work only installs repo-agnostic tooling (`agy`, `gcloud`/ADC/Vertex, and `uv`).
 
 ---
 
 ## Troubleshooting Support
 
-If you encounter any workspace setup blocks, consult the troubleshooting section at the bottom of your chosen track's guide page, or ask your workshop facilitator for assistance.
+If setup blocks you, check the troubleshooting section at the bottom of the [Workstation Setup](setup-corporate.md) guide, or ask your facilitator.

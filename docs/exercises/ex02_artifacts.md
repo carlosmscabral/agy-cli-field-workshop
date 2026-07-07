@@ -1,6 +1,6 @@
-# Exercise 15: Artifacts — Plan, Review, and Verify
+# Exercise 2: Artifacts — Plan, Review & Build
 
-> **Duration:** 20 min | **Module:** 1 — Antigravity CLI Fundamentals
+> **Duration:** 20 min | **The Workshop · Beat 2 — Planning & Build**
 
 ---
 
@@ -44,7 +44,7 @@ agy
 ## Part 1: Enter Planning Mode (5 min)
 
 > [!TIP]
-> **Optional — align first with `/grill-me`.** For an ambiguous task, run `/grill-me` before planning: `agy` interrogates *you* with clarifying questions to pin down the spec, so the Implementation Plan starts from a shared understanding. This is the "tighten the spec" end of the autonomy spectrum (the opposite of `/goal`, which runs autonomously — see the Sandbox & Governance exercise).
+> **Optional — align first with `/grill-me`.** For an ambiguous task, run `/grill-me` before planning: `agy` interrogates *you* with clarifying questions to pin down the spec, so the Implementation Plan starts from a shared understanding. This is the "tighten the spec" end of the autonomy spectrum (the opposite of `/goal`, which runs autonomously).
 
 Put `agy` into planning mode so it produces a plan *before* touching code:
 

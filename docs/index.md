@@ -11,76 +11,75 @@ hide:
 
 ---
 
-## Workshop Modules
+## One Project, One Story
+
+This is a hands-on field workshop for the **Antigravity CLI (`agy`)**, built around a single real codebase — the `agy-sample-app` FastAPI billing API. You'll take it through the everyday arc of software work, learning a core `agy` capability at each step:
 
 <div class="grid cards" markdown>
 
-- :material-rocket-launch:{ .lg .middle } **Module 1 — Antigravity CLI Fundamentals**
+- :material-compass:{ .lg .middle } **1 · Discovery**
 
     ---
 
-    Your first Antigravity CLI session, the **Artifacts** plan-review-verify workflow, custom skills & rules, governed access via **MCP**, and safe sandbox governance.
+    Launch `agy`, explore the code with `@`, set Tool Permissions, and capture context in `AGENTS.md`.
 
-    **90 min** · Exercises: ex01, ex15, ex02, ex16, ex09
+    [:octicons-arrow-right-24: First Session](exercises/ex01_first_session.md)
 
-    [:octicons-arrow-right-24: Start Module 1](sdlc-productivity.md)
-
-- :material-wrench:{ .lg .middle } **Module 2 — Legacy Modernization & Advanced CLI ⭐**
+- :material-lightbulb-on:{ .lg .middle } **2 · Planning & Build**
 
     ---
 
-    The flagship module. Migrate a real legacy **Java** codebase with strict mode and agent self-onboarding (an optional **.NET** path is included) — then layer in the advanced CLI: subagents, `/btw` mid-task steering, and headless `--print` automation.
+    Plan, review, and build the missing `GET /health` endpoint through the **Artifacts** workflow.
 
-    **120 min** · Exercises: ex04, ex13, ex07, ex08, ex12 · *ex03 (.NET) optional — needs Docker*
+    [:octicons-arrow-right-24: Artifacts](exercises/ex02_artifacts.md)
 
-    [:octicons-arrow-right-24: Start Module 2](legacy-modernization.md)
-
-- :material-rocket-launch-outline:{ .lg .middle } **Module 3 — ADK Agents with agents-cli**
+- :material-puzzle:{ .lg .middle } **3 · Coding Standards**
 
     ---
 
-    Use agents-cli to scaffold, build, evaluate, and deploy production ADK agents — the full lifecycle from prototype to Cloud Run, plus an optional GCP Data Cloud lab.
+    Codify conventions as a Custom **Skill** + an always-on **Rule**, and watch them shape new code.
 
-    **75 min** · Exercises: ex10, ex14 (optional)
+    [:octicons-arrow-right-24: Skills & Rules](exercises/ex03_skills_rules.md)
 
-    [:octicons-arrow-right-24: Start Module 3](agents-cli.md)
-
-- :material-code-braces:{ .lg .middle } **Module 4 — Advanced: Building Agents with the Antigravity SDK**
+- :material-transit-connection-variant:{ .lg .middle } **4 · Governed Access**
 
     ---
 
-    The advanced capstone. Build agents in Python with the Antigravity SDK — tools, hooks, triggers, multi-agent orchestration, and deploy to Cloud Run.
+    Give the agent a governed channel to the billing data — an **MCP** server under `strict` permissions.
 
-    **90 min** · Exercises: ex05, ex06, ex11
+    [:octicons-arrow-right-24: Governed Access with MCP](exercises/ex04_mcp_governed_access.md)
 
-    [:octicons-arrow-right-24: Start Module 4](agy-sdk.md)
+- :material-account-group:{ .lg .middle } **5 · Fixes & Security**
+
+    ---
+
+    Run parallel review **subagents**, then build a custom `code-cleaner` subagent to refactor the messy module.
+
+    [:octicons-arrow-right-24: Subagents](exercises/ex05_subagents.md)
 
 </div>
 
+[:octicons-book-24: Read the workshop overview →](overview.md)
+
 ---
 
-## Workshop Timeline
+## Timeline (≈2 hours)
 
 | Time | Content | Duration |
 | :-- | :-- | :-- |
-| `0:00` | Setup + first run | 20 min |
-| `0:20` | **Module 1:** Antigravity CLI Fundamentals | 90 min |
-| `1:50` | :coffee: Break | 10 min |
-| `2:00` | **Module 2:** Legacy Modernization & Advanced CLI | 120 min |
-| `4:00` | :coffee: Break | 10 min |
-| `4:10` | **Module 3:** ADK Agents with agents-cli | 75 min |
-| `5:25` | :coffee: Break | 10 min |
-| `5:35` | **Module 4:** Advanced — Antigravity SDK | 90 min |
-| `7:05` | Wrap-up & Q&A | 15 min |
-
-> **Full day:** Modules 1–3 (≈5.5 hrs). **Extended:** All 4 modules (7 hrs). **Half-day:** Modules 1 + 2 (3.5 hrs). **Lightning:** Module 1 (1.5 hrs).
+| `0:00` | Pre-work check + first run | 15 min |
+| `0:15` | Overview & concept demos | 15 min |
+| `0:30` | Beats 1–2 (Discovery, Artifacts) | 40 min |
+| `1:10` | Beats 3–4 (Skills & Rules, MCP) | 40 min |
+| `1:50` | Beat 5 (Subagents) | 25 min |
+| `2:15` | Wrap-up & Q&A | 15 min |
 
 ---
 
 ## Before You Start
 
 !!! warning "Pre-Work Required"
-    Complete the [Environment Setup](setup.md) before the workshop. You need Antigravity CLI installed and authenticated.
+    Complete the [enterprise setup](setup.md) before the workshop: Antigravity CLI installed and authenticated against Vertex AI, plus the `agy-sample-app` sandbox cloned.
 
 !!! info "Official Documentation"
     Full reference at [antigravity.google/docs](https://www.antigravity.google/docs/cli-overview).

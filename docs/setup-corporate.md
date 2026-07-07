@@ -67,23 +67,6 @@ gcloud --version
 
 - Follow the official install guide: [cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install).
 
-### 1.4 — Docker & Docker Compose (v2) — *optional*
-
-> [!NOTE]
-> **Only needed for the .NET modernization exercise (ex03).** Modules 1, 3, and 4, and the Java track, do not use Docker — `agents-cli`/SDK deploys build server-side on Cloud Build, not local Docker. Skip this step if you're not running ex03 (the workstation verifier treats Docker as a warning, not a failure).
-
-If you plan to run ex03, check with:
-
-```bash
-docker --version
-docker compose version
-```
-
-- Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) (macOS/Windows) or use [Rancher Desktop](https://rancherdesktop.io/) as an open-source alternative.
-- Ensure the Docker daemon is launched and running.
-
----
-
 ## Step 2: Clone the Workshop & Sandbox Repositories
 
 Clone both repositories into adjacent directories on your local workstation:
@@ -124,7 +107,7 @@ uv --version
 ```
 
 > [!NOTE]
-> **Python environments are per-project — there is no shared workshop venv.** Each module's first step sets up its own environment: the sample app (Modules 1–2) creates its own `.venv` and installs from its `requirements.txt`; the ADK project (Module 3) is managed by `uv sync`; the SDK project (Module 4) creates its own `.venv` with `google-antigravity`. This keeps each project's dependencies isolated and avoids `ModuleNotFoundError` from running an app in the wrong environment.
+> **The sample app owns its environment — there is no shared workshop venv.** The sample app (`agy-sample-app`) creates its own `.venv` and installs from its `requirements.txt` (Beat 1 sets this up). This keeps the project's dependencies isolated and avoids `ModuleNotFoundError` from running it in the wrong environment.
 
 ---
 
@@ -167,7 +150,7 @@ trusted-host = artifactory.yourcompany.com
 
 ## Step 5: Google Cloud Authentication & Vertex AI Environment
 
-The workshop runs against **your company's GCP project on Vertex AI**. This one canonical setup authorizes the `agy` CLI, the Antigravity Python SDK, and `agents-cli` (ADK) — no personal/API-key path is needed.
+The workshop runs against **your company's GCP project on Vertex AI**. This one canonical setup authorizes the `agy` CLI — no personal/API-key path is needed.
 
 ```bash
 # 1. Log in to Application Default Credentials (triggers browser auth)
@@ -177,14 +160,14 @@ gcloud auth application-default login
 gcloud config set project "your-workshop-project-id"
 
 # 3. Export the canonical Vertex AI environment (add these to your shell profile
-#    so every new terminal — and every SDK/agents-cli exercise — targets Vertex)
+#    so every new terminal targets Vertex)
 export GOOGLE_CLOUD_PROJECT="your-workshop-project-id"
 export GOOGLE_CLOUD_LOCATION="global"          # or a region, e.g. us-central1
-export GOOGLE_GENAI_USE_VERTEXAI=True           # routes google-genai / ADK calls through Vertex AI
+export GOOGLE_GENAI_USE_VERTEXAI=True           # routes model calls through Vertex AI
 ```
 
 > [!IMPORTANT]
-> **`GOOGLE_GENAI_USE_VERTEXAI=True` is required for the enterprise path.** Without it, the underlying `google-genai`/ADK stack defaults to the AI-Studio (API-key) backend and ignores your ADC/project — the SDK (Module 4) and `agents-cli` (Module 3) exercises will fail on a customer machine that has no `GOOGLE_API_KEY`.
+> **`GOOGLE_GENAI_USE_VERTEXAI=True` is required for the enterprise path.** Without it, the underlying `google-genai` stack defaults to the AI-Studio (API-key) backend and ignores your ADC/project — model calls will fail on a customer machine that has no `GOOGLE_API_KEY`.
 
 ---
 
@@ -309,4 +292,4 @@ Expected output: `Workstation Ready!`
 ## Next Step
 
 Once your smoke test succeeds, you are ready to start:
-👉 Go to **[Module 1: Antigravity CLI Fundamentals](sdlc-productivity.md)**
+👉 Go to **[The Workshop — An End-to-End Software Story](overview.md)**

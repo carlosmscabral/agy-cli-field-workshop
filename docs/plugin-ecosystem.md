@@ -1,6 +1,6 @@
-# Reference: Custom Skills and the Workspace Ecosystem
+# Reference: Workspace Customization
 
-> **Deep reference for agy-cli's customization and skill system.** The essential commands are covered in [Module 1 — Section 1.7](sdlc-productivity.md#17-extend-with-custom-skills-15-min). This page has the full lifecycle detail for teams building and maintaining custom skills, rules, and local workspace-scoped configs.
+> **Deep reference for agy-cli's workspace customization system** — skills, rules, MCP servers, hooks, subagents, and plugins. The workshop beats introduce these in context ([Skills & Rules](exercises/ex03_skills_rules.md), [MCP](exercises/ex04_mcp_governed_access.md), [Subagents](exercises/ex05_subagents.md)); this page is the full file-format detail for teams building and maintaining them.
 
 ---
 
@@ -209,3 +209,13 @@ agy plugin import gemini
 4. Use `agy plugin disable <name>` / `enable <name>` to toggle it per project without losing the install.
 
 > 📖 Full details: [Plugins docs](https://antigravity.google/docs/plugins) · [cli-features — Plugins](https://antigravity.google/docs/cli-features)
+
+---
+
+## Sample Files in This Repo
+
+Copy-ready examples live under `samples/` — drop them into a workspace `.agents/` (or a plugin) and adapt:
+
+* **Subagents** (`samples/agents/`): `code-cleaner.md` (used in [Beat 5](exercises/ex05_subagents.md)), plus `security-scanner.md`, `pr-reviewer.md`, and `doc-writer.md` — each a `.agents/agents/<name>.md` definition (`model` + `tools.allow` + system-prompt body).
+* **Hooks** (`samples/hooks/`): `session-context.sh` (PreInvocation), `secret-scanner.sh` and `git-context-injector.sh` (PreToolUse), and `test-nudge.sh` (PostToolUse) — wired together in `samples/configs/hooks.json`.
+* **Configs** (`samples/configs/`): `settings.json` (permissions), `mcp_config.json` (MCP server), and `hooks.json` (hook registrations).
