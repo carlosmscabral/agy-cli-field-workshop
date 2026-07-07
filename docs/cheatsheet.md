@@ -216,8 +216,8 @@ Spawn a security auditor and a performance auditor in parallel (branch mode).
 # Adversarial review
 Spawn an adversarial reviewer subagent — its job is to find reasons to NOT merge this PR.
 
-# Custom subagent — define once in .agents/agents/<name>.md, then invoke by name
-Use the code-cleaner subagent to refactor app/billing.py.
+# Spawn a subagent to apply a fix (inherit mode = same working dir)
+Spawn a subagent in inherit mode to refactor app/billing.py.
 
 # Background task
 In the background, audit all dependencies for known CVEs. Notify me when done.

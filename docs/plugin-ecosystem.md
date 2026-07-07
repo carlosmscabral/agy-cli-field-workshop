@@ -216,6 +216,6 @@ agy plugin import gemini
 
 Copy-ready examples live under `samples/` — drop them into a workspace `.agents/` (or a plugin) and adapt:
 
-* **Subagents** (`samples/agents/`): `code-cleaner.md` (used in [Beat 5](exercises/ex05_subagents.md)), plus `security-scanner.md`, `pr-reviewer.md`, and `doc-writer.md` — each a `.agents/agents/<name>.md` definition (`model` + `tools.allow` + system-prompt body).
+* **Subagents** (`samples/agents/`): `security-scanner.md`, `pr-reviewer.md`, and `doc-writer.md` — each a `.agents/agents/<name>.md` definition (`model` + `tools.allow` + system-prompt body). *Note: workspace subagent files are documented but not surfaced by all `agy` builds — confirm in `/agents` before relying on them. [Beat 5](exercises/ex05_subagents.md) uses spawned (native) subagents instead.*
 * **Hooks** (`samples/hooks/`): `session-context.sh` (PreInvocation), `secret-scanner.sh` and `git-context-injector.sh` (PreToolUse), and `test-nudge.sh` (PostToolUse) — wired together in `samples/configs/hooks.json`.
 * **Configs** (`samples/configs/`): `settings.json` (permissions), `mcp_config.json` (MCP server), and `hooks.json` (hook registrations).

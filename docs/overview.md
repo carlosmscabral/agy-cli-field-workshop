@@ -20,7 +20,7 @@ You set it up once in the [Pre-Work](setup.md); every beat runs against it.
 | **2. Planning & Build** | [Artifacts](exercises/ex02_artifacts.md) | Plan, review, and build the missing `GET /health` endpoint through the Artifacts workflow. | `/planning`, Artifact Review panel, plan→review→verify |
 | **3. Coding Standards** | [Skills & Rules](exercises/ex03_skills_rules.md) | Codify your team's conventions as a Custom Skill + an always-on Rule, then watch them shape new code. | `.agents/skills/`, `.agents/rules/` (`trigger` frontmatter), `/diff` |
 | **4. Governed Access** | [Governed Access with MCP](exercises/ex04_mcp_governed_access.md) | Give the agent a *governed* channel to the billing data — an MCP server under `strict` permissions. | `.agents/mcp_config.json`, `/mcp`, `strict` mode |
-| **5. Fixes & Security** | [Subagents](exercises/ex05_subagents.md) | Run parallel review subagents, then build a custom `code-cleaner` subagent to refactor the messy module. | native subagents, `/agents`, custom `.agents/agents/` |
+| **5. Fixes & Security** | [Subagents](exercises/ex05_subagents.md) | Run parallel review subagents, then spawn one to refactor the messy module and move the hard-coded key to the environment. | native subagents, `/agents`, `ctrl+j`/`ctrl+k` |
 
 ---
 
@@ -32,7 +32,7 @@ A quick primer the facilitator demos before you work the beats:
 - **Tool Permissions.** `agy` has four modes — `request-review` (default), `always-proceed`, `proceed-in-sandbox`, `strict` — set from `/config` → **Tool Permissions**. Approvals you grant persist as an allow-list in `~/.gemini/antigravity-cli/settings.json` (global-only, by design — a workspace `.agents/settings.json` is deliberately ignored).
 - **Review, don't scroll.** `/diff` opens agy's built-in diff viewer; **Artifacts** (Implementation Plan → Task List → Walkthrough) let you review structured milestones and co-steer with inline comments instead of watching raw tool calls.
 - **Context that persists.** `AGENTS.md` at the repo root is loaded every interactive session (verify it in a *fresh interactive* session — **not** `agy --print`, which skips workspace context).
-- **Workspace customization.** Skills (`.agents/skills/`), Rules (`.agents/rules/*.md` with a `trigger`), MCP servers (`.agents/mcp_config.json`), and subagents (`.agents/agents/`) all live in the project's `.agents/` folder and travel with the repo.
+- **Workspace customization.** Skills (`.agents/skills/`), Rules (`.agents/rules/*.md` with a `trigger`), and MCP servers (`.agents/mcp_config.json`) all live in the project's `.agents/` folder and travel with the repo.
 
 See the [Cheatsheet](cheatsheet.md) for the full command/flag reference and the [Workspace Customization reference](plugin-ecosystem.md) for the file formats.
 
@@ -83,6 +83,6 @@ See the [Cheatsheet](cheatsheet.md) for the full command/flag reference and the 
 ### :material-account-group: Beat 5 — Subagents (Fixes & Refactor)
 
 **File:** [`ex05_subagents.md`](exercises/ex05_subagents.md)
-**Objective:** Run parallel review subagents, then create a custom `code-cleaner` subagent to refactor `app/billing.py` and fix the security findings.
+**Objective:** Run parallel review subagents, then spawn a subagent to refactor `app/billing.py` and move the hard-coded API key to the environment.
 
 </div>
