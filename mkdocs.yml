@@ -1,5 +1,5 @@
 site_name: "Antigravity CLI Field Workshop"
-site_description: "Hands-on field workshop for Antigravity CLI — from daily SDLC productivity to building production AGY agents with the SDK"
+site_description: "Hands-on field workshop for Antigravity CLI — one end-to-end software story (discovery → planning → coding → fixes → security) over a real FastAPI project"
 site_url: "https://carlosmscabral.github.io/agy-cli-field-workshop"
 repo_url: "https://github.com/carlosmscabral/agy-cli-field-workshop"
 repo_name: "carlosmscabral/agy-cli-field-workshop"
@@ -42,44 +42,20 @@ theme:
 nav:
   - Home: index.md
   - "📦 Pre-Work":
-      - Introduction & Tracks: setup.md
-      - "Track A - Enterprise / Corporate (GCP + Vertex AI)":
-          - IT Admin Provisioning (Admin): setup-enterprise-admin.md
-          - Workstation Setup (Dev): setup-corporate.md
-      - Track B - Cloud Shell Sandbox: setup-cloud-shell.md
-  - "🛠️ Workshop":
-      - "1. Antigravity CLI Fundamentals": sdlc-productivity.md
-      - "2. Legacy Modernization & Advanced CLI ⭐":
-          - "Modernization": legacy-modernization.md
-          - "Advanced CLI - Subagents, Steering, Automation": multi-agent-advanced.md
-      - "3. ADK Agents with agents-cli": agents-cli.md
-      - "4. Advanced - Antigravity SDK": agy-sdk.md
-  - "🧪 Exercises":
-      - "Module 1 - Fundamentals":
-          - "1. First Session (ex01)": exercises/ex01_first_session.md
-          - "2. Artifacts - Plan & Review (ex15)": exercises/ex15_artifacts.md
-          - "3. Custom Skills (ex02)": exercises/ex02_custom_skills.md
-          - "4. Governed Access with MCP (ex16)": exercises/ex16_mcp_basics.md
-          - "5. Sandbox & Governance (ex09)": exercises/ex09_sandbox_governance.md
-      - "Module 2 - Modernization & Advanced CLI":
-          - "6. Java Upgrade (ex04)": exercises/ex04_java_upgrade.md
-          - "7. .NET Modernization - Optional (ex03)": exercises/ex03_dotnet_modernization.md
-          - "8. Migration Walkthrough (ex13)": exercises/ex13_migration_walkthrough.md
-          - "9. Subagents (ex07)": exercises/ex07_subagents.md
-          - "10. Mid-Task Steering with /btw (ex08)": exercises/ex08_btw_scheduling.md
-          - "11. Headless --print Pipelines (ex12)": exercises/ex12_print_mode_pipeline.md
-      - "Module 3 - ADK with agents-cli":
-          - "12. ADK Agent Lifecycle (ex10)": exercises/ex10_agents_cli_lifecycle.md
-          - "13. Dataplex Metadata Curation - Optional (ex14)": exercises/ex14_dataplex_metadata_steward.md
-      - "Module 4 - Advanced: Antigravity SDK":
-          - "14. Your First Agent (ex05)": exercises/ex05_first_agent.md
-          - "15. Multi-Agent Pipeline (ex06)": exercises/ex06_multi_agent_pipeline.md
-          - "16. Scheduled Sidecar (ex11)": exercises/ex11_first_sidecar.md
+      - Setup & Prerequisites: setup.md
+      - IT Admin Provisioning: setup-enterprise-admin.md
+      - Workstation Setup: setup-corporate.md
+  - "🛠️ The Workshop":
+      - "Overview — An End-to-End Software Story": overview.md
+      - "1. First Session (Discovery)": exercises/ex01_first_session.md
+      - "2. Artifacts — Plan, Review & Build": exercises/ex02_artifacts.md
+      - "3. Skills & Rules (Coding Standards)": exercises/ex03_skills_rules.md
+      - "4. Governed Access with MCP": exercises/ex04_mcp_governed_access.md
+      - "5. Subagents (Fixes & Refactor)": exercises/ex05_subagents.md
   - "📋 Resources":
       - Cheatsheet: cheatsheet.md
       - Facilitator Guide: facilitator-guide.md
-      - "Reference: Plugin Ecosystem": plugin-ecosystem.md
-      - "Reference: DevOps Patterns": devops-automation.md
+      - "Reference: Workspace Customization": plugin-ecosystem.md
 
 markdown_extensions:
   - admonition

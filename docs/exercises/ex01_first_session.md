@@ -1,6 +1,6 @@
-# Exercise 1: First Session
+# Exercise 1: First Session — Discovery
 
-> **Duration:** 20 min | **Module:** 1 — Antigravity CLI Fundamentals
+> **Duration:** 20 min | **The Workshop · Beat 1 — Discovery**
 
 ---
 
@@ -113,7 +113,7 @@ Your permissions (and other settings) are saved **globally**, at `~/.gemini/anti
 Keeping `request-review` as the default while building a targeted `allow` list is the enterprise sweet spot — the agent moves fast on the operations you've blessed and still stops for anything new.
 
 > [!TIP]
-> For a hands-on look at `strict` and the two-phase governance workflow, see the **Sandbox & Governance** exercise later in this module.
+> You'll put `strict` mode to work in **Beat 4 (Governed Access with MCP)** — locking the agent out of the shell so it can reach data *only* through a governed MCP tool.
 
 ---
 

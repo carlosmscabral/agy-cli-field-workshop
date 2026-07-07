@@ -87,7 +87,7 @@ agy install        # Configure PATH and shell aliases
 
 ## Artifacts
 
-> Structured, verifiable deliverables the agent emits as it works — review milestones instead of raw tool calls. Types: **Implementation Plan** (approach + files to change, before coding), **Task List** (`task.md` ticked off during implementation), **Walkthrough** (post-completion summary + how to verify). See [Exercise 15](exercises/ex15_artifacts.md).
+> Structured, verifiable deliverables the agent emits as it works — review milestones instead of raw tool calls. Types: **Implementation Plan** (approach + files to change, before coding), **Task List** (`task.md` ticked off during implementation), **Walkthrough** (post-completion summary + how to verify). See [Artifacts (Beat 2)](exercises/ex02_artifacts.md).
 
 | Action | How |
 | :-- | :-- |
@@ -154,43 +154,6 @@ Provide feedback focusing on:
 
 ---
 
-## Sidecars
-
-> Background processes AGY manages for you — launches, restarts, and runs independently of any conversation. Source: [antigravity.google/docs/sidecars](https://antigravity.google/docs/sidecars)
-
-```bash
-# Config locations:
-~/.gemini/config/sidecars/<name>/sidecar.json                         # global
-~/.gemini/config/plugins/<plugin>/sidecars/<name>/sidecar.json        # plugin-scoped
-
-# Enable (disabled by default) — edit ~/.gemini/config/config.json:
-#   { "sidecars": { "<name>": { "enabled": true } } }
-
-# Check logs:
-ls ~/.gemini/antigravity/sidecar_data/<name>/logs/
-
-# agentapi (auto-available inside sidecars):
-agentapi new-conversation "<prompt>"
-agentapi send-message <conversation_id> "<prompt>"
-```
-
-Minimal `sidecar.json` — background script:
-
-```json
-{ "command": "python3", "args": ["worker.py"], "restart_policy": "on-failure" }
-```
-
-Minimal `sidecar.json` — scheduled recurring task:
-
-```json
-{
-  "builtin": "schedule",
-  "args": ["0 9 * * 1-5", "agentapi", "new-conversation", "Summarise open PRs."]
-}
-```
-
----
-
 ## Workspace & Context
 
 ```bash
@@ -240,14 +203,6 @@ tail -n 500 app.log | agy -p "Group these errors by root cause. Output as JSON."
 # Multi-dir cross-repo analysis
 agy --add-dir ../api --add-dir ../frontend \
     -p "Map data flow from frontend form submission to database write."
-
-# Full headless CI audit (safe)
-agy --sandbox --dangerously-skip-permissions \
-    -p "Audit for hardcoded secrets and insecure patterns." \
-    --print-timeout 5m > audit.md
-
-# Schedule a recurring task (in interactive mode)
-# > Schedule a daily code quality report at 9am weekdays.
 ```
 
 ---
@@ -261,31 +216,11 @@ Spawn a security auditor and a performance auditor in parallel (branch mode).
 # Adversarial review
 Spawn an adversarial reviewer subagent — its job is to find reasons to NOT merge this PR.
 
-# Steer mid-task — `/btw` is a workshop convention, NOT a built-in command.
-# Just type the steering message inline while the agent is working:
-/btw Focus only on the authentication module, skip the frontend.
+# Custom subagent — define once in .agents/agents/<name>.md, then invoke by name
+Use the code-cleaner subagent to refactor app/billing.py.
 
 # Background task
 In the background, audit all dependencies for known CVEs. Notify me when done.
-```
-
----
-
-## Print Mode Pipeline Examples
-
-```bash
-# Step 1: plan
-agy -p "Create a refactoring plan for moving from callbacks to async/await. JSON output." \
-  > plan.json
-
-# Step 2: execute
-cat plan.json | agy -p "Execute step 1 of this plan."
-
-# Batch: process multiple files
-for f in src/*.ts; do
-  agy --add-dir "$(dirname $f)" \
-      -p "Add JSDoc to all exported functions in $(basename $f)."
-done
 ```
 
 ---

@@ -1,6 +1,6 @@
-# Exercise 2: Custom Skills and Workspace Customization
+# Exercise 3: Skills & Rules — Coding Standards
 
-> **Duration:** 20 min | **Module:** 1 — Antigravity CLI Fundamentals
+> **Duration:** 20 min | **The Workshop · Beat 3 — Coding Standards**
 
 ---
 

@@ -4,6 +4,29 @@ Content-specific changes to workshop materials — CLI breakages, deprecated com
 
 ---
 
+## 2026-07-07
+
+### ♻️ Redesign — Single Cohesive Fundamentals Track
+
+**Affects:** nav, all module/overview pages, exercises, setup, resources, samples, scripts
+
+The 4-module / 16-exercise workshop was collapsed into **one cohesive ≈2-hour track** — a single end-to-end software story (**discovery → planning → coding → governed access → fixes & security**) over the `agy-sample-app` billing API.
+
+**Kept & renumbered** (the five beats):
+
+1. `ex01_first_session` (Discovery) · 2. `ex02_artifacts` (Planning & Build) · 3. `ex03_skills_rules` (Coding Standards) · 4. `ex04_mcp_governed_access` (Governed Access) · 5. `ex05_subagents` (Fixes & Security).
+
+**Cut:** the Legacy Modernization module (Java/.NET/migration — ex03/ex04/ex13), the ADK/`agents-cli` module (ex10/ex14), the Antigravity SDK module (ex05/ex06/ex11), and the standalone `/btw`, `--print`, and Sandbox exercises (ex08/ex12/ex09). Removed their overview pages (`legacy-modernization`, `multi-agent-advanced`, `agents-cli`, `agy-sdk`), `devops-automation.md`, `research/sdk-grounding.md`, and the Cloud Shell setup track (`setup-cloud-shell.md`).
+
+**Reworked:**
+
+- `ex05_subagents` now closes the story: native parallel review subagents (surfacing the hard-coded `dev-secret-123` key and test gaps) + a **custom `code-cleaner` subagent** (`.agents/agents/code-cleaner.md`, documented `model` + `tools.allow` format) that refactors `app/billing.py`.
+- `sdlc-productivity.md` → `overview.md`, reframed as the end-to-end story; `index.md` rebuilt around the five beats.
+- Pre-work simplified to **enterprise-only** (Vertex/ADC); admin IAM trimmed to just `roles/aiplatform.user` (no deployment) and APIs to `aiplatform.googleapis.com`; Docker removed.
+- Cheatsheet trimmed (sidecars, `/btw`, print pipelines removed); facilitator guide rewritten for the 5-beat run-of-show; `plugin-ecosystem.md` retitled "Reference: Workspace Customization" and now indexes the `samples/` files.
+
+---
+
 ## 2026-07-03
 
 ### 🚑 Workshop Audit & Remediation

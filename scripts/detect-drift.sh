@@ -114,7 +114,7 @@ AGY_EVENTS=("PreInvocation" "PreToolUse" "PostToolUse")
 
 for stale in "${STALE_EVENTS[@]}"; do
   # Exclude the migration walkthrough — it intentionally shows legacy Gemini CLI hook names.
-  if grep -rq --include='*.md' --exclude='ex07_migration_walkthrough.md' --exclude='ex13_migration_walkthrough.md' "\"${stale}\"" docs/ 2>/dev/null || grep -rq "\"${stale}\"" samples/ 2>/dev/null; then
+  if grep -rq --include='*.md' "\"${stale}\"" docs/ 2>/dev/null || grep -rq "\"${stale}\"" samples/ 2>/dev/null; then
     log_fail "Stale Gemini CLI hook event '${stale}' found — use AGY equivalent: PreInvocation/PreToolUse/PostToolUse"
   fi
 done
@@ -125,9 +125,9 @@ log_section "  Checking for stale 'gemini' binary references in docs..."
 
 # Allow "gemini" as a noun (e.g., "from Gemini CLI") but flag bare 'gemini' commands.
 # Exclude the migration walkthrough — it intentionally shows legacy Gemini CLI commands.
-if grep -rqE --include='*.md' --exclude='ex07_migration_walkthrough.md' --exclude='ex13_migration_walkthrough.md' '^\s*(gemini |`gemini )' docs/ 2>/dev/null; then
+if grep -rqE --include='*.md' '^\s*(gemini |`gemini )' docs/ 2>/dev/null; then
   log_warn "Found bare 'gemini' command in docs — verify these should be 'agy'"
-  grep -rnoE --include='*.md' --exclude='ex07_migration_walkthrough.md' --exclude='ex13_migration_walkthrough.md' '^\s*(gemini |`gemini )' docs/ 2>/dev/null | head -5
+  grep -rnoE --include='*.md' '^\s*(gemini |`gemini )' docs/ 2>/dev/null | head -5
 else
   log_ok "No stale 'gemini' binary references found"
 fi
