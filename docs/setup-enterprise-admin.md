@@ -2,7 +2,7 @@
 
 This guide is designed for **enterprise cloud administrators**, **IT infrastructure managers**, and **workshop facilitators**. It explains how to provision Google Cloud Platform (GCP) resources and configure network parameters for the **Antigravity CLI Field Workshop** running on local corporate developer workstations.
 
-This is **Role 1 (one-time IT Admin configuration)** under the primary **Track A: Enterprise / Corporate Dev Track**. For the developer-specific workstation onboarding (Python, virtualenvs, local Docker config, and credentials login), refer developers to **[Role 2: Developer Workstation Setup](setup-corporate.md)**.
+This is **Role 1 (one-time IT Admin configuration)** under the primary **Track A: Enterprise / Corporate Dev Track**. For the developer-specific workstation onboarding (Python, virtualenvs, and credentials login), refer developers to **[Role 2: Developer Workstation Setup](setup-corporate.md)**.
 
 ---
 
@@ -12,8 +12,6 @@ This is **Role 1 (one-time IT Admin configuration)** under the primary **Track A
 graph TD
     subgraph Google Cloud Project
         Vertex[Vertex AI API / Gemini Models]
-        CR[Google Cloud Run]
-        AR[Artifact Registry]
     end
 
     subgraph Corporate Network / Firewall
@@ -22,9 +20,8 @@ graph TD
     end
 
     subgraph Developer Workstation
-        Git[Local Git Repos]
+        Git[Local Git Repo - sample app]
         Venv[Python virtualenv]
-        Docker[Docker & Compose]
         ADC[Local Credentials JSON]
         Agy[agy CLI Binary]
     end
@@ -32,11 +29,8 @@ graph TD
     Agy -->|gcloud auth application-default login| ADC
     Agy -->|Port 443 HTTPS| FW
     Venv -->|pip install| Proxy
-    Docker -->|Local Compose Database| Git
     FW --> Proxy
     Proxy --> Vertex
-    Proxy --> CR
-    Proxy --> AR
 ```
 
 ---
@@ -114,11 +108,11 @@ Ensure outbound HTTPS (port 443) traffic is whitelisted to the following domains
 
 | Resource Group | Domain Pattern | Reason |
 | :-- | :-- | :-- |
-| **Vertex AI API** | `*.aiplatform.googleapis.com` (e.g. `us-central1-aiplatform.googleapis.com`) | For model calls from `agy` and python. |
+| **Vertex AI API** | `*.aiplatform.googleapis.com` (e.g. `us-central1-aiplatform.googleapis.com`) | For model calls from the `agy` CLI. |
 | **Google Auth** | `accounts.google.com`, `oauth2.googleapis.com` | For `agy` sign-in and Application Default Credentials login. |
-| **GCP Services** | `*.googleapis.com`, `*.run.app` | For API access and reaching deployed Cloud Run services. |
+| **GCP Services** | `*.googleapis.com` | For general Google Cloud API access. |
 | **Python Packages** | `pypi.org` and `files.pythonhosted.org` | For installing dependencies inside developer virtualenvs. |
-| **GitHub** | `github.com` | For cloning the curriculum and sandbox codebases. |
+| **GitHub** | `github.com` (incl. `raw.githubusercontent.com`) | For cloning the sample app and running the verifier one-liner. |
 | **Antigravity CLI** | `antigravity.google` | For downloading and installing the `agy` binary. |
 
 ### 3.2 — Corporate SSL-Decrypting Proxies
@@ -136,19 +130,27 @@ See **[Corporate Workstation Onboarding (Step 4)](setup-corporate.md)** for deve
 
 ## Phase 4: Automated Pre-Work Verification
 
-To guarantee zero setup blocks on day-one of the workshop, have each attendee run the workstation verification script. This repo contains two robust OS-specific verifiers:
+To guarantee zero setup blocks on day-one of the workshop, have each attendee run the workstation verifier — straight from the repo, no clone required:
 
-- **macOS / Linux / WSL2 (Bash)**: `scripts/verify-workstation.sh`
-- **Native Windows (PowerShell)**: `scripts/verify-workstation.ps1`
+- **macOS / Linux / WSL2 (Bash)**:
+
+  ```bash
+  bash <(curl -fsSL https://raw.githubusercontent.com/carlosmscabral/agy-cli-field-workshop/main/scripts/verify-workstation.sh)
+  ```
+
+- **Native Windows (PowerShell)**:
+
+  ```powershell
+  irm https://raw.githubusercontent.com/carlosmscabral/agy-cli-field-workshop/main/scripts/verify-workstation.ps1 | iex
+  ```
 
 Both verifiers perform the following automated checks:
 
 1. Verifies core binaries (`git`, `python3`, `gcloud`, `agy`).
 2. Tests Python version compliance and isolated `venv` creation.
 3. Tests package installations against corporate firewalls or proxies.
-4. Confirms that **Docker and Docker Compose are running** and the local Docker daemon is healthy.
-5. Verifies local GCP Application Default Credentials (ADC) login status.
-6. **Performs an actual outbound call to Vertex AI** to verify project access, API enablement, and `roles/aiplatform.user` permissions.
+4. Verifies local GCP Application Default Credentials (ADC) login status.
+5. **Performs an actual outbound call to Vertex AI** to verify project access, API enablement, and `roles/aiplatform.user` permissions.
 
 ### Admin Handoff
 

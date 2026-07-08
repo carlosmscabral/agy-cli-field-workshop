@@ -56,15 +56,15 @@ echo -e "${YELLOW}  gcloud auto-detects Cloud Shell/SSH and prints a URL; otherw
 # Single invocation — gcloud picks the right flow itself (avoids double-prompting).
 gcloud auth application-default login
 
-# Canonical Vertex AI environment — required so the SDK / agents-cli (ADK) route through Vertex.
+# Canonical Vertex AI environment — required so the agy CLI routes inference through Vertex.
 export GOOGLE_CLOUD_LOCATION="${GOOGLE_CLOUD_LOCATION:-global}"
 export GOOGLE_GENAI_USE_VERTEXAI=True
 
 echo -e "  ✅ Application Default Credentials + Vertex AI environment configured successfully!"
 
-# Step 4: Clone the attendee hands-on sandbox repository
+# Step 4: Clone the attendee hands-on sandbox repository (into the current directory)
 echo -e "\n${BLUE}[4/5] Preparing Sandbox Workspace...${NC}"
-SANDBOX_DIR="../agy-sample-app"
+SANDBOX_DIR="agy-sample-app"
 
 if [ -d "$SANDBOX_DIR" ]; then
   echo -e "  ⚠️  Sandbox directory '${SANDBOX_DIR}' already exists."

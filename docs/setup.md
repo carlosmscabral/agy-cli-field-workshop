@@ -20,7 +20,7 @@ Setup has **two roles**:
 
     ---
 
-    Install the tooling, authenticate with ADC + Vertex AI, clone the repos, and verify. Done by every attendee on their own laptop (macOS, Windows, or Linux).
+    Install the tooling, authenticate with ADC + Vertex AI, clone the sample app, and verify. Done by every attendee on their own laptop (macOS, Windows, or Linux).
 
     [:octicons-arrow-right-24: Workstation Setup](setup-corporate.md)
 
@@ -38,19 +38,16 @@ Verify your workstation meets these baselines (the onboarding guides install the
 | **Google Cloud SDK** | v410.0+ | Required for ADC authentication to Vertex AI. |
 | **Python** | v3.10 to v3.12 | Runs the sample app and its tests. |
 | **uv** | Latest | Provides `uvx` (used by the MCP beat). Installed during setup. |
-| **Git** | v2.30+ | For cloning the workshop and sample repos. |
+| **Git** | v2.30+ | For cloning the sample app. |
 | **Terminal** | Any | bash, zsh, VS Code terminal, or PowerShell. |
 
 ---
 
-## Why Two Repositories?
+## The Sample App — the one repo you clone
 
-You'll work with **two adjacent repositories**:
+You only clone **one** repository: the **Sample Application ([`agy-sample-app`](https://github.com/carlosmscabral/agy-sample-app))** — a FastAPI billing API where you run `agy`, let agents make changes, and complete every beat. The workshop material itself lives on this site (nothing to clone), and you point `agy` at the sample app, not the curriculum.
 
-1. **Workshop Repository (`agy-cli-field-workshop`)** — the curriculum, guides, verifiers, and exercise instructions. This is what you're reading now.
-2. **Sample Application (`agy-sample-app`)** — the target codebase (a FastAPI billing API) where you run `agy`, let agents make changes, and complete every beat.
-
-The workstation guide clones both into adjacent directories (or run `scripts/bootstrap-enterprise.sh` to do it in one command).
+The workstation guide clones it in one line (or run the [bootstrap one-liner](setup-corporate.md#step-2-clone-the-sample-app) to clone + auth + set up its venv in one command).
 
 > [!NOTE]
 > **The sample app owns its environment — there is no shared workshop virtualenv.** The sample app has its own `.venv` created from its `requirements.txt`; pre-work only installs repo-agnostic tooling (`agy`, `gcloud`/ADC/Vertex, and `uv`).

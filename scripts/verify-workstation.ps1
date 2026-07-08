@@ -193,9 +193,9 @@ if ($gcloudCmd) {
 Write-Host ""
 
 # -----------------------------------------------------------------------------
-# 4. Antigravity CLI (agy) & Docker Environment Checks
+# 4. Antigravity CLI (agy) & Tooling
 # -----------------------------------------------------------------------------
-Write-HostColor "[4/5] Checking Antigravity CLI (agy) & Docker Environment" $blue
+Write-HostColor "[4/5] Checking Antigravity CLI (agy) & Tooling" $blue
 
 # Check agy installation
 $agyCmd = Get-Command agy -ErrorAction SilentlyContinue
@@ -210,7 +210,7 @@ if ($agyCmd) {
     Assert-Result "FAIL" "agy CLI is not installed or not in your system PATH" "Follow the instructions in setup.md to install agy"
 }
 
-# Check uv (Python package/venv manager used by the SDK exercises)
+# Check uv (provides uvx, used by the MCP beat)
 $uvCmd = Get-Command uv -ErrorAction SilentlyContinue
 if ($uvCmd) {
     try {
@@ -220,74 +220,7 @@ if ($uvCmd) {
         Assert-Result "PASS" "uv is installed"
     }
 } else {
-    Assert-Result "WARN" "uv is not installed" "uv is the recommended Python toolchain for the SDK exercises. Install it from https://docs.astral.sh/uv/getting-started/installation/"
-}
-
-# Check agents-cli (Agent Development Kit CLI)
-$agentsCliCmd = Get-Command agents-cli -ErrorAction SilentlyContinue
-if ($agentsCliCmd) {
-    Assert-Result "PASS" "agents-cli is installed and in user PATH"
-} else {
-    Assert-Result "WARN" "agents-cli is not installed or not in your system PATH" "agents-cli is required for the SDK exercises. Follow the instructions in setup.md to install it."
-}
-
-# Check google-antigravity Python package
-if ($pythonCmd) {
-    & $pythonCmd -c "import google.antigravity" 2>$null
-    if ($LASTEXITCODE -eq 0) {
-        Assert-Result "PASS" "google-antigravity Python package is importable"
-    } else {
-        Assert-Result "WARN" "google-antigravity Python package is not installed" "Install it into your workshop environment (e.g. uv pip install google-antigravity) as described in setup.md"
-    }
-}
-
-# Check Docker Client installation
-$dockerCmd = Get-Command docker -ErrorAction SilentlyContinue
-if ($dockerCmd) {
-    try {
-        $dockerVer = (docker --version) -join ""
-        Assert-Result "PASS" "Docker client is installed ($dockerVer)"
-    } catch {
-        Assert-Result "PASS" "Docker client is installed"
-    }
-} else {
-    Assert-Result "FAIL" "Docker client is not installed" "Please install Docker Desktop (or Rancher Desktop) on your workstation"
-}
-
-# Check Docker Compose (v2 preferred)
-try {
-    $composeProc = Start-Process -FilePath "docker" -ArgumentList "compose", "version" -NoNewWindow -PassThru -Wait
-    if ($composeProc.ExitCode -eq 0) {
-        Assert-Result "PASS" "Docker Compose is installed (v2)"
-    } else {
-        throw "Failed to run docker compose"
-    }
-} catch {
-    $dockerComposeCmd = Get-Command docker-compose -ErrorAction SilentlyContinue
-    if ($dockerComposeCmd) {
-        try {
-            $composeVer = (docker-compose --version) -join ""
-            Assert-Result "PASS" "Docker Compose is installed (version $composeVer)"
-        } catch {
-            Assert-Result "PASS" "Docker Compose is installed"
-        }
-    } else {
-        Assert-Result "FAIL" "Docker Compose is not installed" "Verify Docker Desktop is installed or configure docker-compose"
-    }
-}
-
-# Check Docker Daemon running state
-if ($dockerCmd) {
-    try {
-        $infoProc = Start-Process -FilePath "docker" -ArgumentList "info" -NoNewWindow -PassThru -Wait
-        if ($infoProc.ExitCode -eq 0) {
-            Assert-Result "PASS" "Docker Daemon is active & running"
-        } else {
-            Assert-Result "WARN" "Docker Daemon is not running" "Docker is only needed for the modernization module's container exercises. CLI-only attendees can skip this. To run those exercises, start Docker Desktop or Rancher Desktop to activate the local container runtime."
-        }
-    } catch {
-        Assert-Result "WARN" "Docker Daemon is not running" "Docker is only needed for the modernization module's container exercises. CLI-only attendees can skip this. To run those exercises, start Docker Desktop or Rancher Desktop to activate the local container runtime."
-    }
+    Assert-Result "WARN" "uv is not installed" "uv provides uvx, used by the MCP beat. Install it from https://docs.astral.sh/uv/getting-started/installation/"
 }
 
 Write-Host ""

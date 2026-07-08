@@ -36,7 +36,7 @@ Ensure the following core CLI tools are installed on your physical machine.
 
 ### 1.1 — Git
 
-Required to clone the workshop repositories. Check with:
+Required to clone the sample app. Check with:
 
 ```bash
 git --version
@@ -48,7 +48,7 @@ git --version
 
 ### 1.2 — Python 3.10 to 3.12
 
-Required to run virtual environments and the AGY Python SDK. Check with:
+Required to run the sample app and its tests. Check with:
 
 ```bash
 python3 --version
@@ -67,27 +67,29 @@ gcloud --version
 
 - Follow the official install guide: [cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install).
 
-## Step 2: Clone the Workshop & Sandbox Repositories
+## Step 2: Clone the Sample App
 
-Clone both repositories into adjacent directories on your local workstation:
+You only need **one** repository — the sample application. The workshop material itself lives on this site (nothing to clone), and `agy` runs *inside* the sample app. Clone it into your working directory:
 
 ```bash
-# 1. Clone the Workshop Repository
-git clone https://github.com/carlosmscabral/agy-cli-field-workshop.git
-cd agy-cli-field-workshop
-
-# 2. Clone the Sandbox Application (into the parent directory)
-git clone https://github.com/carlosmscabral/agy-sample-app.git ../agy-sample-app
+git clone https://github.com/carlosmscabral/agy-sample-app.git
+cd agy-sample-app
 ```
 
 > [!TIP]
-> **One-command bootstrap (optional).** Once `gcloud` and `agy` are installed, `scripts/bootstrap-enterprise.sh` automates the sample-app onboarding — it clones the `agy-sample-app` sandbox, runs the ADC login, exports the canonical Vertex environment, and creates the sample app's own `.venv` from its `requirements.txt`. Run it from the workshop repo root: `bash scripts/bootstrap-enterprise.sh`. You can then skip the sample-app clone above and Step 5 (Google Cloud Authentication) below. You still need `uv` (Step 3) and `agy` (Step 6).
+> **One-command bootstrap (optional).** Instead of the clone above (and Step 5 auth), run this one-liner from your working directory — it clones `agy-sample-app` into the current folder, runs the ADC login, exports the canonical Vertex environment, and creates the sample app's `.venv`:
+>
+> ```bash
+> bash <(curl -fsSL https://raw.githubusercontent.com/carlosmscabral/agy-cli-field-workshop/main/scripts/bootstrap-enterprise.sh)
+> ```
+>
+> It runs interactively (it may prompt for your GCP project ID). You still need `uv` (Step 3) and `agy` (Step 6).
 
 ---
 
 ## Step 3: Install uv (Python Package Manager)
 
-Install [`uv`](https://docs.astral.sh/uv/), the fast Python package manager used by the ADK exercises (Module 3). It's a standalone binary — no virtual environment required to install it.
+Install [`uv`](https://docs.astral.sh/uv/), the fast Python package manager — it provides `uvx`, used by the MCP beat (Beat 4). It's a standalone binary — no virtual environment required to install it.
 
 ### Install uv on macOS / Linux
 
@@ -216,22 +218,22 @@ agy
 
 ## Step 7: Run the Workstation Verification Script
 
-To guarantee zero blockers, we provide an automated verifier that tests local binaries, package isolation, local credentials, Docker daemon connection, and Vertex AI IAM permissions.
+To guarantee zero blockers, we provide an automated verifier that tests local binaries, package isolation, local credentials, and Vertex AI IAM permissions.
 
 Run the verifier corresponding to your host OS:
+
+Run it straight from the repo — no clone needed:
 
 ### Run Verification on macOS / Linux
 
 ```bash
-# Run the verification script
-./scripts/verify-workstation.sh
+bash <(curl -fsSL https://raw.githubusercontent.com/carlosmscabral/agy-cli-field-workshop/main/scripts/verify-workstation.sh)
 ```
 
 ### Run Verification on Windows
 
 ```powershell
-# Run the verification script
-.\scripts\verify-workstation.ps1
+irm https://raw.githubusercontent.com/carlosmscabral/agy-cli-field-workshop/main/scripts/verify-workstation.ps1 | iex
 ```
 
 ### Expected Successful Output
@@ -255,13 +257,12 @@ Run the verifier corresponding to your host OS:
   ✅ PASS: Application Default Credentials (ADC) are configured locally
   ✅ PASS: Active Google Cloud project configured: your-workshop-project-id
 
-[4/5] Checking Antigravity CLI (agy) & Docker Environment
+[4/5] Checking Antigravity CLI (agy) & Tooling
   ✅ PASS: agy CLI is installed and in user PATH (version 1.0.16)
-  ✅ PASS: Docker client & Compose are installed
-  ✅ PASS: Docker Daemon is active & running
+  ✅ PASS: uv is installed (0.5.11)
 
 [5/5] Checking Firewall Outbound Connection & Vertex AI IAM Permissions
-  🌐 Testing outbound network connectivity to Vertex AI us-central1...
+  🌐 Testing outbound network connectivity to Vertex AI...
   ✅ PASS: Vertex AI Gemini Model access is healthy & verified
 
 ═════════════════════════════════════════════════════════════════════════
