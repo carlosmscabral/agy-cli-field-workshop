@@ -1,6 +1,0 @@
-{
-  "name": "workshop-helpers",
-  "version": "1.0.0",
-  "description": "Sample plugin for agy-cli Field Workshop validation exercise",
-  "components": ["skills", "commands"]
-}

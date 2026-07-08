@@ -25,23 +25,33 @@ Total: ≈2 hours · Lightning (Beats 1, 2, 5): ≈1 hour.
 
 ## Quick Start (participants)
 
+You clone **one** repo — the sample app. The workshop material is this site; `agy` runs inside the sample app.
+
 ```bash
-# 1. Install agy (if not already installed)
+# 1. Install agy
 curl -fsSL https://antigravity.google/cli/install.sh | bash
 
-# 2. Clone the workshop repo
-git clone https://github.com/carlosmscabral/agy-cli-field-workshop.git
-cd agy-cli-field-workshop
+# 2. Authenticate against your GCP project / Vertex AI
+gcloud auth application-default login
+export GOOGLE_CLOUD_PROJECT="your-workshop-project-id"
+export GOOGLE_CLOUD_LOCATION="global"
+export GOOGLE_GENAI_USE_VERTEXAI=True
 
-# 3. Validate your environment
-make check-env
+# 3. Clone the sample app and set up its venv
+git clone https://github.com/carlosmscabral/agy-sample-app.git
+cd agy-sample-app
+python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
 ```
 
-Then complete the **enterprise setup** in **[docs/setup.md](docs/setup.md)** and follow the beats on the **[live workshop site](https://carlosmscabral.github.io/agy-cli-field-workshop/)**.
+Then verify (no clone needed) and follow the beats on the **[live workshop site](https://carlosmscabral.github.io/agy-cli-field-workshop/)**:
 
-> **Pre-work:** the enterprise path — GCP + Vertex AI (ADC) — documented under [`docs/setup.md`](docs/setup.md) (IT-Admin provisioning + developer workstation). The hands-on beats run against the sample app, [`carlosmscabral/agy-sample-app`](https://github.com/carlosmscabral/agy-sample-app), cloned alongside this repo.
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/carlosmscabral/agy-cli-field-workshop/main/scripts/verify-workstation.sh)
+```
+
+> **Pre-work:** the enterprise path (GCP + Vertex AI / ADC) is documented under [`docs/setup.md`](docs/setup.md) — IT-Admin provisioning + developer workstation. Prefer one command? `bash <(curl -fsSL https://raw.githubusercontent.com/carlosmscabral/agy-cli-field-workshop/main/scripts/bootstrap-enterprise.sh)` clones the sample app, authenticates, and builds its venv.
 >
-> **Previewing the docs locally is optional** (maintainers / offline use): `make install-deps && make serve`, then open <http://localhost:8000>.
+> **Maintainers:** clone *this* repo to edit/preview the docs (`make install-deps && make serve` → <http://localhost:8000>) or validate the environment (`make check-env`). Attendees don't need it.
 
 ---
 
@@ -58,7 +68,7 @@ Then complete the **enterprise setup** in **[docs/setup.md](docs/setup.md)** and
 │   ├── plugin-ecosystem.md        # Reference: workspace customization
 │   ├── facilitator-guide.md
 │   └── exercises/                 # ex01–ex05 (the five beats)
-├── samples/                       # Sample configs, subagents, hooks, plugin
+├── samples/                       # Sample configs, subagents, hooks
 ├── scripts/
 │   ├── check-env.sh               # Pre-workshop validator
 │   ├── verify-workstation.sh      # Workstation verifier (Bash + PowerShell)

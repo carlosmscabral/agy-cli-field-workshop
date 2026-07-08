@@ -166,9 +166,9 @@ fi
 echo ""
 
 # -----------------------------------------------------------------------------
-# 4. Antigravity CLI (agy) & Docker Environment Checks
+# 4. Antigravity CLI (agy) & Tooling
 # -----------------------------------------------------------------------------
-echo -e "${BLUE}[4/5] Checking Antigravity CLI (agy) & Docker Environment${NC}"
+echo -e "${BLUE}[4/5] Checking Antigravity CLI (agy) & Tooling${NC}"
 
 # Check agy installation
 if command -v agy &>/dev/null; then
@@ -178,56 +178,12 @@ else
   check_result "FAIL" "agy CLI is not installed or not in your system PATH" "Follow the instructions in setup.md to install agy"
 fi
 
-# Check uv (Python package/venv manager used by the SDK exercises)
+# Check uv (provides uvx, used by the MCP beat)
 if command -v uv &>/dev/null; then
   UV_VERSION=$(uv --version 2>/dev/null | awk '{print $2}')
   check_result "PASS" "uv is installed (version $UV_VERSION)"
 else
-  check_result "WARN" "uv is not installed" "uv is the recommended Python toolchain for the SDK exercises. Install it from https://docs.astral.sh/uv/getting-started/installation/"
-fi
-
-# Check agents-cli (Agent Development Kit CLI)
-if command -v agents-cli &>/dev/null; then
-  check_result "PASS" "agents-cli is installed and in user PATH"
-else
-  check_result "WARN" "agents-cli is not installed or not in your system PATH" "agents-cli is required for the SDK exercises. Follow the instructions in setup.md to install it."
-fi
-
-# Check google-antigravity Python package
-if command -v python3 &>/dev/null; then
-  if python3 -c "import google.antigravity" &>/dev/null; then
-    check_result "PASS" "google-antigravity Python package is importable"
-  else
-    check_result "WARN" "google-antigravity Python package is not installed" "Install it into your workshop environment (e.g. uv pip install google-antigravity) as described in setup.md"
-  fi
-fi
-
-# Check Docker Client installation
-if command -v docker &>/dev/null; then
-  DOCKER_VER=$(docker --version | awk '{print $3}' | tr -d ',')
-  check_result "PASS" "Docker client is installed (version $DOCKER_VER)"
-else
-  check_result "FAIL" "Docker client is not installed" "Please install Docker Desktop (or Rancher Desktop) on your workstation"
-fi
-
-# Check Docker Compose (v2 preferred)
-if docker compose version &>/dev/null; then
-  COMPOSE_VER=$(docker compose version | awk '{print $4}')
-  check_result "PASS" "Docker Compose is installed ($COMPOSE_VER)"
-elif command -v docker-compose &>/dev/null; then
-  COMPOSE_VER=$(docker-compose --version | awk '{print $3}')
-  check_result "PASS" "Docker Compose is installed (version $COMPOSE_VER)"
-else
-  check_result "FAIL" "Docker Compose is not installed" "Verify Docker Desktop is installed or install the docker-compose-plugin"
-fi
-
-# Check Docker Daemon running state
-if command -v docker &>/dev/null; then
-  if docker info &>/dev/null; then
-    check_result "PASS" "Docker Daemon is active & running"
-  else
-    check_result "WARN" "Docker Daemon is not running" "Docker is only needed for the modernization module's container exercises. CLI-only attendees can skip this. To run those exercises, start Docker Desktop or Rancher Desktop to activate the local container runtime."
-  fi
+  check_result "WARN" "uv is not installed" "uv provides uvx, used by the MCP beat. Install it from https://docs.astral.sh/uv/getting-started/installation/"
 fi
 
 echo ""

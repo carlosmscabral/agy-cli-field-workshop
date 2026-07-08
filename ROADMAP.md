@@ -4,9 +4,11 @@ Deferred improvements for the workshop. Not blocking — parked for a future pas
 
 ---
 
-## Single-repo onboarding — attendees clone only `agy-sample-app`
+## ✅ Single-repo onboarding — attendees clone only `agy-sample-app`
 
-**Status:** planned (agreed 2026-07-07) · **Effort:** small
+**Status:** Done (2026-07-08) · **Effort:** small
+
+Implemented: attendees now clone only `agy-sample-app`; the verifier and bootstrap run via `bash <(curl …)` / `irm … | iex` one-liners (no clone); ex03 Part 4 (plugin verification) was removed; the verifier was trimmed to `agy` + `uv` (Docker/SDK/ADK checks dropped). Setup docs, README, and the facilitator guide updated accordingly.
 
 Today attendees clone **two** repos (`agy-cli-field-workshop` + `agy-sample-app`), but the workshop repo is only used locally in a few spots. The curriculum is read on the live GitHub Pages site, and `agy` should run in the **sample app** — not the curriculum repo, which it would otherwise index. Goal: onboarding becomes *install `agy` → auth Vertex → clone only `agy-sample-app` → go.*
 

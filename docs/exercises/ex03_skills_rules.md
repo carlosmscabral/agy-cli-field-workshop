@@ -123,38 +123,8 @@ Beyond skills (which trigger dynamically), you can set project **Rules**. Each r
 
 ---
 
-## Part 4: Validate Custom Plugin Configurations (3 min)
-
-If you package skills, rules, and MCP servers together as a plugin, you can validate its manifest structure before distributing it:
-
-1. Return to your workshop directory in your terminal:
-
-   ```bash
-   cd ../agy-cli-field-workshop
-   ```
-
-2. Run the built-in validator on the helper sample plugin:
-
-   ```bash
-   agy plugin validate samples/plugins/workshop-helpers/
-   ```
-
-Verify that the validator reports the plugin as OK (exit code 0), for example:
-
-```text
-  [ok]    samples/plugins/workshop-helpers/
-          ✔ skills      : 1 processed
-          - agents      : skipped (not found)
-          - commands    : skipped (not found)
-          - mcpServers  : skipped (not found)
-          - hooks       : skipped (not found)
-```
-
----
-
 ## Completion Criteria
 
 * [ ] `.agents/skills/project-advisor/SKILL.md` exists with valid YAML frontmatter
 * [ ] Active skills list contains your custom skill
 * [ ] Code modifications conform to the `.agents/rules/style.md` (`trigger: always_on`) style instructions (confirmed via `/diff` — docstring + type hints present)
-* [ ] Plugin validation command runs successfully on the workshop's helper plugin

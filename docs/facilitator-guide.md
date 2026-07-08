@@ -21,7 +21,7 @@ This is a **single-track, ≈2-hour hands-on workshop** for Antigravity CLI (`ag
 
 ## Pre-Workshop Checklist
 
-- [ ] **Enterprise pre-work done:** participants installed `agy` (standalone binary), authenticated with `gcloud` + ADC + the Vertex env (`GOOGLE_CLOUD_PROJECT` / `GOOGLE_CLOUD_LOCATION` / `GOOGLE_GENAI_USE_VERTEXAI=True`), installed `uv`, and cloned both repos *(see [setup.md](setup.md))*
+- [ ] **Enterprise pre-work done:** participants installed `agy` (standalone binary), authenticated with `gcloud` + ADC + the Vertex env (`GOOGLE_CLOUD_PROJECT` / `GOOGLE_CLOUD_LOCATION` / `GOOGLE_GENAI_USE_VERTEXAI=True`), installed `uv`, and cloned the sample app (`agy-sample-app`) *(see [setup.md](setup.md))*
 - [ ] The admin has granted attendees `roles/aiplatform.user` on the workshop project
 - [ ] **Sample app venv ready:** `cd ../agy-sample-app && python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt` (installs the app's real deps incl. `pydantic[email]`, so its tests run in the right environment)
 - [ ] Facilitator has run all five beats end-to-end on the current `agy` version
