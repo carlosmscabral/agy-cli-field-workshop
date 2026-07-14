@@ -63,7 +63,7 @@ Do the beats **in order** — each builds on the state the previous one left in 
 
 **Key message:** review structured milestones, not raw tool calls. This is agy's co-steering differentiator.
 
-- Demo `/planning` → the Implementation Plan artifact → the Artifact Review panel (`/artifact` or `ctrl+r`) → an inline comment (`c` → type → `esc` → `y`) → Task List → Walkthrough.
+- Demo `/plan` (or `shift+tab` to cycle into plan mode) → the Implementation Plan artifact → the Artifact Review panel (`/artifact` or `ctrl+r`) → an inline comment (`c` → type → `esc` → `y`) → Task List → Walkthrough.
 - The concrete outcome is the `GET /health` endpoint that the sample app deliberately lacks. Verify with `!python3 -m pytest -q` or `curl`.
 
 ### Beat 3 — Skills & Rules (Coding Standards)

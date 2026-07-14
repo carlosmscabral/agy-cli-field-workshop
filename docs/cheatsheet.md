@@ -63,7 +63,7 @@ agy install        # Configure PATH and shell aliases
 | `/rewind` (`/undo`) | Conversation | Roll back conversation history to a previous checkpoint |
 | `/fork` | Conversation | Branch the current conversation into a parallel isolated workspace — trial risky steps without affecting the original |
 | `/rename <name>` | Conversation | Rename the active conversation thread |
-| `/planning` | Artifacts | Enter planning mode — produce an Implementation Plan (and Task List) before writing code |
+| `/plan` | Artifacts | Enter planning mode — produce an Implementation Plan (and Task List) before writing code. Replaced `/planning` in v1.1.0; also reachable via `shift+tab` mode cycling |
 | `/artifact` | Artifacts | Open the artifact panel — view the session's artifacts (singular; `/artifacts` is not accepted) |
 | `/diff` | Review | Open agy's built-in diff view of the changes made in your session |
 | `/config` → Tool Permissions | Autonomy | Set the tool-permission mode: `request-review`, `always-proceed`, `proceed-in-sandbox`, `strict` |
@@ -91,7 +91,7 @@ agy install        # Configure PATH and shell aliases
 
 | Action | How |
 | :-- | :-- |
-| Plan before coding | `/planning` (produces an Implementation Plan artifact) |
+| Plan before coding | `/plan` or `shift+tab` (produces an Implementation Plan artifact) |
 | View session artifacts | `/artifact` (opens the artifact panel) |
 | Open the Artifact Review panel | `/artifact` or `ctrl+r` |
 | Comment on / approve an artifact | In the panel: `c` to add a comment, `esc` to finish, `y` to approve |
@@ -111,6 +111,7 @@ agy install        # Configure PATH and shell aliases
 | `esc esc` | Clear your prompt box (when no streaming is active) |
 | `?` | Get help and list all slash commands |
 | `alt+enter` / `shift+enter` | Insert newline without submitting |
+| `shift+tab` | Cycle the agent execution mode: `default` → `accept-edits` → `plan` (v1.1.0+) |
 | `ctrl+r` | Open the Artifact Review panel (leave inline comments to co-steer the agent) |
 | `ctrl+g` | Open the current prompt or artifact in your `$EDITOR` |
 | `ctrl+l` | Clear TUI screen |

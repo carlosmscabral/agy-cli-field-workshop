@@ -49,8 +49,11 @@ agy
 Put `agy` into planning mode so it produces a plan *before* touching code:
 
 ```text
-/planning
+/plan
 ```
+
+> [!NOTE]
+> `/plan` is the current command (agy CLI **v1.1.0**+; it replaced the older `/planning`). You can also cycle execution modes without a command by pressing **`shift+tab`** — it rotates `default` → `accept-edits` → `plan`.
 
 Then describe the feature. Ask for the health endpoint you scoped back in Exercise 1:
 
@@ -151,7 +154,7 @@ This plan → review → implement → verify loop is the differentiator: `agy` 
 
 ## Completion Criteria
 
-- [ ] Entered planning mode with `/planning` and received an **Implementation Plan** artifact before any code was written
+- [ ] Entered planning mode with `/plan` (or `shift+tab`) and received an **Implementation Plan** artifact before any code was written
 - [ ] Opened the artifact panel with `/artifact` (or `ctrl+r`)
 - [ ] Left an inline comment (`c` → type → `esc`) and approved the plan (`y`), and watched the agent incorporate the comment
 - [ ] Observed the **Task List** artifact tick off steps during implementation
