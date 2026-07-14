@@ -12,7 +12,7 @@ This track is designed for teams running the workshop on **customer-managed corp
 It consists of **two roles**:
 
 1. 🛠️ **IT Admin**: Configures the GCP project, enables Vertex AI APIs, whitelists domains, and provisions bulk IAM permissions *once* for the group.
-2. 💻 **Developer**: Configures their local laptop virtual environment, corporate proxies, Google authentication, and runs the workstation verifier.
+2. 💻 **Developer**: Configures their local laptop virtual environment, Google authentication, and runs the workstation verifier (plus optional corporate proxy/SSL setup only if the network requires it).
 
 ---
 
@@ -113,44 +113,7 @@ uv --version
 
 ---
 
-## Step 4: Handle Corporate Proxies, Private Mirrors, & SSL Certs
-
-Many corporate environments route traffic through SSL-decrypting firewalls or require private package registries (like Sonatype Nexus or JFrog Artifactory). The settings below apply to **every `pip install` you run inside a project's venv** throughout the workshop. If your network does not restrict outbound package traffic, **skip to Step 5**.
-
-### 4.1 — Trusting Corporate Root Certificates
-
-If `pip` throws `SSL: CERTIFICATE_VERIFY_FAILED` errors, point Python to your company's Root CA Certificate Bundle:
-
-#### macOS / Linux (Bash)
-
-```bash
-export PIP_CERT="/path/to/corporate-ca-bundle.pem"
-export REQUESTS_CA_BUNDLE="/path/to/corporate-ca-bundle.pem"
-```
-
-#### Windows (PowerShell)
-
-```powershell
-$env:PIP_CERT="C:\path\to\corporate-ca-bundle.pem"
-$env:REQUESTS_CA_BUNDLE="C:\path\to\corporate-ca-bundle.pem"
-```
-
-### 4.2 — Redirecting to a Corporate Pip Mirror
-
-If direct access to `pypi.org` is blocked, configure pip to use your corporate mirror. Create or update your pip configuration file:
-
-- **macOS/Linux**: `~/.pip/pip.conf`
-- **Windows**: `%APPDATA%\pip\pip.ini`
-
-```ini
-[global]
-index-url = https://artifactory.yourcompany.com/api/pip/pypi/simple
-trusted-host = artifactory.yourcompany.com
-```
-
----
-
-## Step 5: Google Cloud Authentication & Vertex AI Environment
+## Step 4: Google Cloud Authentication & Vertex AI Environment
 
 The workshop runs against **your company's GCP project on Vertex AI**. This one canonical setup authorizes the `agy` CLI — no personal/API-key path is needed.
 
@@ -173,7 +136,7 @@ export GOOGLE_GENAI_USE_VERTEXAI=True           # routes model calls through Ver
 
 ---
 
-## Step 6: Install the Antigravity CLI (agy)
+## Step 5: Install the Antigravity CLI (agy)
 
 Install the `agy` binary locally:
 
@@ -212,11 +175,11 @@ agy
 ```
 
 > [!NOTE]
-> `agy` uses the project from `GOOGLE_CLOUD_PROJECT` (set in Step 5) to select which GCP project handles inference. Type `/logout` inside `agy` to clear cached credentials.
+> `agy` uses the project from `GOOGLE_CLOUD_PROJECT` (set in Step 4) to select which GCP project handles inference. Type `/logout` inside `agy` to clear cached credentials.
 
 ---
 
-## Step 7: Run the Workstation Verification Script
+## Step 6: Run the Workstation Verification Script
 
 To guarantee zero blockers, we provide an automated verifier that tests local binaries, package isolation, local credentials, and Vertex AI IAM permissions.
 
@@ -277,7 +240,7 @@ irm https://raw.githubusercontent.com/carlosmscabral/agy-cli-field-workshop/main
 
 ---
 
-## Step 8: Run the Quick TUI Smoke Test
+## Step 7: Run the Quick TUI Smoke Test
 
 Verify interactive sign-in works by triggering `agy`:
 
@@ -294,3 +257,41 @@ Expected output: `Workstation Ready!`
 
 Once your smoke test succeeds, you are ready to start:
 👉 Go to **[The Workshop — An End-to-End Software Story](overview.md)**
+
+---
+
+## Optional: Corporate Proxies, Private Mirrors, & SSL Certs
+
+> [!NOTE]
+> **Only needed if your network restricts outbound package traffic.** Skip this entirely if the verification script (Step 6) passed. Many corporate environments route traffic through SSL-decrypting firewalls or require private package registries (like Sonatype Nexus or JFrog Artifactory). The settings below apply to **every `pip install` you run inside a project's venv** throughout the workshop. If verification failed with SSL or network errors, apply the relevant fix below and re-run Step 6.
+
+### Trusting Corporate Root Certificates
+
+If `pip` throws `SSL: CERTIFICATE_VERIFY_FAILED` errors, point Python to your company's Root CA Certificate Bundle:
+
+#### macOS / Linux (Bash)
+
+```bash
+export PIP_CERT="/path/to/corporate-ca-bundle.pem"
+export REQUESTS_CA_BUNDLE="/path/to/corporate-ca-bundle.pem"
+```
+
+#### Windows (PowerShell)
+
+```powershell
+$env:PIP_CERT="C:\path\to\corporate-ca-bundle.pem"
+$env:REQUESTS_CA_BUNDLE="C:\path\to\corporate-ca-bundle.pem"
+```
+
+### Redirecting to a Corporate Pip Mirror
+
+If direct access to `pypi.org` is blocked, configure pip to use your corporate mirror. Create or update your pip configuration file:
+
+- **macOS/Linux**: `~/.pip/pip.conf`
+- **Windows**: `%APPDATA%\pip\pip.ini`
+
+```ini
+[global]
+index-url = https://artifactory.yourcompany.com/api/pip/pypi/simple
+trusted-host = artifactory.yourcompany.com
+```

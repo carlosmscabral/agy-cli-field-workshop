@@ -98,37 +98,7 @@ Developers will run the workshop locally on their corporate-managed workstations
 
 ---
 
-## Phase 3: Enterprise Network, Firewalls, & Proxies
-
-Corporate networks with deep packet inspection (DPI), SSL-decrypting firewalls, or strict outbound whitelists may block access to Google APIs, package managers, or installation assets.
-
-### 3.1 — Firewall Outbound Egress Rules
-
-Ensure outbound HTTPS (port 443) traffic is whitelisted to the following domains on the corporate network or VPN:
-
-| Resource Group | Domain Pattern | Reason |
-| :-- | :-- | :-- |
-| **Vertex AI API** | `*.aiplatform.googleapis.com` (e.g. `us-central1-aiplatform.googleapis.com`) | For model calls from the `agy` CLI. |
-| **Google Auth** | `accounts.google.com`, `oauth2.googleapis.com` | For `agy` sign-in and Application Default Credentials login. |
-| **GCP Services** | `*.googleapis.com` | For general Google Cloud API access. |
-| **Python Packages** | `pypi.org` and `files.pythonhosted.org` | For installing dependencies inside developer virtualenvs. |
-| **GitHub** | `github.com` (incl. `raw.githubusercontent.com`) | For cloning the sample app and running the verifier one-liner. |
-| **Antigravity CLI** | `antigravity.google` | For downloading and installing the `agy` binary. |
-
-### 3.2 — Corporate SSL-Decrypting Proxies
-
-If your enterprise proxy intercepts HTTPS traffic and decrypts SSL, Python package managers (`pip`) and CLI tools will fail with `SSL: CERTIFICATE_VERIFY_FAILED` errors.
-
-Advise developers on how to configure Python to trust your enterprise Root Certificate Bundle. These are typically set via environment variables:
-
-- `PIP_CERT`: Points pip to your root certificate bundle file.
-- `REQUESTS_CA_BUNDLE`: Points Python's `requests` package to the bundle file.
-
-See **[Corporate Workstation Onboarding (Step 4)](setup-corporate.md)** for developer configuration details.
-
----
-
-## Phase 4: Automated Pre-Work Verification
+## Phase 3: Automated Pre-Work Verification
 
 To guarantee zero setup blocks on day-one of the workshop, have each attendee run the workstation verifier — straight from the repo, no clone required:
 
@@ -155,3 +125,34 @@ Both verifiers perform the following automated checks:
 ### Admin Handoff
 
 Please direct all workshop attendees to follow the **[Corporate Workstation Onboarding Guide](setup-corporate.md)** and request that they send you a screenshot of their successful verification summaries prior to the workshop session!
+
+---
+
+## Optional: Enterprise Network, Firewalls, & Proxies
+
+> [!NOTE]
+> **Only needed if your corporate network restricts outbound traffic.** Skip this if attendees' verifiers (Phase 3) pass. Networks with deep packet inspection (DPI), SSL-decrypting firewalls, or strict outbound whitelists may block access to Google APIs, package managers, or installation assets — apply the relevant configuration below and have attendees re-run the verifier.
+
+### Firewall Outbound Egress Rules
+
+Ensure outbound HTTPS (port 443) traffic is whitelisted to the following domains on the corporate network or VPN:
+
+| Resource Group | Domain Pattern | Reason |
+| :-- | :-- | :-- |
+| **Vertex AI API** | `*.aiplatform.googleapis.com` (e.g. `us-central1-aiplatform.googleapis.com`) | For model calls from the `agy` CLI. |
+| **Google Auth** | `accounts.google.com`, `oauth2.googleapis.com` | For `agy` sign-in and Application Default Credentials login. |
+| **GCP Services** | `*.googleapis.com` | For general Google Cloud API access. |
+| **Python Packages** | `pypi.org` and `files.pythonhosted.org` | For installing dependencies inside developer virtualenvs. |
+| **GitHub** | `github.com` (incl. `raw.githubusercontent.com`) | For cloning the sample app and running the verifier one-liner. |
+| **Antigravity CLI** | `antigravity.google` | For downloading and installing the `agy` binary. |
+
+### Corporate SSL-Decrypting Proxies
+
+If your enterprise proxy intercepts HTTPS traffic and decrypts SSL, Python package managers (`pip`) and CLI tools will fail with `SSL: CERTIFICATE_VERIFY_FAILED` errors.
+
+Advise developers on how to configure Python to trust your enterprise Root Certificate Bundle. These are typically set via environment variables:
+
+- `PIP_CERT`: Points pip to your root certificate bundle file.
+- `REQUESTS_CA_BUNDLE`: Points Python's `requests` package to the bundle file.
+
+See **[Corporate Workstation Onboarding (Optional: Corporate Proxies section)](setup-corporate.md#optional-corporate-proxies-private-mirrors--ssl-certs)** for developer configuration details.
