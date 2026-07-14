@@ -161,12 +161,11 @@ Official source: [cli-features — Core Slash Commands](https://antigravity.goog
 
 ### ❌ Slash commands that do NOT exist
 
-> ⚠️ **Do not use `strings <binary>` to decide whether a slash command exists.** Slash commands are registered in data, not emitted as literal `/name` strings, so grep gives false negatives — `/planning` and `/diff` both looked "absent" in the binary yet are real (confirmed by live testing). Only mark a command non-existent after checking the [Command Reference](https://antigravity.google/docs/cli-reference) (via Chrome DevTools MCP) or trying it live.
+> ⚠️ **Do not use `strings <binary>` to decide whether a slash command exists.** Slash commands are registered in data, not emitted as literal `/name` strings, so grep gives false negatives — `/plan` and `/diff` both looked "absent" in the binary yet are real (confirmed by live testing). Only mark a command non-existent after checking the [Command Reference](https://antigravity.google/docs/cli-reference) (via Chrome DevTools MCP) or trying it live.
 
 | Command | Status |
 |:--|:--|
 | `/compact` | Not in any official doc |
-| `/plan` | Not a command — the real command is **`/planning`** (verified manually on v1.0.16; `/plan` alone does nothing). See the [Artifacts](#artifacts) section. |
 | `/stats` | Not in any official doc |
 | `/memory` | Not in any official doc |
 | `/security:analyze` | Not in any official doc — was from an unofficial extension |
@@ -177,7 +176,7 @@ Surfaced from the [Command Reference](https://antigravity.google/docs/cli-refere
 
 | Command | Source / status |
 |:--|:--|
-| `/planning` | **Confirmed** (manual test on v1.0.16 — enters planning mode; `/plan` alone does nothing) |
+| `/plan` | **Confirmed** — the current planning-mode command. Per the [CHANGELOG](https://github.com/google-antigravity/antigravity-cli/blob/main/CHANGELOG.md), **v1.1.0** added `/plan` to replace the legacy `/planning` (and removed `/fast`). Also reachable via `shift+tab` execution-mode cycling (`default` → `accept-edits` → `plan`). *(On v1.0.16 the command was `/planning`; `/plan` did nothing.)* |
 | `/grill-me` | **Confirmed** — observed live: agy suggests it to align on task details before implementing |
 | `/goal` | Reported (I/O 2026): run autonomously until the task is finished, auto-approving its own plan |
 | `/schedule` | Reported (I/O 2026): run a prompt once in the future or on a recurring schedule (Scheduled Tasks) |
@@ -217,12 +216,13 @@ To hard-stop/redirect the active operation, use `Esc` / `ctrl+c` (interrupt). Th
 | Command | Description |
 |:--|:--|
 | `/artifact` | Open the artifact panel / view the session's artifacts in the TUI. **Singular only** — `/artifacts` (plural) is not accepted (verified 2026-07-03). Also opens the review panel where `c` adds a comment, `esc` finishes it, `y` approves. |
-| `/planning` | Enter planning mode — produces an Implementation Plan (and Task List) artifact **before** writing code, for you to review/approve (plan-then-implement / spec-driven loop). *(Verified manually: `/planning`, not `/plan`.)* |
+| `/plan` | Enter planning mode — produces an Implementation Plan (and Task List) artifact **before** writing code, for you to review/approve (plan-then-implement / spec-driven loop). Added in **v1.1.0**, replacing the legacy `/planning`; also reachable via `shift+tab` mode cycling. |
 
 ### Review & co-steering shortcuts (TUI)
 
 | Shortcut | Action |
 |:--|:--|
+| `shift+tab` | Cycle the agent execution mode: `default` → `accept-edits` → `plan` (v1.1.0+) |
 | `ctrl+r` | Open the Artifact Review panel |
 | `ctrl+g` | Open the current artifact in `$EDITOR` (same key that opens the current prompt in `$EDITOR`) |
 

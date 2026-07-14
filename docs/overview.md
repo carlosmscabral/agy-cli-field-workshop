@@ -17,7 +17,7 @@ You set it up once in the [Pre-Work](setup.md); every beat runs against it.
 | Beat | Exercise | What you do | AGY concepts |
 | :-- | :-- | :-- | :-- |
 | **1. Discovery** | [First Session](exercises/ex01_first_session.md) | Explore the codebase, focus files with `@`, set Tool Permissions, capture context in `AGENTS.md`. | interactive session, `@`-focus, Tool Permissions, `AGENTS.md` |
-| **2. Planning & Build** | [Artifacts](exercises/ex02_artifacts.md) | Plan, review, and build the missing `GET /health` endpoint through the Artifacts workflow. | `/planning`, Artifact Review panel, plan→review→verify |
+| **2. Planning & Build** | [Artifacts](exercises/ex02_artifacts.md) | Plan, review, and build the missing `GET /health` endpoint through the Artifacts workflow. | `/plan` (or `shift+tab`), Artifact Review panel, plan→review→verify |
 | **3. Coding Standards** | [Skills & Rules](exercises/ex03_skills_rules.md) | Codify your team's conventions as a Custom Skill + an always-on Rule, then watch them shape new code. | `.agents/skills/`, `.agents/rules/` (`trigger` frontmatter), `/diff` |
 | **4. Governed Access** | [Governed Access with MCP](exercises/ex04_mcp_governed_access.md) | Give the agent a *governed* channel to the billing data — an MCP server under `strict` permissions. | `.agents/mcp_config.json`, `/mcp`, `strict` mode |
 | **5. Fixes & Security** | [Subagents](exercises/ex05_subagents.md) | Run parallel review subagents, then spawn one to refactor the messy module and move the hard-coded key to the environment. | native subagents, `/agents`, `ctrl+j`/`ctrl+k` |
@@ -56,7 +56,7 @@ See the [Cheatsheet](cheatsheet.md) for the full command/flag reference and the 
 ### :material-lightbulb-on: Beat 2 — Artifacts (Plan, Review & Build)
 
 **File:** [`ex02_artifacts.md`](exercises/ex02_artifacts.md)
-**Objective:** Use the Artifacts workflow (`/planning` → review → co-steer → verify) to build the `GET /health` endpoint.
+**Objective:** Use the Artifacts workflow (`/plan` → review → co-steer → verify) to build the `GET /health` endpoint.
 
 </div>
 
